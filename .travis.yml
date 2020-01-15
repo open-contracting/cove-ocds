@@ -16,6 +16,13 @@ env:
     # https://github.com/SeleniumHQ/docker-selenium/issues/87 :
     - export DBUS_SESSION_BUS_ADDRESS=/dev/null
 
+before_install:
+  # install gettext for translations
+  - sudo apt-get update
+  - sudo apt-get install openjdk-8-jdk gettext build-essential libxml2-dev libxslt1-dev python3-dev
+  # Install translate toolkit to get pocount binary
+  - sudo apt-get install translate-toolkit
+
 install:
   - curl -s -S --retry 3 $BASEDIR/tests/install.sh | bash -
   - "pip install -r requirements_dev.txt"
