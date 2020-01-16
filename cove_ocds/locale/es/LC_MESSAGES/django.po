@@ -7,18 +7,18 @@
 # Ben Webb <ben.webb@opendataservices.coop>, 2020
 # Maria Esther Cervantes <mariaesther@idatosabiertos.org>, 2020
 # Bibiana Cristòfol <bcristofol@gmail.com>, 2020
-# Amy Guy <amy.guy@opendataservices.coop>, 2020
 # Romina Fernandez <rfernandez@cds.com.py>, 2020
 # Eduardo Gomez <eduardo.gomez@hotmail.co.uk>, 2020
+# Amy Guy <amy.guy@opendataservices.coop>, 2020
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-02 14:10+0000\n"
+"POT-Creation-Date: 2020-01-15 13:26+0000\n"
 "PO-Revision-Date: 2020-01-02 14:12+0000\n"
-"Last-Translator: Eduardo Gomez <eduardo.gomez@hotmail.co.uk>, 2020\n"
+"Last-Translator: Amy Guy <amy.guy@opendataservices.coop>, 2020\n"
 "Language-Team: Spanish (https://www.transifex.com/OpenDataServices/teams/59127/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -486,8 +486,8 @@ msgstr "Ver <a href=\"#validation-errors\">Errores Estructurales</a> más abajo.
 #, python-format
 msgid "This file contains <strong>%(count)s record.</strong>"
 msgid_plural "This file contains <strong>%(count)s record.</strong>"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Este archivo <strong>contiene un registro.</strong>"
+msgstr[1] "Este archivo <strong>contiene %(count)s registros.</strong>"
 
 #: cove_ocds/templates/cove_ocds/explore_record.html:37
 #: cove_ocds/templates/cove_ocds/explore_release.html:43
@@ -498,8 +498,8 @@ msgstr "La versión del esquema especificada en el archivo es "
 #, python-format
 msgid "There is <strong>%(count)s unique OCID.</strong>"
 msgid_plural "There are <strong>%(count)s unique OCIDs.</strong>"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<strong>Hay una OCID.</strong>"
+msgstr[1] "<strong>Hay %(count)s es OCIDs únicas.</strong>"
 
 #: cove_ocds/templates/cove_ocds/explore_record.html:45
 #: cove_ocds/templates/cove_ocds/explore_release.html:48
@@ -526,7 +526,11 @@ msgid_plural ""
 "There are %(count)s <a href=\"#key-field-info\">duplicate release IDs</a> in"
 " this package."
 msgstr[0] ""
+"Hay una<a href=\\\"#key-field-info\\\">ID de versión duplicada</a> en este \"\n"
+"\"paquete."
 msgstr[1] ""
+"Hay %(count)s <a href=\"#key-field-info\">IDs de versión duplicadas</a> en "
+"este paquete."
 
 #: cove_ocds/templates/cove_ocds/explore_record.html:67
 #: cove_ocds/templates/cove_ocds/explore_release.html:75
@@ -538,7 +542,11 @@ msgid_plural ""
 "This file uses %(count)s <a href=\"#additional-fields\">additional "
 "fields</a> not used in the standard."
 msgstr[0] ""
+"Este archivo utiliza un <a href=\\\"#additional-fields\\\">campo adicional</a> \"\n"
+"\"no incluido en el estándar."
 msgstr[1] ""
+"Este archivo utiliza %(count)s <a href=\"#additional-fields\">campos "
+"adicionales</a>no incluidos en el estándar."
 
 #: cove_ocds/templates/cove_ocds/explore_record.html:72
 #: cove_ocds/templates/cove_ocds/explore_release.html:80
@@ -632,8 +640,8 @@ msgstr "<strong> Ha fallado </strong> al aplicar"
 #, python-format
 msgid " %(count)s extension "
 msgid_plural "%(count)s extensions "
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)s extensión"
+msgstr[1] "%(count)s extensiones"
 
 #: cove_ocds/templates/cove_ocds/explore_release.html:28
 msgid ""
@@ -646,15 +654,15 @@ msgstr ""
 #, python-format
 msgid "This file contains <strong>%(count)s release</strong>"
 msgid_plural "This file contains <strong>%(count)s releases</strong>"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Este archivo <strong>contiene una entrega</strong>"
+msgstr[1] "Este archivo contiene <strong>%(count)s entregas</strong>"
 
 #: cove_ocds/templates/cove_ocds/explore_release.html:38
 #, python-format
 msgid " describing <strong>%(count)s contracting process</strong>"
 msgid_plural " describing <strong>%(count)s contracting processes.</strong>"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<strong>describiendo un proceso de contratación</strong>"
+msgstr[1] "<strong>describiendo %(count)s procesos de contratación.</strong>"
 
 #: cove_ocds/templates/cove_ocds/explore_release.html:64
 msgid "This file applies"
@@ -664,8 +672,8 @@ msgstr "Este archivo incorpora "
 #, python-format
 msgid "%(count)s valid <a href=\"#schema-extensions\">extension</a>"
 msgid_plural " %(count)s valid <a href=\"#schema-extensions\">extensions</a> "
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)s <a href=\\\"#schema-extensions\\\">extensión</a> válida"
+msgstr[1] "%(count)s <a href=\\\"#schema-extensions\\\">extensiones</a> válidas "
 
 #: cove_ocds/templates/cove_ocds/explore_release.html:64
 msgid "to the schema"
@@ -679,8 +687,10 @@ msgid ""
 msgid_plural ""
 " This file uses %(count)s <a href=\"#deprecated-fields\">deprecated "
 "fields</a>."
-msgstr[0] ""
+msgstr[0] "Este archivo usa un<a href=\\\"#deprecated-fields\\\">campo obsoleto</a>."
 msgstr[1] ""
+"Este archivo usa %(count)s <a href=\\\"#deprecated-fields\\\">campos "
+"obsoletos</a>."
 
 #: cove_ocds/templates/cove_ocds/explore_release.html:114
 msgid "Key Field Information"
@@ -1086,7 +1096,11 @@ msgid_plural ""
 "We found <strong>%(n_missing)s</strong> objects within arrays in your data "
 "without an <code>id</code> property."
 msgstr[0] ""
+"Encontramos <strong>%(n_missing)s</strong> objetos dentro de la lista de sus"
+" datos sin una propiedad <code>id</code>."
 msgstr[1] ""
+"Encontramos <strong>%(n_missing)s</strong> objetos dentro de la lista de sus"
+" datos sin una propiedad <code>id</code>."
 
 #: cove_ocds/templates/cove_ocds/ocds_missing_ids_table.html:5
 msgid ""
@@ -1111,7 +1125,11 @@ msgid_plural ""
 "<strong>%(n_prefixes)s</strong> of your <code>ocid</code> fields have a "
 "problem: "
 msgstr[0] ""
+"<strong>%(n_prefixes)s</strong> de sus campos <code>ocid</code> tienen un "
+"problema:"
 msgstr[1] ""
+"<strong>%(n_prefixes)s</strong> de sus campos <code>ocid</code> tienen un "
+"problema:"
 
 #: cove_ocds/templates/cove_ocds/ocid_prefixes_table.html:4
 msgid "there is no prefix or the prefix format is not recognised."
