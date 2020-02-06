@@ -45,6 +45,7 @@ script:
   - coverage run --source cove_ocds,cove_project manage.py test
   # Check that messages used by OCDS CoVE are translated
   - "python manage.py makemessages -l es"
+  - "pocount --incomplete cove_ocds/locale/es/LC_MESSAGES/django.po"
   - "[ \"$TRAVIS_PULL_REQUEST\" = \"false\" ] || [ \"`pocount --incomplete cove_ocds/locale/es/LC_MESSAGES/django.po`\" = \"\" ]"
   - DJANGO_SETTINGS_MODULE=cove_project.settings pytest --cov cove_ocds --cov cove_project
 
