@@ -1187,7 +1187,7 @@ msgstr "Cuál es el campo de (ocid)? %(description)s"
 
 #: cove_ocds/templates/cove_ocds/ocid_prefixes_table.html:17
 msgid "For more information see"
-msgstr "Para mas información vea"
+msgstr ""
 
 #: cove_ocds/templates/cove_ocds/ocid_prefixes_table.html:17
 msgid "Open Contracting Identifier guidance"
@@ -1195,11 +1195,11 @@ msgstr "Guía para indentificadores de Contratos Abiertos "
 
 #: cove_ocds/templates/cove_ocds/validation_table.html:7
 msgid "Error Description"
-msgstr "Error de descripción"
+msgstr ""
 
 #: cove_ocds/templates/cove_ocds/validation_table.html:8
 msgid "Error Count"
-msgstr "Total de errores"
+msgstr ""
 
 #: cove_ocds/templates/cove_ocds/validation_table.html:9
 msgid "First 3 Examples"
