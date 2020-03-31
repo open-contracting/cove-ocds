@@ -6,90 +6,88 @@
 #
 -e git+https://github.com/OpenDataServices/lib-cove-web.git@v0.11.0#egg=libcoveweb
 alabaster==0.7.12         # via sphinx
-attrs==19.3.0
+attrs==19.3.0             # via -r requirements.txt, hypothesis, jsonschema, pytest
 babel==2.8.0              # via sphinx
-bleach==3.1.1
-cached-property==1.5.1
-certifi==2019.11.28
-chardet==3.0.4
+bleach==3.1.4             # via -r requirements.txt, libcove, libcoveocds, libcoveweb
+cached-property==1.5.1    # via -r requirements.txt, libcove, libcoveocds, libcoveweb
+certifi==2019.11.28       # via -r requirements.txt, requests
+chardet==3.0.4            # via -r requirements.txt, requests
 click==7.0                # via pip-tools
-commonmark==0.9.1
-contextlib2==0.5.5
-coverage==4.5.4
-coveralls==1.11.1
-dealer==2.0.5
-defusedxml==0.6.0
-django-bootstrap3==12.0.3
-django-debug-toolbar==2.2
-django-environ==0.4.5
-django==1.11.28
+commonmark==0.9.1         # via -r requirements.txt, libcove, libcoveocds
+contextlib2==0.5.5        # via -r requirements.txt, schema
+coverage==4.5.4           # via -r requirements_dev.in, coveralls, hypothesis, pytest-cov
+coveralls==1.11.1         # via -r requirements_dev.in
+dealer==2.0.5             # via -r requirements.txt, libcoveweb
+defusedxml==0.6.0         # via -r requirements.txt, odfpy
+django-bootstrap3==12.0.3  # via -r requirements.txt, libcoveweb
+django-debug-toolbar==2.2  # via -r requirements.txt, libcoveweb
+django-environ==0.4.5     # via -r requirements.txt, libcoveweb
+django==1.11.28           # via -r requirements.txt, django-debug-toolbar, libcove, libcoveocds, libcoveweb
 docopt==0.6.2             # via coveralls
 docutils==0.16            # via sphinx
 entrypoints==0.3          # via flake8
-et-xmlfile==1.0.1
-flake8==3.7.9
-flattentool==0.11.0
-hypothesis==3.52.3
-idna==2.9
+et-xmlfile==1.0.1         # via -r requirements.txt, openpyxl
+flake8==3.7.9             # via -r requirements_dev.in
+flattentool==0.11.0       # via -r requirements.txt, libcove, libcoveocds
+hypothesis==3.52.3        # via -r requirements_dev.in
+idna==2.9                 # via -r requirements.txt, requests
 imagesize==1.2.0          # via sphinx
-importlib-metadata==1.5.0
-jdcal==1.4.1
+jdcal==1.4.1              # via -r requirements.txt, openpyxl
 jinja2==2.11.1            # via sphinx
-json-merge-patch==0.2
-jsonref==0.2
-jsonschema==3.2.0
-lepl==5.1.3
-libcove==0.15.0
-libcoveocds==0.7.4
-lxml==4.5.0
+json-merge-patch==0.2     # via -r requirements.txt, libcove, libcoveocds, libcoveweb
+jsonref==0.2              # via -r requirements.txt, flattentool, libcove, libcoveocds, libcoveweb
+jsonschema==3.2.0         # via -r requirements.txt, libcove, libcoveocds, libcoveweb
+lepl==5.1.3               # via -r requirements.txt, rfc6266
+libcove==0.15.0           # via -r requirements.txt, libcoveocds, libcoveweb
+libcoveocds==0.7.4        # via -r requirements.txt
+lxml==4.5.0               # via -r requirements.txt, flattentool
 markupsafe==1.1.1         # via jinja2
 mccabe==0.6.1             # via flake8
 more-itertools==8.2.0     # via pytest
-odfpy==1.4.1
-openpyxl==2.6.4
+odfpy==1.4.1              # via -r requirements.txt, flattentool
+openpyxl==2.6.4           # via -r requirements.txt, flattentool
 packaging==20.1           # via pytest, sphinx
-pip-tools==4.5.0
+pip-tools==4.5.0          # via -r requirements_dev.in
 pluggy==0.13.1            # via pytest
 py==1.8.1                 # via pytest
 pycodestyle==2.5.0        # via flake8
 pyflakes==2.1.1           # via flake8
 pygments==2.5.2           # via sphinx
 pyparsing==2.4.6          # via packaging
-pyrsistent==0.15.7
-pytest-cov==2.8.1
-pytest-django==3.8.0
-pytest-localserver==0.5.0
-pytest==5.3.5
-python-dateutil==2.8.1
+pyrsistent==0.15.7        # via -r requirements.txt, jsonschema
+pytest-cov==2.8.1         # via -r requirements_dev.in
+pytest-django==3.8.0      # via -r requirements_dev.in
+pytest-localserver==0.5.0  # via -r requirements_dev.in
+pytest==5.3.5             # via -r requirements_dev.in, pytest-cov, pytest-django
+python-dateutil==2.8.1    # via -r requirements.txt, libcoveweb
 python-slugify==1.2.6     # via transifex-client
-pytz==2019.3
-rangedict==0.1.6
-raven==6.10.0
-requests==2.23.0
-rfc3987==1.3.8
-rfc6266==0.0.4
-schema==0.7.1
-selenium==3.141.0
-six==1.14.0
+pytz==2019.3              # via -r requirements.txt, babel, django, flattentool
+rangedict==0.1.6          # via -r requirements.txt
+raven==6.10.0             # via -r requirements.txt, libcoveweb
+requests==2.23.0          # via -r requirements.txt, coveralls, libcove, libcoveocds, libcoveweb, sphinx, transifex-client
+rfc3987==1.3.8            # via -r requirements.txt, libcove, libcoveweb
+rfc6266==0.0.4            # via -r requirements.txt, libcoveweb
+schema==0.7.1             # via -r requirements.txt, flattentool
+selenium==3.141.0         # via -r requirements_dev.in
+six==1.14.0               # via -r requirements.txt, bleach, jsonschema, packaging, pip-tools, pyrsistent, python-dateutil, transifex-client
 snowballstemmer==2.0.0    # via sphinx
-sphinx-rtd-theme==0.4.3
-sphinx==2.4.3
+sphinx-rtd-theme==0.4.3   # via -r requirements_dev.in
+sphinx==2.4.3             # via -r requirements_dev.in, sphinx-rtd-theme
 sphinxcontrib-applehelp==1.0.1  # via sphinx
 sphinxcontrib-devhelp==1.0.1  # via sphinx
 sphinxcontrib-htmlhelp==1.0.3  # via sphinx
 sphinxcontrib-jsmath==1.0.1  # via sphinx
 sphinxcontrib-qthelp==1.0.2  # via sphinx
 sphinxcontrib-serializinghtml==1.1.3  # via sphinx
-sqlparse==0.3.0
-strict-rfc3339==0.7
-transifex-client==0.13.7
+sqlparse==0.3.0           # via -r requirements.txt, django-debug-toolbar
+strict-rfc3339==0.7       # via -r requirements.txt, libcove, libcoveweb
+transifex-client==0.13.7  # via -r requirements_dev.in
 unidecode==1.1.1          # via python-slugify
-urllib3==1.25.8
+urllib3==1.25.8           # via -r requirements.txt, requests, selenium, transifex-client
 wcwidth==0.1.8            # via pytest
-webencodings==0.5.1
+webencodings==0.5.1       # via -r requirements.txt, bleach
 werkzeug==1.0.0           # via pytest-localserver
-xmltodict==0.12.0
-zipp==3.0.0
+xmltodict==0.12.0         # via -r requirements.txt, flattentool, libcoveweb
 
 # The following packages are considered to be unsafe in a requirements file:
 # pip
