@@ -1176,3 +1176,39 @@ def test_release_table_7_rows(url_input_browser):
     assert "first 25 releases" not in panel.text
     table_rows = browser.find_elements_by_css_selector("#releases-table-panel table tbody tr")
     assert len(table_rows) == 7
+
+
+@pytest.fixture
+def settings_releases_table_10(settings):
+    # This needs to be in a fixture, to make sure its loaded before
+    # url_input_browser
+    settings.RELEASES_TABLE_LENGTH = 10
+
+
+def test_release_table_10_rows_env_var(settings_releases_table_10, url_input_browser):
+    """
+    Check that when the appropriate setting is set, and there are more than 10
+    releases, only 10 are shown in the table, and there is a message.
+    """
+
+    browser = url_input_browser("30_releases.json")
+    assert "This file contains 30 releases" in browser.find_element_by_tag_name("body").text
+    panel = browser.find_element_by_css_selector("#releases-table-panel")
+    assert "first 10 releases" in panel.text
+    table_rows = browser.find_elements_by_css_selector("#releases-table-panel table tbody tr")
+    assert len(table_rows) == 10
+
+
+def test_release_table_7_rows_env_var(settings_releases_table_10, url_input_browser):
+    """
+    Check that when the appropriate setting is set, and there are less than 10
+    releases, they are all shown in the table, and there is no message.
+    """
+
+    browser = url_input_browser("tenders_releases_7_releases_check_ocids.json")
+    assert "This file contains 7 releases" in browser.find_element_by_tag_name("body").text
+    panel = browser.find_element_by_css_selector("#releases-table-panel")
+    assert "first 25 releases" not in panel.text
+    assert "first 10 releases" not in panel.text
+    table_rows = browser.find_elements_by_css_selector("#releases-table-panel table tbody tr")
+    assert len(table_rows) == 7
