@@ -49,27 +49,6 @@ This will make the test site available on the local machine only. If you are run
 
     python manage.py runserver 0.0.0.0:8000
 
-Commandline interface
----------------------
-
-You can pass a JSON file for review to the DRT at the commandline after installing it in a virtual environment.
-
-.. code:: bash
-
-    $ python manage.py ocds_cli [-h]
-                                [--version] [-v {0,1,2,3}]
-                                [--settings SETTINGS]
-                                [--pythonpath PYTHONPATH]
-                                [--traceback]
-                                [--no-color]
-                                [--schema-version SCHEMA_VERSION]
-                                [--convert]
-                                [--output-dir OUTPUT_DIR]
-                                [--delete]
-                                [--exclude-file]
-                                file
-
-
 Indices and tables
 ==================
 
