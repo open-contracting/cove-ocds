@@ -13,7 +13,7 @@ env = environ.Env(
     HOTJAR_ID=(str, ""),
     HOTJAR_SV=(str, ""),
     HOTJAR_DATE_INFO=(str, ""),
-    RELEASES_TABLE_LENGTH=(int, 25),
+    RELEASES_OR_RECORDS_TABLE_LENGTH=(int, 25),
 )
 
 
@@ -24,7 +24,7 @@ HOTJAR = {
     "sv": env("HOTJAR_SV"),
     "date_info": env("HOTJAR_DATE_INFO"),
 }
-RELEASES_TABLE_LENGTH = env("RELEASES_TABLE_LENGTH")
+RELEASES_OR_RECORDS_TABLE_LENGTH = env("RELEASES_OR_RECORDS_TABLE_LENGTH")
 
 # We can't take MEDIA_ROOT and MEDIA_URL from cove settings,
 # ... otherwise the files appear under the BASE_DIR that is the Cove library install.

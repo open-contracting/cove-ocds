@@ -30,7 +30,7 @@
            <strong>At a glance</strong>
            <ul>
              <li><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-             {% blocktrans count count=records_aggregates.count %}This file contains <strong>{{count}} record.</strong>{% plural %}This file contains <strong>{{count}} record.</strong>{% endblocktrans %}
+             {% blocktrans count count=records_aggregates.count %}This file contains <strong>{{count}} record.</strong>{% plural %}This file contains <strong>{{count}} records.</strong>{% endblocktrans %}
              </li>
              {% if data_schema_version %}
                 <li><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
@@ -136,27 +136,40 @@
 </div><!--End Row -->
 <div class="row"> <!--Start Row (Detail Table)-->
   <div class="col-md-12">
-    <table class="table table-striped">
-      <caption>{% trans "Records Table:" %}</caption>
-      <thead>
-        <tr>
-          <th>ocid</th>
-          <th>release count</th>
-          <th>compiledRelease</th>
-          <th>versionedRelease</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for record in records %}
-        <tr>
-          <td>{{ record.ocid }}</td>
-          <td>{{ record.releases|length }}</td>
-          <td>{% if record.compiledRelease %}Yes{% else %}No{% endif %}</td>
-          <td>{% if record.versionedRelease %}Yes{% else %}No{% endif %}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <div class="panel panel-default" id="records-table-panel">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+           {% trans "Records Table:" %}
+        </h4>
+      </div>
+      <div class="panel-body">
+        {% if records|length > releases_or_records_table_length %}
+        <p>
+          {% blocktrans %}Showing the first {{releases_or_records_table_length}} records.{% endblocktrans %}
+        </p>
+        {% endif %}
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>ocid</th>
+              <th>release count</th>
+              <th>compiledRelease</th>
+              <th>versionedRelease</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for record in records|slice:releases_or_records_table_slice %}
+            <tr>
+              <td>{{ record.ocid }}</td>
+              <td>{{ record.records|length }}</td>
+              <td>{% if record.compiledRelease %}Yes{% else %}No{% endif %}</td>
+              <td>{% if record.versionedRelease %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div><!--End Row -->
 

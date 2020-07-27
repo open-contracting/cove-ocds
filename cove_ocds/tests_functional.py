@@ -1150,7 +1150,7 @@ def test_additional_checks_error_modal(
     ).click()
 
 
-def test_release_table_25_rows(url_input_browser):
+def test_releases_table_25_rows(url_input_browser):
     """
     Check that when there are more than 25 releases, only 25 are shown in the
     table, and there is a message.
@@ -1164,7 +1164,7 @@ def test_release_table_25_rows(url_input_browser):
     assert len(table_rows) == 25
 
 
-def test_release_table_7_rows(url_input_browser):
+def test_releases_table_7_rows(url_input_browser):
     """
     Check that when there are less than 25 releases, they are all shown in the
     table, and there is no message.
@@ -1182,10 +1182,10 @@ def test_release_table_7_rows(url_input_browser):
 def settings_releases_table_10(settings):
     # This needs to be in a fixture, to make sure its loaded before
     # url_input_browser
-    settings.RELEASES_TABLE_LENGTH = 10
+    settings.RELEASES_OR_RECORDS_TABLE_LENGTH = 10
 
 
-def test_release_table_10_rows_env_var(settings_releases_table_10, url_input_browser):
+def test_releases_table_10_rows_env_var(settings_releases_table_10, url_input_browser):
     """
     Check that when the appropriate setting is set, and there are more than 10
     releases, only 10 are shown in the table, and there is a message.
@@ -1199,7 +1199,7 @@ def test_release_table_10_rows_env_var(settings_releases_table_10, url_input_bro
     assert len(table_rows) == 10
 
 
-def test_release_table_7_rows_env_var(settings_releases_table_10, url_input_browser):
+def test_releases_table_7_rows_env_var(settings_releases_table_10, url_input_browser):
     """
     Check that when the appropriate setting is set, and there are less than 10
     releases, they are all shown in the table, and there is no message.
@@ -1211,4 +1211,68 @@ def test_release_table_7_rows_env_var(settings_releases_table_10, url_input_brow
     assert "first 25 releases" not in panel.text
     assert "first 10 releases" not in panel.text
     table_rows = browser.find_elements_by_css_selector("#releases-table-panel table tbody tr")
+    assert len(table_rows) == 7
+
+
+def test_records_table_25_rows(url_input_browser):
+    """
+    Check that when there are more than 25 records, only 25 are shown in the
+    table, and there is a message.
+    """
+
+    browser = url_input_browser("30_records.json")
+    assert "This file contains 30 records" in browser.find_element_by_tag_name("body").text
+    panel = browser.find_element_by_css_selector("#records-table-panel")
+    assert "first 25 records" in panel.text
+    table_rows = browser.find_elements_by_css_selector("#records-table-panel table tbody tr")
+    assert len(table_rows) == 25
+
+
+def test_records_table_7_rows(url_input_browser):
+    """
+    Check that when there are less than 25 records, they are all shown in the
+    table, and there is no message.
+    """
+
+    browser = url_input_browser("7_records.json")
+    assert "This file contains 7 records" in browser.find_element_by_tag_name("body").text
+    panel = browser.find_element_by_css_selector("#records-table-panel")
+    assert "first 25 records" not in panel.text
+    table_rows = browser.find_elements_by_css_selector("#records-table-panel table tbody tr")
+    assert len(table_rows) == 7
+
+
+@pytest.fixture
+def settings_records_table_10(settings):
+    # This needs to be in a fixture, to make sure its loaded before
+    # url_input_browser
+    settings.RELEASES_OR_RECORDS_TABLE_LENGTH = 10
+
+
+def test_records_table_10_rows_env_var(settings_records_table_10, url_input_browser):
+    """
+    Check that when the appropriate setting is set, and there are more than 10
+    records, only 10 are shown in the table, and there is a message.
+    """
+
+    browser = url_input_browser("30_records.json")
+    assert "This file contains 30 records" in browser.find_element_by_tag_name("body").text
+    panel = browser.find_element_by_css_selector("#records-table-panel")
+    assert "first 10 records" in panel.text
+    table_rows = browser.find_elements_by_css_selector("#records-table-panel table tbody tr")
+    assert len(table_rows) == 10
+
+
+def test_records_table_7_rows_env_var(settings_records_table_10, url_input_browser):
+    """
+    Check that when the appropriate setting is set, and there are less than 10
+    records, they are all shown in the table, and there is no message.
+    """
+
+    browser = url_input_browser("7_records.json")
+    assert "This file contains 7 records" in browser.find_element_by_tag_name("body").text
+    panel = browser.find_element_by_css_selector("#records-table-panel")
+    assert "first 25 records" not in panel.text
+    assert "first 10 records" not in panel.text
+    table_rows = browser.find_elements_by_css_selector("#records-table-panel table tbody tr")
     assert len(table_rows) == 7
