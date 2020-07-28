@@ -406,7 +406,10 @@ def test_500_error(server_url, browser):
         ),
         ("tenders_releases_2_releases_codelists.json", ["oh no", "GSINS"], [], True),
         # Test UTF-8 support
-        ("utf8.json", "Convert", [], True),
+        ("utf8.json", "Convert", ["Ensure that your file uses UTF-8 encoding"], True),
+        # Test that non UTF-8 files get an error, with a helpful message
+        ("latin1.json", "Ensure that your file uses UTF-8 encoding", [], False),
+        ("utf-16.json", "Ensure that your file uses UTF-8 encoding", [], False),
         # But we expect to see an error message if a file is not well formed JSON at all
         (
             "tenders_releases_2_releases_not_json.json",
