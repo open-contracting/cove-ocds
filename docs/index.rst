@@ -15,6 +15,7 @@ This documentation is for people who wish to contribute to or modify the DRT.
    translations
    how-to-add-a-validation-check
    how-to-edit-stylesheet
+   how-to-config-frontend
    tests
    ocds-show
 

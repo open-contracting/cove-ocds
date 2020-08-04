@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-06 10:17+0000\n"
+"POT-Creation-Date: 2020-07-27 13:12+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -449,7 +449,7 @@ msgstr ""
 #: cove_ocds/templates/cove_ocds/explore_record.html:33
 #, python-format
 msgid "This file contains <strong>%(count)s record.</strong>"
-msgid_plural "This file contains <strong>%(count)s record.</strong>"
+msgid_plural "This file contains <strong>%(count)s records.</strong>"
 msgstr[0] ""
 msgstr[1] ""
 
@@ -546,16 +546,21 @@ msgstr ""
 msgid "Unique OCIDs"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:140
+#: cove_ocds/templates/cove_ocds/explore_record.html:142
 msgid "Records Table:"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:170
+#: cove_ocds/templates/cove_ocds/explore_record.html:148
+#, python-format
+msgid "Showing the first %(releases_or_records_table_length)s records."
+msgstr ""
+
+#: cove_ocds/templates/cove_ocds/explore_record.html:183
 #: cove_ocds/templates/cove_ocds/explore_release.html:427
 msgid "Explore your data:"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:175
+#: cove_ocds/templates/cove_ocds/explore_record.html:188
 #: cove_ocds/templates/cove_ocds/explore_release.html:432
 msgid ""
 "This section provides a visual representation of the data, use it to check "
@@ -563,14 +568,14 @@ msgid ""
 "it."
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:178
+#: cove_ocds/templates/cove_ocds/explore_record.html:191
 #: cove_ocds/templates/cove_ocds/explore_release.html:435
 msgid ""
 "Extensions and additional fields are hidden by default, click the 'Extra "
 "fields' buttons or open the 'Extra fields' section to view them."
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:181
+#: cove_ocds/templates/cove_ocds/explore_record.html:194
 #: cove_ocds/templates/cove_ocds/explore_release.html:438
 msgid ""
 "When viewing an OCDS record, use the numbers at the top of the visualization "
@@ -838,9 +843,11 @@ msgid "Releases Table:"
 msgstr ""
 
 #: cove_ocds/templates/cove_ocds/explore_release.html:346
+#, python-format
 msgid ""
-"Showing the first 25 releases. To explore all your data in a tabular format, "
-"convert it to a spreadsheet using the \"Convert\" section, above."
+"Showing the first %(releases_or_records_table_length)s releases. To explore "
+"all your data in a tabular format, convert it to a spreadsheet using the "
+"\"Convert\" section, above."
 msgstr ""
 
 #: cove_ocds/templates/cove_ocds/explore_release.html:353

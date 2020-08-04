@@ -341,9 +341,9 @@
         </h4>
       </div>
       <div class="panel-body">
-        {% if releases|length > 25 %}
+        {% if releases|length > releases_or_records_table_length %}
         <p>
-          {% blocktrans %}Showing the first 25 releases. To explore all your data in a tabular format, convert it to a spreadsheet using the "Convert" section, above.{% endblocktrans %}
+          {% blocktrans %}Showing the first {{releases_or_records_table_length}} releases. To explore all your data in a tabular format, convert it to a spreadsheet using the "Convert" section, above.{% endblocktrans %}
         </p>
         {% endif %}
         <table class="table table-striped">
@@ -357,7 +357,7 @@
             </tr>
           </thead>
           <tbody>
-            {% for release in releases|slice:":25" %}
+            {% for release in releases|slice:releases_or_records_table_slice %}
             <tr>
               <td>{{ release.ocid }}</td>
               <td>{{ release.date|date:"j M Y, H:i (e)" }}</td>
