@@ -762,8 +762,9 @@ def test_flattentool_warnings(
     else:
         source_filename = "tenders_releases_2_releases.xlsx"
 
-    import flattentool
     import warnings
+
+    import flattentool
     from flattentool.exceptions import DataErrorWarning
 
     def mockunflatten(input_name, output_name, *args, **kwargs):
@@ -1191,6 +1192,11 @@ def test_releases_table_10_rows_env_var(settings_releases_table_10, url_input_br
     releases, only 10 are shown in the table, and there is a message.
     """
 
+    # If we're testing a remove server then we can't run this test as we can't
+    # set up the environment variable
+    if "CUSTOM_SERVER_URL" in os.environ:
+        pytest.skip()
+
     browser = url_input_browser("30_releases.json")
     assert "This file contains 30 releases" in browser.find_element_by_tag_name("body").text
     panel = browser.find_element_by_css_selector("#releases-table-panel")
@@ -1204,6 +1210,11 @@ def test_releases_table_7_rows_env_var(settings_releases_table_10, url_input_bro
     Check that when the appropriate setting is set, and there are less than 10
     releases, they are all shown in the table, and there is no message.
     """
+
+    # If we're testing a remove server then we can't run this test as we can't
+    # set up the environment variable
+    if "CUSTOM_SERVER_URL" in os.environ:
+        pytest.skip()
 
     browser = url_input_browser("tenders_releases_7_releases_check_ocids.json")
     assert "This file contains 7 releases" in browser.find_element_by_tag_name("body").text
@@ -1255,6 +1266,11 @@ def test_records_table_10_rows_env_var(settings_records_table_10, url_input_brow
     records, only 10 are shown in the table, and there is a message.
     """
 
+    # If we're testing a remove server then we can't run this test as we can't
+    # set up the environment variable
+    if "CUSTOM_SERVER_URL" in os.environ:
+        pytest.skip()
+
     browser = url_input_browser("30_records.json")
     assert "This file contains 30 records" in browser.find_element_by_tag_name("body").text
     panel = browser.find_element_by_css_selector("#records-table-panel")
@@ -1268,6 +1284,11 @@ def test_records_table_7_rows_env_var(settings_records_table_10, url_input_brows
     Check that when the appropriate setting is set, and there are less than 10
     records, they are all shown in the table, and there is no message.
     """
+
+    # If we're testing a remove server then we can't run this test as we can't
+    # set up the environment variable
+    if "CUSTOM_SERVER_URL" in os.environ:
+        pytest.skip()
 
     browser = url_input_browser("7_records.json")
     assert "This file contains 7 records" in browser.find_element_by_tag_name("body").text
