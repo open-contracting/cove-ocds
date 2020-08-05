@@ -3,7 +3,6 @@ import json
 import pytest
 from cove.input.models import SuppliedData
 from django.core.files.base import ContentFile
-
 from hypothesis import HealthCheck, assume, example, given, settings
 from hypothesis import strategies as st
 from libcoveocds.lib.common_checks import get_releases_aggregates

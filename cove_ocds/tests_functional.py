@@ -762,8 +762,9 @@ def test_flattentool_warnings(
     else:
         source_filename = "tenders_releases_2_releases.xlsx"
 
-    import flattentool
     import warnings
+
+    import flattentool
     from flattentool.exceptions import DataErrorWarning
 
     def mockunflatten(input_name, output_name, *args, **kwargs):
