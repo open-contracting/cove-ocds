@@ -1,4 +1,4 @@
-How to replace something hardcoded in the frontend with a configureable variable
+How to replace something hardcoded in the frontend with a configurable variable
 ================================================================================
 
 Pick a name for the environment variable you want to configure cove with. In this example we use `MY_ENV_VAR`.
