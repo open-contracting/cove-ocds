@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-27 13:12+0000\n"
+"POT-Creation-Date: 2020-08-05 13:55+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 
 #: cove_ocds/lib/exceptions.py:11 cove_ocds/lib/exceptions.py:31
 #: cove_ocds/lib/exceptions.py:54 cove_ocds/lib/exceptions.py:74
-#: cove_ocds/views.py:81 cove_ocds/views.py:99
+#: cove_ocds/views.py:80 cove_ocds/views.py:91 cove_ocds/views.py:109
 msgid "Try Again"
 msgstr ""
 
@@ -1140,11 +1140,29 @@ msgstr ""
 msgid "Line:"
 msgstr ""
 
-#: cove_ocds/views.py:79 cove_ocds/views.py:97
+#: cove_ocds/views.py:78 cove_ocds/views.py:89 cove_ocds/views.py:107
 msgid "Sorry, we can't process that data"
 msgstr ""
 
-#: cove_ocds/views.py:101
+#: cove_ocds/views.py:81
+msgid ""
+"The file that you uploaded doesn't appear to be well formed JSON. OCDS JSON "
+"follows the I-JSON format, which requires UTF-8 encoding. Ensure that your "
+"file uses UTF-8 encoding, then try uploading again.\n"
+"\n"
+"<span class=\"glyphicon glyphicon-exclamation-sign\" aria-hidden=\"true\"></"
+"span> <strong>Error message:</strong> {}"
+msgstr ""
+
+#: cove_ocds/views.py:94
+msgid ""
+"We think you tried to upload a JSON file, but it is not well formed JSON.\n"
+"\n"
+"<span class=\"glyphicon glyphicon-exclamation-sign\" aria-hidden=\"true\"></"
+"span> <strong>Error message:</strong> {}"
+msgstr ""
+
+#: cove_ocds/views.py:111
 msgid ""
 "OCDS JSON should have an object as the top level, the JSON you supplied does "
 "not."

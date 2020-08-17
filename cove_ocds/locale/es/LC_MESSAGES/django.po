@@ -7,9 +7,9 @@
 # Bibiana Cristòfol <bcristofol@gmail.com>, 2020
 # Romina Fernandez <rfernandez@cds.com.py>, 2020
 # Amy Guy <amy.guy@opendataservices.coop>, 2020
-# Eduardo Gomez <eduardo.gomez@hotmail.co.uk>, 2020
 # James Baster <james.baster@opendataservices.coop>, 2020
 # Maria Esther Cervantes <mariaesther@idatosabiertos.org>, 2020
+# Eduardo Gomez <eduardo.gomez@hotmail.co.uk>, 2020
 # Ben Webb <ben.webb@opendataservices.coop>, 2020
 # 
 #, fuzzy
@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-27 13:12+0000\n"
+"POT-Creation-Date: 2020-08-05 13:55+0000\n"
 "PO-Revision-Date: 2020-01-02 14:12+0000\n"
 "Last-Translator: Ben Webb <ben.webb@opendataservices.coop>, 2020\n"
 "Language-Team: Spanish (https://www.transifex.com/OpenDataServices/teams/59127/es/)\n"
@@ -33,7 +33,7 @@ msgstr "Versión del esquema no reconocida"
 
 #: cove_ocds/lib/exceptions.py:11 cove_ocds/lib/exceptions.py:31
 #: cove_ocds/lib/exceptions.py:54 cove_ocds/lib/exceptions.py:74
-#: cove_ocds/views.py:81 cove_ocds/views.py:99
+#: cove_ocds/views.py:80 cove_ocds/views.py:91 cove_ocds/views.py:109
 msgid "Try Again"
 msgstr "Inténtelo de nuevo"
 
@@ -1301,11 +1301,31 @@ msgstr "Ruta:"
 msgid "Line:"
 msgstr "Línea:"
 
-#: cove_ocds/views.py:79 cove_ocds/views.py:97
+#: cove_ocds/views.py:78 cove_ocds/views.py:89 cove_ocds/views.py:107
 msgid "Sorry, we can't process that data"
 msgstr "Lo sentimos, no podemos procesar esos datos"
 
-#: cove_ocds/views.py:101
+#: cove_ocds/views.py:81
+msgid ""
+"The file that you uploaded doesn't appear to be well formed JSON. OCDS JSON follows the I-JSON format, which requires UTF-8 encoding. Ensure that your file uses UTF-8 encoding, then try uploading again.\n"
+"\n"
+"<span class=\"glyphicon glyphicon-exclamation-sign\" aria-hidden=\"true\"></span> <strong>Error message:</strong> {}"
+msgstr ""
+"El archivo que cargó no parece ser un JSON bien formado. Los JSON OCDS siguen el formato I-JSON, que requiere el uso de la codificación UTF-8. Asegúrese de que su archivo use la codificación UTF-8, luego intente cargarlo nuevamente.\n"
+"\n"
+"<span class=\"glyphicon glyphicon-exclamation-sign\" aria-hidden=\"true\"></span> <strong>Mensaje del error:</strong> {}"
+
+#: cove_ocds/views.py:94
+msgid ""
+"We think you tried to upload a JSON file, but it is not well formed JSON.\n"
+"\n"
+"<span class=\"glyphicon glyphicon-exclamation-sign\" aria-hidden=\"true\"></span> <strong>Error message:</strong> {}"
+msgstr ""
+"Creemos que está intentando enviar un archivo JSON que contiene algunos errores de forma\n"
+"\n"
+"<span class=\"glyphicon glyphicon-exclamation-sign\" aria-hidden=\"true\"></span> <strong>Mensaje del error:</strong> {}"
+
+#: cove_ocds/views.py:111
 msgid ""
 "OCDS JSON should have an object as the top level, the JSON you supplied does"
 " not."
