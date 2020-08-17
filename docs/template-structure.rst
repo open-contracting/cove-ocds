@@ -10,9 +10,9 @@ In lib-cove-web you will find:
 * Various error pages.
 * Terms and conditions, usage statistics, analytics.
 
-In cove-ocds (this repo) you will find specialisations of these, either some blocks or entire templates.
+In cove-ocds (this repo) you will find specializations of these, either some blocks or entire templates.
 
-* The base, input, and some of the result table templates customise text and appearance for the OCDS DRT.
+* The base, input, and some of the result table templates customize text and appearance for the OCDS DRT.
 * ``explore_base``, ``explore_record`` and ``explore_release`` modify the base ``explore`` template depending on the data input.
 * Additional template partials which are included in other templates.
 
@@ -30,7 +30,7 @@ Some of the templates include variables for the translation of generic terms so 
   {% trans 'Excel Spreadsheet (.xlsx)' as xlsx %} 
   {% trans 'CSV Spreadsheet (.csv)' as csv %} 
   {% trans 'Excel Spreadsheet (.xlsx) with titles' as xlsx_titles %} 
-  {# Translators: JSON probably does not need a transalation: http://www.json.org/ #}
+  {# Translators: JSON probably does not need a translation: http://www.json.org/ #}
   {% trans 'JSON' as JSON %}
   {% trans 'XML' as XML %}
 
