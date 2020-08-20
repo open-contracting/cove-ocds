@@ -4,7 +4,7 @@
 #
 #    pip-compile requirements_dev.in
 #
--e git+https://github.com/OpenDataServices/lib-cove-web.git@v0.14.0#egg=libcoveweb  # via -r requirements.txt
+-e git+https://github.com/OpenDataServices/lib-cove-web.git@v0.15.0#egg=libcoveweb  # via -r requirements.txt
 alabaster==0.7.12         # via sphinx
 attrs==19.3.0             # via -r requirements.txt, hypothesis, jsonschema, pytest
 babel==2.8.0              # via sphinx
