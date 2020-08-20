@@ -4,7 +4,7 @@
 #
 #    pip-compile
 #
--e git+https://github.com/OpenDataServices/lib-cove-web.git@v0.14.0#egg=libcoveweb  # via -r requirements.in
+-e git+https://github.com/OpenDataServices/lib-cove-web.git@v0.15.0#egg=libcoveweb  # via -r requirements.in
 attrs==19.3.0             # via jsonschema
 bleach==3.1.5             # via -r requirements.in, libcove, libcoveocds
 cached-property==1.5.1    # via -r requirements.in, libcove, libcoveocds, libcoveweb
