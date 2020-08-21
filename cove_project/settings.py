@@ -146,14 +146,14 @@ COVE_CONFIG = {
     "schema_version_choices": OrderedDict(
         (  # {version: (display, url)}
             ("1.0", ("1.0", "https://standard.open-contracting.org/schema/1__0__3/")),
-            ("1.1", ("1.1", "https://standard.open-contracting.org/schema/1__1__4/")),
+            ("1.1", ("1.1", "https://standard.open-contracting.org/schema/1__1__5/")),
         )
     ),
     "schema_codelists": OrderedDict(
         (  # {version: codelist_dir}
             (
                 "1.1",
-                "https://raw.githubusercontent.com/open-contracting/standard/1.1/standard/schema/codelists/",
+                "https://raw.githubusercontent.com/open-contracting/standard/1.1/schema/codelists/",
             ),
         )
     ),

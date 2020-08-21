@@ -358,7 +358,8 @@ def test_500_error(server_url, browser):
                 "id is missing but required within tender",
                 "initiationType is missing but required",
                 "Incorrect date format. Dates should use the form YYYY-MM-DDT00:00:00Z. Learn more about dates in OCDS.",
-                "The date this information was first released, or published.",
+                # This matches the description of the `date` field in release-schema.json.
+                "The date on which the information contained in the release was first recorded in, or published by, any system.",
                 "Invalid 'uri' found",
                 "The URI of this package that identifies it uniquely in the world.",
                 "Invalid code found in currency",
