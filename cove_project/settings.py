@@ -153,7 +153,7 @@ COVE_CONFIG = {
         (  # {version: codelist_dir}
             (
                 "1.1",
-                "https://raw.githubusercontent.com/open-contracting/standard/1.1/standard/schema/codelists/",
+                "https://raw.githubusercontent.com/open-contracting/standard/1.1/schema/codelists/",
             ),
         )
     ),
