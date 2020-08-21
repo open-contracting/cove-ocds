@@ -28,7 +28,7 @@ jsonref==0.2              # via flattentool, libcove
 jsonschema==3.2.0
 lepl==5.1.3               # via rfc6266
 libcove==0.17.0
-libcoveocds==0.7.5
+libcoveocds==0.7.6
 lxml==4.5.2               # via flattentool
 odfpy==1.4.1              # via flattentool
 openpyxl==2.6.4
