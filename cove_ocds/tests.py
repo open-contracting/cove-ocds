@@ -269,7 +269,7 @@ def test_get_releases_aggregates():
 
 def test_get_schema_validation_errors():
     schema_obj = SchemaOCDS(select_version="1.0")
-    schema_name = schema_obj.release_pkg_schema_name
+    schema_name = schema_obj.pkg_schema_name
 
     with open(
         os.path.join("cove_ocds", "fixtures", "tenders_releases_2_releases.json")
@@ -319,11 +319,11 @@ def test_get_json_data_deprecated_fields():
 
     schema_obj = SchemaOCDS()
     schema_obj.schema_host = os.path.join("cove_ocds", "fixtures/")
-    schema_obj.release_pkg_schema_name = (
+    schema_obj.pkg_schema_name = (
         "release_package_schema_ref_release_schema_deprecated_fields.json"
     )
-    schema_obj.release_pkg_schema_url = os.path.join(
-        schema_obj.schema_host, schema_obj.release_pkg_schema_name
+    schema_obj.pkg_schema_url = os.path.join(
+        schema_obj.schema_host, schema_obj.pkg_schema_name
     )
     json_data_paths = cove_common.get_json_data_generic_paths(json_data_w_deprecations)
     deprecated_data_fields = cove_common.get_json_data_deprecated_fields(
@@ -365,11 +365,11 @@ def test_get_json_data_deprecated_fields():
 def test_get_schema_deprecated_paths():
     schema_obj = SchemaOCDS()
     schema_obj.schema_host = os.path.join("cove_ocds", "fixtures/")
-    schema_obj.release_pkg_schema_name = (
+    schema_obj.pkg_schema_name = (
         "release_package_schema_ref_release_schema_deprecated_fields.json"
     )
-    schema_obj.release_pkg_schema_url = os.path.join(
-        schema_obj.schema_host, schema_obj.release_pkg_schema_name
+    schema_obj.pkg_schema_url = os.path.join(
+        schema_obj.schema_host, schema_obj.pkg_schema_name
     )
     deprecated_paths = cove_common._get_schema_deprecated_paths(schema_obj)
     expected_results = [
@@ -773,9 +773,9 @@ def test_schema_ocds_constructor(
     url = host + name
 
     assert schema.version == version
-    assert schema.release_pkg_schema_name == name
+    assert schema.pkg_schema_name == name
     assert schema.schema_host == host
-    assert schema.release_pkg_schema_url == url
+    assert schema.pkg_schema_url == url
     assert schema.invalid_version_argument == invalid_version_argument
     assert schema.invalid_version_data == invalid_version_data
     assert schema.extensions == extensions
@@ -829,24 +829,24 @@ def test_schema_ocds_extensions(
     assert schema.extensions == extensions
     assert not schema.extended
 
-    release_schema_obj = schema.get_release_schema_obj()
+    schema_obj = schema.get_schema_obj()
     assert schema.invalid_extension == invalid_extension
     assert schema.extended == extended
 
     if extends_schema:
-        assert "Metric" in release_schema_obj["definitions"].keys()
-        assert release_schema_obj["definitions"]["Award"]["properties"].get(
+        assert "Metric" in schema_obj["definitions"].keys()
+        assert schema_obj["definitions"]["Award"]["properties"].get(
             "agreedMetrics"
         )
     else:
-        assert "Metric" not in release_schema_obj["definitions"].keys()
-        assert not release_schema_obj["definitions"]["Award"]["properties"].get(
+        assert "Metric" not in schema_obj["definitions"].keys()
+        assert not schema_obj["definitions"]["Award"]["properties"].get(
             "agreedMetrics"
         )
 
 
 @pytest.mark.django_db
-def test_schema_ocds_extended_release_schema_file():
+def test_schema_ocds_extended_schema_file():
     data = SuppliedData.objects.create()
     with open(
         os.path.join(
@@ -861,25 +861,25 @@ def test_schema_ocds_extended_release_schema_file():
     schema = SchemaOCDS(release_data=json_data)
     assert not schema.extended
 
-    schema.get_release_schema_obj()
+    schema.get_schema_obj()
     assert schema.extended
     assert not schema.extended_schema_file
     assert not schema.extended_schema_url
 
-    schema.create_extended_release_schema_file(data.upload_dir(), data.upload_url())
+    schema.create_extended_schema_file(data.upload_dir(), data.upload_url())
     assert schema.extended_schema_file == os.path.join(
-        data.upload_dir(), "extended_release_schema.json"
+        data.upload_dir(), "extended_schema.json"
     )
     assert schema.extended_schema_url == os.path.join(
-        data.upload_url(), "extended_release_schema.json"
+        data.upload_url(), "extended_schema.json"
     )
 
     json_data = json.loads(
         '{"version": "1.1", "extensions": [], "releases": [{"ocid": "xx"}]}'
     )
     schema = SchemaOCDS(release_data=json_data)
-    schema.get_release_schema_obj()
-    schema.create_extended_release_schema_file(data.upload_dir(), data.upload_url())
+    schema.get_schema_obj()
+    schema.create_extended_schema_file(data.upload_dir(), data.upload_url())
     assert not schema.extended
     assert not schema.extended_schema_file
     assert not schema.extended_schema_url
@@ -901,7 +901,7 @@ def test_schema_after_version_change(client):
     assert resp.status_code == 200
 
     with open(
-        os.path.join(data.upload_dir(), "extended_release_schema.json")
+        os.path.join(data.upload_dir(), "extended_schema.json")
     ) as extended_release_fp:
         assert (
             "mainProcurementCategory"
@@ -916,10 +916,10 @@ def test_schema_after_version_change(client):
     # test link is still there.
     resp = client.get(data.get_absolute_url())
     assert resp.status_code == 200
-    assert "extended_release_schema.json" in resp.content.decode()
+    assert "extended_schema.json" in resp.content.decode()
 
     with open(
-        os.path.join(data.upload_dir(), "extended_release_schema.json")
+        os.path.join(data.upload_dir(), "extended_schema.json")
     ) as extended_release_fp:
         assert (
             "mainProcurementCategory"
@@ -935,7 +935,7 @@ def test_schema_after_version_change(client):
     assert resp.status_code == 200
 
     with open(
-        os.path.join(data.upload_dir(), "extended_release_schema.json")
+        os.path.join(data.upload_dir(), "extended_schema.json")
     ) as extended_release_fp:
         assert (
             "mainProcurementCategory"
@@ -968,7 +968,7 @@ def test_schema_after_version_change_record(client):
     assert resp.status_code == 200
 
     with open(
-        os.path.join(data.upload_dir(), "extended_release_schema.json")
+        os.path.join(data.upload_dir(), "extended_schema.json")
     ) as extended_release_fp:
         assert (
             "mainProcurementCategory"
@@ -983,10 +983,10 @@ def test_schema_after_version_change_record(client):
     # test link is still there.
     resp = client.get(data.get_absolute_url())
     assert resp.status_code == 200
-    assert "extended_release_schema.json" in resp.content.decode()
+    assert "extended_schema.json" in resp.content.decode()
 
     with open(
-        os.path.join(data.upload_dir(), "extended_release_schema.json")
+        os.path.join(data.upload_dir(), "extended_schema.json")
     ) as extended_release_fp:
         assert (
             "mainProcurementCategory"
@@ -1002,7 +1002,7 @@ def test_schema_after_version_change_record(client):
     assert resp.status_code == 200
 
     with open(
-        os.path.join(data.upload_dir(), "extended_release_schema.json")
+        os.path.join(data.upload_dir(), "extended_schema.json")
     ) as extended_release_fp:
         assert (
             "mainProcurementCategory"
@@ -1135,7 +1135,7 @@ def test_context_api_transform_extensions():
     """Expected result for extensions after trasform:
 
     'extensions': {
-        'extended_schema_url': 'extended_release_schema.json',
+        'extended_schema_url': 'extended_schema.json',
         'extensions': [{'description': 'description_a', 'documentationUrl': 'documentation_a', 'name': 'a', 'url': 'url_a'},
                        {'description': 'description_b', 'documentationUrl': 'documentation_b', 'name': 'b', 'url': 'url_b'},
                        {'description': 'description_c', 'documentationUrl': 'documentation_c', 'name': 'c', 'url': 'url_c'},
@@ -1183,7 +1183,7 @@ def test_context_api_transform_extensions():
                 "bad_url_y": [],
                 "bad_url_z": [],
             },
-            "extended_schema_url": "extended_release_schema.json",
+            "extended_schema_url": "extended_schema.json",
         },
         "validation_errors_count": 0,
         "additional_fields_count": 0,

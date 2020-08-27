@@ -120,6 +120,7 @@ def explore_ocds(request, pk):
                 select_version=select_version,
                 release_data=json_data,
                 lib_cove_ocds_config=lib_cove_ocds_config,
+                record_pkg="records" in json_data
             )
 
             if schema_ocds.missing_package:
@@ -142,8 +143,8 @@ def explore_ocds(request, pk):
             if schema_ocds.version != db_data.schema_version:
                 replace = True
             if schema_ocds.extensions:
-                schema_ocds.create_extended_release_schema_file(upload_dir, upload_url)
-            url = schema_ocds.extended_schema_file or schema_ocds.release_schema_url
+                schema_ocds.create_extended_schema_file(upload_dir, upload_url)
+            url = schema_ocds.extended_schema_file or schema_ocds.schema_url
 
             if "records" in json_data:
                 context["conversion"] = None
@@ -172,7 +173,7 @@ def explore_ocds(request, pk):
         # Use the lowest release pkg schema version accepting 'version' field
         metatab_schema_url = SchemaOCDS(
             select_version="1.1", lib_cove_ocds_config=lib_cove_ocds_config
-        ).release_pkg_schema_url
+        ).pkg_schema_url
         metatab_data = get_spreadsheet_meta_data(
             upload_dir, file_name, metatab_schema_url, file_type
         )
@@ -204,9 +205,9 @@ def explore_ocds(request, pk):
             replace = True
 
         if schema_ocds.extensions:
-            schema_ocds.create_extended_release_schema_file(upload_dir, upload_url)
-        url = schema_ocds.extended_schema_file or schema_ocds.release_schema_url
-        pkg_url = schema_ocds.release_pkg_schema_url
+            schema_ocds.create_extended_schema_file(upload_dir, upload_url)
+        url = schema_ocds.extended_schema_file or schema_ocds.schema_url
+        pkg_url = schema_ocds.pkg_schema_url
 
         context.update(
             convert_spreadsheet(
@@ -253,10 +254,9 @@ def explore_ocds(request, pk):
 
     db_data.save()
 
-    ocds_show_schema = SchemaOCDS()
-    ocds_show_deref_schema = ocds_show_schema.get_release_schema_obj(deref=True)
-
     if "records" in json_data:
+        ocds_show_schema = SchemaOCDS(record_pkg=True)
+        ocds_show_deref_schema = ocds_show_schema.get_schema_obj(deref=True)
         template = "cove_ocds/explore_record.html"
         if hasattr(json_data, "get") and hasattr(json_data.get("records"), "__iter__"):
             context["records"] = json_data["records"]
@@ -267,6 +267,8 @@ def explore_ocds(request, pk):
                 json_data, ocds_show_deref_schema
             )
     else:
+        ocds_show_schema = SchemaOCDS(record_pkg=False)
+        ocds_show_deref_schema = ocds_show_schema.get_schema_obj(deref=True)
         template = "cove_ocds/explore_release.html"
         if hasattr(json_data, "get") and hasattr(json_data.get("releases"), "__iter__"):
             context["releases"] = json_data["releases"]
