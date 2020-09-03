@@ -3,7 +3,7 @@ Django>2.2<2.3
 flattentool>=0.10.0
 libcoveocds>=0.8.0
 libcove>=0.18.0
--e git+https://github.com/OpenDataServices/lib-cove-web.git@v0.15.0#egg=libcoveweb
+libcoveweb>=0.16.0
 django-bootstrap3
 django-debug-toolbar
 requests
