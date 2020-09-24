@@ -44,11 +44,13 @@ Running it locally
     python manage.py compilemessages
     python manage.py runserver
 
-This will make the test site available on the local machine only. If you are running in some kind of container, you may need to do:
+This will make the test site available on the local machine only. If you are running in some kind of container, or on a remote development machine you will need to run:
 
 .. code:: bash
 
-    python manage.py runserver 0.0.0.0:8000
+    ALLOWED_HOSTS='XXX.XXX.XXX.XXX' python manage.py runserver 0.0.0.0:8000
+
+where XXX.XXX.XXX.XXX is the IP address that you'll be using to access the running service. 
 
 Commandline interface
 ---------------------
