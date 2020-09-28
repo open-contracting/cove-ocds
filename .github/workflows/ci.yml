@@ -22,7 +22,6 @@ jobs:
     - run: curl -s -S --retry 3 $BASEDIR/tests/install.sh | bash -
     - run: pip install -r requirements_dev.txt
     - run: curl -s -S --retry 3 $BASEDIR/tests/script.sh | bash -
-    - run: coverage run --source cove_ocds,cove_project manage.py test
     - run: DJANGO_SETTINGS_MODULE=cove_project.settings pytest --cov cove_ocds --cov cove_project
     - run: python manage.py makemessages -l es
     - run: "[ \"$GITHUB_EVENT_NAME\" != \"pull_request\" ] || [ \"`pocount --incomplete cove_ocds/locale/es/LC_MESSAGES/django.po`\" = \"\" ]"
