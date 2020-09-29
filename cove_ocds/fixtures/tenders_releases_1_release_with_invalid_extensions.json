@@ -10,7 +10,7 @@
         "https://raw.githubusercontent.com/open-contracting/ocds_extension_parties/master/extension.json",
         "https://raw.githubusercontent.com/open-contracting/ocds_partyDetails_scale_extension/master/extension.json",
         "https://raw.githubusercontent.com/open-contracting/bad_path_to_extensions/extension.json",
-        "http://httpstat.us/404",
+        "https://standard.open-contracting.org/latest/en/404.json",
         "badprotocol://example.com"
     ],
     "releases": [
