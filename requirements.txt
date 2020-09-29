@@ -18,7 +18,7 @@ django-debug-toolbar==2.2  # via -r requirements.in, libcoveweb
 django-environ==0.4.5     # via -r requirements.in, libcoveweb
 django==2.2.14            # via -r requirements.in, django-bootstrap3, django-debug-toolbar, libcove, libcoveocds, libcoveweb
 et-xmlfile==1.0.1         # via openpyxl
-flattentool==0.11.0       # via -r requirements.in, libcove
+flattentool==0.14.0       # via -r requirements.in, libcove
 idna==2.10                # via requests
 importlib-metadata==1.7.0  # via django-bootstrap3, jsonschema
 jdcal==1.4.1              # via openpyxl
