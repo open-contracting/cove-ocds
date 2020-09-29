@@ -1,6 +1,6 @@
 pip
 Django>2.2<2.3
-flattentool>=0.10.0
+flattentool>=0.14.0
 libcoveocds>=0.8.0
 libcove>=0.18.0
 libcoveweb>=0.17.0

@@ -26,7 +26,7 @@ docopt==0.6.2             # via coveralls
 docutils==0.16            # via sphinx
 et-xmlfile==1.0.1         # via -r requirements.txt, openpyxl
 flake8==3.8.3             # via -r requirements_dev.in
-flattentool==0.11.0       # via -r requirements.txt, libcove
+flattentool==0.14.0       # via -r requirements.txt, libcove
 gitdb==4.0.5              # via gitpython
 gitpython==3.1.7          # via transifex-client
 hypothesis==3.52.3        # via -r requirements_dev.in
