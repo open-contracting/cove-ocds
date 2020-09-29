@@ -1301,3 +1301,76 @@ def test_records_table_7_rows_env_var(settings_records_table_10, url_input_brows
     assert "first 10 records" not in panel.text
     table_rows = browser.find_elements_by_css_selector("#records-table-panel table tbody tr")
     assert len(table_rows) == 7
+
+
+def test_error_list_1000_lines(url_input_browser):
+    """
+    Check that when there are more than 1000 error locations, only 1001 are
+    shown in the table, and there is a message.
+    """
+
+    browser = url_input_browser("1001_empty_releases.json")
+    assert "1001" in browser.find_element_by_tag_name("body").text
+    browser.find_element_by_link_text("1001").click()
+    modal_body = browser.find_element_by_css_selector(".modal-body")
+    assert "first 1000 locations for this error" in modal_body.text
+    assert "releases/999" in modal_body.text
+    assert "releases/1000" not in modal_body.text
+    table_rows = modal_body.find_elements_by_css_selector("table tbody tr")
+    assert len(table_rows) == 1000
+
+
+def test_error_list_999_lines(url_input_browser):
+    """
+    Check that when there are less than 1000 error locations, they are all shown
+    in the table, and there is no message.
+    """
+
+    browser = url_input_browser("999_empty_releases.json")
+    assert "999" in browser.find_element_by_tag_name("body").text
+    browser.find_element_by_link_text("999").click()
+    modal_body = browser.find_element_by_css_selector(".modal-body")
+    assert "first 999 locations for this error" not in modal_body.text
+    assert "releases/998" in modal_body.text
+    assert "releases/999" not in modal_body.text
+    table_rows = modal_body.find_elements_by_css_selector("table tbody tr")
+    assert len(table_rows) == 999
+
+
+@pytest.fixture
+def settings_error_locations_sample(settings):
+    # This needs to be in a fixture, to make sure its loaded before
+    # url_input_browser
+    settings.VALIDATION_ERROR_LOCATIONS_SAMPLE = True
+
+
+def test_error_list_1000_lines_sample(settings_error_locations_sample, url_input_browser):
+    """
+    Check that when there are more than 1000 error locations, only 1001 are
+    shown in the table, and there is a message.
+    """
+
+    browser = url_input_browser("1001_empty_releases.json")
+    assert "1001" in browser.find_element_by_tag_name("body").text
+    browser.find_element_by_link_text("1001").click()
+    modal_body = browser.find_element_by_css_selector(".modal-body")
+    assert "random 1000 locations for this error" in modal_body.text
+    table_rows = modal_body.find_elements_by_css_selector("table tbody tr")
+    assert len(table_rows) == 1000
+
+
+def test_error_list_999_lines_sample(settings_error_locations_sample, url_input_browser):
+    """
+    Check that when there are less than 1000 error locations, they are all shown
+    in the table, and there is no message.
+    """
+
+    browser = url_input_browser("999_empty_releases.json")
+    assert "999" in browser.find_element_by_tag_name("body").text
+    browser.find_element_by_link_text("999").click()
+    modal_body = browser.find_element_by_css_selector(".modal-body")
+    assert "first 999 locations for this error" not in modal_body.text
+    assert "releases/998" in modal_body.text
+    assert "releases/999" not in modal_body.text
+    table_rows = modal_body.find_elements_by_css_selector("table tbody tr")
+    assert len(table_rows) == 999

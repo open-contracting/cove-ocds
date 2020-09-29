@@ -1450,7 +1450,7 @@ def test_cove_ocds_cli_schema_cache():
         == "badprotocol://example.com"
     )
     assert (
-        sorted(results["extensions"]["invalid_extensions"], key=lambda k: k[0])[1][1]
+        sorted(results["extensions"]["invalid_extensions"], key=lambda k: k[0])[2][1]
         == "404: not found"
     )
 
@@ -1488,7 +1488,7 @@ def test_cove_ocds_cli_schema_cache():
         == "badprotocol://example.com"
     )
     assert (
-        sorted(results["extensions"]["invalid_extensions"], key=lambda k: k[0])[1][1]
+        sorted(results["extensions"]["invalid_extensions"], key=lambda k: k[0])[2][1]
         == "404: not found"
     )
     assert cache_time_avg < no_cache_time

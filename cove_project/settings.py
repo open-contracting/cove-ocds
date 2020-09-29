@@ -25,6 +25,8 @@ HOTJAR = {
     "date_info": env("HOTJAR_DATE_INFO"),
 }
 RELEASES_OR_RECORDS_TABLE_LENGTH = env("RELEASES_OR_RECORDS_TABLE_LENGTH")
+VALIDATION_ERROR_LOCATIONS_LENGTH = settings.VALIDATION_ERROR_LOCATIONS_LENGTH
+VALIDATION_ERROR_LOCATIONS_SAMPLE = settings.VALIDATION_ERROR_LOCATIONS_SAMPLE
 
 # We can't take MEDIA_ROOT and MEDIA_URL from cove settings,
 # ... otherwise the files appear under the BASE_DIR that is the Cove library install.
