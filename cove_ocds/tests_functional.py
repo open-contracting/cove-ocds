@@ -1343,6 +1343,11 @@ def settings_error_locations_sample(settings):
     # url_input_browser
     settings.VALIDATION_ERROR_LOCATIONS_SAMPLE = True
 
+    # If we're testing a remove server then we can't run this test as we can't
+    # set up the environment variable
+    if "CUSTOM_SERVER_URL" in os.environ:
+        pytest.skip()
+
 
 def test_error_list_1000_lines_sample(settings_error_locations_sample, url_input_browser):
     """
