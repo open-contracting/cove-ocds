@@ -1155,7 +1155,15 @@ def test_additional_checks_error_modal(
     ).click()
 
 
-def test_releases_table_25_rows(url_input_browser):
+@pytest.fixture
+def skip_if_remote():
+    # If we're testing a remote server, then we can't run these tests, as we
+    # can't make assumptions about what environment variables will be set
+    if "CUSTOM_SERVER_URL" in os.environ:
+        pytest.skip()
+
+
+def test_releases_table_25_rows(skip_if_remote, url_input_browser):
     """
     Check that when there are more than 25 releases, only 25 are shown in the
     table, and there is a message.
@@ -1169,7 +1177,7 @@ def test_releases_table_25_rows(url_input_browser):
     assert len(table_rows) == 25
 
 
-def test_releases_table_7_rows(url_input_browser):
+def test_releases_table_7_rows(skip_if_remote, url_input_browser):
     """
     Check that when there are less than 25 releases, they are all shown in the
     table, and there is no message.
@@ -1190,16 +1198,11 @@ def settings_releases_table_10(settings):
     settings.RELEASES_OR_RECORDS_TABLE_LENGTH = 10
 
 
-def test_releases_table_10_rows_env_var(settings_releases_table_10, url_input_browser):
+def test_releases_table_10_rows_env_var(skip_if_remote, settings_releases_table_10, url_input_browser):
     """
     Check that when the appropriate setting is set, and there are more than 10
     releases, only 10 are shown in the table, and there is a message.
     """
-
-    # If we're testing a remove server then we can't run this test as we can't
-    # set up the environment variable
-    if "CUSTOM_SERVER_URL" in os.environ:
-        pytest.skip()
 
     browser = url_input_browser("30_releases.json")
     assert "This file contains 30 releases" in browser.find_element_by_tag_name("body").text
@@ -1209,16 +1212,11 @@ def test_releases_table_10_rows_env_var(settings_releases_table_10, url_input_br
     assert len(table_rows) == 10
 
 
-def test_releases_table_7_rows_env_var(settings_releases_table_10, url_input_browser):
+def test_releases_table_7_rows_env_var(skip_if_remote, settings_releases_table_10, url_input_browser):
     """
     Check that when the appropriate setting is set, and there are less than 10
     releases, they are all shown in the table, and there is no message.
     """
-
-    # If we're testing a remove server then we can't run this test as we can't
-    # set up the environment variable
-    if "CUSTOM_SERVER_URL" in os.environ:
-        pytest.skip()
 
     browser = url_input_browser("tenders_releases_7_releases_check_ocids.json")
     assert "This file contains 7 releases" in browser.find_element_by_tag_name("body").text
@@ -1229,7 +1227,7 @@ def test_releases_table_7_rows_env_var(settings_releases_table_10, url_input_bro
     assert len(table_rows) == 7
 
 
-def test_records_table_25_rows(url_input_browser):
+def test_records_table_25_rows(skip_if_remote, url_input_browser):
     """
     Check that when there are more than 25 records, only 25 are shown in the
     table, and there is a message.
@@ -1243,7 +1241,7 @@ def test_records_table_25_rows(url_input_browser):
     assert len(table_rows) == 25
 
 
-def test_records_table_7_rows(url_input_browser):
+def test_records_table_7_rows(skip_if_remote, url_input_browser):
     """
     Check that when there are less than 25 records, they are all shown in the
     table, and there is no message.
@@ -1264,16 +1262,11 @@ def settings_records_table_10(settings):
     settings.RELEASES_OR_RECORDS_TABLE_LENGTH = 10
 
 
-def test_records_table_10_rows_env_var(settings_records_table_10, url_input_browser):
+def test_records_table_10_rows_env_var(skip_if_remote, settings_records_table_10, url_input_browser):
     """
     Check that when the appropriate setting is set, and there are more than 10
     records, only 10 are shown in the table, and there is a message.
     """
-
-    # If we're testing a remove server then we can't run this test as we can't
-    # set up the environment variable
-    if "CUSTOM_SERVER_URL" in os.environ:
-        pytest.skip()
 
     browser = url_input_browser("30_records.json")
     assert "This file contains 30 records" in browser.find_element_by_tag_name("body").text
@@ -1283,16 +1276,11 @@ def test_records_table_10_rows_env_var(settings_records_table_10, url_input_brow
     assert len(table_rows) == 10
 
 
-def test_records_table_7_rows_env_var(settings_records_table_10, url_input_browser):
+def test_records_table_7_rows_env_var(skip_if_remote, settings_records_table_10, url_input_browser):
     """
     Check that when the appropriate setting is set, and there are less than 10
     records, they are all shown in the table, and there is no message.
     """
-
-    # If we're testing a remove server then we can't run this test as we can't
-    # set up the environment variable
-    if "CUSTOM_SERVER_URL" in os.environ:
-        pytest.skip()
 
     browser = url_input_browser("7_records.json")
     assert "This file contains 7 records" in browser.find_element_by_tag_name("body").text
@@ -1303,7 +1291,7 @@ def test_records_table_7_rows_env_var(settings_records_table_10, url_input_brows
     assert len(table_rows) == 7
 
 
-def test_error_list_1000_lines(url_input_browser):
+def test_error_list_1000_lines(skip_if_remote, url_input_browser):
     """
     Check that when there are more than 1000 error locations, only 1001 are
     shown in the table, and there is a message.
@@ -1320,7 +1308,7 @@ def test_error_list_1000_lines(url_input_browser):
     assert len(table_rows) == 1000
 
 
-def test_error_list_999_lines(url_input_browser):
+def test_error_list_999_lines(skip_if_remote, url_input_browser):
     """
     Check that when there are less than 1000 error locations, they are all shown
     in the table, and there is no message.
@@ -1343,13 +1331,8 @@ def settings_error_locations_sample(settings):
     # url_input_browser
     settings.VALIDATION_ERROR_LOCATIONS_SAMPLE = True
 
-    # If we're testing a remove server then we can't run this test as we can't
-    # set up the environment variable
-    if "CUSTOM_SERVER_URL" in os.environ:
-        pytest.skip()
 
-
-def test_error_list_1000_lines_sample(settings_error_locations_sample, url_input_browser):
+def test_error_list_1000_lines_sample(skip_if_remote, settings_error_locations_sample, url_input_browser):
     """
     Check that when there are more than 1000 error locations, only 1001 are
     shown in the table, and there is a message.
@@ -1364,7 +1347,7 @@ def test_error_list_1000_lines_sample(settings_error_locations_sample, url_input
     assert len(table_rows) == 1000
 
 
-def test_error_list_999_lines_sample(settings_error_locations_sample, url_input_browser):
+def test_error_list_999_lines_sample(skip_if_remote, settings_error_locations_sample, url_input_browser):
     """
     Check that when there are less than 1000 error locations, they are all shown
     in the table, and there is no message.
@@ -1381,7 +1364,7 @@ def test_error_list_999_lines_sample(settings_error_locations_sample, url_input_
     assert len(table_rows) == 999
 
 
-def test_records_table_releases_count(url_input_browser):
+def test_records_table_releases_count(skip_if_remote, url_input_browser):
     """
     Check that the correct releases count is shown in the records table.
     """
