@@ -1379,3 +1379,14 @@ def test_error_list_999_lines_sample(settings_error_locations_sample, url_input_
     assert "releases/999" not in modal_body.text
     table_rows = modal_body.find_elements_by_css_selector("table tbody tr")
     assert len(table_rows) == 999
+
+
+def test_records_table_releases_count(url_input_browser):
+    """
+    Check that the correct releases count is shown in the records table.
+    """
+
+    browser = url_input_browser("30_records.json")
+    assert "release" in browser.find_elements_by_css_selector("#records-table-panel table thead th")[1].text
+    table_rows = browser.find_elements_by_css_selector("#records-table-panel table tbody tr")
+    assert table_rows[0].find_elements_by_css_selector("td")[1].text == "5"
