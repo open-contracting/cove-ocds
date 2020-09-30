@@ -161,7 +161,7 @@
             {% for record in records|slice:releases_or_records_table_slice %}
             <tr>
               <td>{{ record.ocid }}</td>
-              <td>{{ record.records|length }}</td>
+              <td>{{ record.releases|length }}</td>
               <td>{% if record.compiledRelease %}Yes{% else %}No{% endif %}</td>
               <td>{% if record.versionedRelease %}Yes{% else %}No{% endif %}</td>
             </tr>
