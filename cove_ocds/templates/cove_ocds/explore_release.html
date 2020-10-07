@@ -107,7 +107,7 @@
 {% block explore_additional_content %}
 {% with releases_aggregates as ra %}
 {% if ra %}
-<div class="row">
+<div class="row" id="kfi">
   <div class="col-md-12">
     <div class="panel panel-primary">
       <div class="panel-heading">
@@ -191,6 +191,7 @@
             </ul>
 
             <b>{% trans "Total Items: " %}</b> {{ra.total_item_count}}<br/>
+	    <b>{% trans "Unique Item IDs: " %}</b> {{ra.unique_item_ids_count}}<br/>
             <b>{% trans "Items ID schemes: " %}</b> {{ra.item_identifier_schemes|join:", "}}<br/>
             <b>{% trans "Item Types: " %}</b> <br/>
             <ul class="list-unstyled">
