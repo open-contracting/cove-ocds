@@ -37,6 +37,9 @@ common.py contains a function called ``get_release_aggregates``, which broadly c
 
 KFIs are generated on a best-effort basis, so be aware that the data might be invalid, missing fields, or use unexpected formats. For this reason, and for reasons of performance, KFI checks are typically small, high-level and not computationally expensive.
 
+.. tip:: Safely accessing data 
+	Because KFIs are generated from data that might not be using the standard, it's important to use safe ways of accessing the data. The existing code already always uses get() to access attributes (because get() doesn't throw an exception if the key doesn't exist), and always tests that a value isn't null before using it. It also uses default values to ensure that types are correct - for example if an attribute is a list, then the default value should be an empty list in order to avoid a TypeError. New KFIs should follow these same patterns. 
+
 In this case, KFIs already has some code that iterates through the items in each of the `tender <https://github.com/open-contracting/lib-cove-ocds/blob/388df45/libcoveocds/lib/common_checks.py#L153-158>`_, `award <https://github.com/open-contracting/lib-cove-ocds/blob/388df45/libcoveocds/lib/common_checks.py#L177-L182>`_ and `contract <https://github.com/open-contracting/lib-cove-ocds/blob/388df45/libcoveocds/lib/common_checks.py#L200-205>`_ stages, so we'll be adding to that. 
 
 First, we're going to need a new variable. We don't care about how many times an item ID appears, just the number of item IDs that appear in the whole of the data, so we'll use a ``set``:
