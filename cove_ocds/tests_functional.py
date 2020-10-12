@@ -1373,3 +1373,27 @@ def test_records_table_releases_count(skip_if_remote, url_input_browser):
     assert "release" in browser.find_elements_by_css_selector("#records-table-panel table thead th")[1].text
     table_rows = browser.find_elements_by_css_selector("#records-table-panel table tbody tr")
     assert table_rows[0].find_elements_by_css_selector("td")[1].text == "5"
+
+
+@pytest.mark.parametrize(
+    ("source_filename", "expected"),
+    [
+        (
+            "release_aggregate.json",
+            [
+                "Unique OCIDs: 1",
+                "Unique Item IDs: 2",
+                "Currencies: EUR, GBP, USD, YEN",
+            ],
+        ),
+    ],
+)
+def test_key_field_information(
+    server_url, url_input_browser, httpserver, source_filename, expected
+):
+    """Check that KFIs are displaying"""
+
+    browser = url_input_browser(source_filename)
+    kfi_text = browser.find_element_by_id("kfi").text
+    for text in expected:
+        assert text in kfi_text
