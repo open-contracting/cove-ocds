@@ -16,6 +16,7 @@ This documentation is for people who wish to contribute to or modify the DRT.
    how-to-add-a-validation-check
    how-to-edit-stylesheet
    how-to-config-frontend
+   how-to-add-kfi
    tests
    ocds-show
 
