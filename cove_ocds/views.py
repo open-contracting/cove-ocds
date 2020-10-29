@@ -1,5 +1,4 @@
 import copy
-import functools
 import json
 import logging
 import os
@@ -8,7 +7,7 @@ import warnings
 from collections import OrderedDict
 from decimal import Decimal
 
-from cove.views import explore_data_context
+from cove.views import cove_web_input_error, explore_data_context
 from dateutil import parser
 from django.conf import settings
 from django.shortcuts import render
@@ -29,17 +28,6 @@ from .lib import exceptions
 from .lib.ocds_show_extra import add_extra_fields
 
 logger = logging.getLogger(__name__)
-
-
-def cove_web_input_error(func):
-    @functools.wraps(func)
-    def wrapper(request, *args, **kwargs):
-        try:
-            return func(request, *args, **kwargs)
-        except CoveInputDataError as err:
-            return render(request, "error.html", context=err.context)
-
-    return wrapper
 
 
 @cove_web_input_error
