@@ -16,13 +16,13 @@ jobs:
         key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements_dev.txt') }}
         restore-keys: |
           ${{ runner.os }}-pip-
-    # install gettext for translations
-    # Install translate toolkit to get pocount binary
-    - run: sudo apt install gettext translate-toolkit
     - run: curl -s -S --retry 3 $BASEDIR/tests/install.sh | bash -
     - run: pip install -r requirements_dev.txt
     - run: curl -s -S --retry 3 $BASEDIR/tests/script.sh | bash -
+    # Install gettext for translations, and translate-toolkit for `pocount`.
+    - run: sudo apt-get install gettext translate-toolkit
     - run: DJANGO_SETTINGS_MODULE=cove_project.settings pytest --cov cove_ocds --cov cove_project
+      if: always()
     - run: python manage.py makemessages -l es
     - run: "[ \"$GITHUB_EVENT_NAME\" != \"pull_request\" ] || [ \"`pocount --incomplete cove_ocds/locale/es/LC_MESSAGES/django.po`\" = \"\" ]"
     - env:
