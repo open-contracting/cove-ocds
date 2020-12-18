@@ -23,6 +23,7 @@ jobs:
     - run: pip install -r requirements_dev.txt
     - run: curl -s -S --retry 3 $BASEDIR/tests/script.sh | bash -
     # Install gettext for translations, and translate-toolkit for `pocount`.
+    - run: sudo apt-get update
     - run: sudo apt-get install gettext translate-toolkit
     - run: DJANGO_SETTINGS_MODULE=cove_project.settings pytest --cov cove_ocds --cov cove_project
       if: always()
