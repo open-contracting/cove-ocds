@@ -1,8 +1,6 @@
 import io
 import json
 import os
-import time
-import uuid
 from collections import OrderedDict
 from unittest.mock import patch
 
@@ -12,10 +10,7 @@ from cove.input.models import SuppliedData
 from django.conf import settings
 from django.core.files.base import ContentFile
 from django.core.files.uploadedfile import UploadedFile
-from django.core.management import call_command
-from django.core.management.base import CommandError
 from libcove.lib.converters import convert_json, convert_spreadsheet
-from libcove.lib.tools import cached_get_request
 from libcoveocds.api import APIException, ocds_json_output
 from libcoveocds.lib.api import context_api_transform
 from libcoveocds.lib.common_checks import get_bad_ocds_prefixes, get_releases_aggregates
