@@ -7,11 +7,13 @@ from cove import settings
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-env = environ.Env(  # set default values and casting
+env = environ.Env(
+    # set casting, default value
     DB_NAME=(str, os.path.join(BASE_DIR, "db.sqlite3")),
     HOTJAR_ID=(str, ""),
     HOTJAR_SV=(str, ""),
     HOTJAR_DATE_INFO=(str, ""),
+    RELEASES_OR_RECORDS_TABLE_LENGTH=(int, 25),
 )
 
 
@@ -22,6 +24,9 @@ HOTJAR = {
     "sv": env("HOTJAR_SV"),
     "date_info": env("HOTJAR_DATE_INFO"),
 }
+RELEASES_OR_RECORDS_TABLE_LENGTH = env("RELEASES_OR_RECORDS_TABLE_LENGTH")
+VALIDATION_ERROR_LOCATIONS_LENGTH = settings.VALIDATION_ERROR_LOCATIONS_LENGTH
+VALIDATION_ERROR_LOCATIONS_SAMPLE = settings.VALIDATION_ERROR_LOCATIONS_SAMPLE
 
 # We can't take MEDIA_ROOT and MEDIA_URL from cove settings,
 # ... otherwise the files appear under the BASE_DIR that is the Cove library install.
@@ -69,7 +74,7 @@ ROOT_URLCONF = "cove_project.urls"
 TEMPLATES = settings.TEMPLATES
 TEMPLATES[0]["DIRS"] = [os.path.join(BASE_DIR, "cove_project", "templates")]
 TEMPLATES[0]["OPTIONS"]["context_processors"].append(
-    "cove_project.context_processors.analytics"
+    "cove_project.context_processors.from_settings",
 )
 
 WSGI_APPLICATION = "cove_project.wsgi.application"
@@ -143,14 +148,14 @@ COVE_CONFIG = {
     "schema_version_choices": OrderedDict(
         (  # {version: (display, url)}
             ("1.0", ("1.0", "https://standard.open-contracting.org/schema/1__0__3/")),
-            ("1.1", ("1.1", "https://standard.open-contracting.org/schema/1__1__4/")),
+            ("1.1", ("1.1", "https://standard.open-contracting.org/schema/1__1__5/")),
         )
     ),
     "schema_codelists": OrderedDict(
         (  # {version: codelist_dir}
             (
                 "1.1",
-                "https://raw.githubusercontent.com/open-contracting/standard/1.1/standard/schema/codelists/",
+                "https://raw.githubusercontent.com/open-contracting/standard/1.1/schema/codelists/",
             ),
         )
     ),

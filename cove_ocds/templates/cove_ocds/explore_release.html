@@ -107,7 +107,7 @@
 {% block explore_additional_content %}
 {% with releases_aggregates as ra %}
 {% if ra %}
-<div class="row">
+<div class="row" id="kfi">
   <div class="col-md-12">
     <div class="panel panel-primary">
       <div class="panel-heading">
@@ -191,6 +191,7 @@
             </ul>
 
             <b>{% trans "Total Items: " %}</b> {{ra.total_item_count}}<br/>
+            <b>{% trans "Unique Item IDs: " %}</b> {{ra.unique_item_ids_count}}<br/>
             <b>{% trans "Items ID schemes: " %}</b> {{ra.item_identifier_schemes|join:", "}}<br/>
             <b>{% trans "Item Types: " %}</b> <br/>
             <ul class="list-unstyled">
@@ -341,9 +342,9 @@
         </h4>
       </div>
       <div class="panel-body">
-        {% if releases|length > 25 %}
+        {% if releases|length > releases_or_records_table_length %}
         <p>
-          {% blocktrans %}Showing the first 25 releases. To explore all your data in a tabular format, convert it to a spreadsheet using the "Convert" section, above.{% endblocktrans %}
+          {% blocktrans %}Showing the first {{releases_or_records_table_length}} releases. To explore all your data in a tabular format, convert it to a spreadsheet using the "Convert" section, above.{% endblocktrans %}
         </p>
         {% endif %}
         <table class="table table-striped">
@@ -357,7 +358,7 @@
             </tr>
           </thead>
           <tbody>
-            {% for release in releases|slice:":25" %}
+            {% for release in releases|slice:releases_or_records_table_slice %}
             <tr>
               <td>{{ release.ocid }}</td>
               <td>{{ release.date|date:"j M Y, H:i (e)" }}</td>

@@ -1,7 +1,7 @@
 [main]
 host = https://www.transifex.com
 
-[cove.cove-ocds]
+[cove-1.cove-ocds]
 file_filter = cove_ocds/locale/<lang>/LC_MESSAGES/django.po
 source_file = cove_ocds/locale/en/LC_MESSAGES/django.po
 source_lang = en

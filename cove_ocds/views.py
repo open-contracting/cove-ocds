@@ -1,5 +1,4 @@
 import copy
-import functools
 import json
 import logging
 import os
@@ -8,7 +7,7 @@ import warnings
 from collections import OrderedDict
 from decimal import Decimal
 
-from cove.views import explore_data_context
+from cove.views import cove_web_input_error, explore_data_context
 from dateutil import parser
 from django.conf import settings
 from django.shortcuts import render
@@ -29,17 +28,6 @@ from .lib import exceptions
 from .lib.ocds_show_extra import add_extra_fields
 
 logger = logging.getLogger(__name__)
-
-
-def cove_web_input_error(func):
-    @functools.wraps(func)
-    def wrapper(request, *args, **kwargs):
-        try:
-            return func(request, *args, **kwargs)
-        except CoveInputDataError as err:
-            return render(request, "error.html", context=err.context)
-
-    return wrapper
 
 
 @cove_web_input_error
@@ -73,19 +61,29 @@ def explore_ocds(request, pk):
                 json_data = json.load(
                     fp, parse_float=Decimal, object_pairs_hook=OrderedDict
                 )
+            except UnicodeError as err:
+                raise CoveInputDataError(context={
+                    'sub_title': _("Sorry, we can't process that data"),
+                    'link': 'index',
+                    'link_text': _('Try Again'),
+                    'msg': format_html(_("The file that you uploaded doesn't appear to be well formed JSON. OCDS JSON follows the I-JSON format, which requires UTF-8 encoding. Ensure that your file uses UTF-8 encoding, then try uploading again."
+                             '\n\n<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true">'
+                             '</span> <strong>Error message:</strong> {}'), err),
+                    'error': format(err)
+                })
             except ValueError as err:
                 raise CoveInputDataError(
                     context={
                         "sub_title": _("Sorry, we can't process that data"),
                         "link": "index",
                         "link_text": _("Try Again"),
-                        "msg": _(
-                            format_html(
+                        "msg": format_html(
+                            _(
                                 "We think you tried to upload a JSON file, but it is not well formed JSON."
                                 '\n\n<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true">'
                                 "</span> <strong>Error message:</strong> {}",
-                                err,
-                            )
+                            ),
+                            err,
                         ),
                         "error": format(err),
                     }
@@ -110,6 +108,7 @@ def explore_ocds(request, pk):
                 select_version=select_version,
                 release_data=json_data,
                 lib_cove_ocds_config=lib_cove_ocds_config,
+                record_pkg="records" in json_data
             )
 
             if schema_ocds.missing_package:
@@ -132,8 +131,8 @@ def explore_ocds(request, pk):
             if schema_ocds.version != db_data.schema_version:
                 replace = True
             if schema_ocds.extensions:
-                schema_ocds.create_extended_release_schema_file(upload_dir, upload_url)
-            url = schema_ocds.extended_schema_file or schema_ocds.release_schema_url
+                schema_ocds.create_extended_schema_file(upload_dir, upload_url)
+            url = schema_ocds.extended_schema_file or schema_ocds.schema_url
 
             if "records" in json_data:
                 context["conversion"] = None
@@ -162,7 +161,7 @@ def explore_ocds(request, pk):
         # Use the lowest release pkg schema version accepting 'version' field
         metatab_schema_url = SchemaOCDS(
             select_version="1.1", lib_cove_ocds_config=lib_cove_ocds_config
-        ).release_pkg_schema_url
+        ).pkg_schema_url
         metatab_data = get_spreadsheet_meta_data(
             upload_dir, file_name, metatab_schema_url, file_type
         )
@@ -194,9 +193,9 @@ def explore_ocds(request, pk):
             replace = True
 
         if schema_ocds.extensions:
-            schema_ocds.create_extended_release_schema_file(upload_dir, upload_url)
-        url = schema_ocds.extended_schema_file or schema_ocds.release_schema_url
-        pkg_url = schema_ocds.release_pkg_schema_url
+            schema_ocds.create_extended_schema_file(upload_dir, upload_url)
+        url = schema_ocds.extended_schema_file or schema_ocds.schema_url
+        pkg_url = schema_ocds.pkg_schema_url
 
         context.update(
             convert_spreadsheet(
@@ -243,10 +242,9 @@ def explore_ocds(request, pk):
 
     db_data.save()
 
-    ocds_show_schema = SchemaOCDS()
-    ocds_show_deref_schema = ocds_show_schema.get_release_schema_obj(deref=True)
-
     if "records" in json_data:
+        ocds_show_schema = SchemaOCDS(record_pkg=True)
+        ocds_show_deref_schema = ocds_show_schema.get_schema_obj(deref=True)
         template = "cove_ocds/explore_record.html"
         if hasattr(json_data, "get") and hasattr(json_data.get("records"), "__iter__"):
             context["records"] = json_data["records"]
@@ -257,6 +255,8 @@ def explore_ocds(request, pk):
                 json_data, ocds_show_deref_schema
             )
     else:
+        ocds_show_schema = SchemaOCDS(record_pkg=False)
+        ocds_show_deref_schema = ocds_show_schema.get_schema_obj(deref=True)
         template = "cove_ocds/explore_release.html"
         if hasattr(json_data, "get") and hasattr(json_data.get("releases"), "__iter__"):
             context["releases"] = json_data["releases"]

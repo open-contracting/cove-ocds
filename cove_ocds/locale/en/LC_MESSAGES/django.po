@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-06 10:17+0000\n"
+"POT-Creation-Date: 2020-10-12 08:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 
 #: cove_ocds/lib/exceptions.py:11 cove_ocds/lib/exceptions.py:31
 #: cove_ocds/lib/exceptions.py:54 cove_ocds/lib/exceptions.py:74
-#: cove_ocds/views.py:81 cove_ocds/views.py:99
+#: cove_ocds/views.py:80 cove_ocds/views.py:91 cove_ocds/views.py:109
 msgid "Try Again"
 msgstr ""
 
@@ -449,7 +449,7 @@ msgstr ""
 #: cove_ocds/templates/cove_ocds/explore_record.html:33
 #, python-format
 msgid "This file contains <strong>%(count)s record.</strong>"
-msgid_plural "This file contains <strong>%(count)s record.</strong>"
+msgid_plural "This file contains <strong>%(count)s records.</strong>"
 msgstr[0] ""
 msgstr[1] ""
 
@@ -546,32 +546,37 @@ msgstr ""
 msgid "Unique OCIDs"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:140
+#: cove_ocds/templates/cove_ocds/explore_record.html:142
 msgid "Records Table:"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:170
-#: cove_ocds/templates/cove_ocds/explore_release.html:427
+#: cove_ocds/templates/cove_ocds/explore_record.html:148
+#, python-format
+msgid "Showing the first %(releases_or_records_table_length)s records."
+msgstr ""
+
+#: cove_ocds/templates/cove_ocds/explore_record.html:183
+#: cove_ocds/templates/cove_ocds/explore_release.html:428
 msgid "Explore your data:"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:175
-#: cove_ocds/templates/cove_ocds/explore_release.html:432
+#: cove_ocds/templates/cove_ocds/explore_record.html:188
+#: cove_ocds/templates/cove_ocds/explore_release.html:433
 msgid ""
 "This section provides a visual representation of the data, use it to check "
 "whether the data makes sense in the type of tool a user might use to explore "
 "it."
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:178
-#: cove_ocds/templates/cove_ocds/explore_release.html:435
+#: cove_ocds/templates/cove_ocds/explore_record.html:191
+#: cove_ocds/templates/cove_ocds/explore_release.html:436
 msgid ""
 "Extensions and additional fields are hidden by default, click the 'Extra "
 "fields' buttons or open the 'Extra fields' section to view them."
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:181
-#: cove_ocds/templates/cove_ocds/explore_release.html:438
+#: cove_ocds/templates/cove_ocds/explore_record.html:194
+#: cove_ocds/templates/cove_ocds/explore_release.html:439
 msgid ""
 "When viewing an OCDS record, use the numbers at the top of the visualization "
 "to browse the change history. New and changed fields are highlighted, use "
@@ -758,140 +763,146 @@ msgid "Total Items: "
 msgstr ""
 
 #: cove_ocds/templates/cove_ocds/explore_release.html:194
-msgid "Items ID schemes: "
+msgid "Unique Item IDs: "
 msgstr ""
 
 #: cove_ocds/templates/cove_ocds/explore_release.html:195
+msgid "Items ID schemes: "
+msgstr ""
+
+#: cove_ocds/templates/cove_ocds/explore_release.html:196
 msgid "Item Types: "
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_release.html:197
+#: cove_ocds/templates/cove_ocds/explore_release.html:198
 msgid "Tender: "
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_release.html:198
+#: cove_ocds/templates/cove_ocds/explore_release.html:199
 msgid "Award: "
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_release.html:199
+#: cove_ocds/templates/cove_ocds/explore_release.html:200
 msgid "Contract: "
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_release.html:202
+#: cove_ocds/templates/cove_ocds/explore_release.html:203
 msgid "Languages: "
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_release.html:203
+#: cove_ocds/templates/cove_ocds/explore_release.html:204
 msgid "Currencies: "
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_release.html:221
+#: cove_ocds/templates/cove_ocds/explore_release.html:222
 msgid "Documents"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_release.html:226
+#: cove_ocds/templates/cove_ocds/explore_release.html:227
 msgid "Part of Contracting Process"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_release.html:227
+#: cove_ocds/templates/cove_ocds/explore_release.html:228
 msgid "Count of Docs"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_release.html:228
+#: cove_ocds/templates/cove_ocds/explore_release.html:229
 msgid "Document Types"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_release.html:234
+#: cove_ocds/templates/cove_ocds/explore_release.html:235
 msgid "Planning"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_release.html:246
+#: cove_ocds/templates/cove_ocds/explore_release.html:247
 msgid "Tender"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_release.html:258
+#: cove_ocds/templates/cove_ocds/explore_release.html:259
 msgid "Tender Milestones"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_release.html:270
+#: cove_ocds/templates/cove_ocds/explore_release.html:271
 msgid "Awards"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_release.html:282
+#: cove_ocds/templates/cove_ocds/explore_release.html:283
 msgid "Contracts"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_release.html:294
+#: cove_ocds/templates/cove_ocds/explore_release.html:295
 msgid "Implementation"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_release.html:306
+#: cove_ocds/templates/cove_ocds/explore_release.html:307
 msgid "Implementation Milestones"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_release.html:326
+#: cove_ocds/templates/cove_ocds/explore_release.html:327
 msgid "Statistics cannot be produced as data is not structurally correct."
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_release.html:340
+#: cove_ocds/templates/cove_ocds/explore_release.html:341
 msgid "Releases Table:"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_release.html:346
+#: cove_ocds/templates/cove_ocds/explore_release.html:347
+#, python-format
 msgid ""
-"Showing the first 25 releases. To explore all your data in a tabular format, "
-"convert it to a spreadsheet using the \"Convert\" section, above."
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:353
-msgid "Release Date"
+"Showing the first %(releases_or_records_table_length)s releases. To explore "
+"all your data in a tabular format, convert it to a spreadsheet using the "
+"\"Convert\" section, above."
 msgstr ""
 
 #: cove_ocds/templates/cove_ocds/explore_release.html:354
-msgid "Tags"
+msgid "Release Date"
 msgstr ""
 
 #: cove_ocds/templates/cove_ocds/explore_release.html:355
-msgid "Descriptions"
+msgid "Tags"
 msgstr ""
 
 #: cove_ocds/templates/cove_ocds/explore_release.html:356
+msgid "Descriptions"
+msgstr ""
+
+#: cove_ocds/templates/cove_ocds/explore_release.html:357
 msgid "Purchasers"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_release.html:368
+#: cove_ocds/templates/cove_ocds/explore_release.html:369
 msgid "Tender Title:"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_release.html:371
+#: cove_ocds/templates/cove_ocds/explore_release.html:372
 msgid "Tender Description:"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_release.html:375
+#: cove_ocds/templates/cove_ocds/explore_release.html:376
 msgid "Tender Item Description:"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_release.html:380
+#: cove_ocds/templates/cove_ocds/explore_release.html:381
 msgid "Award Title:"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_release.html:383
+#: cove_ocds/templates/cove_ocds/explore_release.html:384
 msgid "Award Description:"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_release.html:388
+#: cove_ocds/templates/cove_ocds/explore_release.html:389
 msgid "Contract Title:"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_release.html:391
+#: cove_ocds/templates/cove_ocds/explore_release.html:392
 msgid "Contract Description:"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_release.html:399
+#: cove_ocds/templates/cove_ocds/explore_release.html:400
 msgid "Buyer:"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_release.html:405
+#: cove_ocds/templates/cove_ocds/explore_release.html:406
 msgid "Procuring Entity:"
 msgstr ""
 
@@ -1133,11 +1144,29 @@ msgstr ""
 msgid "Line:"
 msgstr ""
 
-#: cove_ocds/views.py:79 cove_ocds/views.py:97
+#: cove_ocds/views.py:78 cove_ocds/views.py:89 cove_ocds/views.py:107
 msgid "Sorry, we can't process that data"
 msgstr ""
 
-#: cove_ocds/views.py:101
+#: cove_ocds/views.py:81
+msgid ""
+"The file that you uploaded doesn't appear to be well formed JSON. OCDS JSON "
+"follows the I-JSON format, which requires UTF-8 encoding. Ensure that your "
+"file uses UTF-8 encoding, then try uploading again.\n"
+"\n"
+"<span class=\"glyphicon glyphicon-exclamation-sign\" aria-hidden=\"true\"></"
+"span> <strong>Error message:</strong> {}"
+msgstr ""
+
+#: cove_ocds/views.py:94
+msgid ""
+"We think you tried to upload a JSON file, but it is not well formed JSON.\n"
+"\n"
+"<span class=\"glyphicon glyphicon-exclamation-sign\" aria-hidden=\"true\"></"
+"span> <strong>Error message:</strong> {}"
+msgstr ""
+
+#: cove_ocds/views.py:111
 msgid ""
 "OCDS JSON should have an object as the top level, the JSON you supplied does "
 "not."

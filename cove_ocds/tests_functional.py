@@ -358,7 +358,8 @@ def test_500_error(server_url, browser):
                 "id is missing but required within tender",
                 "initiationType is missing but required",
                 "Incorrect date format. Dates should use the form YYYY-MM-DDT00:00:00Z. Learn more about dates in OCDS.",
-                "The date this information was first released, or published.",
+                # This matches the description of the `date` field in release-schema.json.
+                "The date on which the information contained in the release was first recorded in, or published by, any system.",
                 "Invalid 'uri' found",
                 "The URI of this package that identifies it uniquely in the world.",
                 "Invalid code found in currency",
@@ -406,7 +407,10 @@ def test_500_error(server_url, browser):
         ),
         ("tenders_releases_2_releases_codelists.json", ["oh no", "GSINS"], [], True),
         # Test UTF-8 support
-        ("utf8.json", "Convert", [], True),
+        ("utf8.json", "Convert", ["Ensure that your file uses UTF-8 encoding"], True),
+        # Test that non UTF-8 files get an error, with a helpful message
+        ("latin1.json", "Ensure that your file uses UTF-8 encoding", [], False),
+        ("utf-16.json", "Ensure that your file uses UTF-8 encoding", [], False),
         # But we expect to see an error message if a file is not well formed JSON at all
         (
             "tenders_releases_2_releases_not_json.json",
@@ -762,8 +766,9 @@ def test_flattentool_warnings(
     else:
         source_filename = "tenders_releases_2_releases.xlsx"
 
-    import flattentool
     import warnings
+
+    import flattentool
     from flattentool.exceptions import DataErrorWarning
 
     def mockunflatten(input_name, output_name, *args, **kwargs):
@@ -1150,7 +1155,15 @@ def test_additional_checks_error_modal(
     ).click()
 
 
-def test_release_table_25_rows(url_input_browser):
+@pytest.fixture
+def skip_if_remote():
+    # If we're testing a remote server, then we can't run these tests, as we
+    # can't make assumptions about what environment variables will be set
+    if "CUSTOM_SERVER_URL" in os.environ:
+        pytest.skip()
+
+
+def test_releases_table_25_rows(skip_if_remote, url_input_browser):
     """
     Check that when there are more than 25 releases, only 25 are shown in the
     table, and there is a message.
@@ -1164,7 +1177,7 @@ def test_release_table_25_rows(url_input_browser):
     assert len(table_rows) == 25
 
 
-def test_release_table_7_rows(url_input_browser):
+def test_releases_table_7_rows(skip_if_remote, url_input_browser):
     """
     Check that when there are less than 25 releases, they are all shown in the
     table, and there is no message.
@@ -1176,3 +1189,211 @@ def test_release_table_7_rows(url_input_browser):
     assert "first 25 releases" not in panel.text
     table_rows = browser.find_elements_by_css_selector("#releases-table-panel table tbody tr")
     assert len(table_rows) == 7
+
+
+@pytest.fixture
+def settings_releases_table_10(settings):
+    # This needs to be in a fixture, to make sure its loaded before
+    # url_input_browser
+    settings.RELEASES_OR_RECORDS_TABLE_LENGTH = 10
+
+
+def test_releases_table_10_rows_env_var(skip_if_remote, settings_releases_table_10, url_input_browser):
+    """
+    Check that when the appropriate setting is set, and there are more than 10
+    releases, only 10 are shown in the table, and there is a message.
+    """
+
+    browser = url_input_browser("30_releases.json")
+    assert "This file contains 30 releases" in browser.find_element_by_tag_name("body").text
+    panel = browser.find_element_by_css_selector("#releases-table-panel")
+    assert "first 10 releases" in panel.text
+    table_rows = browser.find_elements_by_css_selector("#releases-table-panel table tbody tr")
+    assert len(table_rows) == 10
+
+
+def test_releases_table_7_rows_env_var(skip_if_remote, settings_releases_table_10, url_input_browser):
+    """
+    Check that when the appropriate setting is set, and there are less than 10
+    releases, they are all shown in the table, and there is no message.
+    """
+
+    browser = url_input_browser("tenders_releases_7_releases_check_ocids.json")
+    assert "This file contains 7 releases" in browser.find_element_by_tag_name("body").text
+    panel = browser.find_element_by_css_selector("#releases-table-panel")
+    assert "first 25 releases" not in panel.text
+    assert "first 10 releases" not in panel.text
+    table_rows = browser.find_elements_by_css_selector("#releases-table-panel table tbody tr")
+    assert len(table_rows) == 7
+
+
+def test_records_table_25_rows(skip_if_remote, url_input_browser):
+    """
+    Check that when there are more than 25 records, only 25 are shown in the
+    table, and there is a message.
+    """
+
+    browser = url_input_browser("30_records.json")
+    assert "This file contains 30 records" in browser.find_element_by_tag_name("body").text
+    panel = browser.find_element_by_css_selector("#records-table-panel")
+    assert "first 25 records" in panel.text
+    table_rows = browser.find_elements_by_css_selector("#records-table-panel table tbody tr")
+    assert len(table_rows) == 25
+
+
+def test_records_table_7_rows(skip_if_remote, url_input_browser):
+    """
+    Check that when there are less than 25 records, they are all shown in the
+    table, and there is no message.
+    """
+
+    browser = url_input_browser("7_records.json")
+    assert "This file contains 7 records" in browser.find_element_by_tag_name("body").text
+    panel = browser.find_element_by_css_selector("#records-table-panel")
+    assert "first 25 records" not in panel.text
+    table_rows = browser.find_elements_by_css_selector("#records-table-panel table tbody tr")
+    assert len(table_rows) == 7
+
+
+@pytest.fixture
+def settings_records_table_10(settings):
+    # This needs to be in a fixture, to make sure its loaded before
+    # url_input_browser
+    settings.RELEASES_OR_RECORDS_TABLE_LENGTH = 10
+
+
+def test_records_table_10_rows_env_var(skip_if_remote, settings_records_table_10, url_input_browser):
+    """
+    Check that when the appropriate setting is set, and there are more than 10
+    records, only 10 are shown in the table, and there is a message.
+    """
+
+    browser = url_input_browser("30_records.json")
+    assert "This file contains 30 records" in browser.find_element_by_tag_name("body").text
+    panel = browser.find_element_by_css_selector("#records-table-panel")
+    assert "first 10 records" in panel.text
+    table_rows = browser.find_elements_by_css_selector("#records-table-panel table tbody tr")
+    assert len(table_rows) == 10
+
+
+def test_records_table_7_rows_env_var(skip_if_remote, settings_records_table_10, url_input_browser):
+    """
+    Check that when the appropriate setting is set, and there are less than 10
+    records, they are all shown in the table, and there is no message.
+    """
+
+    browser = url_input_browser("7_records.json")
+    assert "This file contains 7 records" in browser.find_element_by_tag_name("body").text
+    panel = browser.find_element_by_css_selector("#records-table-panel")
+    assert "first 25 records" not in panel.text
+    assert "first 10 records" not in panel.text
+    table_rows = browser.find_elements_by_css_selector("#records-table-panel table tbody tr")
+    assert len(table_rows) == 7
+
+
+def test_error_list_1000_lines(skip_if_remote, url_input_browser):
+    """
+    Check that when there are more than 1000 error locations, only 1001 are
+    shown in the table, and there is a message.
+    """
+
+    browser = url_input_browser("1001_empty_releases.json")
+    assert "1001" in browser.find_element_by_tag_name("body").text
+    browser.find_element_by_link_text("1001").click()
+    modal_body = browser.find_element_by_css_selector(".modal-body")
+    assert "first 1000 locations for this error" in modal_body.text
+    assert "releases/999" in modal_body.text
+    assert "releases/1000" not in modal_body.text
+    table_rows = modal_body.find_elements_by_css_selector("table tbody tr")
+    assert len(table_rows) == 1000
+
+
+def test_error_list_999_lines(skip_if_remote, url_input_browser):
+    """
+    Check that when there are less than 1000 error locations, they are all shown
+    in the table, and there is no message.
+    """
+
+    browser = url_input_browser("999_empty_releases.json")
+    assert "999" in browser.find_element_by_tag_name("body").text
+    browser.find_element_by_link_text("999").click()
+    modal_body = browser.find_element_by_css_selector(".modal-body")
+    assert "first 999 locations for this error" not in modal_body.text
+    assert "releases/998" in modal_body.text
+    assert "releases/999" not in modal_body.text
+    table_rows = modal_body.find_elements_by_css_selector("table tbody tr")
+    assert len(table_rows) == 999
+
+
+@pytest.fixture
+def settings_error_locations_sample(settings):
+    # This needs to be in a fixture, to make sure its loaded before
+    # url_input_browser
+    settings.VALIDATION_ERROR_LOCATIONS_SAMPLE = True
+
+
+def test_error_list_1000_lines_sample(skip_if_remote, settings_error_locations_sample, url_input_browser):
+    """
+    Check that when there are more than 1000 error locations, only 1001 are
+    shown in the table, and there is a message.
+    """
+
+    browser = url_input_browser("1001_empty_releases.json")
+    assert "1001" in browser.find_element_by_tag_name("body").text
+    browser.find_element_by_link_text("1001").click()
+    modal_body = browser.find_element_by_css_selector(".modal-body")
+    assert "random 1000 locations for this error" in modal_body.text
+    table_rows = modal_body.find_elements_by_css_selector("table tbody tr")
+    assert len(table_rows) == 1000
+
+
+def test_error_list_999_lines_sample(skip_if_remote, settings_error_locations_sample, url_input_browser):
+    """
+    Check that when there are less than 1000 error locations, they are all shown
+    in the table, and there is no message.
+    """
+
+    browser = url_input_browser("999_empty_releases.json")
+    assert "999" in browser.find_element_by_tag_name("body").text
+    browser.find_element_by_link_text("999").click()
+    modal_body = browser.find_element_by_css_selector(".modal-body")
+    assert "first 999 locations for this error" not in modal_body.text
+    assert "releases/998" in modal_body.text
+    assert "releases/999" not in modal_body.text
+    table_rows = modal_body.find_elements_by_css_selector("table tbody tr")
+    assert len(table_rows) == 999
+
+
+def test_records_table_releases_count(skip_if_remote, url_input_browser):
+    """
+    Check that the correct releases count is shown in the records table.
+    """
+
+    browser = url_input_browser("30_records.json")
+    assert "release" in browser.find_elements_by_css_selector("#records-table-panel table thead th")[1].text
+    table_rows = browser.find_elements_by_css_selector("#records-table-panel table tbody tr")
+    assert table_rows[0].find_elements_by_css_selector("td")[1].text == "5"
+
+
+@pytest.mark.parametrize(
+    ("source_filename", "expected"),
+    [
+        (
+            "release_aggregate.json",
+            [
+                "Unique OCIDs: 1",
+                "Unique Item IDs: 2",
+                "Currencies: EUR, GBP, USD, YEN",
+            ],
+        ),
+    ],
+)
+def test_key_field_information(
+    server_url, url_input_browser, httpserver, source_filename, expected
+):
+    """Check that KFIs are displaying"""
+
+    browser = url_input_browser(source_filename)
+    kfi_text = browser.find_element_by_id("kfi").text
+    for text in expected:
+        assert text in kfi_text

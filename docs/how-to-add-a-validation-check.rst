@@ -3,7 +3,7 @@ How to add a validation check
 
 Data validation takes place in the `lib-cove-ocds <https://github.com/open-contracting/lib-cove-ocds>`_ library and are presented in the UI via templates in cove-ocds.
 
-'Common checks' process the various different objects in a release, so the data can be validated against the schema and statistics about different aspects of the data (eg. the number of contracts, the range of dates, or number of unique organisations present) can be presented in the UI. This happens in ``lib/common_checks.py``.
+'Common checks' process the various different objects in a release, so the data can be validated against the schema and statistics about different aspects of the data (eg. the number of contracts, the range of dates, or number of unique organizations present) can be presented in the UI. This happens in ``lib/common_checks.py``.
 
 'Additional checks' are for data validation beyond what is covered by validation against the `OCDS Schema <https://github.com/open-contracting/lib-cove-ocds/blob/master/libcoveocds/schema.py>`_ - that is, the results of these checks may suggest an issue with the data where the issue does not cause data to be invalid against the schema - and are implemented in ``lib/additional_checks.py``. An example of such a check is identifying when fields, objects and arrays exist but are empty or contain only whitespace.
 
@@ -23,7 +23,7 @@ Make new class for your check, subclassing the ``AdditionalCheck`` class in ``li
             pass
 
 
-The items in the ``output`` array should be dicts with a key for ``type`` at a minimum as well as anything else you want to pass through to be displayed in the template. The value of ``type`` is just a string so that in the template you can customise the display of the results of each type of check. Other things in the output might be the JSON path of the value which failed the check, and the value itself.
+The items in the ``output`` array should be dicts with a key for ``type`` at a minimum as well as anything else you want to pass through to be displayed in the template. The value of ``type`` is just a string so that in the template you can customize the display of the results of each type of check. Other things in the output might be the JSON path of the value which failed the check, and the value itself.
 
 Carry out the validation in the ``process`` function of your new class:
 
