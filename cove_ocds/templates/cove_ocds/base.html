@@ -56,7 +56,7 @@
         </div><!--col-md-2-->
       </div><!--row-->
       <div class="row">
-        <div class="col-xs-7">
+        <div class="col-xs-{{ delete_files_after_days }}">
           {% block h1 %}<h1 class="application-name"><a href="{% url 'index' %}">{% blocktrans %} Data <span> Review </span> Tool{% endblocktrans %} </a></h1> <h2 class="beta"><small>beta</small></h2>{% endblock %}
         </div><!--col-md-8-->
         <div class="col-xs-5">
@@ -134,7 +134,7 @@
         <p> {% blocktrans %}Supported encodings are UTF-8 for JSON and UTF-8, Windows-1252 and ISO-8859-1 for CSV.{% endblocktrans%} </p>
         <p> {% blocktrans %}The application works with both <a href="http://standard.open-contracting.org/latest/en/getting_started/releases_and_records/">'release' and 'record'</a> OCDS documents that conform to the <a href="http://standard.open-contracting.org/">Open Data Contracting Standard</a> {%endblocktrans%} </p>
         <p> {% blocktrans %}If your data passes basic structural checks, the tool will then present a report on data quality, and information about the contents of your file. It will also offer alternative copies of the data for download. {%endblocktrans%} </p>
-        <p> {% blocktrans %}Data is stored for 7 days at a randomly generated URL. You can share this link with others to support discussion of data quality.  {%endblocktrans%} </p>
+        <p> {% blocktrans %}Data is stored for {{ delete_files_after_days }} days at a randomly generated URL. You can share this link with others to support discussion of data quality.  {%endblocktrans%} </p>
         <p> {% blocktrans %}To preview how the data review tool works, try <a href="/review/?source_url=https://raw.githubusercontent.com/open-contracting/sample-data/master/fictional-example/1.1/ocds-213czf-000-00001-02-tender.json"> loading some sample data. </a>{% endblocktrans%} </p>
       </div>
     </div>

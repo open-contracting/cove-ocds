@@ -456,8 +456,8 @@
       <span class="copy-span"> {{ current_url }} <span id="copy-url-button" title="Click to copy." data-clipboard-text={{ current_url }} class="btn copy-button glyphicon glyphicon-copy" aria-hidden="true"></span> </span>
   </div>
   {% comment %}Translators: Paragraph that describes the application{% endcomment %}
-  <p>{% blocktrans %}These results will be available for 7 days from the day the data was first uploaded. You can revisit these results until then.{% endblocktrans %}</p>
-  <p>{% blocktrans %}After 7 days all uploaded data is deleted from our servers, and the results will no longer be available. Anyone using the link to this page after that will be shown a message that tells them the file has been removed.{% endblocktrans %}</p>
+  <p>{% blocktrans %}These results will be available for {{ delete_files_after_days }} days from the day the data was first uploaded. You can revisit these results until then.{% endblocktrans %}</p>
+  <p>{% blocktrans %}After {{ delete_files_after_days }} days all uploaded data is deleted from our servers, and the results will no longer be available. Anyone using the link to this page after that will be shown a message that tells them the file has been removed.{% endblocktrans %}</p>
 </div>
 
 {% endblock explore_content %}

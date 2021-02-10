@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-12 08:05+0000\n"
+"POT-Creation-Date: 2021-02-10 16:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 
 #: cove_ocds/lib/exceptions.py:11 cove_ocds/lib/exceptions.py:31
 #: cove_ocds/lib/exceptions.py:54 cove_ocds/lib/exceptions.py:74
-#: cove_ocds/views.py:80 cove_ocds/views.py:91 cove_ocds/views.py:109
+#: cove_ocds/views.py:68 cove_ocds/views.py:79 cove_ocds/views.py:97
 msgid "Try Again"
 msgstr ""
 
@@ -175,9 +175,11 @@ msgid ""
 msgstr ""
 
 #: cove_ocds/templates/cove_ocds/base.html:137
+#, python-format
 msgid ""
-"Data is stored for 7 days at a randomly generated URL. You can share this "
-"link with others to support discussion of data quality.  "
+"Data is stored for %(delete_files_after_days)s days at a randomly generated "
+"URL. You can share this link with others to support discussion of data "
+"quality.  "
 msgstr ""
 
 #: cove_ocds/templates/cove_ocds/base.html:138
@@ -240,11 +242,11 @@ msgstr ""
 msgid "Usage Count"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/deprecated_fields_table.html:18
+#: cove_ocds/templates/cove_ocds/deprecated_fields_table.html:16
 msgid "Learn more about deprecated fields"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/deprecated_fields_table.html:25
+#: cove_ocds/templates/cove_ocds/deprecated_fields_table.html:23
 #, python-format
 msgid ""
 "\n"
@@ -372,16 +374,20 @@ msgstr ""
 
 #. Translators: Paragraph that describes the application
 #: cove_ocds/templates/cove_ocds/explore_base.html:459
+#, python-format
 msgid ""
-"These results will be available for 7 days from the day the data was first "
-"uploaded. You can revisit these results until then."
+"These results will be available for %(delete_files_after_days)s days from "
+"the day the data was first uploaded. You can revisit these results until "
+"then."
 msgstr ""
 
 #: cove_ocds/templates/cove_ocds/explore_base.html:460
+#, python-format
 msgid ""
-"After 7 days all uploaded data is deleted from our servers, and the results "
-"will no longer be available. Anyone using the link to this page after that "
-"will be shown a message that tells them the file has been removed."
+"After %(delete_files_after_days)s days all uploaded data is deleted from our "
+"servers, and the results will no longer be available. Anyone using the link "
+"to this page after that will be shown a message that tells them the file has "
+"been removed."
 msgstr ""
 
 #: cove_ocds/templates/cove_ocds/explore_base.html:475
@@ -446,41 +452,41 @@ msgstr ""
 msgid "See <a href=\"#validation-errors\">Structural Errors</a> below."
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:33
+#: cove_ocds/templates/cove_ocds/explore_record.html:34
 #, python-format
 msgid "This file contains <strong>%(count)s record.</strong>"
 msgid_plural "This file contains <strong>%(count)s records.</strong>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:37
+#: cove_ocds/templates/cove_ocds/explore_record.html:39
 #: cove_ocds/templates/cove_ocds/explore_release.html:43
 msgid "The schema version specified in the file is"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:41
+#: cove_ocds/templates/cove_ocds/explore_record.html:43
 #, python-format
 msgid "There is <strong>%(count)s unique OCID.</strong>"
 msgid_plural "There are <strong>%(count)s unique OCIDs.</strong>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:45
+#: cove_ocds/templates/cove_ocds/explore_record.html:47
 #: cove_ocds/templates/cove_ocds/explore_release.html:48
 msgid "The publisher named in the file is"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:50
+#: cove_ocds/templates/cove_ocds/explore_record.html:52
 #: cove_ocds/templates/cove_ocds/explore_release.html:53
 msgid "The license is"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:55
+#: cove_ocds/templates/cove_ocds/explore_record.html:57
 #: cove_ocds/templates/cove_ocds/explore_release.html:58
 msgid "Publication policy is"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:61
+#: cove_ocds/templates/cove_ocds/explore_record.html:63
 #: cove_ocds/templates/cove_ocds/explore_release.html:70
 #, python-format
 msgid ""
@@ -492,7 +498,7 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:67
+#: cove_ocds/templates/cove_ocds/explore_record.html:69
 #: cove_ocds/templates/cove_ocds/explore_release.html:75
 #, python-format
 msgid ""
@@ -504,63 +510,63 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:72
+#: cove_ocds/templates/cove_ocds/explore_record.html:74
 #: cove_ocds/templates/cove_ocds/explore_release.html:80
 msgid "This file is not 'utf-8' encoded (it is"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:72
+#: cove_ocds/templates/cove_ocds/explore_record.html:74
 #: cove_ocds/templates/cove_ocds/explore_release.html:80
 msgid "encoded)."
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:76
+#: cove_ocds/templates/cove_ocds/explore_record.html:78
 #: cove_ocds/templates/cove_ocds/explore_release.html:89
 msgid "Data "
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:78
+#: cove_ocds/templates/cove_ocds/explore_record.html:80
 #: cove_ocds/templates/cove_ocds/explore_release.html:91
 msgid "downloaded from "
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:80
+#: cove_ocds/templates/cove_ocds/explore_record.html:82
 #: cove_ocds/templates/cove_ocds/explore_release.html:93
 msgid "uploaded "
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:82
+#: cove_ocds/templates/cove_ocds/explore_record.html:84
 #: cove_ocds/templates/cove_ocds/explore_release.html:95
 msgid "on "
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:100
+#: cove_ocds/templates/cove_ocds/explore_record.html:102
 msgid "Is structurally correct?"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:113
+#: cove_ocds/templates/cove_ocds/explore_record.html:115
 msgid "Number of records"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:124
+#: cove_ocds/templates/cove_ocds/explore_record.html:126
 msgid "Unique OCIDs"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:142
+#: cove_ocds/templates/cove_ocds/explore_record.html:144
 msgid "Records Table:"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:148
+#: cove_ocds/templates/cove_ocds/explore_record.html:150
 #, python-format
 msgid "Showing the first %(releases_or_records_table_length)s records."
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:183
+#: cove_ocds/templates/cove_ocds/explore_record.html:185
 #: cove_ocds/templates/cove_ocds/explore_release.html:428
 msgid "Explore your data:"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:188
+#: cove_ocds/templates/cove_ocds/explore_record.html:190
 #: cove_ocds/templates/cove_ocds/explore_release.html:433
 msgid ""
 "This section provides a visual representation of the data, use it to check "
@@ -568,14 +574,14 @@ msgid ""
 "it."
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:191
+#: cove_ocds/templates/cove_ocds/explore_record.html:193
 #: cove_ocds/templates/cove_ocds/explore_release.html:436
 msgid ""
 "Extensions and additional fields are hidden by default, click the 'Extra "
 "fields' buttons or open the 'Extra fields' section to view them."
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:194
+#: cove_ocds/templates/cove_ocds/explore_record.html:196
 #: cove_ocds/templates/cove_ocds/explore_release.html:439
 msgid ""
 "When viewing an OCDS record, use the numbers at the top of the visualization "
@@ -937,21 +943,24 @@ msgid "What happens to the data I provide to this site?"
 msgstr ""
 
 #: cove_ocds/templates/cove_ocds/more_info.html:11
+#, python-format
 msgid ""
-"We retain the data you upload or paste to this site, on our server, for 7 "
-"days."
+"We retain the data you upload or paste to this site, on our server, for "
+"%(delete_files_after_days)s days."
 msgstr ""
 
 #: cove_ocds/templates/cove_ocds/more_info.html:12
+#, python-format
 msgid ""
 "If you supply a link, we fetch the data from that link and store it on our "
-"server for 7 days."
+"server for %(delete_files_after_days)s days."
 msgstr ""
 
 #: cove_ocds/templates/cove_ocds/more_info.html:13
+#, python-format
 msgid ""
-"We delete all data older than 7 days from our servers daily, retaining none "
-"of the original data."
+"We delete all data older than %(delete_files_after_days)s days from our "
+"servers daily, retaining none of the original data."
 msgstr ""
 
 #: cove_ocds/templates/cove_ocds/more_info.html:14
@@ -977,22 +986,26 @@ msgid ""
 msgstr ""
 
 #: cove_ocds/templates/cove_ocds/more_info.html:18
-msgid "Why do you delete data after 7 days?"
+#, python-format
+msgid "Why do you delete data after %(delete_files_after_days)s days?"
 msgstr ""
 
 #: cove_ocds/templates/cove_ocds/more_info.html:19
+#, python-format
 msgid ""
 "This is service to allow people to explore machine readable data. As such we "
 "see no need to store and gather everything people submit to the site "
-"forever. We have chosen 7 days as a practical time frame that allows people "
-"to share results with colleagues, but also allows data to disappear over "
-"time to save people having to clean up after themselves."
+"forever. We have chosen %(delete_files_after_days)s days as a practical time "
+"frame that allows people to share results with colleagues, but also allows "
+"data to disappear over time to save people having to clean up after "
+"themselves."
 msgstr ""
 
 #: cove_ocds/templates/cove_ocds/more_info.html:20
+#, python-format
 msgid ""
-"We believe that deleting supplied data after 7 days provides a level of "
-"privacy for the users of this service. "
+"We believe that deleting supplied data after %(delete_files_after_days)s "
+"days provides a level of privacy for the users of this service. "
 msgstr ""
 
 #: cove_ocds/templates/cove_ocds/more_info.html:24
@@ -1144,11 +1157,11 @@ msgstr ""
 msgid "Line:"
 msgstr ""
 
-#: cove_ocds/views.py:78 cove_ocds/views.py:89 cove_ocds/views.py:107
+#: cove_ocds/views.py:66 cove_ocds/views.py:77 cove_ocds/views.py:95
 msgid "Sorry, we can't process that data"
 msgstr ""
 
-#: cove_ocds/views.py:81
+#: cove_ocds/views.py:69
 msgid ""
 "The file that you uploaded doesn't appear to be well formed JSON. OCDS JSON "
 "follows the I-JSON format, which requires UTF-8 encoding. Ensure that your "
@@ -1158,7 +1171,7 @@ msgid ""
 "span> <strong>Error message:</strong> {}"
 msgstr ""
 
-#: cove_ocds/views.py:94
+#: cove_ocds/views.py:82
 msgid ""
 "We think you tried to upload a JSON file, but it is not well formed JSON.\n"
 "\n"
@@ -1166,7 +1179,7 @@ msgid ""
 "span> <strong>Error message:</strong> {}"
 msgstr ""
 
-#: cove_ocds/views.py:111
+#: cove_ocds/views.py:99
 msgid ""
 "OCDS JSON should have an object as the top level, the JSON you supplied does "
 "not."
