@@ -152,7 +152,7 @@ def test_common_index_elements(server_url, browser):
         in browser.find_element_by_tag_name("body").text
     )
     assert (
-        "Why do you delete data after 7 days?"
+        "Why do you delete data after 90 days?"
         in browser.find_element_by_tag_name("body").text
     )
     assert (
