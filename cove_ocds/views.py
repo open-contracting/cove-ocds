@@ -243,6 +243,7 @@ def explore_ocds(request, pk):
     db_data.save()
 
     if "records" in json_data:
+        context["release_or_record"] = "record"
         ocds_show_schema = SchemaOCDS(record_pkg=True)
         ocds_show_deref_schema = ocds_show_schema.get_schema_obj(deref=True)
         template = "cove_ocds/explore_record.html"
@@ -255,6 +256,7 @@ def explore_ocds(request, pk):
                 json_data, ocds_show_deref_schema
             )
     else:
+        context["release_or_record"] = "release"
         ocds_show_schema = SchemaOCDS(record_pkg=False)
         ocds_show_deref_schema = ocds_show_schema.get_schema_obj(deref=True)
         template = "cove_ocds/explore_release.html"
