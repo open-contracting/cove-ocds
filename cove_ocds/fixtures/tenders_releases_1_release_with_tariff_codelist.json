@@ -6,7 +6,7 @@
         "uid": null
     },
     "extensions": [
-        "https://raw.githubusercontent.com/open-contracting/ocds_tariffs_extension/d9df2969030b0a555c24c7db685262c714b4da24/extension.json"
+        "https://raw.githubusercontent.com/open-contracting-extensions/ocds_tariffs_extension/d9df2969030b0a555c24c7db685262c714b4da24/extension.json"
     ],
     "version": "1.1",
     "releases": [

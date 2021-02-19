@@ -6,10 +6,10 @@
         "uid": null
     },
     "extensions": [
-        "https://raw.githubusercontent.com/open-contracting/ocds_metrics_extension/master/extension.json",
-        "https://raw.githubusercontent.com/open-contracting/ocds_extension_parties/master/extension.json",
-        "https://raw.githubusercontent.com/open-contracting/ocds_partyDetails_scale_extension/master/extension.json",
-        "https://raw.githubusercontent.com/open-contracting/bad_path_to_extensions/extension.json",
+        "https://raw.githubusercontent.com/open-contracting-extensions/ocds_metrics_extension/master/extension.json",
+        "https://raw.githubusercontent.com/open-contracting-extensions/ocds_extension_parties/master/extension.json",
+        "https://raw.githubusercontent.com/open-contracting-extensions/ocds_partyDetails_scale_extension/master/extension.json",
+        "https://raw.githubusercontent.com/open-contracting-extensions/bad_path_to_extensions/extension.json",
         "https://standard.open-contracting.org/latest/en/404.json",
         "badprotocol://example.com"
     ],

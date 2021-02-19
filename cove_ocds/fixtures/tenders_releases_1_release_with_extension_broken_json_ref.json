@@ -7,7 +7,7 @@
 	},
 	"publishedDate": "2017-08-08T09:44:30+00:00",
 	"uri": "http://pptin.staging.yipl.com.np/bulk-download/2017",
-	"extensions":["https://raw.githubusercontent.com/open-contracting/ocds_requirements_extension/master/extension.json"],
+	"extensions":["https://raw.githubusercontent.com/open-contracting-extensions/ocds_requirements_extension/master/extension.json"],
 	"version": "1.0",
 	"releases": [{
 			"ocid": "ocds-rw2stw-DTOK-3994\/CIP\/KPV\/W\/NCB-26",
