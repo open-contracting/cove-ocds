@@ -150,7 +150,7 @@
             }
         }
     ], 
-    "uri": "https://github.com/open-contracting/sample-data/blob/master/buyandsell/ocds_data/tender_releases.json.zip", 
+    "uri": "https://github.com/open-contracting/sample-data/blob/main/buyandsell/ocds_data/tender_releases.json.zip",
     "license": "http://data.gc.ca/eng/open-government-licence-canada", 
     "publishedDate": "2014-11-07T00:00:00.00Z"
 }

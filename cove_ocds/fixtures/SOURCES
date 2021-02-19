@@ -44,5 +44,5 @@ Source: Same data as tenders_releases_2_releases.json, but edited to be a record
 License: http://data.gc.ca/eng/open-government-licence-canada
 
 ocds_release_nulls.json
-Adapted from://github.com/open-contracting/sample-data/blob/master/blank-template/release-template-1__0__0.json 
+Adapted from://github.com/open-contracting/sample-data/blob/main/blank-template/release-template-1__0__0.json
 

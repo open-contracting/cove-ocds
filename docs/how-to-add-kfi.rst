@@ -15,7 +15,7 @@ Because the code changes over time, links are to lines in specific versions of f
 Overview
 --------
 
-The Key Field Information section of the results page presents summary statistics that are generated in the `lib-cove-ocds <https://github.com/open-contracting/lib-cove-ocds>`_ library and are presented in the UI via templates in cove-ocds. To make a change, we're going to add the code that generates the statistic to lib-cove-ocds's `common_checks.py <https://github.com/open-contracting/lib-cove-ocds/blob/master/libcoveocds/lib/common_checks.py>`_, and then present it in the explore_additional_content block of of the `results page template <https://github.com/open-contracting/cove-ocds/blob/master/cove_ocds/templates/cove_ocds/explore_release.html>`_
+The Key Field Information section of the results page presents summary statistics that are generated in the `lib-cove-ocds <https://github.com/open-contracting/lib-cove-ocds>`_ library and are presented in the UI via templates in cove-ocds. To make a change, we're going to add the code that generates the statistic to lib-cove-ocds's `common_checks.py <https://github.com/open-contracting/lib-cove-ocds/blob/main/libcoveocds/lib/common_checks.py>`_, and then present it in the explore_additional_content block of of the `results page template <https://github.com/open-contracting/cove-ocds/blob/main/cove_ocds/templates/cove_ocds/explore_release.html>`_
 
 For this article, we'll be using a real-life example that was `reported on GitHub <https://github.com/open-contracting/cove-ocds/issues/69>`_ - adding a count of unique item IDs to KFI. To achieve this, we'll carry out three steps:
 
@@ -65,7 +65,7 @@ Finally, add the new ``set`` to the return ``dict``:
 Presenting the statistics in the template
 -----------------------------------------
 
-The `template <https://github.com/open-contracting/cove-ocds/blob/master/cove_ocds/templates/cove_ocds/explore_release.html>`_ is passed the returned dict from ``get_release_aggregates``, and names it ``ra``.
+The `template <https://github.com/open-contracting/cove-ocds/blob/main/cove_ocds/templates/cove_ocds/explore_release.html>`_ is passed the returned dict from ``get_release_aggregates``, and names it ``ra``.
 
 Therefore, we need to choose an appropriate place in the template, and use our new variable: 
 
@@ -80,7 +80,7 @@ Adding tests
 
 Beacuse the DRT has a lib+app architecture, we need to add tests to both the library (lib-cove-ocds) and the app (cove-ocds). This does mean that there's some duplication, but it helps to locate errors when they occur. Because there's already tests for the adjacent code, we will be modifying what's already there rather than adding new tests.
 
-First, we'll look at the `unit tests in lib-cove-ocds <https://github.com/open-contracting/lib-cove-ocds/blob/master/tests/lib/test_common_checks.py>`_
+First, we'll look at the `unit tests in lib-cove-ocds <https://github.com/open-contracting/lib-cove-ocds/blob/main/tests/lib/test_common_checks.py>`_
 
 The unit test file contains some setup at the top, and then a series of tests. 
 
@@ -88,7 +88,7 @@ So, we'll add our new values to the dicts that support the unit tests for the KF
 
 ``EMPTY_RELEASE_AGGREGATE`` is straightforward - we'll just add a row for our new variable, with a value of 0.
 
-``EXPECTED_RELEASE_AGGREGATE`` is populated with the expected results from `fixtures/release_aggregate.json <https://github.com/open-contracting/cove-ocds/blob/master/cove_ocds/fixtures/release_aggregate.json>`_ , which is a small OCDS JSON file specifically to support testing KFIs. In order to work out the values here, calculate what the value should be based on that file, and insert the relevant result. If you've got a way of calculating the value in a way that's not the code that you've just written, this is a good chance to validate that your code is behaving correctly! If the KFI that you're adding can't be calculated from the existing data in that file, then add the relevant data, and update any other values that change as a result.
+``EXPECTED_RELEASE_AGGREGATE`` is populated with the expected results from `fixtures/release_aggregate.json <https://github.com/open-contracting/cove-ocds/blob/main/cove_ocds/fixtures/release_aggregate.json>`_ , which is a small OCDS JSON file specifically to support testing KFIs. In order to work out the values here, calculate what the value should be based on that file, and insert the relevant result. If you've got a way of calculating the value in a way that's not the code that you've just written, this is a good chance to validate that your code is behaving correctly! If the KFI that you're adding can't be calculated from the existing data in that file, then add the relevant data, and update any other values that change as a result.
 
 In this case, we can carry out the same calculation with ``jq`` and basic UNIX commandline tools:
 
@@ -99,7 +99,7 @@ In this case, we can carry out the same calculation with ``jq`` and basic UNIX c
 
 (note that various values can be can be null or missing, hence using the ? so that jq doesn't stop with an error)
 
-``EXPECTED_RELEASE_AGGREGATE_RANDOM`` is populated with the expected results from `fixtures/samplerubbish.json <https://github.com/open-contracting/cove-ocds/blob/master/cove_ocds/fixtures/samplerubbish.json>`_. This is a large OCDS JSON file that's nonsense, and is intended to provide a more robust test of the code. If the KFI that you're adding can't be calculated from the existing data in that file, then contact the OCDS Helpdesk to discuss generating a new version of the file that does include the relevant fields. 
+``EXPECTED_RELEASE_AGGREGATE_RANDOM`` is populated with the expected results from `fixtures/samplerubbish.json <https://github.com/open-contracting/cove-ocds/blob/main/cove_ocds/fixtures/samplerubbish.json>`_. This is a large OCDS JSON file that's nonsense, and is intended to provide a more robust test of the code. If the KFI that you're adding can't be calculated from the existing data in that file, then contact the OCDS Helpdesk to discuss generating a new version of the file that does include the relevant fields. 
 
 .. code-block:: bash
 
@@ -107,9 +107,9 @@ In this case, we can carry out the same calculation with ``jq`` and basic UNIX c
 	4698
 
 
-Then, we'll look at the `unit tests in cove-ocds <https://github.com/open-contracting/cove-ocds/blob/master/cove_ocds/tests.py>`_. These are very similar to the unit tests in lib-cove-ocds, so we'll just apply the same changes here. 
+Then, we'll look at the `unit tests in cove-ocds <https://github.com/open-contracting/cove-ocds/blob/main/cove_ocds/tests.py>`_. These are very similar to the unit tests in lib-cove-ocds, so we'll just apply the same changes here. 
 
-Then, we'll look at the `functional tests <https://github.com/open-contracting/cove-ocds/blob/master/cove_ocds/tests_functional.py>`_
+Then, we'll look at the `functional tests <https://github.com/open-contracting/cove-ocds/blob/main/cove_ocds/tests_functional.py>`_
 
 There's a ``test_key_field_information`` already, so we'll just add our new value to that:
 
