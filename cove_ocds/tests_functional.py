@@ -278,7 +278,7 @@ def test_500_error(server_url, browser):
             "tenders_releases_1_release_with_invalid_extensions.json",
             [
                 "Schema Extensions",
-                "https://raw.githubusercontent.com/open-contracting/",
+                "https://raw.githubusercontent.com/open-contracting-extensions/",
                 "badprotocol://example.com",
                 "400: bad request",
                 "Only those extensions successfully fetched",
