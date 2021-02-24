@@ -1397,3 +1397,52 @@ def test_key_field_information(
     kfi_text = browser.find_element_by_id("kfi").text
     for text in expected:
         assert text in kfi_text
+
+
+def test_jsonschema_translation(
+    url_input_browser,
+):
+    english_validation_messages = [
+        "'a' does not match any of the regexes: 'okay'",
+        '"a" is a dependency of "b"',
+        '"a" is not a "email"',
+        '"a" is not valid under any of the given schemas',
+        '"a" is not valid under any of the given schemas',
+        '"a" is too short',
+        '"aaa" is too long',
+        "1 is less than the minimum of 2",
+        "1 is valid under each of {'type': 'integer'}, {'type': 'number'}",
+        "2 is more than or equal to the maximum of 2",
+        "2 is less than or equal to the minimum of 2",
+        "2 is not a multiple of 3",
+        "3 is more than the maximum of 2",
+        "Additional items are not allowed (['a'] was unexpected)",
+        "Additional properties are not allowed (['a'] was unexpected)",
+        '{"a": 1, "b": 2, "c": 3} has too many properties',
+        '["a", "a", "a"] is too long',
+        '["a"] is too short',
+        '"a" is not valid under any of the given schemas',
+        '{"type": "string"} is not allowed for "a"',
+    ]
+
+    spanish_validation_messages = [
+        "TODO: add me"
+    ]
+
+    source_filename = "extended_many_jsonschema_keys.json"
+    browser = url_input_browser(source_filename)
+    body_text = browser.find_element_by_tag_name("body").text
+
+    for message in english_validation_messages:
+        assert message in body_text
+
+    browser.find_elements_by_xpath("//*[contains(text(), 'English')]")[0].click()
+    browser.find_elements_by_xpath("//*[contains(text(), 'español')]")[0].click()
+    body_text = browser.find_element_by_tag_name("body").text
+
+    for message in english_validation_messages:
+        assert message not in body_text
+
+    for message in spanish_validation_messages:
+        assert message in body_text
+
