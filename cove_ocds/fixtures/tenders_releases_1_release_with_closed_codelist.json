@@ -6,7 +6,7 @@
         "uid": null
     },
     "extensions": [
-        "https://raw.githubusercontent.com/open-contracting/ocds_tariffs_extension/d9df2969030b0a555c24c7db685262c714b4da24/extension.json",
+        "https://raw.githubusercontent.com/open-contracting-extensions/ocds_tariffs_extension/d9df2969030b0a555c24c7db685262c714b4da24/extension.json",
         "https://raw.githubusercontent.com/OpenDataServices/cove/4318ebe1182ccd3b3c3492de2ae75683c3c0395f/cove_ocds/fixtures/codelist_extension/extension.json"
     ],
     "version": "1.1",
@@ -68,7 +68,7 @@
             }
         }
     ], 
-    "uri": "https://github.com/open-contracting/sample-data/blob/master/buyandsell/ocds_data/tender_releases.json.zip", 
+    "uri": "https://github.com/open-contracting/sample-data/blob/main/buyandsell/ocds_data/tender_releases.json.zip",
     "license": "http://data.gc.ca/eng/open-government-licence-canada", 
     "publishedDate": "2014-11-07T00:00:00.00Z"
 }

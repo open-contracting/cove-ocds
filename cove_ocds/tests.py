@@ -207,7 +207,7 @@ EXPECTED_RELEASE_AGGREGATE_RANDOM = {
 }
 
 DEFAULT_OCDS_VERSION = settings.COVE_CONFIG["schema_version"]
-METRICS_EXT = "https://raw.githubusercontent.com/open-contracting/ocds_metrics_extension/master/extension.json"
+METRICS_EXT = "https://raw.githubusercontent.com/open-contracting-extensions/ocds_metrics_extension/master/extension.json"
 CODELIST_EXT = "https://raw.githubusercontent.com/INAImexico/ocds_extendedProcurementCategory_extension/0ed54770c85500cf21f46e88fb06a30a5a2132b1/extension.json"
 UNKNOWN_URL_EXT = "http://bad-url-for-extensions.com/extension.json"
 NOT_FOUND_URL_EXT = "https://standard.open-contracting.org/latest/en/404.json"
@@ -439,9 +439,9 @@ def test_get_schema_deprecated_paths():
         '{"version": "1.1", "records" : {"version": "1.1", "a":"b"}}',
         '{"version": "1.1", "releases":{"buyer":{"additionalIdentifiers":[]}}}',
         '{"version": "1.1", "releases":{"parties":{"roles":[["a","b"]]}}}',  # test an array in a codelist position
-        '{"extensions":["https://raw.githubusercontent.com/open-contracting/ocds_bid_extension/v1.1.1/extension.jso"], "releases":[]}',
+        '{"extensions":["https://raw.githubusercontent.com/open-contracting-extensions/ocds_bid_extension/v1.1.1/extension.jso"], "releases":[]}',
         '{"extensions":[{}], "releases":[]}'
-        '{"extensions":["https://raw.githubusercontent.com/open-contracting/ocds_bid_extension/v1.1.1/extension.jso"], "releases":[], "version": "1.1"}',
+        '{"extensions":["https://raw.githubusercontent.com/open-contracting-extensions/ocds_bid_extension/v1.1.1/extension.jso"], "releases":[], "version": "1.1"}',
         '{"extensions":[{}], "releases":[], "version": "1.1"}',
     ],
 )

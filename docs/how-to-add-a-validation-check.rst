@@ -5,7 +5,7 @@ Data validation takes place in the `lib-cove-ocds <https://github.com/open-contr
 
 'Common checks' process the various different objects in a release, so the data can be validated against the schema and statistics about different aspects of the data (eg. the number of contracts, the range of dates, or number of unique organizations present) can be presented in the UI. This happens in ``lib/common_checks.py``.
 
-'Additional checks' are for data validation beyond what is covered by validation against the `OCDS Schema <https://github.com/open-contracting/lib-cove-ocds/blob/master/libcoveocds/schema.py>`_ - that is, the results of these checks may suggest an issue with the data where the issue does not cause data to be invalid against the schema - and are implemented in ``lib/additional_checks.py``. An example of such a check is identifying when fields, objects and arrays exist but are empty or contain only whitespace.
+'Additional checks' are for data validation beyond what is covered by validation against the `OCDS Schema <https://github.com/open-contracting/lib-cove-ocds/blob/main/libcoveocds/schema.py>`_ - that is, the results of these checks may suggest an issue with the data where the issue does not cause data to be invalid against the schema - and are implemented in ``lib/additional_checks.py``. An example of such a check is identifying when fields, objects and arrays exist but are empty or contain only whitespace.
 
 What follows is an outline of how to add a check. This will involve making changes in both `lib-cove-ocds` and `cove-ocds`.
 
@@ -52,7 +52,7 @@ To loop through the input data to process it, you can flatten it first, ie:
     for key, value in flattened_data.items():
         # do stuff with each field
 
-Add the class to the array of checks so they get run when data is loaded (this happens in `the top level common_checks.py <https://github.com/open-contracting/lib-cove-ocds/blob/master/libcoveocds/common_checks.py>`_).
+Add the class to the array of checks so they get run when data is loaded (this happens in `the top level common_checks.py <https://github.com/open-contracting/lib-cove-ocds/blob/main/libcoveocds/common_checks.py>`_).
 
 .. code-block:: python
 

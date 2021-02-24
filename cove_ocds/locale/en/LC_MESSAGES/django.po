@@ -190,7 +190,7 @@ msgstr ""
 msgid ""
 "To preview how the data review tool works, try <a href=\"/review/?"
 "source_url=https://raw.githubusercontent.com/open-contracting/sample-data/"
-"master/fictional-example/1.1/ocds-213czf-000-00001-02-tender.json\"> loading "
+"main/fictional-example/1.1/ocds-213czf-000-00001-02-tender.json\"> loading "
 "some sample data. </a>"
 msgstr ""
 
