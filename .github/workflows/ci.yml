@@ -22,6 +22,7 @@ jobs:
     - run: curl -s -S --retry 3 $BASEDIR/tests/install.sh | bash -
     - run: pip install -r requirements_dev.txt
     - run: curl -s -S --retry 3 $BASEDIR/tests/script.sh | bash -
+    - run: pytest /tmp/test_requirements.py
     # Install gettext for translations, and translate-toolkit for `pocount`.
     - run: sudo apt-get update
     - run: sudo apt-get install gettext translate-toolkit
