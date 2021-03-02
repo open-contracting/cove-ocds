@@ -1,23 +1,17 @@
 -r requirements.txt
-pip-tools
+coverage<5 # Lock as coverage 5 breaks hypothesis tests?
 coveralls
-pytest
-# Lock because version of coverage is locked
-pytest-cov<2.11
-pytest-django
 flake8
-hypothesis
+flattentool>=0.14.0
+hypothesis==3.52.3 # Lock as later versions have a problem with slow generation of data
+libsass
+pip-tools
+pytest
+pytest-cov<2.11 # Lock because version of coverage is locked
+pytest-django
 pytest-localserver
+requests
 selenium
 sphinx
 sphinx-rtd-theme
 transifex-client
-# Lock as later versions have a problem with slow generation of data
-hypothesis==3.52.3
-# Lock as coverage 5 breaks hypothesis tests?
-coverage<5
-libsass
-sphinx
-sphinx-rtd-theme
-flattentool>=0.14.0
-requests
