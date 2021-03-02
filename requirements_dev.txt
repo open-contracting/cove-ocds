@@ -222,8 +222,6 @@ pytz==2021.1
     #   babel
     #   django
     #   flattentool
-rangedict==0.1.6
-    # via -r requirements.txt
 requests==2.25.1
     # via
     #   -r requirements.txt
