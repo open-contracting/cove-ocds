@@ -19,3 +19,5 @@ coverage<5
 libsass
 sphinx
 sphinx-rtd-theme
+flattentool>=0.14.0
+requests
