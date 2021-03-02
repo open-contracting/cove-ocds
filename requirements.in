@@ -1,9 +1,9 @@
-Django>2.2<2.3
-libcoveocds>=0.9.0
-libcove>=0.18.0
-libcoveweb>=0.20.0
-django-bootstrap3
 dealer
+django-bootstrap3
 django-environ
+Django>2.2<2.3
+libcove>=0.18.0
+libcoveocds>=0.9.0
+libcoveweb>=0.20.0
 python-dateutil
 strict-rfc3339
