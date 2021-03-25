@@ -6,15 +6,17 @@
 # Translators:
 # Rob Redpath <rob.redpath@opendataservices.coop>, 2020
 # Ben Webb <ben.webb@opendataservices.coop>, 2021
+# Cecilia Casco <ceciliacasco@cds.com.py>, 2021
+# Juan Pane <juanpane@idatosabiertos.org>, 2021
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-10 16:08+0000\n"
+"POT-Creation-Date: 2021-02-24 17:55+0000\n"
 "PO-Revision-Date: 2020-09-08 08:53+0000\n"
-"Last-Translator: Ben Webb <ben.webb@opendataservices.coop>, 2021\n"
+"Last-Translator: Juan Pane <juanpane@idatosabiertos.org>, 2021\n"
 "Language-Team: Spanish (https://www.transifex.com/open-contracting-partnership-1/teams/113687/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,7 +30,7 @@ msgstr "Versión del esquema no reconocida"
 
 #: cove_ocds/lib/exceptions.py:11 cove_ocds/lib/exceptions.py:31
 #: cove_ocds/lib/exceptions.py:54 cove_ocds/lib/exceptions.py:74
-#: cove_ocds/views.py:68 cove_ocds/views.py:79 cove_ocds/views.py:97
+#: cove_ocds/views.py:80 cove_ocds/views.py:91 cove_ocds/views.py:109
 msgid "Try Again"
 msgstr "Inténtelo de nuevo"
 
@@ -70,6 +72,10 @@ msgstr ""
 "Los datos incluyen campos que están vacíos o que solo contienen espacios en "
 "blanco. Los campos que no se usan, o que no tienen ningún valor, deben "
 "excluirse en su totalidad (clave y valor) de los datos"
+
+#: cove_ocds/templates/cove_ocds/additional_checks_table.html:22
+msgid "see all"
+msgstr "ver todos"
 
 #. Translators: Label of a button that triggers search
 #: cove_ocds/templates/cove_ocds/base.html:53
@@ -233,7 +239,7 @@ msgid ""
 "contracting/sample-data/main/fictional-example/1.1/ocds-"
 "213czf-000-00001-02-tender.json\"> loading some sample data. </a>"
 msgstr ""
-"Para ver cómo funciona la herramienta de revisión de datos,  intenta <a "
+"Para ver cómo funciona la herramienta de revisión de datos,  intente <a "
 "href=\"/review/?source_url=https://raw.githubusercontent.com/open-"
 "contracting/sample-data/main/fictional-example/1.1/ocds-"
 "213czf-000-00001-02-tender.json\"> subir algunos datos de muestra.</a>"
@@ -308,9 +314,76 @@ msgstr ""
 msgid "Load New File"
 msgstr "Cargar archivo nuevo"
 
+#: cove_ocds/templates/cove_ocds/explore_base.html:24
+msgid "Schema"
+msgstr "Esquema"
+
+#: cove_ocds/templates/cove_ocds/explore_base.html:29
+#, python-format
+msgid ""
+"Your data specifies a version <strong>%(unrecognized_version_data)s</strong>"
+" which is not recognised. For that reason, it's been checked against the "
+"current default version."
+msgstr ""
+"Sus datos especifican una versión "
+"<strong>%(unrecognized_version_data)s</strong>que no es reconocida. Por esta"
+" razón, se ha verificado en relación a la versión actual por defecto."
+
+#: cove_ocds/templates/cove_ocds/explore_base.html:32
+#, python-format
+msgid ""
+"This data has been checked against <a href=\"%(schema_url)s\">OCDS "
+"%(release_or_record)s package schema version %(version_used_display)s</a>."
+msgstr ""
+"Este dato ha sido verificado <a href=\"%(schema_url)s\"> con la versión "
+"%(version_used_display)s</a>del paquete del esquema %(release_or_record)s"
+
+#: cove_ocds/templates/cove_ocds/explore_base.html:32
+msgid ""
+"You can choose a different version of the schema to check and explore your "
+"data."
+msgstr ""
+"Puede elegir una versión diferente del esquema para verificar y explorar sus"
+" datos."
+
+#: cove_ocds/templates/cove_ocds/explore_base.html:34
+msgid "Check and explore same data against a different version of the schema"
+msgstr ""
+"Verifique y explore los mismos datos en relación a una versión diferente del"
+" esquema"
+
+#: cove_ocds/templates/cove_ocds/explore_base.html:37
+msgid ""
+"Switching the schema version will result in changes to CoVE output and "
+"conversions. If you revisit or share this URL, the lastest version selected "
+"will be used to check your data"
+msgstr ""
+"Cambiar la versión del esquema dará como resultado cambios en las salidas y "
+"conversiones del CoVE. Si vuelve a visitar o compartir esta URL, la última "
+"versión seleccionada se utilizará para verificar sus datos."
+
 #: cove_ocds/templates/cove_ocds/explore_base.html:64
 msgid "Convert"
 msgstr "Convertir"
+
+#: cove_ocds/templates/cove_ocds/explore_base.html:71
+msgid ""
+"There were <a href=\"#conversion-warning\">conversion warnings</a> when "
+"processing your file. The converted data may not represent your data as you "
+"want it to be."
+msgstr ""
+"Hubieron <a href=\"#conversion-warning\"> advertencias de conversión </a>al "
+"procesar su archivo. Los datos convertidos puede que no representen sus "
+"datos como lo desea. "
+
+#: cove_ocds/templates/cove_ocds/explore_base.html:74
+msgid "We have tried to convert your JSON into a spreadsheet format."
+msgstr "Hemos intentado convertir su JSON a un formato de hoja de cálculo."
+
+#: cove_ocds/templates/cove_ocds/explore_base.html:74
+#: cove_ocds/templates/cove_ocds/explore_base.html:98
+msgid "The results can be seen below."
+msgstr "Los resultados se pueden ver a continuación."
 
 #: cove_ocds/templates/cove_ocds/explore_base.html:81
 #: cove_ocds/templates/cove_ocds/explore_base.html:86
@@ -322,6 +395,10 @@ msgstr "usando versión del esquema"
 msgid "The JSON could not be converted to Spreadsheet due to the error:"
 msgstr "El JSON no se pudo convertir a hoja de cálculo debido al error:"
 
+#: cove_ocds/templates/cove_ocds/explore_base.html:98
+msgid "We have tried to convert your data into JSON format."
+msgstr "Hemos intentado convertir sus datos a formato JSON."
+
 #: cove_ocds/templates/cove_ocds/explore_base.html:124
 msgid "Convert to Spreadsheet"
 msgstr "Convertir a hoja de cálculo"
@@ -330,9 +407,69 @@ msgstr "Convertir a hoja de cálculo"
 msgid "Schema Extensions"
 msgstr "Extensiones del Esquema"
 
+#: cove_ocds/templates/cove_ocds/explore_base.html:151
+msgid ""
+"Your data has been checked against schema version <strong>1.0</strong> and "
+"includes extensions but extensions were not introduced in the schema until "
+"version <strong>1.1</strong>."
+msgstr ""
+"Sus datos se han comparado con la versión <strong>1.0 </strong>del esquema e"
+" incluyen extensiones, pero no se introdujeron extensiones en el esquema "
+"hasta la versión <strong> 1.1 </strong>."
+
+#: cove_ocds/templates/cove_ocds/explore_base.html:154
+msgid "Your data contains the following schema extensions"
+msgstr "Los datos contienen las siguientes extensiones de esquema"
+
+#: cove_ocds/templates/cove_ocds/explore_base.html:154
+msgid ", but it wasn't possible to fetch them"
+msgstr ", pero no fue posible recuperarlos "
+
+#: cove_ocds/templates/cove_ocds/explore_base.html:160
+msgid "release schema"
+msgstr "esquema de entrega"
+
+#: cove_ocds/templates/cove_ocds/explore_base.html:177
+msgid "The following extensions failed:"
+msgstr "Las siguientes extensiones fallaron:"
+
+#: cove_ocds/templates/cove_ocds/explore_base.html:187
+msgid ""
+"Only those extensions successfully fetched were applied to extend the "
+"schema."
+msgstr ""
+"Solo las extensiones obtenidas con éxito se aplicaron para ampliar el "
+"esquema."
+
+#: cove_ocds/templates/cove_ocds/explore_base.html:189
+msgid "All the extensions above were applied to extend the schema."
+msgstr ""
+"Todas las extensiones anteriores se aplicaron para ampliar el esquema."
+
+#: cove_ocds/templates/cove_ocds/explore_base.html:191
+msgid "Get a copy of the schema with extension patches applied"
+msgstr "Obtenga una copia del esquema con los parches de extensión aplicados"
+
+#: cove_ocds/templates/cove_ocds/explore_base.html:193
+msgid ""
+"None of the extensions above could be applied. Your data has been checked "
+"against a schema with no extensions."
+msgstr ""
+"No se pudo aplicar ninguna de las extensiones anteriores. Sus datos han sido"
+" comparados con un esquema sin extensiones."
+
 #: cove_ocds/templates/cove_ocds/explore_base.html:206
 msgid "Conversion Errors"
 msgstr "Errores de Conversión"
+
+#: cove_ocds/templates/cove_ocds/explore_base.html:211
+#: cove_ocds/templates/cove_ocds/explore_base.html:233
+msgid ""
+"In order to check your data we need to convert it. During that conversion we"
+" found the following issues:"
+msgstr ""
+"Para verificar sus datos, necesitamos convertirlos. Durante esta conversión,"
+" encontramos los siguientes problemas:"
 
 #: cove_ocds/templates/cove_ocds/explore_base.html:228
 msgid "Conversion Errors (titles)"
@@ -374,6 +511,14 @@ msgstr "Alguno o todos tus datos tienen errores de validación."
 msgid "Structure Warnings"
 msgstr "Advertencias de Estructura"
 
+#: cove_ocds/templates/cove_ocds/explore_base.html:326
+#: cove_ocds/templates/cove_ocds/explore_base.html:348
+msgid ""
+"Fixing the following issues will improve the interoperability of your data."
+msgstr ""
+"La resolución de los siguientes problemas mejorará la interoperabilidad de "
+"sus datos."
+
 #: cove_ocds/templates/cove_ocds/explore_base.html:343
 #: cove_ocds/templates/cove_ocds/explore_base.html:481
 #: cove_ocds/templates/cove_ocds/explore_base.html:484
@@ -383,6 +528,36 @@ msgstr "Conformidad (Reglas)"
 #: cove_ocds/templates/cove_ocds/explore_base.html:365
 msgid "Codelist Errors"
 msgstr "Errores de la Lista de Códigos"
+
+#: cove_ocds/templates/cove_ocds/explore_base.html:370
+msgid ""
+"The fields below use closed codelists. When using these fields, you <strong>"
+" must </strong> use one of the pre-defined codelist values. If you use a "
+"value that is not on the relevant codelist, your data will not pass "
+"structural checks. Where you see + or - this indicates that the codelist has"
+" been modified with these additions (+) or subtractions (-) by one or more "
+"extensions."
+msgstr ""
+"Los siguientes campos utilizan listas de códigos cerradas. Al utilizar estos"
+" campos, <strong>debe </strong>utilizar uno de los valores de la lista de "
+"códigos predefinidos. Si usa un valor que no está en la lista de códigos "
+"relevantes, sus datos no pasarán las verificaciones estructurales. Donde vea"
+" + o - esto indica que la lista de códigos ha sido modificada con estas "
+"adiciones (+) o sustracciones (-) por una o más extensiones."
+
+#: cove_ocds/templates/cove_ocds/explore_base.html:374
+msgid ""
+"You may need to create a mapping between your local codes and the OCDS "
+"closed codelists to address these errors. In most cases, there will be a "
+"‘detail’ field where you can also include your local codes. If you have "
+"already completed a mapping, please review the spelling and capitalisation "
+"used in these closed codelist fields."
+msgstr ""
+"Es posible que deba crear un mapeo entre sus códigos locales y las listas de"
+" códigos cerradas de OCDS para abordar estos errores. En la mayoría de los "
+"casos, habrá un campo de \"detalles\" donde también puede incluir sus "
+"códigos locales. Si ya ha completado un mapeo, favor revise la ortografía y "
+"las mayúsculas utilizadas en estos campos cerrados de la lista de códigos."
 
 #: cove_ocds/templates/cove_ocds/explore_base.html:385
 msgid "Additional Fields"
@@ -405,6 +580,42 @@ msgstr ""
 #: cove_ocds/templates/cove_ocds/explore_base.html:403
 msgid "Additional Codelist Values"
 msgstr "Valores Adicionales de Listas de Códigos"
+
+#: cove_ocds/templates/cove_ocds/explore_base.html:407
+msgid ""
+"Your data contains a number of fields that use an open codelist. You should "
+"use values from the codelist whenever possible, but if the codelist does not"
+" provide the values you need, you are permitted to add additional values. "
+"The values below do not appear in the codelist; you should check that you "
+"intended these as additional values. Where you see + or - this indicates "
+"that the codelist has been modified with these additions (+) or subtractions"
+" (-) by one or more extensions."
+msgstr ""
+"Sus datos contienen una serie de campos que utilizan una lista de códigos "
+"abierta. Se debería usar valores de la lista de códigos siempre que sea "
+"posible, pero si la lista de códigos no proporciona los valores que "
+"necesita, puede agregar valores adicionales. Los siguientes valores no "
+"aparecen en la lista de códigos; se debería comprobar que se los pretendía "
+"agregar como valores adicionales. Donde vea + o - esto indica que la lista "
+"de códigos ha sido modificada con estas adiciones (+) o sustracciones (-) "
+"por una o más extensiones."
+
+#: cove_ocds/templates/cove_ocds/explore_base.html:413
+msgid ""
+"Make sure you list the definition of any additional codelist values you "
+"include within your <a href=\"http://standard.open-"
+"contracting.org/latest/en/implementation/publication_policy/\">publication "
+"policy</a>, and if you believe they should be added as recommended values in"
+" the open codelist, please suggest this via the <a href=\"https://github.com"
+"/open-contracting/standard/issues/new\"> OCDS issue tracker.</a>"
+msgstr ""
+"Asegúrese de listar la definición de cualquier valor adicional de la lista "
+"de códigos que incluya en su <a href=\"https://standard.open-"
+"contracting.org/latest/es/guidance/publish/#finalize-your-publication-"
+"policy\">política de publicación</a>, y si cree que deberían agregarse como "
+"valores recomendados en la lista de códigos abierta, favor sugerirlos a "
+"través del <a href=\"https://github.com/open-"
+"contracting/standard/issues/new\">gestor de incidencias de OCDS </a>."
 
 #: cove_ocds/templates/cove_ocds/explore_base.html:423
 msgid "Additional Checks"
@@ -516,10 +727,19 @@ msgstr "Ha pasado "
 msgid "structural checks against "
 msgstr "comprobaciones estructurales contra"
 
+#: cove_ocds/templates/cove_ocds/explore_record.html:25
+msgid "OCDS record package schema version"
+msgstr "Versión del esquema del paquete de registros OCDS"
+
 #: cove_ocds/templates/cove_ocds/explore_record.html:26
 #: cove_ocds/templates/cove_ocds/explore_release.html:24
 msgid "See <a href=\"#validation-errors\">Structural Errors</a> below."
 msgstr "Ver <a href=\"#validation-errors\">Errores Estructurales</a> más abajo."
+
+#: cove_ocds/templates/cove_ocds/explore_record.html:30
+#: cove_ocds/templates/cove_ocds/explore_release.html:33
+msgid "At a glance"
+msgstr "De un vistazo"
 
 #: cove_ocds/templates/cove_ocds/explore_record.html:34
 #, python-format
@@ -621,6 +841,18 @@ msgstr "el "
 msgid "Is structurally correct?"
 msgstr "¿Es estructuralmente correcto?"
 
+#: cove_ocds/templates/cove_ocds/explore_record.html:105
+#: cove_ocds/templates/cove_ocds/explore_record.html:167
+#: cove_ocds/templates/cove_ocds/explore_record.html:168
+msgid "No"
+msgstr "No"
+
+#: cove_ocds/templates/cove_ocds/explore_record.html:105
+#: cove_ocds/templates/cove_ocds/explore_record.html:167
+#: cove_ocds/templates/cove_ocds/explore_record.html:168
+msgid "Yes"
+msgstr "Si"
+
 #: cove_ocds/templates/cove_ocds/explore_record.html:115
 msgid "Number of records"
 msgstr "Número de registros"
@@ -638,6 +870,10 @@ msgstr "Tabla de Registros:"
 msgid "Showing the first %(releases_or_records_table_length)s records."
 msgstr ""
 "Mostrando los primeros %(releases_or_records_table_length)s registros."
+
+#: cove_ocds/templates/cove_ocds/explore_record.html:157
+msgid "release count"
+msgstr "cantidad de entregas"
 
 #: cove_ocds/templates/cove_ocds/explore_record.html:185
 #: cove_ocds/templates/cove_ocds/explore_release.html:428
@@ -676,6 +912,10 @@ msgstr ""
 "visualización para navegar en el historial de cambios. Los campos nuevos y "
 "modificados están resaltados, use esta función para verificar si alguno de "
 "los campos ha cambiado inesperadamente."
+
+#: cove_ocds/templates/cove_ocds/explore_release.html:23
+msgid "OCDS release package schema version"
+msgstr "Versión del esquema del paquete de entrega de OCDS"
 
 #: cove_ocds/templates/cove_ocds/explore_release.html:28
 msgid "<strong>Failed </strong>to apply "
@@ -1010,6 +1250,10 @@ msgstr "Comprador:"
 msgid "Procuring Entity:"
 msgstr "Entidad Contratante:"
 
+#: cove_ocds/templates/cove_ocds/input.html:6
+msgid "Loading"
+msgstr "Cargando"
+
 #: cove_ocds/templates/cove_ocds/input.html:13
 msgid "Link"
 msgstr "Enlazar"
@@ -1295,6 +1539,10 @@ msgstr "3 primeros ejemplos"
 msgid "Spreadsheet Location of first 3 errors"
 msgstr " Ubicación de los 3 primeros errores en la hoja de cálculo"
 
+#: cove_ocds/templates/cove_ocds/validation_table.html:25
+msgid "(more info)"
+msgstr "(más información)"
+
 #: cove_ocds/templates/cove_ocds/validation_table.html:28
 msgid ""
 "(Assuming these are embedded releases, because they have an "
@@ -1310,19 +1558,62 @@ msgstr ""
 "(Asumiendo que estas son entregas ('releases') enlazadas, porque no tienen "
 "un <code>id</code>)."
 
-#: cove_ocds/templates/cove_ocds/validation_table.html:70
+#: cove_ocds/templates/cove_ocds/validation_table.html:71
 msgid "Path:"
 msgstr "Ruta:"
 
-#: cove_ocds/templates/cove_ocds/validation_table.html:71
+#: cove_ocds/templates/cove_ocds/validation_table.html:72
 msgid "Line:"
 msgstr "Línea:"
 
-#: cove_ocds/views.py:66 cove_ocds/views.py:77 cove_ocds/views.py:95
+#: cove_ocds/templates/cove_ocds/validation_table.html:84
+msgid "Sheet"
+msgstr "Hoja"
+
+#: cove_ocds/templates/cove_ocds/validation_table.html:84
+msgid "Row"
+msgstr "Fila"
+
+#: cove_ocds/templates/cove_ocds/validation_table.html:84
+msgid "Column"
+msgstr "Columna"
+
+#: cove_ocds/templatetags/cove_tags.py:9
+msgid ""
+"Incorrect date format. Dates should use the form YYYY-MM-DDT00:00:00Z. Learn"
+" more about <a href=\"https://standard.open-"
+"contracting.org/latest/en/schema/reference/#date\">dates in OCDS</a>."
+msgstr ""
+"Formato de fecha inválido. Las fechas deben usar el formato YYYY-MM-"
+"DDT00:00:00Z. Lea más sobre <a href=\"https://standard.open-"
+"contracting.org/latest/es/schema/reference/#date\"> fechas en OCDS</a>"
+
+#: cove_ocds/templatetags/cove_tags.py:18
+msgid ""
+"This array should contain either entirely embedded releases or linked "
+"releases. Embedded releases contain an 'id' whereas linked releases do not. "
+"Your releases contain a mixture."
+msgstr ""
+"Esta lista debe contener entregas totalmente integradas o entregas "
+"vinculadas. Las entregas integradas contienen un \"identificador\", mientras"
+" que las entregas vinculadas no. Estas entregas contienen una mezcla de "
+"ambos."
+
+#: cove_ocds/templatetags/cove_tags.py:23
+#, python-format
+msgid "%s is not valid under any of the given schemas"
+msgstr "%s no es válido bajo ninguno de los esquemas dados"
+
+#: cove_ocds/templatetags/cove_tags.py:25
+#, python-format
+msgid "%(instance)s is valid under each of %(reprs)s"
+msgstr "%(instance)ses válido bajo cada uno de %(reprs)s"
+
+#: cove_ocds/views.py:78 cove_ocds/views.py:89 cove_ocds/views.py:107
 msgid "Sorry, we can't process that data"
 msgstr "Lo sentimos, no podemos procesar esos datos"
 
-#: cove_ocds/views.py:69
+#: cove_ocds/views.py:81
 msgid ""
 "The file that you uploaded doesn't appear to be well formed JSON. OCDS JSON follows the I-JSON format, which requires UTF-8 encoding. Ensure that your file uses UTF-8 encoding, then try uploading again.\n"
 "\n"
@@ -1332,7 +1623,7 @@ msgstr ""
 "\n"
 "<span class=\"glyphicon glyphicon-exclamation-sign\" aria-hidden=\"true\"></span> <strong>Mensaje del error:</strong> {}"
 
-#: cove_ocds/views.py:82
+#: cove_ocds/views.py:94
 msgid ""
 "We think you tried to upload a JSON file, but it is not well formed JSON.\n"
 "\n"
@@ -1342,7 +1633,7 @@ msgstr ""
 "\n"
 "<span class=\"glyphicon glyphicon-exclamation-sign\" aria-hidden=\"true\"></span> <strong>Mensaje del error:</strong> {}"
 
-#: cove_ocds/views.py:99
+#: cove_ocds/views.py:111
 msgid ""
 "OCDS JSON should have an object as the top level, the JSON you supplied does"
 " not."

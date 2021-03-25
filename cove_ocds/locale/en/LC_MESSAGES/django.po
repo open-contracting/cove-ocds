@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-11 13:07+0000\n"
+"POT-Creation-Date: 2021-02-24 17:55+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 
 #: cove_ocds/lib/exceptions.py:11 cove_ocds/lib/exceptions.py:31
 #: cove_ocds/lib/exceptions.py:54 cove_ocds/lib/exceptions.py:74
-#: cove_ocds/views.py:68 cove_ocds/views.py:79 cove_ocds/views.py:97
+#: cove_ocds/views.py:80 cove_ocds/views.py:91 cove_ocds/views.py:109
 msgid "Try Again"
 msgstr ""
 
@@ -1341,31 +1341,55 @@ msgid ""
 "(Assuming these are linked releases, because they lack an <code>id</code>)."
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/validation_table.html:70
+#: cove_ocds/templates/cove_ocds/validation_table.html:71
 msgid "Path:"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/validation_table.html:71
+#: cove_ocds/templates/cove_ocds/validation_table.html:72
 msgid "Line:"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/validation_table.html:83
+#: cove_ocds/templates/cove_ocds/validation_table.html:84
 msgid "Sheet"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/validation_table.html:83
+#: cove_ocds/templates/cove_ocds/validation_table.html:84
 msgid "Row"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/validation_table.html:83
+#: cove_ocds/templates/cove_ocds/validation_table.html:84
 msgid "Column"
 msgstr ""
 
-#: cove_ocds/views.py:66 cove_ocds/views.py:77 cove_ocds/views.py:95
+#: cove_ocds/templatetags/cove_tags.py:9
+msgid ""
+"Incorrect date format. Dates should use the form YYYY-MM-DDT00:00:00Z. Learn "
+"more about <a href=\"https://standard.open-contracting.org/latest/en/schema/"
+"reference/#date\">dates in OCDS</a>."
+msgstr ""
+
+#: cove_ocds/templatetags/cove_tags.py:18
+msgid ""
+"This array should contain either entirely embedded releases or linked "
+"releases. Embedded releases contain an 'id' whereas linked releases do not. "
+"Your releases contain a mixture."
+msgstr ""
+
+#: cove_ocds/templatetags/cove_tags.py:23
+#, python-format
+msgid "%s is not valid under any of the given schemas"
+msgstr ""
+
+#: cove_ocds/templatetags/cove_tags.py:25
+#, python-format
+msgid "%(instance)s is valid under each of %(reprs)s"
+msgstr ""
+
+#: cove_ocds/views.py:78 cove_ocds/views.py:89 cove_ocds/views.py:107
 msgid "Sorry, we can't process that data"
 msgstr ""
 
-#: cove_ocds/views.py:69
+#: cove_ocds/views.py:81
 msgid ""
 "The file that you uploaded doesn't appear to be well formed JSON. OCDS JSON "
 "follows the I-JSON format, which requires UTF-8 encoding. Ensure that your "
@@ -1375,7 +1399,7 @@ msgid ""
 "span> <strong>Error message:</strong> {}"
 msgstr ""
 
-#: cove_ocds/views.py:82
+#: cove_ocds/views.py:94
 msgid ""
 "We think you tried to upload a JSON file, but it is not well formed JSON.\n"
 "\n"
@@ -1383,7 +1407,7 @@ msgid ""
 "span> <strong>Error message:</strong> {}"
 msgstr ""
 
-#: cove_ocds/views.py:99
+#: cove_ocds/views.py:111
 msgid ""
 "OCDS JSON should have an object as the top level, the JSON you supplied does "
 "not."
