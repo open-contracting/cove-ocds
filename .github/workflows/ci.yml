@@ -18,7 +18,6 @@ jobs:
           ${{ runner.os }}-pip-
     # Check requirements.txt contains production requirements.
     - run: pip install -r requirements.txt
-    - run: cd .. && pip install -e git+https://github.com/OpenDataServices/lib-cove.git@cove-ocds-144-translation#egg=libcove && pip install -e git+https://github.com/OpenDataServices/lib-cove-web.git@cove-ocds-144-translation#egg=libcoveweb && pip install -e git+https://github.com/open-contracting/lib-cove-ocds.git@cove-ocds-144-translation#egg=libcoveocds && cd cove-ocds
     - run: ./manage.py --help
     - run: curl -s -S --retry 3 $BASEDIR/tests/install.sh | bash -
     - run: pip install -r requirements_dev.txt
