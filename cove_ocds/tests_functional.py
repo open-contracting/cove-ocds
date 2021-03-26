@@ -1426,7 +1426,26 @@ def test_jsonschema_translation(
     ]
 
     spanish_validation_messages = [
-        "TODO: add me"
+        "'a' no coincide con ninguna de las expresiones regulares: 'okay'",
+        '"a"es una dependencia de "b"',
+        '"a" no es un "email"',
+        '"a" no es válido bajo ninguno de los esquemas dados',
+        '"a" no es válido bajo ninguno de los esquemas dados',
+        '"a"es muy corto',
+        '"aaa"es muy largo',
+        "1 es menor que el mínimo de 2",
+        "1es válido bajo cada uno de {'type': 'integer'}, {'type': 'number'}",
+        "2es mayor o igual que el máximo de 2",
+        "2 es menor o igual que el mínimo de 2",
+        "2 no es un múltiplo de 3",
+        "3 es mayor que el máximo de 2",
+        "Items adicionales no están permitidos (['a'] fue inesperado)",
+        "Propiedades adicionales no están permitidas (['a'] fue inesperado )",
+        '{"a": 1, "b": 2, "c": 3} tiene demasiadas propiedades',
+        '["a", "a", "a"]es muy largo',
+        '["a"]es muy corto',
+        '"a" no es válido bajo ninguno de los esquemas dados',
+        '{"type": "string"} no está permitido para "a"',
     ]
 
     source_filename = "extended_many_jsonschema_keys.json"
@@ -1445,4 +1464,3 @@ def test_jsonschema_translation(
 
     for message in spanish_validation_messages:
         assert message in body_text
-
