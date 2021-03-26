@@ -94,6 +94,7 @@ flake8==3.8.4
 flattentool==0.15.2
     # via
     #   -r requirements.txt
+    #   -r requirements_dev.in
     #   libcove
 gitdb==4.0.5
     # via gitpython
@@ -222,11 +223,10 @@ pytz==2021.1
     #   babel
     #   django
     #   flattentool
-rangedict==0.1.6
-    # via -r requirements.txt
 requests==2.25.1
     # via
     #   -r requirements.txt
+    #   -r requirements_dev.in
     #   coveralls
     #   libcove
     #   libcoveocds

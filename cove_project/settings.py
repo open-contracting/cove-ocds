@@ -10,6 +10,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 env = environ.Env(
     # set casting, default value
     DB_NAME=(str, os.path.join(BASE_DIR, "db.sqlite3")),
+    FATHOM_ANALYTICS_DOMAIN=(str, "cdn.usefathom.com"),
+    FATHOM_ANALYTICS_ID=(str, ""),
     HOTJAR_ID=(str, ""),
     HOTJAR_SV=(str, ""),
     HOTJAR_DATE_INFO=(str, ""),
@@ -20,6 +22,10 @@ env = environ.Env(
 
 PIWIK = settings.PIWIK
 GOOGLE_ANALYTICS_ID = settings.GOOGLE_ANALYTICS_ID
+FATHOM = {
+    "domain": env("FATHOM_ANALYTICS_DOMAIN"),
+    "id": env("FATHOM_ANALYTICS_ID"),
+}
 HOTJAR = {
     "id": env("HOTJAR_ID"),
     "sv": env("HOTJAR_SV"),

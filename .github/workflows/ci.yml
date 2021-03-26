@@ -4,7 +4,7 @@ env:
   BASEDIR: https://raw.githubusercontent.com/open-contracting/standard-maintenance-scripts/main
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-python@v1
@@ -22,6 +22,7 @@ jobs:
     - run: curl -s -S --retry 3 $BASEDIR/tests/install.sh | bash -
     - run: pip install -r requirements_dev.txt
     - run: curl -s -S --retry 3 $BASEDIR/tests/script.sh | bash -
+    - run: pytest /tmp/test_requirements.py
     # Install gettext for translations, and translate-toolkit for `pocount`.
     - run: sudo apt-get update
     - run: sudo apt-get install gettext translate-toolkit
@@ -33,5 +34,5 @@ jobs:
     - run: python manage.py makemessages -l es
     - run: "[ \"$GITHUB_EVENT_NAME\" != \"pull_request\" ] || [ \"`pocount --incomplete cove_ocds/locale/es/LC_MESSAGES/django.po`\" = \"\" ]"
     - env:
-        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-      run: coveralls
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: coveralls --service=github
