@@ -157,7 +157,7 @@ libcoveweb==0.21.0
     # via -r requirements.txt
 libsass==0.20.1
     # via -r requirements_dev.in
-lxml==4.6.2
+lxml==4.6.3
     # via
     #   -r requirements.txt
     #   flattentool
