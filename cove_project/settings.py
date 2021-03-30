@@ -155,8 +155,8 @@ COVE_CONFIG = {
     "schema_host": None,
     "schema_version_choices": OrderedDict(
         (  # {version: (display, url)}
-            ("1.0", ("1.0", "https://standard.open-contracting.org/schema/1__0__3/")),
-            ("1.1", ("1.1", "https://standard.open-contracting.org/schema/1__1__5/")),
+            ("1.0", ("1.0", "https://standard.open-contracting.org/1.0/{lang}/")),
+            ("1.1", ("1.1", "https://standard.open-contracting.org/1.1/{lang}/")),
         )
     ),
     "schema_codelists": OrderedDict(

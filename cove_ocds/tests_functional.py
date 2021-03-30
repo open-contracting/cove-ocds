@@ -1397,3 +1397,70 @@ def test_key_field_information(
     kfi_text = browser.find_element_by_id("kfi").text
     for text in expected:
         assert text in kfi_text
+
+
+def test_jsonschema_translation(
+    url_input_browser,
+):
+    english_validation_messages = [
+        "'a' does not match any of the regexes: 'okay'",
+        '"a" is a dependency of "b"',
+        '"a" is not a "email"',
+        '"a" is not valid under any of the given schemas',
+        '"a" is not valid under any of the given schemas',
+        '"a" is too short',
+        '"aaa" is too long',
+        "1 is less than the minimum of 2",
+        "1 is valid under each of {'type': 'integer'}, {'type': 'number'}",
+        "2 is more than or equal to the maximum of 2",
+        "2 is less than or equal to the minimum of 2",
+        "2 is not a multiple of 3",
+        "3 is more than the maximum of 2",
+        "Additional items are not allowed (['a'] was unexpected)",
+        "Additional properties are not allowed (['a'] was unexpected)",
+        '{"a": 1, "b": 2, "c": 3} has too many properties',
+        '["a", "a", "a"] is too long',
+        '["a"] is too short',
+        '"a" is not valid under any of the given schemas',
+        '{"type": "string"} is not allowed for "a"',
+    ]
+
+    spanish_validation_messages = [
+        "'a' no coincide con ninguna de las expresiones regulares: 'okay'",
+        '"a"es una dependencia de "b"',
+        '"a" no es un "email"',
+        '"a" no es válido bajo ninguno de los esquemas dados',
+        '"a" no es válido bajo ninguno de los esquemas dados',
+        '"a"es muy corto',
+        '"aaa"es muy largo',
+        "1 es menor que el mínimo de 2",
+        "1es válido bajo cada uno de {'type': 'integer'}, {'type': 'number'}",
+        "2es mayor o igual que el máximo de 2",
+        "2 es menor o igual que el mínimo de 2",
+        "2 no es un múltiplo de 3",
+        "3 es mayor que el máximo de 2",
+        "Items adicionales no están permitidos (['a'] fue inesperado)",
+        "Propiedades adicionales no están permitidas (['a'] fue inesperado )",
+        '{"a": 1, "b": 2, "c": 3} tiene demasiadas propiedades',
+        '["a", "a", "a"]es muy largo',
+        '["a"]es muy corto',
+        '"a" no es válido bajo ninguno de los esquemas dados',
+        '{"type": "string"} no está permitido para "a"',
+    ]
+
+    source_filename = "extended_many_jsonschema_keys.json"
+    browser = url_input_browser(source_filename)
+    body_text = browser.find_element_by_tag_name("body").text
+
+    for message in english_validation_messages:
+        assert message in body_text
+
+    browser.find_elements_by_xpath("//*[contains(text(), 'English')]")[0].click()
+    browser.find_elements_by_xpath("//*[contains(text(), 'español')]")[0].click()
+    body_text = browser.find_element_by_tag_name("body").text
+
+    for message in english_validation_messages:
+        assert message not in body_text
+
+    for message in spanish_validation_messages:
+        assert message in body_text

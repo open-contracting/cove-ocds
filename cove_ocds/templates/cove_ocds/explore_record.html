@@ -22,12 +22,12 @@
         {% else %} 
           <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>{% trans "Passed " %} 
         {% endif %}
-        {% blocktrans %}structural checks against {% endblocktrans %}<a href="{{ schema_url }}">OCDS record package schema version {{ version_used_display }}</a>.
+        {% blocktrans %}structural checks against {% endblocktrans %}<a href="{{ schema_url }}">{% blocktrans %}OCDS record package schema version{% endblocktrans %} {{ version_used_display }}</a>.
         {% if validation_errors %}<br/>{% blocktrans %}See <a href="#validation-errors">Structural Errors</a> below.{% endblocktrans %}{% endif %}
         </div>
 
          <div class="key-facts message">
-           <strong>At a glance</strong>
+           <strong>{% trans "At a glance" %}</strong>
            <ul>
              <li><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
              {% if records_aggregates.count %}
@@ -102,7 +102,7 @@
         <h4 class="panel-title">{% trans 'Is structurally correct?' %}</h4>
       </div>
       <div class="panel-body">
-        {% if validation_errors %}No{% else %}Yes{% endif %}
+        {% if validation_errors %}{% trans "No" %}{% else %}{% trans "Yes" %}{% endif %}
 
       </div>
     </div>
@@ -154,7 +154,7 @@
           <thead>
             <tr>
               <th>ocid</th>
-              <th>release count</th>
+              <th>{% trans "release count" %}</th>
               <th>compiledRelease</th>
               <th>versionedRelease</th>
             </tr>
@@ -164,8 +164,8 @@
             <tr>
               <td>{{ record.ocid }}</td>
               <td>{{ record.releases|length }}</td>
-              <td>{% if record.compiledRelease %}Yes{% else %}No{% endif %}</td>
-              <td>{% if record.versionedRelease %}Yes{% else %}No{% endif %}</td>
+              <td>{% if record.compiledRelease %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}</td>
+              <td>{% if record.versionedRelease %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}</td>
             </tr>
             {% endfor %}
           </tbody>

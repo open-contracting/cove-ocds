@@ -542,20 +542,20 @@ def test_explore_schema_version(client, json_data):
     resp = client.get(data.get_absolute_url())
     assert resp.status_code == 200
     if "version" not in json_data:
-        assert "1__0__" in resp.context["schema_url"]
+        assert "/1.0/" in resp.context["schema_url"]
         assert resp.context["version_used"] == "1.0"
         assert resp.context["version_used_display"] == "1.0"
         resp = client.post(data.get_absolute_url(), {"version": "1.1"})
         assert resp.status_code == 200
-        assert "1__1__" in resp.context["schema_url"]
+        assert "/1.1/" in resp.context["schema_url"]
         assert resp.context["version_used"] == "1.1"
     else:
-        assert "1__1__" in resp.context["schema_url"]
+        assert "/1.1/" in resp.context["schema_url"]
         assert resp.context["version_used"] == "1.1"
         assert resp.context["version_used_display"] == "1.1"
         resp = client.post(data.get_absolute_url(), {"version": "1.0"})
         assert resp.status_code == 200
-        assert "1__0__" in resp.context["schema_url"]
+        assert "/1.0/" in resp.context["schema_url"]
         assert resp.context["version_used"] == "1.0"
         assert resp.context["version_used_display"] == "1.0"
 
@@ -600,7 +600,7 @@ def test_explore_schema_version_change(
         assert resp.status_code == 200
         assert resp.context["version_used"] == "1.0"
         assert mock_object.called
-        assert "1__0__" in kwargs["schema_url"]
+        assert "/1.0/" in kwargs["schema_url"]
         assert kwargs["replace"] is False
         mock_object.reset_mock()
 
@@ -609,7 +609,7 @@ def test_explore_schema_version_change(
         assert resp.status_code == 200
         assert resp.context["version_used"] == "1.1"
         assert mock_object.called
-        assert "1__1__" in kwargs["schema_url"]
+        assert "/1.1/" in kwargs["schema_url"]
         assert kwargs["replace"] is replace_after_post
 
 
@@ -626,7 +626,7 @@ def test_explore_schema_version_change_with_json_to_xlsx(mock_object, client):
     resp = client.get(data.get_absolute_url())
     args, kwargs = mock_object.call_args
     assert resp.status_code == 200
-    assert "1__0__" in kwargs["schema_url"]
+    assert "/1.0/" in kwargs["schema_url"]
     assert kwargs["replace"] is False
     mock_object.reset_mock()
 
@@ -767,7 +767,7 @@ def test_schema_ocds_constructor(
 ):
     schema = SchemaOCDS(select_version=select_version, release_data=release_data)
     name = settings.COVE_CONFIG["schema_name"]["release"]
-    host = settings.COVE_CONFIG["schema_version_choices"][version][1]
+    host = settings.COVE_CONFIG["schema_version_choices"][version][1].format(lang="en")
     url = host + name
 
     assert schema.version == version

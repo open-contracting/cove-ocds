@@ -30,6 +30,17 @@ from .lib.ocds_show_extra import add_extra_fields
 logger = logging.getLogger(__name__)
 
 
+def format_lang(choices, lang):
+    """
+    Format the urls with `{lang}` contained in a schema_version_choices.
+    """
+
+    formatted_choices = OrderedDict()
+    for version, (display, url) in choices.items():
+        formatted_choices[version] = (display, url.format(lang=lang))
+    return formatted_choices
+    
+
 @cove_web_input_error
 def explore_ocds(request, pk):
     context, db_data, error = explore_data_context(request, pk)
@@ -38,9 +49,10 @@ def explore_ocds(request, pk):
 
     lib_cove_ocds_config = LibCoveOCDSConfig()
     lib_cove_ocds_config.config["current_language"] = translation.get_language()
-    lib_cove_ocds_config.config["schema_version_choices"] = settings.COVE_CONFIG[
-        "schema_version_choices"
-    ]
+    lib_cove_ocds_config.config["schema_version_choices"] = format_lang(
+        settings.COVE_CONFIG["schema_version_choices"],
+        request.LANGUAGE_CODE
+    )
     lib_cove_ocds_config.config["schema_codelists"] = settings.COVE_CONFIG[
         "schema_codelists"
     ]
@@ -243,6 +255,7 @@ def explore_ocds(request, pk):
     db_data.save()
 
     if "records" in json_data:
+        context["release_or_record"] = "record"
         ocds_show_schema = SchemaOCDS(record_pkg=True)
         ocds_show_deref_schema = ocds_show_schema.get_schema_obj(deref=True)
         template = "cove_ocds/explore_record.html"
@@ -255,6 +268,7 @@ def explore_ocds(request, pk):
                 json_data, ocds_show_deref_schema
             )
     else:
+        context["release_or_record"] = "release"
         ocds_show_schema = SchemaOCDS(record_pkg=False)
         ocds_show_deref_schema = ocds_show_schema.get_schema_obj(deref=True)
         template = "cove_ocds/explore_release.html"

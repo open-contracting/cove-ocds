@@ -1,0 +1,28 @@
+{
+	"version": "1.1",
+	"extensions": ["https://raw.githubusercontent.com/open-contracting/cove-ocds/a699bb7600d7c849e98afedf43468b2be5bc27c0/cove_ocds/fixtures/extension_many_jsonschema_keys/extension.json"],
+	"releases": [{
+		"json_schema_example_fields": {
+			"minimum": 1,
+			"minimum2": 2,
+			"maximum": 3,
+			"maximum2": 2,
+			"minItems": ["a"],
+			"maxItems": ["a", "a", "a"],
+			"minLength": "a",
+			"maxLength": "aaa",
+			"maxProperties": {"a":1, "b":2, "c": 3},
+			"multipleOf": 2,
+			"not": "a",
+			"anyOf": "a",
+			"allOf": "a",
+			"oneOf": "a",
+			"oneOf2": 1,
+			"additionalItems": ["a", "a"],
+			"additionalProperties": {"a": 1},
+			"additionalProperties2": {"a": 1},
+			"dependencies": {"b": 1},
+			"format": "a"
+		}
+	}]
+}

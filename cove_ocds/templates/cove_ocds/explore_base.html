@@ -21,20 +21,20 @@
   <div class="col-md-6">
     <div class="panel panel-primary">
       <div class="panel-heading">
-        <h4 class="panel-title">Schema</h4>
+        <h4 class="panel-title">{% trans "Schema" %}</h4>
       </div>
       <div class="panel-body">
         {% if unrecognized_version_data %}
           <div class="bg-danger text-danger in-panel-warning">
-            <small><span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> &nbsp;Your data specifies a version <strong>{{unrecognized_version_data}}</strong> which is not recognised. For that reason, it's been checked against the current default version.</small>
+            <small><span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> &nbsp;{% blocktrans %}Your data specifies a version <strong>{{unrecognized_version_data}}</strong> which is not recognised. For that reason, it's been checked against the current default version.{% endblocktrans %}</small>
           </div>
         {% endif %}
-        <p>This data has been checked against <a href="{{ schema_url }}">OCDS {% if releases %}release {% endif %}{% if records %}record {% endif %}package schema version {{ version_used_display }}</a>. You can choose a different version of the schema to check and explore your data.</p>
+        <p>{% blocktrans %}This data has been checked against <a href="{{ schema_url }}">OCDS {{ release_or_record }} package schema version {{ version_used_display }}</a>.{% endblocktrans %} {% blocktrans %}You can choose a different version of the schema to check and explore your data.{% endblocktrans %}</p>
         <br>
-        <strong>Check and explore same data against a different version of the schema</strong>
+        <strong>{% blocktrans %}Check and explore same data against a different version of the schema{% endblocktrans %}</strong>
         <div class="ttip">
           <sup><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></sup>
-          <span class="ttiptext">Switching the schema version will result in changes to CoVE output and conversions. If you revisit or share this URL, the lastest version selected will be used to check your data</span>
+          <span class="ttiptext">{% blocktrans %}Switching the schema version will result in changes to CoVE output and conversions. If you revisit or share this URL, the lastest version selected will be used to check your data{% endblocktrans %}</span>
         </div>
         <br>
         <br>
@@ -68,10 +68,10 @@
       <div class="panel-body">
         <div class="conversion message">
           {% if conversion_warning_messages or conversion_warning_messages_titles %}
-            <p><span class="glyphicon glyphicon-flag" aria-hidden="true"></span>There were <a href="#conversion-warning">conversion warnings</a> when processing your file. The converted data may not represent your data as you want it to be.</p>
+            <p><span class="glyphicon glyphicon-flag" aria-hidden="true"></span>{% blocktrans %}There were <a href="#conversion-warning">conversion warnings</a> when processing your file. The converted data may not represent your data as you want it to be.{% endblocktrans %}</p>
           {% endif %}
           {% if conversion == 'flatten' %}
-            <p>We have tried to convert your JSON into a spreadsheet format.</p><p>The results can be seen below.</p>
+            <p>{% trans "We have tried to convert your JSON into a spreadsheet format." %}</p><p>{% trans "The results can be seen below." %}</p>
             <ul class="list-unstyled left-space">
               <li>
                 <span class="glyphicon glyphicon-download" aria-hidden="true"></span><a href="{{original_file.url}}">{{JSON}} <small>({{original}})</small></a> <small>{{original_file.size|filesizeformat }}</small>
@@ -95,7 +95,7 @@
             {% endif %}
           
           {% elif conversion == 'unflatten' %}
-            <p>We have tried to convert your data into JSON format.</p><p>The results can be seen below.</p>
+            <p>{% blocktrans %}We have tried to convert your data into JSON format.{% endblocktrans %}</p><p>{% blocktrans %}The results can be seen below.{% endblocktrans %}</p>
             <ul class="list-unstyled">
               <li>
                 <span class="glyphicon glyphicon-download" aria-hidden="true"></span>
@@ -148,16 +148,16 @@
     <div class="panel-body">
       {% if extensions and version_used_display == "1.0" %}
         <div class="bg-danger text-danger in-panel-warning">
-          <small><span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> &nbsp;Your data has been checked against schema version <strong>1.0</strong> and includes extensions but extensions were not introduced in the schema until version <strong>1.1</strong>.</small>
+          <small><span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> &nbsp;{% blocktrans %}Your data has been checked against schema version <strong>1.0</strong> and includes extensions but extensions were not introduced in the schema until version <strong>1.1</strong>.{% endblocktrans %}</small>
         </div>
       {% endif %}
-      <p>Your data contains the following schema extensions{% if not extensions.is_extended_schema %} but it wasn't possible to fetch them{% endif %}:</p>
+      <p>{% blocktrans %}Your data contains the following schema extensions{% endblocktrans %}{% if not extensions.is_extended_schema %}{% blocktrans %}, but it wasn't possible to fetch them{% endblocktrans %}{% endif %}:</p>
       <ul>
         {% for ext_descriptor_url, ext_details in ext.items %}
           {% if ext_details %}
           <li><a href="{% if ext_details.documentationUrl %}{{ext_details.documentationUrl}}{% else %}{{ext_details.url}}{% endif %}">{{ext_details.name}}</a>
             {% if ext_details.release_schema_url %}
-              &nbsp;(<a href="{{ext_details.release_schema_url}}">release schema</a>)
+              &nbsp;(<a href="{{ext_details.release_schema_url}}">{% trans "release schema" %}</a>)
             {% endif %} 
             &nbsp;&nbsp;<span class="font-tick tick"></span><p><small>{{ext_details.description}}</small><p>
             {% if ext_details.failed_codelists %}
@@ -174,7 +174,7 @@
         {% endfor %}
       </ul>
       {% if ext_errors %}
-      {% if extensions.is_extended_schema %}<p class="indent"> The following extensions failed:{% endif %}
+      {% if extensions.is_extended_schema %}<p class="indent"> {% blocktrans %}The following extensions failed:{% endblocktrans %}{% endif %}
       <ul>
         {% for ext_descriptor_url, error in ext_errors.items %}
           <li><a href="{{ext_descriptor_url}}" class="text-warning">{{ext_descriptor_url}}</a>  &nbsp;&nbsp;<span class="font-tick cross"></span><p><small>{{error}}</small><p></li>
@@ -184,13 +184,13 @@
 
       {% if extensions.is_extended_schema %}
         {% if ext_errors %}
-          <p>Only those extensions successfully fetched were applied to extend the schema.</p>
+          <p>{% blocktrans %}Only those extensions successfully fetched were applied to extend the schema.{% endblocktrans %}</p>
         {% else %}
-          <p>All the extensions above were applied to extend the schema.</p>
+          <p>{% blocktrans %}All the extensions above were applied to extend the schema.{% endblocktrans %}</p>
         {% endif %}
-        <span class="glyphicon glyphicon-download" aria-hidden="true"></span> <a href="{{extensions.extended_schema_url}}"> &nbsp;Get a copy of the schema with extension patches applied</a>
+        <span class="glyphicon glyphicon-download" aria-hidden="true"></span> <a href="{{extensions.extended_schema_url}}"> &nbsp;{% blocktrans %}Get a copy of the schema with extension patches applied{% endblocktrans %}</a>
       {% else %}
-        <p>None of the extensions above could be applied. Your data has been checked against a schema with no extensions.</p>
+        <p>{% blocktrans %}None of the extensions above could be applied. Your data has been checked against a schema with no extensions.{% endblocktrans %}</p>
       {% endif %}
 
     </div>
@@ -208,7 +208,7 @@
     </div>
     <div class="panel-body">
       {% if file_type == 'xlsx' or file_type == 'csv' %}
-        <p class="explanation">In order to check your data we need to convert it. During that conversion we found the following issues:</p>
+        <p class="explanation">{% blocktrans %}In order to check your data we need to convert it. During that conversion we found the following issues:{% endblocktrans %}</p>
       {% endif %}
       <ul>
         {% for warning_message in conversion_warning_messages %}
@@ -230,7 +230,7 @@
     </div>
     <div class="panel-body">
     {% if file_type == 'xlsx' or file_type == 'csv' %}
-      <p class="explanation">In order to check your data we need to convert it. During that conversion we found the following issues:</p>
+      <p class="explanation">{% blocktrans %}In order to check your data we need to convert it. During that conversion we found the following issues:{% endblocktrans %}</p>
     {% endif %}
     <ul>
       {% for warning_message in conversion_warning_messages_titles %}
@@ -323,7 +323,7 @@
       </div>
       <div id="structureWarningsTable" class="collapse in">
         <div class="panel-body">
-          <p class="explanation">Fixing the following issues will improve the interoperability of your data.</p>
+          <p class="explanation">{% blocktrans %}Fixing the following issues will improve the interoperability of your data.{% endblocktrans %}</p>
           <br>
           {% with structure_warnings=structure_warnings %}
             {% if structure_warnings.missing_ids %}
@@ -345,7 +345,7 @@
       </div>
       <div id="conformanceRulesTable" class="collapse in">
         <div class="panel-body">
-          <p class="explanation">Fixing the following issues will improve the interoperability of your data.</p>
+          <p class="explanation">{% blocktrans %}Fixing the following issues will improve the interoperability of your data.{% endblocktrans %}</p>
           <br>
           {% with conformance_errors=conformance_errors %}
             {% if conformance_errors.ocds_prefixes_bad_format %}
@@ -367,11 +367,11 @@
       </div>
       <div id="additionalClosedCodelist" class="collapse in">
         <div class="panel-body">
-          The fields below use closed codelists. When using these fields, you <strong> must </strong> use one of the pre-defined codelist values. If you use a value that is not on the relevant codelist, your data will not pass structural checks. Where you see + or - this indicates that the codelist has been modified with these additions (+) or subtractions (-) by one or more extensions.
+          {% blocktrans %}The fields below use closed codelists. When using these fields, you <strong> must </strong> use one of the pre-defined codelist values. If you use a value that is not on the relevant codelist, your data will not pass structural checks. Where you see + or - this indicates that the codelist has been modified with these additions (+) or subtractions (-) by one or more extensions.{% endblocktrans %}
           {% with additional_codelist_values=additional_closed_codelist_values %}
           <div>{% include "additional_codelist_values.html" %}</div>
           {% endwith %}
-          You may need to create a mapping between your local codes and the OCDS closed codelists to address these errors. In most cases, there will be a ‘detail’ field where you can also include your local codes. If you have already completed a mapping, please review the spelling and capitalisation used in these closed codelist fields.
+          {% blocktrans %}You may need to create a mapping between your local codes and the OCDS closed codelists to address these errors. In most cases, there will be a ‘detail’ field where you can also include your local codes. If you have already completed a mapping, please review the spelling and capitalisation used in these closed codelist fields.{% endblocktrans %}
         </div>
       </div>
     </div>
@@ -404,13 +404,13 @@
         </h4>
       </div>
       <div class="panel-body">
-        Your data contains a number of fields that use an open codelist. You should use values from the codelist whenever possible, but if the codelist does not provide the values you need, you are permitted to add additional values. The values below do not appear in the codelist; you should check that you intended these as additional values. Where you see + or - this indicates that the codelist has been modified with these additions (+) or subtractions (-) by one or more extensions.
+        {% blocktrans %}Your data contains a number of fields that use an open codelist. You should use values from the codelist whenever possible, but if the codelist does not provide the values you need, you are permitted to add additional values. The values below do not appear in the codelist; you should check that you intended these as additional values. Where you see + or - this indicates that the codelist has been modified with these additions (+) or subtractions (-) by one or more extensions.{% endblocktrans %}
         <div id="additionalOpenCodelist" class="collapse in">
           {% with additional_codelist_values=additional_open_codelist_values %}
           {% include "additional_codelist_values.html" %}
           {% endwith%}
         </div>
-        Make sure you list the definition of any additional codelist values you include within your <a href="http://standard.open-contracting.org/latest/en/implementation/publication_policy/">publication policy</a>, and if you believe they should be added as recommended values in the open codelist, please suggest this via the <a href="https://github.com/open-contracting/standard/issues/new"> OCDS issue tracker.</a>
+        {% blocktrans %}Make sure you list the definition of any additional codelist values you include within your <a href="http://standard.open-contracting.org/latest/en/implementation/publication_policy/">publication policy</a>, and if you believe they should be added as recommended values in the open codelist, please suggest this via the <a href="https://github.com/open-contracting/standard/issues/new"> OCDS issue tracker.</a>{% endblocktrans %}
       </div>
     </div>
 {% endif %}
