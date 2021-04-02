@@ -4,35 +4,36 @@ env:
   BASEDIR: https://raw.githubusercontent.com/open-contracting/standard-maintenance-scripts/main
 jobs:
   build:
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-18.04
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-python@v1
-      with:
-        python-version: 3.6
-    - uses: actions/cache@v1
-      with:
-        path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements_dev.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-
-    # Check requirements.txt contains production requirements.
-    - run: pip install -r requirements.txt
-    - run: ./manage.py --help
-    - run: curl -s -S --retry 3 $BASEDIR/tests/install.sh | bash -
-    - run: pip install -r requirements_dev.txt
-    - run: curl -s -S --retry 3 $BASEDIR/tests/script.sh | bash -
-    - run: pytest /tmp/test_requirements.py
-    # Install gettext for translations, and translate-toolkit for `pocount`.
-    - run: sudo apt-get update
-    - run: sudo apt-get install gettext translate-toolkit
-    - run: python manage.py compilemessages
-    # Ensure that compilemessages gets run for lib-cove-web
-    - run: pushd /opt/hostedtoolcache; pwd; django-admin compilemessages; popd
-    - run: DJANGO_SETTINGS_MODULE=cove_project.settings pytest --cov cove_ocds --cov cove_project
-      if: always()
-    - run: python manage.py makemessages -l es
-    - run: "[ \"$GITHUB_EVENT_NAME\" != \"pull_request\" ] || [ \"`pocount --incomplete cove_ocds/locale/es/LC_MESSAGES/django.po`\" = \"\" ]"
-    - env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: coveralls --service=github
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v1
+        with:
+          python-version: 3.6
+      - uses: actions/cache@v1
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements_dev.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      # Check requirements.txt contains production requirements.
+      - run: pip install -r requirements.txt
+      - run: ./manage.py --help
+      - run: curl -s -S --retry 3 $BASEDIR/tests/install.sh | bash -
+      - run: pip install -r requirements_dev.txt
+      - run: curl -s -S --retry 3 $BASEDIR/tests/script.sh | bash -
+      - run: pytest /tmp/test_requirements.py
+      # Install gettext for translations, and translate-toolkit for `pocount`.
+      - run: sudo apt-get update
+      - run: sudo apt-get install gettext translate-toolkit
+      - run: python manage.py compilemessages
+      # Ensure that compilemessages gets run for lib-cove-web
+      - run: pushd /opt/hostedtoolcache; pwd; django-admin compilemessages; popd
+      - run: DJANGO_SETTINGS_MODULE=cove_project.settings pytest --cov cove_ocds --cov cove_project
+        if: always()
+      - run: python manage.py makemessages -l es
+      - run: "[ \"$GITHUB_EVENT_NAME\" != \"pull_request\" ] || [ \"`pocount --incomplete cove_ocds/locale/es/LC_MESSAGES/django.po`\" = \"\" ]"
+      - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: coveralls --service=github
