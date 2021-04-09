@@ -74,7 +74,7 @@ django-environ==0.4.5
     # via
     #   -r requirements.txt
     #   libcoveweb
-django==2.2.18
+django==2.2.20
     # via
     #   -r requirements.txt
     #   django-bootstrap3
@@ -298,7 +298,7 @@ toml==0.10.2
     # via pytest
 transifex-client==0.14.2
     # via -r requirements_dev.in
-urllib3==1.26.3
+urllib3==1.26.4
     # via
     #   -r requirements.txt
     #   requests
