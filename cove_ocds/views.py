@@ -174,9 +174,14 @@ def explore_ocds(request, pk):
         metatab_schema_url = SchemaOCDS(
             select_version="1.1", lib_cove_ocds_config=lib_cove_ocds_config
         ).pkg_schema_url
-        metatab_data = get_spreadsheet_meta_data(
-            upload_dir, file_name, metatab_schema_url, file_type
-        )
+
+        with warnings.catch_warnings():
+            warnings.filterwarnings('ignore')  # flattentool uses UserWarning, so can't set a specific category
+
+            metatab_data = get_spreadsheet_meta_data(
+                upload_dir, file_name, metatab_schema_url, file_type
+            )
+
         if "version" not in metatab_data:
             metatab_data["version"] = "1.0"
         else:
@@ -209,18 +214,21 @@ def explore_ocds(request, pk):
         url = schema_ocds.extended_schema_file or schema_ocds.schema_url
         pkg_url = schema_ocds.pkg_schema_url
 
-        context.update(
-            convert_spreadsheet(
-                upload_dir,
-                upload_url,
-                file_name,
-                file_type,
-                lib_cove_ocds_config,
-                schema_url=url,
-                pkg_schema_url=pkg_url,
-                replace=replace,
+        with warnings.catch_warnings():
+            warnings.filterwarnings('ignore')  # flattentool uses UserWarning, so can't set a specific category
+
+            context.update(
+                convert_spreadsheet(
+                    upload_dir,
+                    upload_url,
+                    file_name,
+                    file_type,
+                    lib_cove_ocds_config,
+                    schema_url=url,
+                    pkg_schema_url=pkg_url,
+                    replace=replace,
+                )
             )
-        )
 
         with open(context["converted_path"], encoding="utf-8") as fp:
             json_data = json.load(
