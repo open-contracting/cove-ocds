@@ -53,7 +53,7 @@ def test_explore_page(client, current_app, json_data):
 @pytest.mark.parametrize("current_app", ["cove-ocds"])
 @given(general_json)
 @example(1)
-@settings(max_examples=50, deadline=None)
+@settings(max_examples=50, deadline=None, suppress_health_check=[HealthCheck.function_scoped_fixture])
 def test_explore_page_duplicate_ids(client, current_app, json_data):
     duplicate_id_releases = {"releases": [{"id": json_data}, {"id": json_data}]}
     data = SuppliedData.objects.create()
