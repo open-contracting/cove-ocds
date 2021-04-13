@@ -1,13 +1,12 @@
 -r requirements.txt
-coverage<5 # Lock as coverage 5 breaks hypothesis tests?
 coveralls
 flake8
 flattentool>=0.14.0
-hypothesis==3.52.3 # Lock as later versions have a problem with slow generation of data
+hypothesis
 libsass
 pip-tools
 pytest
-pytest-cov<2.11 # Lock because version of coverage is locked
+pytest-cov
 pytest-django
 pytest-localserver
 requests

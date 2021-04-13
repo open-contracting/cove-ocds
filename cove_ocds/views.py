@@ -13,7 +13,7 @@ from django.conf import settings
 from django.shortcuts import render
 from django.utils import translation
 from django.utils.html import format_html
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from libcove.lib.common import get_spreadsheet_meta_data
 from libcove.lib.converters import convert_json, convert_spreadsheet
 from libcove.lib.exceptions import CoveInputDataError
@@ -130,7 +130,7 @@ def explore_ocds(request, pk):
                 exceptions.raise_invalid_version_argument(post_version_choice)
             if schema_ocds.invalid_version_data:
                 if isinstance(version_in_data, str) and re.compile(
-                    "^\d+\.\d+\.\d+$"
+                    r"^\d+\.\d+\.\d+$"
                 ).match(version_in_data):
                     exceptions.raise_invalid_version_data_with_patch(version_in_data)
                 else:
@@ -174,9 +174,14 @@ def explore_ocds(request, pk):
         metatab_schema_url = SchemaOCDS(
             select_version="1.1", lib_cove_ocds_config=lib_cove_ocds_config
         ).pkg_schema_url
-        metatab_data = get_spreadsheet_meta_data(
-            upload_dir, file_name, metatab_schema_url, file_type
-        )
+
+        with warnings.catch_warnings():
+            warnings.filterwarnings('ignore')  # flattentool uses UserWarning, so can't set a specific category
+
+            metatab_data = get_spreadsheet_meta_data(
+                upload_dir, file_name, metatab_schema_url, file_type
+            )
+
         if "version" not in metatab_data:
             metatab_data["version"] = "1.0"
         else:
@@ -195,7 +200,7 @@ def explore_ocds(request, pk):
             exceptions.raise_invalid_version_argument(post_version_choice)
         if schema_ocds.invalid_version_data:
             version_in_data = metatab_data.get("version")
-            if re.compile("^\d+\.\d+\.\d+$").match(version_in_data):
+            if re.compile(r"^\d+\.\d+\.\d+$").match(version_in_data):
                 exceptions.raise_invalid_version_data_with_patch(version_in_data)
             else:
                 context["unrecognized_version_data"] = version_in_data
@@ -209,18 +214,21 @@ def explore_ocds(request, pk):
         url = schema_ocds.extended_schema_file or schema_ocds.schema_url
         pkg_url = schema_ocds.pkg_schema_url
 
-        context.update(
-            convert_spreadsheet(
-                upload_dir,
-                upload_url,
-                file_name,
-                file_type,
-                lib_cove_ocds_config,
-                schema_url=url,
-                pkg_schema_url=pkg_url,
-                replace=replace,
+        with warnings.catch_warnings():
+            warnings.filterwarnings('ignore')  # flattentool uses UserWarning, so can't set a specific category
+
+            context.update(
+                convert_spreadsheet(
+                    upload_dir,
+                    upload_url,
+                    file_name,
+                    file_type,
+                    lib_cove_ocds_config,
+                    schema_url=url,
+                    pkg_schema_url=pkg_url,
+                    replace=replace,
+                )
             )
-        )
 
         with open(context["converted_path"], encoding="utf-8") as fp:
             json_data = json.load(

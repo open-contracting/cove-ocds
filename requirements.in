@@ -1,9 +1,9 @@
-dealer
+django
 django-bootstrap3
 django-environ
-Django>2.2<2.3
-libcove>=0.22.0
-libcoveocds>=0.10.0
-libcoveweb>=0.21.0
+libcove
+libcoveocds
+# https://github.com/OpenDataServices/lib-cove-web/issues/78
+-e git+https://github.com/jpmckinney/lib-cove-web.git@django32#egg=libcoveweb
 python-dateutil
 strict-rfc3339
