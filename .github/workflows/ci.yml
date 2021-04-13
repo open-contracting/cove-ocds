@@ -23,7 +23,7 @@ jobs:
       # Check requirements.txt contains production requirements.
       - run: ./manage.py --help
       - run: curl -s -S --retry 3 $BASEDIR/tests/install.sh | bash -
-      - run: pip install -r requirements_dev.txt
+      - run: pip install --src $GITHUB_WORKSPACE/../src -r requirements_dev.txt
       - run: curl -s -S --retry 3 $BASEDIR/tests/script.sh | bash -
       - run: pytest /tmp/test_requirements.py
       # Install gettext for translations, and translate-toolkit for `pocount`.
