@@ -1,7 +1,7 @@
 from cove.html_error_msg import html_error_msg, json_repr
 from cove.templatetags.cove_tags import register
 from django.utils.html import mark_safe
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 # https://github.com/open-contracting/lib-cove-ocds/blob/e6120c058340dfeec71cdcc67c976fa591b1a2b1/libcoveocds/common_checks.py
 validation_error_lookup = {

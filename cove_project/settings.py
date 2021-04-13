@@ -42,7 +42,6 @@ DELETE_FILES_AFTER_DAYS = env("DELETE_FILES_AFTER_DAYS")
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
 
-DEALER_TYPE = settings.DEALER_TYPE
 SECRET_KEY = settings.SECRET_KEY
 DEBUG = settings.DEBUG
 ALLOWED_HOSTS = settings.ALLOWED_HOSTS
@@ -72,7 +71,6 @@ MIDDLEWARE = (
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.security.SecurityMiddleware",
-    "dealer.contrib.django.Middleware",
     "cove.middleware.CoveConfigCurrentApp",
 )
 
@@ -177,9 +175,6 @@ COVE_CONFIG = {
 
 # Set default schema version to the latest version
 COVE_CONFIG["schema_version"] = list(COVE_CONFIG["schema_version_choices"].keys())[-1]
-
-# https://github.com/OpenDataServices/cove/issues/1098
-FILE_UPLOAD_PERMISSIONS = 0o644
 
 URL_PREFIX = r"review/"
 

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% load static from staticfiles %}
+{% load static %}
 
 {% block after_head %}
   <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
@@ -155,5 +155,4 @@
 {% endblock %}
 
 {% block version_link %}
-<p class="text-muted">{% blocktrans %}Running version {% endblocktrans %}<a href="https://github.com/open-contracting/cove-ocds/tree/{{request.tag}}">{{request.tag}}</a></p>
 {% endblock %}
