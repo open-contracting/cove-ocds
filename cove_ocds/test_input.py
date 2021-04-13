@@ -47,7 +47,7 @@ def test_connection_error(rf):
             rf.post("/", {"source_url": "https://wrong.host.badssl.com/"})
         )
     )
-    # https://docs.djangoproject.com/en/dev/releases/3.0/#miscellaneous
+    # https://docs.djangoproject.com/en/3.2/releases/3.0/#miscellaneous
     assert b"doesn&#x27;t match either of" in resp.content or b"doesn&#39;t match either of" in resp.content
 
 

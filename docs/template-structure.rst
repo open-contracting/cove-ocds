@@ -1,7 +1,7 @@
 Template structure
 ==================
 
-The DRT uses `Django templating <https://docs.djangoproject.com/en/3.0/topics/templates/>`_. Generic templates are defined in `lib-cove-web <https://github.com/opendataservices/lib-cove-web>`_ and include various blocks which can be overridden here if necessary.
+The DRT uses `Django templating <https://docs.djangoproject.com/en/3.2/topics/templates/>`_. Generic templates are defined in `lib-cove-web <https://github.com/opendataservices/lib-cove-web>`_ and include various blocks which can be overridden here if necessary.
 
 In lib-cove-web you will find:
 
