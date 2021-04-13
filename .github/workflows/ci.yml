@@ -30,7 +30,15 @@ jobs:
       - run: python manage.py compilemessages
       # Ensure that compilemessages gets run for lib-cove-web
       - run: pushd /opt/hostedtoolcache; pwd; django-admin compilemessages; popd
-      - run: DJANGO_SETTINGS_MODULE=cove_project.settings pytest --cov cove_ocds --cov cove_project
+      - name: Run checks and tests
+        run: |
+          ./manage.py migrate
+          ./manage.py makemigrations --check --dry-run
+          ./manage.py check --fail-level WARNING
+          pytest --cov cove_ocds --cov cove_project
+        env:
+          PYTHONWARNINGS: error
+          DJANGO_SETTINGS_MODULE: cove_project.settings
         if: always()
       - run: python manage.py makemessages -l es
       - run: '[ "$GITHUB_EVENT_NAME" != "pull_request" ] || [ "`pocount --incomplete cove_ocds/locale/es/LC_MESSAGES/django.po`" = "" ]'
