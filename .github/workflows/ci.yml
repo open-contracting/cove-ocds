@@ -41,6 +41,7 @@ jobs:
         env:
           PYTHONWARNINGS: error
           DJANGO_SETTINGS_MODULE: cove_project.settings
+          SECRET_KEY: 7ur)dt+e%1^e6$8_sd-@1h67_5zixe2&39%r2$$8_7v6fr_7ee
         if: always()
       - run: python manage.py makemessages -l es
       - run: '[ "$GITHUB_EVENT_NAME" != "pull_request" ] || [ "`pocount --incomplete cove_ocds/locale/es/LC_MESSAGES/django.po`" = "" ]'
