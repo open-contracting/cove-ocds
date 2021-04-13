@@ -124,10 +124,6 @@ importlib-metadata==1.7.0
     #   pytest
 iniconfig==1.1.1
     # via pytest
-jdcal==1.4.1
-    # via
-    #   -r requirements.txt
-    #   openpyxl
 jinja2==2.11.3
     # via sphinx
 json-merge-patch==0.2
@@ -169,11 +165,10 @@ odfpy==1.4.1
     # via
     #   -r requirements.txt
     #   flattentool
-openpyxl==2.6.4
+openpyxl==3.0.7
     # via
     #   -r requirements.txt
     #   flattentool
-    #   libcoveweb
 packaging==20.9
     # via
     #   -r requirements.txt
