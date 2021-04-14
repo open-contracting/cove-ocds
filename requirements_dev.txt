@@ -4,8 +4,6 @@
 #
 #    pip-compile requirements_dev.in
 #
--e git+https://github.com/jpmckinney/lib-cove-web.git@django32#egg=libcoveweb
-    # via -r requirements.txt
 alabaster==0.7.12
     # via sphinx
 asgiref==3.3.4
@@ -148,6 +146,8 @@ libcove==0.22.0
     #   libcoveocds
     #   libcoveweb
 libcoveocds==0.10.0
+    # via -r requirements.txt
+libcoveweb==0.22.0
     # via -r requirements.txt
 libsass==0.20.1
     # via -r requirements_dev.in

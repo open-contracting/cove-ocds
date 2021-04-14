@@ -4,8 +4,6 @@
 #
 #    pip-compile
 #
--e git+https://github.com/jpmckinney/lib-cove-web.git@django32#egg=libcoveweb
-    # via -r requirements.in
 asgiref==3.3.4
     # via django
 attrs==20.3.0
@@ -82,6 +80,8 @@ libcove==0.22.0
     #   libcoveocds
     #   libcoveweb
 libcoveocds==0.10.0
+    # via -r requirements.in
+libcoveweb==0.22.0
     # via -r requirements.in
 lxml==4.6.3
     # via flattentool
