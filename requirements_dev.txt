@@ -68,7 +68,7 @@ django-bootstrap3==14.2.0
     # via
     #   -r requirements.txt
     #   libcoveweb
-django-debug-toolbar==3.2
+django-debug-toolbar==3.2.1
     # via
     #   -r requirements.txt
     #   libcoveweb
