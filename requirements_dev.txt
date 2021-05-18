@@ -39,6 +39,7 @@ certifi==2020.12.5
     # via
     #   -r requirements.txt
     #   requests
+    #   sentry-sdk
 cffi==1.14.5
     # via
     #   -r requirements.txt
@@ -252,6 +253,8 @@ schema==0.7.4
     #   flattentool
 selenium==3.141.0
     # via -r requirements_dev.in
+sentry-sdk==1.1.0
+    # via -r requirements.txt
 six==1.16.0
     # via
     #   -r requirements.txt
@@ -321,6 +324,7 @@ urllib3==1.26.4
     #   -r requirements.txt
     #   requests
     #   selenium
+    #   sentry-sdk
     #   transifex-client
 webencodings==0.5.1
     # via

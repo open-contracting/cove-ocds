@@ -5,4 +5,5 @@ libcove
 libcoveocds
 libcoveweb
 python-dateutil
+sentry-sdk
 strict-rfc3339
