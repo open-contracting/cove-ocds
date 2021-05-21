@@ -1450,6 +1450,71 @@ def test_jsonschema_translation(
 
     source_filename = "extended_many_jsonschema_keys.json"
     browser = url_input_browser(source_filename)
+
+    # Ensure language is English
+    browser.find_elements_by_xpath("//*[contains(text(), 'español')]")[0].click()
+    browser.find_elements_by_xpath("//*[contains(text(), 'English')]")[0].click()
+
+    body_text = browser.find_element_by_tag_name("body").text
+
+    for message in english_validation_messages:
+        assert message in body_text
+
+    browser.find_elements_by_xpath("//*[contains(text(), 'English')]")[0].click()
+    browser.find_elements_by_xpath("//*[contains(text(), 'español')]")[0].click()
+    body_text = browser.find_element_by_tag_name("body").text
+
+    for message in english_validation_messages:
+        assert message not in body_text
+
+    for message in spanish_validation_messages:
+        assert message in body_text
+
+
+def test_jsonschema_translation_2(
+    url_input_browser,
+):
+    english_validation_messages = [
+        "id is missing but required within tender",
+        "initiationType is missing but required",
+        "version does not match the regex ^(\\d+\\.)(\\d+)$",
+        "amount is not a number. Check that the value doesn’t contain any characters other than 0-9 and dot (.). Number values should not be in quotes.",
+        "buyer is not a JSON object",
+        "numberOfTenderers is not a integer. Check that the value doesn’t contain decimal points or any characters other than 0-9. Integer values should not be in quotes.",
+        "ocid is not a string. Check that the value is not null, and has quotes at the start and end. Escape any quotes in the value with \\",
+        "parties is not a JSON array",
+        "title is not a string. Check that the value has quotes at the start and end. Escape any quotes in the value with \\",
+        "Incorrect date format. Dates should use the form YYYY-MM-DDT00:00:00Z. Learn more about dates in OCDS.",
+        "Invalid 'uri' found",
+        '"" is too short. Strings must be at least one character. This error typically indicates a missing value.',
+        "Invalid code found in currency",
+        "[] is too short. You must supply at least one value, or remove the item entirely (unless it’s required).",
+    ]
+
+    spanish_validation_messages = [
+        "id falta pero se requiere dentro de tender",
+        "initiationTypefalta pero se requiere",
+        "versionno coincide con la expresión regular ^(\\d+\\.)(\\d+)$",
+        "amountno es un número. Compruebe que el valor no contenga ningún carácter más que 0-9 y el punto (.). Los valores numéricos no deben estar entre comillas",
+        "buyer no es un objeto JSON.",
+        "numberOfTenderers no es un entero. Compruebe que el valor no contenga puntos decimales ni ningún otro carácter que no sea 0-9. Los valores enteros no deben estar entre comillas.",
+        "ocid no es un hilo. Revise que el valor no es 'null', y tenga comillas al principio y al final. Escapar de cualquier comillas con el valor /",
+        "parties no es una matriz JSON",
+        "title no es un hilo. Revise que el valor tenga comillas al principio y al final. Escapar de cualquier comillas con el valor /",
+        "Formato de fecha inválido. Las fechas deben usar el formato YYYY-MM-DDT00:00:00Z. Lea más sobre fechas en OCDS",
+        "Se ha encontrado una 'uri' inválida",
+        '""es muy corto. Las cadenas deben ser de al menos un caracter. Este error generalmente indica que hay un valor faltante.',
+        "Código inválido encontrado en currency",
+        "[]es muy corto. Debe proporcionar al menos un valor o eliminar el artículo por completo (a menos que sea necesario)",
+    ]
+
+    source_filename = "badfile_all_validation_errors.json"
+    browser = url_input_browser(source_filename)
+
+    # Ensure language is English
+    browser.find_elements_by_xpath("//*[contains(text(), 'español')]")[0].click()
+    browser.find_elements_by_xpath("//*[contains(text(), 'English')]")[0].click()
+
     body_text = browser.find_element_by_tag_name("body").text
 
     for message in english_validation_messages:
