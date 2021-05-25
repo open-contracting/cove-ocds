@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 # https://github.com/open-contracting/lib-cove-ocds/blob/e6120c058340dfeec71cdcc67c976fa591b1a2b1/libcoveocds/common_checks.py
 validation_error_lookup = {
-    "date-time": mark_safe(_(
+    "date-time": _(mark_safe(
         'Incorrect date format. Dates should use the form YYYY-MM-DDT00:00:00Z. Learn more about <a href="https://standard.open-contracting.org/latest/en/schema/reference/#date">dates in OCDS</a>.'  # noqa: E501
     )),
 }
