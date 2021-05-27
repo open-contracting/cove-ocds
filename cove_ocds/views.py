@@ -39,7 +39,7 @@ def format_lang(choices, lang):
     for version, (display, url) in choices.items():
         formatted_choices[version] = (display, url.format(lang=lang))
     return formatted_choices
-    
+
 
 @cove_web_input_error
 def explore_ocds(request, pk):
@@ -78,9 +78,11 @@ def explore_ocds(request, pk):
                     'sub_title': _("Sorry, we can't process that data"),
                     'link': 'index',
                     'link_text': _('Try Again'),
-                    'msg': format_html(_("The file that you uploaded doesn't appear to be well formed JSON. OCDS JSON follows the I-JSON format, which requires UTF-8 encoding. Ensure that your file uses UTF-8 encoding, then try uploading again."
-                             '\n\n<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true">'
-                             '</span> <strong>Error message:</strong> {}'), err),
+                    'msg': format_html(
+                        _("The file that you uploaded doesn't appear to be well formed JSON. OCDS JSON follows the "
+                          "I-JSON format, which requires UTF-8 encoding. Ensure that your file uses UTF-8 encoding, "
+                          'then try uploading again.\n\n<span class="glyphicon glyphicon-exclamation-sign" '
+                          'aria-hidden="true"></span> <strong>Error message:</strong> {}'), err),
                     'error': format(err)
                 })
             except ValueError as err:

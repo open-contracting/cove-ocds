@@ -207,8 +207,8 @@ EXPECTED_RELEASE_AGGREGATE_RANDOM = {
 }
 
 DEFAULT_OCDS_VERSION = settings.COVE_CONFIG["schema_version"]
-METRICS_EXT = "https://raw.githubusercontent.com/open-contracting-extensions/ocds_metrics_extension/master/extension.json"
-CODELIST_EXT = "https://raw.githubusercontent.com/INAImexico/ocds_extendedProcurementCategory_extension/0ed54770c85500cf21f46e88fb06a30a5a2132b1/extension.json"
+METRICS_EXT = "https://raw.githubusercontent.com/open-contracting-extensions/ocds_metrics_extension/master/extension.json"  # noqa: E501
+CODELIST_EXT = "https://raw.githubusercontent.com/INAImexico/ocds_extendedProcurementCategory_extension/0ed54770c85500cf21f46e88fb06a30a5a2132b1/extension.json"  # noqa: E501
 UNKNOWN_URL_EXT = "http://bad-url-for-extensions.com/extension.json"
 NOT_FOUND_URL_EXT = "https://standard.open-contracting.org/latest/en/404.json"
 
@@ -439,9 +439,20 @@ def test_get_schema_deprecated_paths():
         '{"version": "1.1", "records" : {"version": "1.1", "a":"b"}}',
         '{"version": "1.1", "releases":{"buyer":{"additionalIdentifiers":[]}}}',
         '{"version": "1.1", "releases":{"parties":{"roles":[["a","b"]]}}}',  # test an array in a codelist position
-        '{"extensions":["https://raw.githubusercontent.com/open-contracting-extensions/ocds_bid_extension/v1.1.1/extension.jso"], "releases":[]}',
+        """{
+            "extensions": [
+                "https://raw.githubusercontent.com/open-contracting-extensions/ocds_bid_extension/v1.1.1/extension.jso"
+            ],
+            "releases": []
+        }""",
         '{"extensions":[{}], "releases":[]}'
-        '{"extensions":["https://raw.githubusercontent.com/open-contracting-extensions/ocds_bid_extension/v1.1.1/extension.jso"], "releases":[], "version": "1.1"}',
+        """{
+            "extensions": [
+                "https://raw.githubusercontent.com/open-contracting-extensions/ocds_bid_extension/v1.1.1/extension.jso"
+            ],
+            "releases": [],
+            "version": "1.1"
+        }""",
         '{"extensions":[{}], "releases":[], "version": "1.1"}',
     ],
 )
@@ -700,7 +711,7 @@ def test_get_additional_codelist_values():
     assert additional_codelist_values == {
         ("releases/tag"): {
             "codelist": "releaseTag.csv",
-            "codelist_url": "https://raw.githubusercontent.com/open-contracting/standard/1.1/schema/codelists/releaseTag.csv",
+            "codelist_url": "https://raw.githubusercontent.com/open-contracting/standard/1.1/schema/codelists/releaseTag.csv",  # noqa: E501
             "codelist_amend_urls": [],
             "field": "tag",
             "extension_codelist": False,
@@ -710,7 +721,7 @@ def test_get_additional_codelist_values():
         },
         ("releases/tender/items/classification/scheme"): {
             "codelist": "itemClassificationScheme.csv",
-            "codelist_url": "https://raw.githubusercontent.com/open-contracting/standard/1.1/schema/codelists/itemClassificationScheme.csv",
+            "codelist_url": "https://raw.githubusercontent.com/open-contracting/standard/1.1/schema/codelists/itemClassificationScheme.csv",  # noqa: E501
             "codelist_amend_urls": [],
             "extension_codelist": False,
             "field": "scheme",
@@ -1134,14 +1145,18 @@ def test_context_api_transform_extensions():
 
     'extensions': {
         'extended_schema_url': 'extended_schema.json',
-        'extensions': [{'description': 'description_a', 'documentationUrl': 'documentation_a', 'name': 'a', 'url': 'url_a'},
-                       {'description': 'description_b', 'documentationUrl': 'documentation_b', 'name': 'b', 'url': 'url_b'},
-                       {'description': 'description_c', 'documentationUrl': 'documentation_c', 'name': 'c', 'url': 'url_c'},
-                       {'description': 'description_d', 'documentationUrl': 'documentation_d', 'name': 'd', 'url': 'url_d'}],
-        'invalid_extensions': [['bad_url_x', 'x_error_msg'],
-                               ['bad_url_z', 'z_error_msg'],
-                               ['bad_url_y', 'y_error_msg']],
-        'is_extended_schema': True
+        'extensions': [
+            {'description': 'description_a', 'documentationUrl': 'documentation_a', 'name': 'a', 'url': 'url_a'},
+            {'description': 'description_b', 'documentationUrl': 'documentation_b', 'name': 'b', 'url': 'url_b'},
+            {'description': 'description_c', 'documentationUrl': 'documentation_c', 'name': 'c', 'url': 'url_c'},
+            {'description': 'description_d', 'documentationUrl': 'documentation_d', 'name': 'd', 'url': 'url_d'},
+        ],
+        'invalid_extensions': [
+            ['bad_url_x', 'x_error_msg'],
+            ['bad_url_z', 'z_error_msg'],
+            ['bad_url_y', 'y_error_msg'],
+        ],
+        'is_extended_schema': True,
     }
     """
     context = {

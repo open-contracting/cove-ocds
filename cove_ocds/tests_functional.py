@@ -351,33 +351,33 @@ def test_500_error(server_url, browser):
         (
             "badfile_all_validation_errors.json",
             [
-                '"" is too short. Strings must be at least one character. This error typically indicates a missing value.',
+                '"" is too short. Strings must be at least one character. This error typically indicates a missing value.',  # noqa: E501
                 "An identifier for this particular release of information.",
                 r"version does not match the regex ^(\d+\.)(\d+)$",
-                "The version of the OCDS schema used in this package, expressed as major.minor For example: 1.0 or 1.1",
+                "The version of the OCDS schema used in this package, expressed as major.minor For example: 1.0 or 1.1",  # noqa: E501
                 "id is missing but required within tender",
                 "initiationType is missing but required",
-                "Incorrect date format. Dates should use the form YYYY-MM-DDT00:00:00Z. Learn more about dates in OCDS.",
+                "Incorrect date format. Dates should use the form YYYY-MM-DDT00:00:00Z. Learn more about dates in OCDS.",  # noqa: E501
                 # This matches the description of the `date` field in release-schema.json.
-                "The date on which the information contained in the release was first recorded in, or published by, any system.",
+                "The date on which the information contained in the release was first recorded in, or published by, any system.",  # noqa: E501
                 "Invalid 'uri' found",
                 "The URI of this package that identifies it uniquely in the world.",
                 "Invalid code found in currency",
                 "The currency of the amount, from the closed currency codelist.",
-                "numberOfTenderers is not a integer. Check that the value doesn’t contain decimal points or any characters other than 0-9. Integer values should not be in quotes.",
+                "numberOfTenderers is not a integer. Check that the value doesn’t contain decimal points or any characters other than 0-9. Integer values should not be in quotes.",  # noqa: E501
                 "The number of parties who submit a bid.",
-                "amount is not a number. Check that the value doesn’t contain any characters other than 0-9 and dot (.). Number values should not be in quotes",
+                "amount is not a number. Check that the value doesn’t contain any characters other than 0-9 and dot (.). Number values should not be in quotes",  # noqa: E501
                 "Amount as a number.",
-                "ocid is not a string. Check that the value is not null, and has quotes at the start and end. Escape any quotes in the value with \\",
-                "A globally unique identifier for this Open Contracting Process. Composed of an ocid prefix and an identifier for the contracting process. For more information see the Open Contracting Identifier guidance",
-                "title is not a string. Check that the value has quotes at the start and end. Escape any quotes in the value with \\",
-                "A title for this tender. This will often be used by applications as a headline to attract interest, and to help analysts understand the nature of this procurement",
+                "ocid is not a string. Check that the value is not null, and has quotes at the start and end. Escape any quotes in the value with \\",  # noqa: E501
+                "A globally unique identifier for this Open Contracting Process. Composed of an ocid prefix and an identifier for the contracting process. For more information see the Open Contracting Identifier guidance",  # noqa: E501
+                "title is not a string. Check that the value has quotes at the start and end. Escape any quotes in the value with \\",  # noqa: E501
+                "A title for this tender. This will often be used by applications as a headline to attract interest, and to help analysts understand the nature of this procurement",  # noqa: E501
                 "parties is not a JSON array",
-                "Information on the parties (organizations, economic operators and other participants) who are involved in the contracting process and their roles, e.g. buyer, procuring entity, supplier etc. Organization references elsewhere in the schema are used to refer back to this entries in this list.",
+                "Information on the parties (organizations, economic operators and other participants) who are involved in the contracting process and their roles, e.g. buyer, procuring entity, supplier etc. Organization references elsewhere in the schema are used to refer back to this entries in this list.",  # noqa: E501
                 "buyer is not a JSON object",
                 "The id and name of the party being referenced. Used to cross-reference to the parties section",
-                "[] is too short. You must supply at least one value, or remove the item entirely (unless it’s required).",
-                "One or more values from the closed releaseTag codelist. Tags can be used to filter releases and to understand the kind of information that releases might contain",
+                "[] is too short. You must supply at least one value, or remove the item entirely (unless it’s required).",  # noqa: E501
+                "One or more values from the closed releaseTag codelist. Tags can be used to filter releases and to understand the kind of information that releases might contain",  # noqa: E501
             ],
             [],
             True,
@@ -520,7 +520,7 @@ def test_500_error(server_url, browser):
             [
                 "needsAssessment, notADocumentType, tariffIllustration",
                 "+releaseTag.csv: Codelist Error, Could not find code field in codelist",
-                "-documentType.csv: Codelist error, Trying to remove non existing codelist value notACodelistValueAtAll",
+                "-documentType.csv: Codelist error, Trying to remove non existing codelist value notACodelistValueAtAll",  # noqa: E501
                 "+method.csv: Unicode Error, codelists need to be in UTF-8",
                 "chargePaidBy.csv",
                 "notAPaidByCodelist",
@@ -709,9 +709,11 @@ DARK_GREEN = "rgba(155, 175, 0, 1)"
 def test_headlines_class(url_input_browser, source_filename, heading_color):
     browser = url_input_browser(source_filename)
     headlines_panel = browser.find_elements_by_class_name("panel")[0]
+    actual = headlines_panel.find_element_by_class_name("panel-heading").value_of_css_property("background-color")
+
     # Check that this is actually the headlines panel
     assert headlines_panel.text.startswith('Headlines')
-    assert headlines_panel.find_element_by_class_name("panel-heading").value_of_css_property("background-color") == heading_color
+    assert heading_color == actual
 
 
 def test_validation_error_messages(url_input_browser):
@@ -721,17 +723,17 @@ def test_validation_error_messages(url_input_browser):
         r"<code>version</code> does not match the regex <code>^(\d+\.)(\d+)$</code>",
         "<code>id</code> is missing but required within <code>tender</code>",
         "<code>initiationType</code> is missing but required",
-        'Incorrect date format. Dates should use the form YYYY-MM-DDT00:00:00Z. Learn more about <a href="https://standard.open-contracting.org/latest/en/schema/reference/#date">dates in OCDS</a>.',
+        'Incorrect date format. Dates should use the form YYYY-MM-DDT00:00:00Z. Learn more about <a href="https://standard.open-contracting.org/latest/en/schema/reference/#date">dates in OCDS</a>.',  # noqa: E501
         "Invalid code found in <code>currency</code>",
         "<code>numberOfTenderers</code> is not a integer",
-        "<code>amount</code> is not a number. Check that the value  doesn’t contain any characters other than 0-9 and dot (<code>.</code>).",
-        "<code>ocid</code> is not a string. Check that the value is not null, and has quotes at the start and end. Escape any quotes in the value with <code>\\</code>",
-        'For more information see the <a href="https://standard.open-contracting.org/1.1/en/schema/identifiers/">Open Contracting Identifier guidance</a>',
-        "<code>title</code> is not a string. Check that the value  has quotes at the start and end. Escape any quotes in the value with <code>\\</code>",
+        "<code>amount</code> is not a number. Check that the value  doesn’t contain any characters other than 0-9 and dot (<code>.</code>).",  # noqa: E501
+        "<code>ocid</code> is not a string. Check that the value is not null, and has quotes at the start and end. Escape any quotes in the value with <code>\\</code>",  # noqa: E501
+        'For more information see the <a href="https://standard.open-contracting.org/1.1/en/schema/identifiers/">Open Contracting Identifier guidance</a>',  # noqa: E501
+        "<code>title</code> is not a string. Check that the value  has quotes at the start and end. Escape any quotes in the value with <code>\\</code>",  # noqa: E501
         "<code>parties</code> is not a JSON array",
         "<code>buyer</code> is not a JSON object",
         "<code>[]</code> is too short.",
-        'One or more values from the closed <a href="https://standard.open-contracting.org/1.1/en/schema/codelists/#release-tag">releaseTag</a> codelist',
+        'One or more values from the closed <a href="https://standard.open-contracting.org/1.1/en/schema/codelists/#release-tag">releaseTag</a> codelist',  # noqa: E501
     ]:
         assert html in browser.page_source
 
@@ -1478,12 +1480,12 @@ def test_jsonschema_translation_2(
         "id is missing but required within tender",
         "initiationType is missing but required",
         "version does not match the regex ^(\\d+\\.)(\\d+)$",
-        "amount is not a number. Check that the value doesn’t contain any characters other than 0-9 and dot (.). Number values should not be in quotes.",
+        "amount is not a number. Check that the value doesn’t contain any characters other than 0-9 and dot (.). Number values should not be in quotes.",  # noqa: E501
         "buyer is not a JSON object",
-        "numberOfTenderers is not a integer. Check that the value doesn’t contain decimal points or any characters other than 0-9. Integer values should not be in quotes.",
-        "ocid is not a string. Check that the value is not null, and has quotes at the start and end. Escape any quotes in the value with \\",
+        "numberOfTenderers is not a integer. Check that the value doesn’t contain decimal points or any characters other than 0-9. Integer values should not be in quotes.",  # noqa: E501
+        "ocid is not a string. Check that the value is not null, and has quotes at the start and end. Escape any quotes in the value with \\",  # noqa: E501
         "parties is not a JSON array",
-        "title is not a string. Check that the value has quotes at the start and end. Escape any quotes in the value with \\",
+        "title is not a string. Check that the value has quotes at the start and end. Escape any quotes in the value with \\",  # noqa: E501
         "Incorrect date format. Dates should use the form YYYY-MM-DDT00:00:00Z. Learn more about dates in OCDS.",
         "Invalid 'uri' found",
         '"" is too short. Strings must be at least one character. This error typically indicates a missing value.',
@@ -1495,17 +1497,17 @@ def test_jsonschema_translation_2(
         "id falta pero se requiere dentro de tender",
         "initiationTypefalta pero se requiere",
         "versionno coincide con la expresión regular ^(\\d+\\.)(\\d+)$",
-        "amountno es un número. Compruebe que el valor no contenga ningún carácter más que 0-9 y el punto (.). Los valores numéricos no deben estar entre comillas",
+        "amountno es un número. Compruebe que el valor no contenga ningún carácter más que 0-9 y el punto (.). Los valores numéricos no deben estar entre comillas",  # noqa: E501
         "buyer no es un objeto JSON.",
-        "numberOfTenderers no es un entero. Compruebe que el valor no contenga puntos decimales ni ningún otro carácter que no sea 0-9. Los valores enteros no deben estar entre comillas.",
-        "ocid no es un hilo. Revise que el valor no es 'null', y tenga comillas al principio y al final. Escapa de cualquier comillas con el valor \\",
+        "numberOfTenderers no es un entero. Compruebe que el valor no contenga puntos decimales ni ningún otro carácter que no sea 0-9. Los valores enteros no deben estar entre comillas.",  # noqa: E501
+        "ocid no es un hilo. Revise que el valor no es 'null', y tenga comillas al principio y al final. Escapa de cualquier comillas con el valor \\",  # noqa: E501
         "parties no es una matriz JSON",
-        "title no es un hilo. Revise que el valor tenga comillas al principio y al final. Escapa de cualquier comillas con el valor \\",
-        "Formato de fecha inválido. Las fechas deben usar el formato YYYY-MM-DDT00:00:00Z. Lea más sobre fechas en OCDS",
+        "title no es un hilo. Revise que el valor tenga comillas al principio y al final. Escapa de cualquier comillas con el valor \\",  # noqa: E501
+        "Formato de fecha inválido. Las fechas deben usar el formato YYYY-MM-DDT00:00:00Z. Lea más sobre fechas en OCDS",  # noqa: E501
         "Se ha encontrado una 'uri' inválida",
-        '""es muy corto. Las cadenas deben ser de al menos un caracter. Este error generalmente indica que hay un valor faltante.',
+        '""es muy corto. Las cadenas deben ser de al menos un caracter. Este error generalmente indica que hay un valor faltante.',  # noqa: E501
         "Código inválido encontrado en currency",
-        "[]es muy corto. Debe proporcionar al menos un valor o eliminar el artículo por completo (a menos que sea necesario)",
+        "[]es muy corto. Debe proporcionar al menos un valor o eliminar el artículo por completo (a menos que sea necesario)",  # noqa: E501
     ]
 
     source_filename = "badfile_all_validation_errors.json"
