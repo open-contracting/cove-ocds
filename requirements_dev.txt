@@ -319,7 +319,7 @@ uc-rfc6266-parser==0.1.0
     # via
     #   -r requirements.txt
     #   libcoveweb
-urllib3==1.26.4
+urllib3==1.26.5
     # via
     #   -r requirements.txt
     #   requests
