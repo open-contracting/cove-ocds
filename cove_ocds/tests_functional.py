@@ -80,8 +80,8 @@ def url_input_browser(request, server_url, browser, httpserver):
         ),
         (
             "Open Contracting Data Standard",
-            "Open Contracting Data Standard: Documentation",
-            "#open-contracting-data-standard-documentation",
+            "Open Contracting Data Standard",
+            "#open-contracting-data-standard",
             "http://standard.open-contracting.org/",
         ),
     ],
