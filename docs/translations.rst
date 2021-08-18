@@ -14,7 +14,7 @@ In order to fetch translated strings from transifex:
 
 .. code:: bash
 
-    tx pull -a
+    tx pull -af
 
 In order to compile them:
 
