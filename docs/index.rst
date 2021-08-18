@@ -4,7 +4,9 @@ OCDS Data Review Tool: Developer Documentation
 .. include:: ../README.rst
 
 
-This documentation is for people who wish to contribute to or modify the DRT.
+This documentation is for people who wish to contribute to or modify the Data Review Tool (DRT).
+
+The `CoVE <https://cove.readthedocs.io/en/latest/>`__ documentation might also be relevant.
 
 .. toctree::
    :maxdepth: 2
@@ -19,6 +21,8 @@ This documentation is for people who wish to contribute to or modify the DRT.
    how-to-add-kfi
    tests
    ocds-show
+
+There are `drafts <https://docs.google.com/document/d/1EER_GjXi7F0SPZ_Mra9JuQBY5JxU0NGRSS9mYzB4guU/edit>`__ of another couple how-tos for adding headlines and modifying validation error messages.
 
 .. _run_locally:
 
