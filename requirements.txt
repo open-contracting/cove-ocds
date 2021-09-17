@@ -70,7 +70,7 @@ jsonschema==3.2.0
     # via
     #   libcove
     #   libcoveocds
-libcove==0.24.0
+libcove==0.26.0
     # via
     #   -r requirements.in
     #   libcoveocds
