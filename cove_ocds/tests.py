@@ -297,7 +297,7 @@ def test_get_json_data_generic_paths():
     ) as fp:
         json_data_w_deprecations = json.load(fp)
 
-    generic_paths = cove_common.get_json_data_generic_paths(json_data_w_deprecations)
+    generic_paths = cove_common.get_json_data_generic_paths(json_data_w_deprecations, generic_paths={})
     assert len(generic_paths.keys()) == 36
     assert generic_paths[("releases", "buyer", "name")] == {
         ("releases", 1, "buyer", "name"): "Parks Canada",
@@ -323,7 +323,7 @@ def test_get_json_data_deprecated_fields():
     schema_obj.pkg_schema_url = os.path.join(
         schema_obj.schema_host, schema_obj.pkg_schema_name
     )
-    json_data_paths = cove_common.get_json_data_generic_paths(json_data_w_deprecations)
+    json_data_paths = cove_common.get_json_data_generic_paths(json_data_w_deprecations, generic_paths={})
     deprecated_data_fields = cove_common.get_json_data_deprecated_fields(
         json_data_paths, schema_obj
     )
@@ -1034,7 +1034,7 @@ def test_schema_after_version_change_record(client):
 def test_corner_cases_for_deprecated_data_fields(json_data):
     data = json.loads(json_data)
     schema = SchemaOCDS(release_data=data)
-    json_data_paths = cove_common.get_json_data_generic_paths(data)
+    json_data_paths = cove_common.get_json_data_generic_paths(data, generic_paths={})
     deprecated_fields = cove_common.get_json_data_deprecated_fields(
         json_data_paths, schema
     )
@@ -1317,7 +1317,7 @@ def test_get_json_data_missing_ids():
         "releases/1/tender/tenderers/2/id",
         "releases/1/tender/tenderers/4/id",
     ]
-    user_data_paths = cove_common.get_json_data_generic_paths(user_data)
+    user_data_paths = cove_common.get_json_data_generic_paths(user_data, generic_paths={})
     missin_ids_paths = cove_common.get_json_data_missing_ids(
         user_data_paths, schema_obj
     )
