@@ -193,3 +193,6 @@ URL_PREFIX = r"review/"
 
 # Because of how the standard site proxies traffic, we want to use this
 USE_X_FORWARDED_HOST = True
+
+# https://docs.djangoproject.com/en/3.2/ref/settings/#data-upload-max-memory-size
+DATA_UPLOAD_MAX_MEMORY_SIZE = 52428800  # 5 MB
