@@ -1124,7 +1124,7 @@ def test_additional_checks_section(
     assert not_expected not in additional_checks_text
 
 
-@pytest.mark.parametrize(("source_filename"), [("full_record.json")])
+@pytest.mark.parametrize("source_filename", ["full_record.json"])
 def test_additional_checks_section_not_being_displayed(
     server_url, url_input_browser, httpserver, source_filename
 ):
@@ -1136,7 +1136,7 @@ def test_additional_checks_section_not_being_displayed(
     assert additional_checks == []
 
 
-@pytest.mark.parametrize(("source_filename"), [("basic_release_empty_fields.json")])
+@pytest.mark.parametrize("source_filename", ["basic_release_empty_fields.json"])
 def test_additional_checks_error_modal(
     server_url, url_input_browser, httpserver, source_filename
 ):
