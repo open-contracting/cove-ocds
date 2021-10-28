@@ -5,5 +5,5 @@ libcove
 libcoveocds
 libcoveweb
 python-dateutil
-rfc3339-validator
 sentry-sdk
+strict-rfc3339
