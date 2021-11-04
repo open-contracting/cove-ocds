@@ -1,7 +1,5 @@
 name: CI
 on: [push, pull_request]
-env:
-  BASEDIR: https://raw.githubusercontent.com/open-contracting/standard-maintenance-scripts/main
 jobs:
   build:
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
@@ -20,16 +18,12 @@ jobs:
       - run: pip install -r requirements.txt
       # Check requirements.txt contains production requirements.
       - run: ./manage.py --help
-      - run: curl -s -S --retry 3 $BASEDIR/tests/install.sh | bash -
       - run: pip install -r requirements_dev.txt
-      - run: curl -s -S --retry 3 $BASEDIR/tests/script.sh | bash -
-      - run: pytest /tmp/test_requirements.py
       # Install gettext for translations, and translate-toolkit for `pocount`.
       - run: sudo apt update
       - run: sudo apt install gettext translate-toolkit
       - run: python manage.py compilemessages
       - name: Run checks and tests
-        if: always()
         run: |
           ./manage.py migrate
           ./manage.py makemigrations --check --dry-run
