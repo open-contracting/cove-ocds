@@ -1,0 +1,17 @@
+name: Translations
+on:
+  pull_request: {}
+  push:
+    branches: [main]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install translate-toolkit for pocount
+        run: |
+          sudo apt update
+          sudo apt install translate-toolkit
+      - run: pip install -r requirements.txt
+      - run: python manage.py makemessages -l es
+      - run: '[ $(find . -name LC_MESSAGES -exec pocount --incomplete --short "{}" +) = "" ]'
