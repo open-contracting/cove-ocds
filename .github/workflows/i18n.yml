@@ -14,4 +14,4 @@ jobs:
           sudo apt install translate-toolkit
       - run: pip install -r requirements.txt
       - run: python manage.py makemessages -l es
-      - run: '[ "$(find . -name LC_MESSAGES -exec pocount --incomplete --short "{}" +)" = "" ]'
+      - run: '[ "$(find . -name LC_MESSAGES -not -path "*/en/*" -exec pocount --incomplete --short "{}" +)" = "" ]'
