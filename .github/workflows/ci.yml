@@ -19,11 +19,6 @@ jobs:
       # Check requirements.txt contains production requirements.
       - run: ./manage.py --help
       - run: pip install -r requirements_dev.txt
-      - name: Install gettext for compilemessages
-        run: |
-          sudo apt update
-          sudo apt install gettext
-      - run: python manage.py compilemessages
       - name: Run checks and tests
         run: |
           ./manage.py migrate
