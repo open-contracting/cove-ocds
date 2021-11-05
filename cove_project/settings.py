@@ -55,7 +55,7 @@ DELETE_FILES_AFTER_DAYS = env("DELETE_FILES_AFTER_DAYS")
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
 
-SECRET_KEY = settings.SECRET_KEY
+SECRET_KEY = os.getenv("SECRET_KEY", "7ur)dt+e%1^e6$8_sd-@1h67_5zixe2&39%r2$$8_7v6fr_7ee")
 DEBUG = settings.DEBUG
 ALLOWED_HOSTS = settings.ALLOWED_HOSTS
 

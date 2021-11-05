@@ -5,7 +5,7 @@ Run the tests with:
 
 .. code:: bash
 
-    DJANGO_SETTINGS_MODULE=cove_project.settings pytest --cov cove_ocds --cov cove_project
+    pytest --cov cove_ocds --cov cove_project
 
 See ``cove_ocds/fixtures`` for good and bad JSON and XML files for testing the DRT.
 

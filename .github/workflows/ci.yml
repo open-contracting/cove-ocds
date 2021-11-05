@@ -20,15 +20,13 @@ jobs:
       - run: ./manage.py --help
       - run: pip install -r requirements_dev.txt
       - name: Run checks and tests
+        env:
+          PYTHONWARNINGS: error
         run: |
           ./manage.py migrate
           ./manage.py makemigrations --check --dry-run
           ./manage.py check --fail-level WARNING
           pytest --cov cove_ocds --cov cove_project
-        env:
-          PYTHONWARNINGS: error
-          DJANGO_SETTINGS_MODULE: cove_project.settings
-          SECRET_KEY: 7ur)dt+e%1^e6$8_sd-@1h67_5zixe2&39%r2$$8_7v6fr_7ee
       - env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: coveralls --service=github
