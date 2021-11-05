@@ -594,15 +594,15 @@ def test_explore_schema_version_change(
     data = SuppliedData.objects.create()
     with open(
         os.path.join(
-            "cove_ocds", "fixtures", "tenders_releases_2_releases.{}".format(file_type)
+            "cove_ocds", "fixtures", f"tenders_releases_2_releases.{file_type}"
         ),
         "rb",
     ) as fp:
-        data.original_file.save("test.{}".format(file_type), UploadedFile(fp))
+        data.original_file.save(f"test.{file_type}", UploadedFile(fp))
     data.current_app = "cove_ocds"
 
     with patch(
-        "cove_ocds.views.{}".format(converter.__name__),
+        f"cove_ocds.views.{converter.__name__}",
         side_effect=converter,
         autospec=True,
     ) as mock_object:

@@ -443,9 +443,7 @@ def test_500_error(server_url, browser):
             "tenders_releases_1_release_with_unrecognized_version.json",
             [
                 "Your data specifies a version 123.123 which is not recognised",
-                "checked against OCDS release package schema version {}. You can".format(
-                    OCDS_DEFAULT_SCHEMA_VERSION
-                ),
+                f"checked against OCDS release package schema version {OCDS_DEFAULT_SCHEMA_VERSION}. You can",
                 "checked against the current default version.",
                 "Convert to Spreadsheet",
             ],
@@ -456,9 +454,7 @@ def test_500_error(server_url, browser):
             "tenders_releases_1_release_with_wrong_version_type.json",
             [
                 "Your data specifies a version 1000 (it must be a string) which is not recognised",
-                "checked against OCDS release package schema version {}. You can".format(
-                    OCDS_DEFAULT_SCHEMA_VERSION
-                ),
+                f"checked against OCDS release package schema version {OCDS_DEFAULT_SCHEMA_VERSION}. You can",
                 "Convert to Spreadsheet",
             ],
             ["Additional Fields (fields in data not in schema)", "Error message"],

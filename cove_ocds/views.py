@@ -137,9 +137,7 @@ def explore_ocds(request, pk):
                     exceptions.raise_invalid_version_data_with_patch(version_in_data)
                 else:
                     if not isinstance(version_in_data, str):
-                        version_in_data = "{} (it must be a string)".format(
-                            str(version_in_data)
-                        )
+                        version_in_data = f"{version_in_data} (it must be a string)"
                     context["unrecognized_version_data"] = version_in_data
 
             if schema_ocds.version != db_data.schema_version:

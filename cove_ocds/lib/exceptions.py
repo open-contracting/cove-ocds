@@ -18,7 +18,7 @@ def raise_invalid_version_argument(version):
                     version,
                 )
             ),
-            "error": _("{} is not a known schema version".format(version)),
+            "error": _(f"{version} is not a known schema version"),
         }
     )
 
@@ -41,7 +41,7 @@ def raise_invalid_version_data_with_patch(version):
                     version,
                 )
             ),
-            "error": _("{} is not a known schema version".format(version)),
+            "error": _(f"{version} is not a known schema version"),
         }
     )
 
@@ -61,7 +61,7 @@ def raise_json_deref_error(error):
                     error,
                 )
             ),
-            "error": _("{}".format(error)),
+            "error": _(f"{error}"),
         }
     )
 
