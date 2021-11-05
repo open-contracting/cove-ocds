@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-05 20:31+0000\n"
+"POT-Creation-Date: 2021-11-05 22:36+0000\n"
 "PO-Revision-Date: 2020-09-08 08:53+0000\n"
 "Last-Translator: Juan Pane <juanpane@idatosabiertos.org>, 2021\n"
 "Language-Team: Spanish (https://www.transifex.com/open-contracting-"
@@ -25,39 +25,64 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: cove_ocds/lib/exceptions.py:9
+#: cove_ocds/lib/exceptions.py:12
 msgid "Unrecognised version of the schema"
 msgstr "Versión del esquema no reconocida"
 
-#: cove_ocds/lib/exceptions.py:11 cove_ocds/lib/exceptions.py:31
-#: cove_ocds/lib/exceptions.py:54 cove_ocds/lib/exceptions.py:74
+#: cove_ocds/lib/exceptions.py:14 cove_ocds/lib/exceptions.py:34
+#: cove_ocds/lib/exceptions.py:57 cove_ocds/lib/exceptions.py:77
 #: cove_ocds/views.py:80 cove_ocds/views.py:93 cove_ocds/views.py:111
 msgid "Try Again"
 msgstr "Inténtelo de nuevo"
 
-#: cove_ocds/lib/exceptions.py:21 cove_ocds/lib/exceptions.py:44
+#: cove_ocds/lib/exceptions.py:24 cove_ocds/lib/exceptions.py:47
 #, python-format
-#| msgid "{} is not a known schema version"
 msgid "%(version)s is not a known schema version"
 msgstr "%(version)s no es una versión conocida del esquema"
 
-#: cove_ocds/lib/exceptions.py:29
+#: cove_ocds/lib/exceptions.py:32
 msgid "Version format does not comply with the schema"
 msgstr "El formato de la versión no se ajusta al esquema"
 
-#: cove_ocds/lib/exceptions.py:52
+#: cove_ocds/lib/exceptions.py:55
 msgid "JSON reference error"
 msgstr "Error de referencia en JSON"
 
-#: cove_ocds/lib/exceptions.py:64
+#: cove_ocds/lib/exceptions.py:67
 #, python-format
-#| msgid "{error}"
 msgid "%(error)s"
 msgstr "%(error)s"
 
-#: cove_ocds/lib/exceptions.py:72 cove_ocds/lib/exceptions.py:89
+#: cove_ocds/lib/exceptions.py:75 cove_ocds/lib/exceptions.py:92
 msgid "Missing OCDS package"
 msgstr "Paquete OCDS no encontrado"
+
+#: cove_ocds/lib/exceptions.py:80
+msgid ""
+"We could not detect a package structure at the top-level of your data. OCDS "
+"releases and records should be published within a <a href=\"http://standard."
+"open-contracting.org/latest/en/schema/release_package/\">release package </"
+"a> or <a href=\"http://standard.open-contracting.org/latest/en/schema/"
+"record_package/\"> record package</a> to provide important meta-data. For "
+"more information, please refer to the <a href=\"http://standard.open-"
+"contracting.org/latest/en/getting_started/releases_and_records/\"> Releases "
+"and Records section </a> in the OCDS documentation.\n"
+"\n"
+"<span class=\"glyphicon glyphicon-exclamation-sign\" aria-hidden=\"true\"></"
+"span> <strong>Error message:</strong> <em>Missing OCDS package</em>"
+msgstr ""
+"No pudimos detectar una estructura de paquete en el nivel superior de sus "
+"datos. Las versiones y registros de OCDS deben publicarse dentro de un <a "
+"href=\"http://standard.open-contracting.org/latest/es/schema/release_package/"
+"\">paquete de entrega</a> o <a href=\"http://standard.open-contracting.org/"
+"latest/es/schema/record_package/\">paquete de registros</a> para "
+"proporcionar metadatos importantes. Para obtener más información, consulte "
+"la <a href=\"http://standard.open-contracting.org/latest/es/getting_started/"
+"releases_and_records/\">sección Entregas y registros</a> en la documentación "
+"de OCDS.\n"
+"\n"
+"<span class=\"glyphicon glyphicon-exclamation-sign\" aria-hidden=\"true\"></"
+"span> <strong>Mensaje de error:</strong> <em>Falta el paquete OCDS</em>"
 
 #: cove_ocds/templates/cove_ocds/additional_checks_table.html:7
 msgid "Check Description"
@@ -1581,7 +1606,17 @@ msgstr "Fila"
 msgid "Column"
 msgstr "Columna"
 
-#: cove_ocds/templatetags/cove_tags.py:18
+#: cove_ocds/templatetags/cove_tags.py:12
+msgid ""
+"Incorrect date format. Dates should use the form YYYY-MM-DDT00:00:00Z. Learn "
+"more about <a href=\"https://standard.open-contracting.org/latest/en/schema/"
+"reference/#date\">dates in OCDS</a>."
+msgstr ""
+"Formato de fecha inválido. Las fechas deben usar el formato YYYY-MM-"
+"DDT00:00:00Z. Lea más sobre <a href=\"https://standard.open-contracting.org/"
+"latest/es/schema/reference/#date\"> fechas en OCDS</a>"
+
+#: cove_ocds/templatetags/cove_tags.py:22
 msgid ""
 "This array should contain either entirely embedded releases or linked "
 "releases. Embedded releases contain an 'id' whereas linked releases do not. "
@@ -1591,12 +1626,12 @@ msgstr ""
 "vinculadas. Las entregas integradas contienen un \"identificador\", mientras "
 "que las entregas vinculadas no. Estas entregas contienen una mezcla de ambos."
 
-#: cove_ocds/templatetags/cove_tags.py:23
+#: cove_ocds/templatetags/cove_tags.py:27
 #, python-format
 msgid "%s is not valid under any of the given schemas"
 msgstr "%s no es válido bajo ninguno de los esquemas dados"
 
-#: cove_ocds/templatetags/cove_tags.py:25
+#: cove_ocds/templatetags/cove_tags.py:29
 #, python-format
 msgid "%(instance)s is valid under each of %(reprs)s"
 msgstr "%(instance)ses válido bajo cada uno de %(reprs)s"

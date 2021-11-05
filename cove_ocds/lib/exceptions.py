@@ -1,6 +1,9 @@
+from django.utils.functional import lazy
 from django.utils.html import format_html, mark_safe
 from django.utils.translation import gettext_lazy as _
 from libcove.lib.exceptions import CoveInputDataError
+
+mark_safe_lazy = lazy(mark_safe, str)
 
 
 def raise_invalid_version_argument(version):
@@ -72,8 +75,8 @@ def raise_missing_package_error():
             "sub_title": _("Missing OCDS package"),
             "link": "index",
             "link_text": _("Try Again"),
-            "msg": _(
-                mark_safe(
+            "msg": mark_safe_lazy(
+                _(
                     "We could not detect a package structure at the top-level of your data. "
                     'OCDS releases and records should be published within a <a href="http://'
                     'standard.open-contracting.org/latest/en/schema/release_package/">release '

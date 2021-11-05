@@ -1,12 +1,16 @@
 from cove.html_error_msg import html_error_msg, json_repr
 from cove.templatetags.cove_tags import register
+from django.utils.functional import lazy
 from django.utils.html import mark_safe
 from django.utils.translation import gettext_lazy as _
 
-# https://github.com/open-contracting/lib-cove-ocds/blob/e6120c058340dfeec71cdcc67c976fa591b1a2b1/libcoveocds/common_checks.py
+mark_safe_lazy = lazy(mark_safe, str)
+
+# https://github.com/open-contracting/lib-cove-ocds/blob/main/libcoveocds/common_checks.py
 validation_error_lookup = {
-    "date-time": _(mark_safe(
-        'Incorrect date format. Dates should use the form YYYY-MM-DDT00:00:00Z. Learn more about <a href="https://standard.open-contracting.org/latest/en/schema/reference/#date">dates in OCDS</a>.'  # noqa: E501
+    "date-time": mark_safe_lazy(_(
+        "Incorrect date format. Dates should use the form YYYY-MM-DDT00:00:00Z. Learn more about "
+        '<a href="https://standard.open-contracting.org/latest/en/schema/reference/#date">dates in OCDS</a>.'
     )),
 }
 
