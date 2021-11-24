@@ -316,7 +316,7 @@ def test_get_json_data_deprecated_fields():
         json_data_w_deprecations = json.load(fp)
 
     schema_obj = SchemaOCDS()
-    schema_obj.schema_host = os.path.join("tests", "fixtures")
+    schema_obj.schema_host = os.path.join("tests", "fixtures/")  # "/" is for urljoin in lib-cove
     schema_obj.pkg_schema_name = (
         "release_package_schema_ref_release_schema_deprecated_fields.json"
     )
@@ -362,7 +362,7 @@ def test_get_json_data_deprecated_fields():
 
 def test_get_schema_deprecated_paths():
     schema_obj = SchemaOCDS()
-    schema_obj.schema_host = os.path.join("tests", "fixtures")
+    schema_obj.schema_host = os.path.join("tests", "fixtures/")  # "/" is for urljoin in lib-cove
     schema_obj.pkg_schema_name = (
         "release_package_schema_ref_release_schema_deprecated_fields.json"
     )
