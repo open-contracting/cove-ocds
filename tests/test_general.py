@@ -222,7 +222,7 @@ def test_get_releases_aggregates():
         get_releases_aggregates({"releases": [{}, {}, {}]}) == release_aggregate_3_empty
     )
 
-    with open(os.path.join("cove_ocds", "fixtures", "release_aggregate.json")) as fp:
+    with open(os.path.join("tests", "fixtures", "release_aggregate.json")) as fp:
         data = json.load(fp)
 
     assert (
@@ -247,7 +247,7 @@ def test_get_releases_aggregates():
 
     assert actual_cleaned == expected_cleaned
 
-    with open(os.path.join("cove_ocds", "fixtures", "samplerubbish.json")) as fp:
+    with open(os.path.join("tests", "fixtures", "samplerubbish.json")) as fp:
         data = json.load(fp)
 
     actual = get_releases_aggregates(data)
@@ -257,7 +257,7 @@ def test_get_releases_aggregates():
 
     assert actual_cleaned == EXPECTED_RELEASE_AGGREGATE_RANDOM
 
-    with open(os.path.join("cove_ocds", "fixtures", "badfile.json")) as fp:
+    with open(os.path.join("tests", "fixtures", "badfile.json")) as fp:
         data = json.load(fp)
 
     actual = get_releases_aggregates(data, ignore_errors=True)
@@ -270,7 +270,7 @@ def test_get_schema_validation_errors():
     schema_name = schema_obj.pkg_schema_name
 
     with open(
-        os.path.join("cove_ocds", "fixtures", "tenders_releases_2_releases.json")
+        os.path.join("tests", "fixtures", "tenders_releases_2_releases.json")
     ) as fp:
         error_list = cove_common.get_schema_validation_errors(
             json.load(fp), schema_obj, schema_name, {}, {}
@@ -278,7 +278,7 @@ def test_get_schema_validation_errors():
         assert len(error_list) == 0
     with open(
         os.path.join(
-            "cove_ocds", "fixtures", "tenders_releases_2_releases_invalid.json"
+            "tests", "fixtures", "tenders_releases_2_releases_invalid.json"
         )
     ) as fp:
         error_list = cove_common.get_schema_validation_errors(
@@ -290,7 +290,7 @@ def test_get_schema_validation_errors():
 def test_get_json_data_generic_paths():
     with open(
         os.path.join(
-            "cove_ocds",
+            "tests",
             "fixtures",
             "tenders_releases_2_releases_with_deprecated_fields.json",
         )
@@ -308,7 +308,7 @@ def test_get_json_data_generic_paths():
 def test_get_json_data_deprecated_fields():
     with open(
         os.path.join(
-            "cove_ocds",
+            "tests",
             "fixtures",
             "tenders_releases_2_releases_with_deprecated_fields.json",
         )
@@ -316,7 +316,7 @@ def test_get_json_data_deprecated_fields():
         json_data_w_deprecations = json.load(fp)
 
     schema_obj = SchemaOCDS()
-    schema_obj.schema_host = os.path.join("cove_ocds", "fixtures/")
+    schema_obj.schema_host = os.path.join("tests", "fixtures")
     schema_obj.pkg_schema_name = (
         "release_package_schema_ref_release_schema_deprecated_fields.json"
     )
@@ -362,7 +362,7 @@ def test_get_json_data_deprecated_fields():
 
 def test_get_schema_deprecated_paths():
     schema_obj = SchemaOCDS()
-    schema_obj.schema_host = os.path.join("cove_ocds", "fixtures/")
+    schema_obj.schema_host = os.path.join("tests", "fixtures")
     schema_obj.pkg_schema_name = (
         "release_package_schema_ref_release_schema_deprecated_fields.json"
     )
@@ -495,7 +495,7 @@ def test_explore_not_json(client):
     data = SuppliedData.objects.create()
     with open(
         os.path.join(
-            "cove_ocds", "fixtures", "tenders_releases_2_releases_not_json.json"
+            "tests", "fixtures", "tenders_releases_2_releases_not_json.json"
         )
     ) as fp:
         data.original_file.save("test.json", UploadedFile(fp))
@@ -507,7 +507,7 @@ def test_explore_not_json(client):
 @pytest.mark.django_db
 def test_explore_unconvertable_spreadsheet(client):
     data = SuppliedData.objects.create()
-    with open(os.path.join("cove_ocds", "fixtures", "bad.xlsx"), "rb") as fp:
+    with open(os.path.join("tests", "fixtures", "bad.xlsx"), "rb") as fp:
         data.original_file.save("basic.xlsx", UploadedFile(fp))
     resp = client.get(data.get_absolute_url())
     assert resp.status_code == 200
@@ -520,7 +520,7 @@ def test_explore_unconvertable_spreadsheet(client):
 @pytest.mark.django_db
 def test_explore_unconvertable_json(client):
     data = SuppliedData.objects.create()
-    with open(os.path.join("cove_ocds", "fixtures", "unconvertable_json.json")) as fp:
+    with open(os.path.join("tests", "fixtures", "unconvertable_json.json")) as fp:
         data.original_file.save("unconvertable_json.json", UploadedFile(fp))
     resp = client.post(data.get_absolute_url(), {"flatten": "true"})
     assert resp.status_code == 200
@@ -594,7 +594,7 @@ def test_explore_schema_version_change(
     data = SuppliedData.objects.create()
     with open(
         os.path.join(
-            "cove_ocds", "fixtures", f"tenders_releases_2_releases.{file_type}"
+            "tests", "fixtures", f"tenders_releases_2_releases.{file_type}"
         ),
         "rb",
     ) as fp:
@@ -629,7 +629,7 @@ def test_explore_schema_version_change(
 def test_explore_schema_version_change_with_json_to_xlsx(mock_object, client):
     data = SuppliedData.objects.create()
     with open(
-        os.path.join("cove_ocds", "fixtures", "tenders_releases_2_releases.json")
+        os.path.join("tests", "fixtures", "tenders_releases_2_releases.json")
     ) as fp:
         data.original_file.save("test.json", UploadedFile(fp))
     data.current_app = "cove_ocds"
@@ -677,7 +677,7 @@ def test_explore_schema_version_change_with_json_to_xlsx(mock_object, client):
 def test_data_supplied_schema_version(client):
     data = SuppliedData.objects.create()
     with open(
-        os.path.join("cove_ocds", "fixtures", "tenders_releases_2_releases.xlsx"), "rb"
+        os.path.join("tests", "fixtures", "tenders_releases_2_releases.xlsx"), "rb"
     ) as fp:
         data.original_file.save("test.xlsx", UploadedFile(fp))
     data.current_app = "cove_ocds"
@@ -698,7 +698,7 @@ def test_data_supplied_schema_version(client):
 def test_get_additional_codelist_values():
     with open(
         os.path.join(
-            "cove_ocds", "fixtures", "tenders_releases_2_releases_codelists.json"
+            "tests", "fixtures", "tenders_releases_2_releases_codelists.json"
         )
     ) as fp:
         json_data_w_additial_codelists = json.load(fp)
@@ -859,7 +859,7 @@ def test_schema_ocds_extended_schema_file():
     data = SuppliedData.objects.create()
     with open(
         os.path.join(
-            "cove_ocds",
+            "tests",
             "fixtures",
             "tenders_releases_1_release_with_extensions_1_1.json",
         )
@@ -899,7 +899,7 @@ def test_schema_after_version_change(client):
     data = SuppliedData.objects.create()
     with open(
         os.path.join(
-            "cove_ocds",
+            "tests",
             "fixtures",
             "tenders_releases_1_release_with_invalid_extensions.json",
         )
@@ -962,7 +962,7 @@ def test_schema_after_version_change_record(client):
     data = SuppliedData.objects.create()
     with open(
         os.path.join(
-            "cove_ocds",
+            "tests",
             "fixtures",
             "tenders_records_1_record_with_invalid_extensions.json",
         )
@@ -1301,7 +1301,7 @@ def test_get_schema_non_required_ids():
 
 def test_get_json_data_missing_ids():
     file_name = os.path.join(
-        "cove_ocds",
+        "tests",
         "fixtures",
         "tenders_releases_2_releases_1_1_tenderers_with_missing_ids.json",
     )
@@ -1327,7 +1327,7 @@ def test_get_json_data_missing_ids():
 
 def test_bad_ocds_prefixes():
     file_name = os.path.join(
-        "cove_ocds", "fixtures", "tenders_releases_7_releases_check_ocids.json"
+        "tests", "fixtures", "tenders_releases_7_releases_check_ocids.json"
     )
     results = [
         ("bad-prefix-000001", "releases/0/ocid"),
