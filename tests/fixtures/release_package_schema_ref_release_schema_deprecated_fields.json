@@ -20,7 +20,7 @@
         "releases": {
             "type": "array",
             "minItems": 1,
-            "items": { "$ref": "file:cove_ocds/fixtures/release_schema_deprecated_fields.json" },
+            "items": { "$ref": "file:tests/fixtures/release_schema_deprecated_fields.json" },
             "uniqueItems": true
         },
         "publisher": { 

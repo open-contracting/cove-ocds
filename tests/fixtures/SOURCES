@@ -39,7 +39,7 @@ tenders_1_release_with_extensions_1_1_missing_party_scale.json
 Source: Same data as tenders_releases_2_releases.json, but edited such that it contains valid extensions, and with some additional fields added.
 License: http://data.gc.ca/eng/open-government-licence-canada
 
-cove_ocds/fixtures/tenders_records_1_record_with_invalid_extensions.json
+tests/fixtures/tenders_records_1_record_with_invalid_extensions.json
 Source: Same data as tenders_releases_2_releases.json, but edited to be a record, and with some additional fields added.
 License: http://data.gc.ca/eng/open-government-licence-canada
 

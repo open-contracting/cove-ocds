@@ -88,22 +88,22 @@ So, we'll add our new values to the dicts that support the unit tests for the KF
 
 ``EMPTY_RELEASE_AGGREGATE`` is straightforward - we'll just add a row for our new variable, with a value of 0.
 
-``EXPECTED_RELEASE_AGGREGATE`` is populated with the expected results from `fixtures/release_aggregate.json <https://github.com/open-contracting/cove-ocds/blob/main/cove_ocds/fixtures/release_aggregate.json>`_ , which is a small OCDS JSON file specifically to support testing KFIs. In order to work out the values here, calculate what the value should be based on that file, and insert the relevant result. If you've got a way of calculating the value in a way that's not the code that you've just written, this is a good chance to validate that your code is behaving correctly! If the KFI that you're adding can't be calculated from the existing data in that file, then add the relevant data, and update any other values that change as a result.
+``EXPECTED_RELEASE_AGGREGATE`` is populated with the expected results from `fixtures/release_aggregate.json <https://github.com/open-contracting/cove-ocds/blob/main/tests/fixtures/release_aggregate.json>`_ , which is a small OCDS JSON file specifically to support testing KFIs. In order to work out the values here, calculate what the value should be based on that file, and insert the relevant result. If you've got a way of calculating the value in a way that's not the code that you've just written, this is a good chance to validate that your code is behaving correctly! If the KFI that you're adding can't be calculated from the existing data in that file, then add the relevant data, and update any other values that change as a result.
 
 In this case, we can carry out the same calculation with ``jq`` and basic UNIX commandline tools:
 
 .. code-block:: bash
 
-	jq ".releases[] | (.tender?,.awards[]?,.contracts[]?) | .items[]?.id" cove_ocds/fixtures/release_aggregate.json | sort | uniq | wc -l
+	jq ".releases[] | (.tender?,.awards[]?,.contracts[]?) | .items[]?.id" tests/fixtures/release_aggregate.json | sort | uniq | wc -l
 	2
 
 (note that various values can be can be null or missing, hence using the ? so that jq doesn't stop with an error)
 
-``EXPECTED_RELEASE_AGGREGATE_RANDOM`` is populated with the expected results from `fixtures/samplerubbish.json <https://github.com/open-contracting/cove-ocds/blob/main/cove_ocds/fixtures/samplerubbish.json>`_. This is a large OCDS JSON file that's nonsense, and is intended to provide a more robust test of the code. If the KFI that you're adding can't be calculated from the existing data in that file, then contact the OCDS Helpdesk to discuss generating a new version of the file that does include the relevant fields. 
+``EXPECTED_RELEASE_AGGREGATE_RANDOM`` is populated with the expected results from `fixtures/samplerubbish.json <https://github.com/open-contracting/cove-ocds/blob/main/tests/fixtures/samplerubbish.json>`_. This is a large OCDS JSON file that's nonsense, and is intended to provide a more robust test of the code. If the KFI that you're adding can't be calculated from the existing data in that file, then contact the OCDS Helpdesk to discuss generating a new version of the file that does include the relevant fields. 
 
 .. code-block:: bash
 
-	jq ".releases[] | (.tender?,.awards[]?,.contracts[]?) | .items[]?.id" cove_ocds/fixtures/samplerubbish.json | sort | uniq | wc -l
+	jq ".releases[] | (.tender?,.awards[]?,.contracts[]?) | .items[]?.id" tests/fixtures/samplerubbish.json | sort | uniq | wc -l
 	4698
 
 

@@ -7,7 +7,7 @@ Run the tests with:
 
     pytest --cov cove_ocds --cov cove_project
 
-See ``cove_ocds/fixtures`` for good and bad JSON and XML files for testing the DRT.
+See ``tests/fixtures`` for good and bad JSON and XML files for testing the DRT.
 
 Tests are found in the following files:
 

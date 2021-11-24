@@ -44,12 +44,12 @@ def server_url(request, live_server):
 @pytest.fixture()
 def url_input_browser(request, server_url, browser, httpserver):
     def _url_input_browser(source_filename, output_source_url=False):
-        with open(os.path.join("cove_ocds", "fixtures", source_filename), "rb") as fp:
+        with open(os.path.join("tests", "fixtures", source_filename), "rb") as fp:
             httpserver.serve_content(fp.read())
         if "CUSTOM_SERVER_URL" in os.environ:
             # Use urls pointing to GitHub if we have a custom (probably non local) server URL
             source_url = (
-                "https://raw.githubusercontent.com/open-contracting/cove-ocds/main/cove_ocds/fixtures/"
+                "https://raw.githubusercontent.com/open-contracting/cove-ocds/main/tests/fixtures/"
                 + source_filename
             )
         else:
@@ -788,12 +788,12 @@ def test_flattentool_warnings(
     mocks = {"flatten": mockflatten, "unflatten": mockunflatten}
     monkeypatch.setattr(flattentool, flatten_or_unflatten, mocks[flatten_or_unflatten])
 
-    with open(os.path.join("cove_ocds", "fixtures", source_filename), "rb") as fp:
+    with open(os.path.join("tests", "fixtures", source_filename), "rb") as fp:
         httpserver.serve_content(fp.read())
     if "CUSTOM_SERVER_URL" in os.environ:
         # Use urls pointing to GitHub if we have a custom (probably non local) server URL
         source_url = (
-            "https://raw.githubusercontent.com/open-contracting/cove-ocds/main/cove_ocds/fixtures/"
+            "https://raw.githubusercontent.com/open-contracting/cove-ocds/main/tests/fixtures/"
             + source_filename
         )
     else:
