@@ -40,7 +40,7 @@ django-environ==0.4.5
     # via
     #   -r requirements.in
     #   libcoveweb
-django==3.2.8
+django==3.2.10
     # via
     #   -r requirements.in
     #   django-bootstrap3
@@ -79,7 +79,7 @@ libcoveocds==0.11.0
     # via -r requirements.in
 libcoveweb==0.24.1
     # via -r requirements.in
-lxml==4.6.3
+lxml==4.7.1
     # via flattentool
 markdown-it-py==1.1.0
     # via libcoveocds
