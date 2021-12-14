@@ -23,6 +23,8 @@ backports-datetime-fromisoformat==1.0.0
     # via
     #   -r requirements.txt
     #   flattentool
+beautifulsoup4==4.10.0
+    # via furo
 bleach==3.3.0
     # via
     #   -r requirements.txt
@@ -84,9 +86,7 @@ django==3.2.8
 docopt==0.6.2
     # via coveralls
 docutils==0.16
-    # via
-    #   sphinx
-    #   sphinx-rtd-theme
+    # via sphinx
 et-xmlfile==1.1.0
     # via
     #   -r requirements.txt
@@ -99,6 +99,8 @@ flattentool==0.17.0
     #   -r requirements_dev.in
     #   libcove
     #   libcoveweb
+furo==2021.11.23
+    # via -r requirements_dev.in
 gitdb==4.0.7
     # via gitpython
 gitpython==3.1.17
@@ -203,7 +205,9 @@ pycparser==2.20
 pyflakes==2.3.1
     # via flake8
 pygments==2.9.0
-    # via sphinx
+    # via
+    #   furo
+    #   sphinx
 pyparsing==2.4.7
     # via
     #   -r requirements.txt
@@ -270,12 +274,12 @@ snowballstemmer==2.1.0
     # via sphinx
 sortedcontainers==2.4.0
     # via hypothesis
-sphinx-rtd-theme==0.5.2
-    # via -r requirements_dev.in
+soupsieve==2.3.1
+    # via beautifulsoup4
 sphinx==4.0.1
     # via
     #   -r requirements_dev.in
-    #   sphinx-rtd-theme
+    #   furo
 sphinxcontrib-applehelp==1.0.2
     # via sphinx
 sphinxcontrib-devhelp==1.0.2

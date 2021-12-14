@@ -2,6 +2,7 @@
 coveralls
 flake8
 flattentool>=0.14.0
+furo
 hypothesis
 libsass
 pip-tools
@@ -12,5 +13,4 @@ pytest-localserver
 requests
 selenium
 sphinx
-sphinx-rtd-theme
 transifex-client
