@@ -32,7 +32,7 @@ The OCDS Data Review Tool is just one manifestation of software historically kno
 
 * lib-cove (`opendataservices/lib-cove <https://github.com/opendataservices/lib-cove>`_): contains functions and helpers that may be useful for data validation and review, regardless of the particular data standard.
 * lib-cove-web (`opendataservices/lib-cove-web <https://github.com/opendataservices/lib-cove-web>`_): provides a barebones Django configuration, and baseline CSS, JS and templates that are common for all CoVE instances. It is also a place for common functions relating to presentation or display of data or output. Any templates edited here typically affect all CoVE instances. Sometimes this is useful, but for OCDS-only changes, templates can be overridden in cove-ocds. This and cove-ocds are the only places where frontend output and translatable strings should be.
-* flatten-tool (`opendataservices/lib-cove <https://github.com/opendataservices/flatten-tool>`_): a general purpose library for converting data between JSON and CSV/XLS formats. While not CoVE-specific, it is listed here because it is a specialized tool of which the DRT makes heavy use.
+* flatten-tool (`opendataservices/flatten-tool <https://github.com/opendataservices/flatten-tool>`_): a general purpose library for converting data between JSON and CSV/XLS formats. While not CoVE-specific, it is listed here because it is a specialized tool of which the DRT makes heavy use.
 
 Config
 ------
@@ -50,11 +50,12 @@ Path through the code
 
 1. The input form on the landing page can be found in the ``input`` template (``cove_ocds/templates``). The OCDS DRT overrides the default input template from lib-cove-web so it can be customized compared to other instances of CoVE. This override is set using the ``input_template`` setting in ``COVE_CONFIG`` (see above).
 2. Submitting the form calls the `explore_ocds` function (``cove_ocds/views.py``).
+
   * This checks for basic problems with the input file, and adds metadata, using ``explore_data_context`` from lib-cove-web.
   * It then performs OCDS specific JSON checks, if the input data is JSON.
   * And then schema-specific OCDS checks, depending on the version specified, using ``SchemaOCDS`` and ``common_checks`` from lib-cove-ocds. Functions from lib-cove-ocds also takes care of handling any extension data included in the input. lib-cove-ocds calls on lib-cove to perform schema validation that is not specific to OCDS, using JSON Schema and JSONRef, as well as common things like checking for duplicate identifiers.
   * lib-cove-ocds runs additional checks, which are basic data quality checks outside of the OCDS schema.
   * The results of the various stages of validation are added to the context so they can be displayed on the frontend. The JSON schema error messages are currently set in lib-cove and OCDS schema specific messages are set in lib-cove-ocds or in this repo (``cove_ocds/lib/exceptions.py``).
   * It uses flattentool to convert the input JSON data into XLSX, or vice versa.
-3. The results of the validation, as well as some basic statistics on the data, are output to the ``explore_record`` and ``explore_release`` html templates in ``cove_ocds/templates``.
 
+3. The results of the validation, as well as some basic statistics on the data, are output to the ``explore_record`` and ``explore_release`` html templates in ``cove_ocds/templates``.
