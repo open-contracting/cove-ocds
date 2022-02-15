@@ -69,7 +69,7 @@ defusedxml==0.7.1
     # via
     #   -r requirements.txt
     #   odfpy
-django==3.2.10
+django==3.2.12
     # via
     #   -r requirements.txt
     #   django-bootstrap3
