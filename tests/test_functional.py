@@ -29,8 +29,10 @@ def browser(request):
     else:
         browser = getattr(webdriver, BROWSER)()
     browser.implicitly_wait(3)
-    request.addfinalizer(lambda: browser.quit())
-    return browser
+
+    yield browser
+
+    browser.quit()
 
 
 @pytest.fixture(scope="module")
