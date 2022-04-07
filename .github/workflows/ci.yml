@@ -29,7 +29,7 @@ jobs:
           ./manage.py migrate
           ./manage.py makemigrations --check --dry-run
           ./manage.py check --fail-level WARNING
-          pytest --cov cove_ocds --cov cove_project
+          pytest -W error --cov cove_ocds --cov cove_project
       - env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: coveralls --service=github
