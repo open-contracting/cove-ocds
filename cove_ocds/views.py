@@ -20,7 +20,7 @@ from libcove.lib.exceptions import CoveInputDataError
 from libcoveocds.common_checks import common_checks_ocds
 from libcoveocds.config import LibCoveOCDSConfig
 from libcoveocds.schema import SchemaOCDS
-from strict_rfc3339 import validate_rfc3339
+from rfc3339_validator import validate_rfc3339
 
 from cove_ocds.lib.views import group_validation_errors
 

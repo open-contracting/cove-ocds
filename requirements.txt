@@ -111,7 +111,9 @@ requests==2.25.1
     #   libcoveocds
     #   libcoveweb
 rfc3339-validator==0.1.4
-    # via libcove
+    # via
+    #   -r requirements.in
+    #   libcove
 rfc3987==1.3.8
     # via libcove
 schema==0.7.4
@@ -127,8 +129,6 @@ six==1.16.0
     #   zodb
 sqlparse==0.4.2
     # via django
-strict-rfc3339==0.7
-    # via -r requirements.in
 transaction==3.0.1
     # via zodb
 typing-extensions==3.10.0.0
