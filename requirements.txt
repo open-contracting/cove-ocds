@@ -70,7 +70,7 @@ jsonschema==3.2.0
     # via
     #   libcove
     #   libcoveocds
-libcove==0.26.0
+libcove==0.27.0
     # via
     #   -r requirements.in
     #   libcoveocds
@@ -110,6 +110,8 @@ requests==2.25.1
     #   libcove
     #   libcoveocds
     #   libcoveweb
+rfc3339-validator==0.1.4
+    # via libcove
 rfc3987==1.3.8
     # via libcove
 schema==0.7.4
@@ -121,13 +123,12 @@ six==1.16.0
     #   bleach
     #   jsonschema
     #   python-dateutil
+    #   rfc3339-validator
     #   zodb
 sqlparse==0.4.2
     # via django
 strict-rfc3339==0.7
-    # via
-    #   -r requirements.in
-    #   libcove
+    # via -r requirements.in
 transaction==3.0.1
     # via zodb
 typing-extensions==3.10.0.0
