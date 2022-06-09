@@ -2,7 +2,6 @@
 coveralls
 flake8
 flattentool>=0.14.0
-furo
 hypothesis
 libsass
 pip-tools
@@ -12,8 +11,4 @@ pytest-django
 pytest-localserver
 requests
 selenium
-# sphinx>=4.4.0 requires importlib-metadata>=4.4, but django-bootstrap3 requires <3.
-# https://github.com/zostera/django-bootstrap3/issues/608
-# https://github.com/zostera/django-bootstrap4/issues/380
-sphinx<4.4.0
 transifex-client
