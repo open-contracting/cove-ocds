@@ -4,8 +4,6 @@
 #
 #    pip-compile requirements_dev.in
 #
-alabaster==0.7.12
-    # via sphinx
 asgiref==3.3.4
     # via
     #   -r requirements.txt
@@ -17,14 +15,10 @@ attrs==21.2.0
     #   jsonschema
     #   markdown-it-py
     #   pytest
-babel==2.9.1
-    # via sphinx
 backports-datetime-fromisoformat==1.0.0
     # via
     #   -r requirements.txt
     #   flattentool
-beautifulsoup4==4.10.0
-    # via furo
 bleach==3.3.0
     # via
     #   -r requirements.txt
@@ -85,8 +79,6 @@ django-environ==0.4.5
     #   libcoveweb
 docopt==0.6.2
     # via coveralls
-docutils==0.16
-    # via sphinx
 et-xmlfile==1.1.0
     # via
     #   -r requirements.txt
@@ -99,8 +91,6 @@ flattentool==0.17.0
     #   -r requirements_dev.in
     #   libcove
     #   libcoveweb
-furo==2021.11.23
-    # via -r requirements_dev.in
 gitdb==4.0.7
     # via gitpython
 gitpython==3.1.17
@@ -115,8 +105,6 @@ ijson==3.1.4
     # via
     #   -r requirements.txt
     #   flattentool
-imagesize==1.2.0
-    # via sphinx
 importlib-metadata==2.1.1
     # via
     #   -r requirements.txt
@@ -128,8 +116,6 @@ importlib-metadata==2.1.1
     #   pytest
 iniconfig==1.1.1
     # via pytest
-jinja2==2.11.3
-    # via sphinx
 json-merge-patch==0.2
     # via
     #   -r requirements.txt
@@ -149,7 +135,7 @@ libcove==0.27.0
     #   -r requirements.txt
     #   libcoveocds
     #   libcoveweb
-libcoveocds==0.11.0
+libcoveocds==0.11.1
     # via -r requirements.txt
 libcoveweb==0.24.1
     # via -r requirements.txt
@@ -163,10 +149,6 @@ markdown-it-py==1.1.0
     # via
     #   -r requirements.txt
     #   libcoveocds
-markupsafe==1.1.1
-    # via
-    #   jinja2
-    #   sphinx
 mccabe==0.6.1
     # via flake8
 odfpy==1.4.1
@@ -182,7 +164,6 @@ packaging==20.9
     #   -r requirements.txt
     #   bleach
     #   pytest
-    #   sphinx
 pep517==0.10.0
     # via pip-tools
 persistent==4.7.0
@@ -204,10 +185,6 @@ pycparser==2.20
     #   cffi
 pyflakes==2.3.1
     # via flake8
-pygments==2.9.0
-    # via
-    #   furo
-    #   sphinx
 pyparsing==2.4.7
     # via
     #   -r requirements.txt
@@ -234,7 +211,6 @@ python-slugify==4.0.1
 pytz==2021.1
     # via
     #   -r requirements.txt
-    #   babel
     #   django
     #   flattentool
 requests==2.25.1
@@ -245,7 +221,6 @@ requests==2.25.1
     #   libcove
     #   libcoveocds
     #   libcoveweb
-    #   sphinx
     #   transifex-client
 rfc3339-validator==0.1.4
     # via
@@ -275,28 +250,8 @@ six==1.16.0
     #   zodb
 smmap==4.0.0
     # via gitdb
-snowballstemmer==2.1.0
-    # via sphinx
 sortedcontainers==2.4.0
     # via hypothesis
-soupsieve==2.3.1
-    # via beautifulsoup4
-sphinx==4.0.1
-    # via
-    #   -r requirements_dev.in
-    #   furo
-sphinxcontrib-applehelp==1.0.2
-    # via sphinx
-sphinxcontrib-devhelp==1.0.2
-    # via sphinx
-sphinxcontrib-htmlhelp==1.0.3
-    # via sphinx
-sphinxcontrib-jsmath==1.0.1
-    # via sphinx
-sphinxcontrib-qthelp==1.0.3
-    # via sphinx
-sphinxcontrib-serializinghtml==1.1.4
-    # via sphinx
 sqlparse==0.4.2
     # via
     #   -r requirements.txt
