@@ -11,7 +11,7 @@ First, and add a line to the `environ.Env`:
 
     env = environ.Env(
 	# set casting, default value
-	DB_NAME=(str, os.path.join(BASE_DIR, "db.sqlite3")),
+	DB_NAME=(str, str(BASE_DIR / "db.sqlite3")),
 	HOTJAR_ID=(str, ""),
 	HOTJAR_SV=(str, ""),
 	...

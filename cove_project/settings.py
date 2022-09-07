@@ -1,15 +1,16 @@
 import os
 from collections import OrderedDict
+from pathlib import Path
 
 import environ
 from cove import settings
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Build paths inside the project like this: BASE_DIR / "subdir".
+BASE_DIR = Path(__file__).resolve().parents[1]
 
 env = environ.Env(
     # set casting, default value
-    DB_NAME=(str, os.path.join(BASE_DIR, "db.sqlite3")),
+    DB_NAME=(str, str(BASE_DIR / "db.sqlite3")),
     FATHOM_ANALYTICS_DOMAIN=(str, "cdn.usefathom.com"),
     FATHOM_ANALYTICS_ID=(str, ""),
     HOTJAR_ID=(str, ""),
@@ -52,7 +53,7 @@ DELETE_FILES_AFTER_DAYS = env("DELETE_FILES_AFTER_DAYS")
 # We can't take MEDIA_ROOT and MEDIA_URL from cove settings,
 # ... otherwise the files appear under the BASE_DIR that is the Cove library install.
 # That could get messy. We want them to appear in our directory.
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = "/media/"
 
 SECRET_KEY = os.getenv("SECRET_KEY", "7ur)dt+e%1^e6$8_sd-@1h67_5zixe2&39%r2$$8_7v6fr_7ee")
@@ -91,7 +92,7 @@ MIDDLEWARE = (
 ROOT_URLCONF = "cove_project.urls"
 
 TEMPLATES = settings.TEMPLATES
-TEMPLATES[0]["DIRS"] = [os.path.join(BASE_DIR, "cove_project", "templates")]
+TEMPLATES[0]["DIRS"] = [BASE_DIR / "cove_project" / "templates"]
 TEMPLATES[0]["OPTIONS"]["context_processors"].append(
     "cove_project.context_processors.from_settings",
 )
@@ -129,7 +130,7 @@ USE_TZ = settings.USE_TZ
 
 LANGUAGES = settings.LANGUAGES
 
-LOCALE_PATHS = (os.path.join(BASE_DIR, "cove_ocds", "locale"),)
+LOCALE_PATHS = (BASE_DIR / "cove_ocds" / "locale",)
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
@@ -138,7 +139,7 @@ LOCALE_PATHS = (os.path.join(BASE_DIR, "cove_ocds", "locale"),)
 # ... otherwise the files appear under the BASE_DIR that is the Cove library install.
 # and that doesn't work with our standard Apache setup.
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_ROOT = BASE_DIR / "static"
 
 # Misc
 
