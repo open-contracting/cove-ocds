@@ -459,6 +459,7 @@ def test_get_schema_deprecated_paths():
 def test_explore_page(client, json_data):
     data = SuppliedData.objects.create()
     data.original_file.save("test.json", ContentFile(json_data))
+    data.original_file.close()
     data.current_app = "cove_ocds"
     resp = client.get(data.get_absolute_url())
     assert resp.status_code == 200
@@ -468,6 +469,7 @@ def test_explore_page(client, json_data):
 def test_explore_page_convert(client):
     data = SuppliedData.objects.create()
     data.original_file.save("test.json", ContentFile('{"releases":[]}'))
+    data.original_file.close()
     data.current_app = "cove_ocds"
     resp = client.get(data.get_absolute_url())
     assert resp.status_code == 200
@@ -484,6 +486,7 @@ def test_explore_page_convert(client):
 def test_explore_page_csv(client):
     data = SuppliedData.objects.create()
     data.original_file.save("test.csv", ContentFile("a,b"))
+    data.original_file.close()
     resp = client.get(data.get_absolute_url())
     assert resp.status_code == 200
     assert resp.context["conversion"] == "unflatten"
@@ -499,6 +502,7 @@ def test_explore_not_json(client):
         )
     ) as fp:
         data.original_file.save("test.json", UploadedFile(fp))
+        data.original_file.close()
     resp = client.get(data.get_absolute_url())
     assert resp.status_code == 200
     assert b"not well formed JSON" in resp.content
@@ -509,6 +513,7 @@ def test_explore_unconvertable_spreadsheet(client):
     data = SuppliedData.objects.create()
     with open(os.path.join("tests", "fixtures", "bad.xlsx"), "rb") as fp:
         data.original_file.save("basic.xlsx", UploadedFile(fp))
+        data.original_file.close()
     resp = client.get(data.get_absolute_url())
     assert resp.status_code == 200
     assert (
@@ -522,6 +527,7 @@ def test_explore_unconvertable_json(client):
     data = SuppliedData.objects.create()
     with open(os.path.join("tests", "fixtures", "unconvertable_json.json")) as fp:
         data.original_file.save("unconvertable_json.json", UploadedFile(fp))
+        data.original_file.close()
     resp = client.post(data.get_absolute_url(), {"flatten": "true"})
     assert resp.status_code == 200
     assert b"could not be converted" in resp.content
@@ -531,6 +537,7 @@ def test_explore_unconvertable_json(client):
 def test_explore_page_null_tag(client):
     data = SuppliedData.objects.create()
     data.original_file.save("test.json", ContentFile('{"releases":[{"tag":null}]}'))
+    data.original_file.close()
     data.current_app = "cove_ocds"
     resp = client.get(data.get_absolute_url())
     assert resp.status_code == 200
@@ -548,6 +555,7 @@ def test_explore_page_null_tag(client):
 def test_explore_schema_version(client, json_data):
     data = SuppliedData.objects.create()
     data.original_file.save("test.json", ContentFile(json_data))
+    data.original_file.close()
     data.current_app = "cove_ocds"
 
     resp = client.get(data.get_absolute_url())
@@ -575,6 +583,7 @@ def test_explore_schema_version(client, json_data):
 def test_wrong_schema_version_in_data(client):
     data = SuppliedData.objects.create()
     data.original_file.save(
+    data.original_file.close()
         "test.json", ContentFile('{"version": "1.bad", "releases": [{"ocid": "xx"}]}')
     )
     data.current_app = "cove_ocds"
@@ -599,6 +608,7 @@ def test_explore_schema_version_change(
         "rb",
     ) as fp:
         data.original_file.save(f"test.{file_type}", UploadedFile(fp))
+        data.original_file.close()
     data.current_app = "cove_ocds"
 
     with patch(
@@ -632,6 +642,7 @@ def test_explore_schema_version_change_with_json_to_xlsx(mock_object, client):
         os.path.join("tests", "fixtures", "tenders_releases_2_releases.json")
     ) as fp:
         data.original_file.save("test.json", UploadedFile(fp))
+        data.original_file.close()
     data.current_app = "cove_ocds"
 
     resp = client.get(data.get_absolute_url())
@@ -680,6 +691,7 @@ def test_data_supplied_schema_version(client):
         os.path.join("tests", "fixtures", "tenders_releases_2_releases.xlsx"), "rb"
     ) as fp:
         data.original_file.save("test.xlsx", UploadedFile(fp))
+        data.original_file.close()
     data.current_app = "cove_ocds"
 
     assert data.schema_version == ""
@@ -865,6 +877,7 @@ def test_schema_ocds_extended_schema_file():
         )
     ) as fp:
         data.original_file.save("test.json", UploadedFile(fp))
+        data.original_file.close()
         fp.seek(0)
         json_data = json.load(fp)
     schema = SchemaOCDS(release_data=json_data)
@@ -905,6 +918,7 @@ def test_schema_after_version_change(client):
         )
     ) as fp:
         data.original_file.save("test.json", UploadedFile(fp))
+        data.original_file.close()
 
     resp = client.post(data.get_absolute_url(), {"version": "1.1"})
     assert resp.status_code == 200
@@ -972,6 +986,7 @@ def test_schema_after_version_change_record(client):
         new_json.pop("version")
         new_json_file = io.StringIO(json.dumps(new_json))
         data.original_file.save("test.json", UploadedFile(new_json_file))
+        data.original_file.close()
 
     resp = client.post(data.get_absolute_url(), {"version": "1.1"})
     assert resp.status_code == 200
@@ -1273,6 +1288,7 @@ def test_context_api_transform_deprecations():
 def test_ocds_json_output_bad_data(json_data):
     data = SuppliedData.objects.create()
     data.original_file.save("bad_data.json", ContentFile(json_data))
+    data.original_file.close()
     with pytest.raises(APIException):
         ocds_json_output(
             data.upload_dir(),

@@ -24,7 +24,6 @@ jobs:
       - name: Run checks and tests
         env:
           PYTHONWARNINGS: error
-          SECRET_KEY: https://github.com/OpenDataServices/lib-cove-web/pull/100
         run: |
           ./manage.py migrate
           ./manage.py makemigrations --check --dry-run

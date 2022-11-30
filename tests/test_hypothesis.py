@@ -44,6 +44,7 @@ def test_get_releases_aggregates_dict(json_data):
 def test_explore_page(client, current_app, json_data):
     data = SuppliedData.objects.create()
     data.original_file.save("test.json", ContentFile(json.dumps(json_data)))
+    data.original_file.close()
     data.current_app = current_app
     resp = client.get(data.get_absolute_url())
     assert resp.status_code == 200
@@ -58,6 +59,7 @@ def test_explore_page_duplicate_ids(client, current_app, json_data):
     duplicate_id_releases = {"releases": [{"id": json_data}, {"id": json_data}]}
     data = SuppliedData.objects.create()
     data.original_file.save("test.json", ContentFile(json.dumps(duplicate_id_releases)))
+    data.original_file.close()
     data.current_app = current_app
     resp = client.get(data.get_absolute_url())
     assert resp.status_code == 200
