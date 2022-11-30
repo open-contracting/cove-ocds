@@ -459,42 +459,35 @@ def test_get_schema_deprecated_paths():
 def test_explore_page(client, json_data):
     data = SuppliedData.objects.create()
     data.original_file.save("test.json", ContentFile(json_data))
-    data.original_file.close()
     data.current_app = "cove_ocds"
     resp = client.get(data.get_absolute_url())
     assert resp.status_code == 200
-    resp.close()
 
 
 @pytest.mark.django_db
 def test_explore_page_convert(client):
     data = SuppliedData.objects.create()
     data.original_file.save("test.json", ContentFile('{"releases":[]}'))
-    data.original_file.close()
     data.current_app = "cove_ocds"
     resp = client.get(data.get_absolute_url())
     assert resp.status_code == 200
     assert resp.context["conversion"] == "flattenable"
-    resp.close()
 
     resp = client.post(data.get_absolute_url(), {"flatten": "true"})
     assert resp.status_code == 200
     assert resp.context["conversion"] == "flatten"
     assert "converted_file_size" in resp.context
     assert "converted_file_size_titles" not in resp.context
-    resp.close()
 
 
 @pytest.mark.django_db
 def test_explore_page_csv(client):
     data = SuppliedData.objects.create()
     data.original_file.save("test.csv", ContentFile("a,b"))
-    data.original_file.close()
     resp = client.get(data.get_absolute_url())
     assert resp.status_code == 200
     assert resp.context["conversion"] == "unflatten"
     assert resp.context["converted_file_size"] == 22
-    resp.close()
 
 
 @pytest.mark.django_db
@@ -506,11 +499,9 @@ def test_explore_not_json(client):
         )
     ) as fp:
         data.original_file.save("test.json", UploadedFile(fp))
-        data.original_file.close()
     resp = client.get(data.get_absolute_url())
     assert resp.status_code == 200
     assert b"not well formed JSON" in resp.content
-    resp.close()
 
 
 @pytest.mark.django_db
@@ -518,14 +509,12 @@ def test_explore_unconvertable_spreadsheet(client):
     data = SuppliedData.objects.create()
     with open(os.path.join("tests", "fixtures", "bad.xlsx"), "rb") as fp:
         data.original_file.save("basic.xlsx", UploadedFile(fp))
-        data.original_file.close()
     resp = client.get(data.get_absolute_url())
     assert resp.status_code == 200
     assert (
         b"We think you tried to supply a spreadsheet, but we failed to convert it."
         in resp.content
     )
-    resp.close()
 
 
 @pytest.mark.django_db
@@ -533,7 +522,6 @@ def test_explore_unconvertable_json(client):
     data = SuppliedData.objects.create()
     with open(os.path.join("tests", "fixtures", "unconvertable_json.json")) as fp:
         data.original_file.save("unconvertable_json.json", UploadedFile(fp))
-        data.original_file.close()
     resp = client.post(data.get_absolute_url(), {"flatten": "true"})
     assert resp.status_code == 200
     assert b"could not be converted" in resp.content
@@ -543,11 +531,9 @@ def test_explore_unconvertable_json(client):
 def test_explore_page_null_tag(client):
     data = SuppliedData.objects.create()
     data.original_file.save("test.json", ContentFile('{"releases":[{"tag":null}]}'))
-    data.original_file.close()
     data.current_app = "cove_ocds"
     resp = client.get(data.get_absolute_url())
     assert resp.status_code == 200
-    resp.close()
 
 
 @pytest.mark.django_db
@@ -562,7 +548,6 @@ def test_explore_page_null_tag(client):
 def test_explore_schema_version(client, json_data):
     data = SuppliedData.objects.create()
     data.original_file.save("test.json", ContentFile(json_data))
-    data.original_file.close()
     data.current_app = "cove_ocds"
 
     resp = client.get(data.get_absolute_url())
@@ -584,7 +569,6 @@ def test_explore_schema_version(client, json_data):
         assert "/1.0/" in resp.context["schema_url"]
         assert resp.context["version_used"] == "1.0"
         assert resp.context["version_used_display"] == "1.0"
-    resp.close()
 
 
 @pytest.mark.django_db
@@ -593,12 +577,10 @@ def test_wrong_schema_version_in_data(client):
     data.original_file.save(
         "test.json", ContentFile('{"version": "1.bad", "releases": [{"ocid": "xx"}]}')
     )
-    data.original_file.close()
     data.current_app = "cove_ocds"
     resp = client.get(data.get_absolute_url())
     assert resp.status_code == 200
     assert resp.context["version_used"] == OCDS_DEFAULT_SCHEMA_VERSION
-    resp.close()
 
 
 @pytest.mark.django_db
@@ -617,7 +599,6 @@ def test_explore_schema_version_change(
         "rb",
     ) as fp:
         data.original_file.save(f"test.{file_type}", UploadedFile(fp))
-        data.original_file.close()
     data.current_app = "cove_ocds"
 
     with patch(
@@ -632,8 +613,6 @@ def test_explore_schema_version_change(
         assert mock_object.called
         assert "/1.0/" in kwargs["schema_url"]
         assert kwargs["replace"] is False
-        resp.close()
-
         mock_object.reset_mock()
 
         resp = client.post(data.get_absolute_url(), {"version": "1.1"})
@@ -643,7 +622,6 @@ def test_explore_schema_version_change(
         assert mock_object.called
         assert "/1.1/" in kwargs["schema_url"]
         assert kwargs["replace"] is replace_after_post
-        resp.close()
 
 
 @pytest.mark.django_db
@@ -654,7 +632,6 @@ def test_explore_schema_version_change_with_json_to_xlsx(mock_object, client):
         os.path.join("tests", "fixtures", "tenders_releases_2_releases.json")
     ) as fp:
         data.original_file.save("test.json", UploadedFile(fp))
-        data.original_file.close()
     data.current_app = "cove_ocds"
 
     resp = client.get(data.get_absolute_url())
@@ -662,23 +639,17 @@ def test_explore_schema_version_change_with_json_to_xlsx(mock_object, client):
     assert resp.status_code == 200
     assert "/1.0/" in kwargs["schema_url"]
     assert kwargs["replace"] is False
-    resp.close()
-
     mock_object.reset_mock()
 
     resp = client.post(data.get_absolute_url(), {"version": "1.1"})
     args, kwargs = mock_object.call_args
     assert resp.status_code == 200
     assert kwargs["replace"] is False
-    resp.close()
-
     mock_object.reset_mock()
 
     # Convert to spreadsheet
     resp = client.post(data.get_absolute_url(), {"flatten": "true"})
     assert kwargs["replace"] is False
-    resp.close()
-
     mock_object.reset_mock()
 
     # Do replace with version change now that it's been converted once
@@ -686,8 +657,6 @@ def test_explore_schema_version_change_with_json_to_xlsx(mock_object, client):
     args, kwargs = mock_object.call_args
     assert resp.status_code == 200
     assert kwargs["replace"] is True
-    resp.close()
-
     mock_object.reset_mock()
 
     # Do not replace if the version does not changed
@@ -695,15 +664,13 @@ def test_explore_schema_version_change_with_json_to_xlsx(mock_object, client):
     args, kwargs = mock_object.call_args
     assert resp.status_code == 200
     assert kwargs["replace"] is False
-    resp.close()
-
     mock_object.reset_mock()
 
     resp = client.post(data.get_absolute_url(), {"version": "1.1"})
     args, kwargs = mock_object.call_args
     assert resp.status_code == 200
     assert kwargs["replace"] is True
-    resp.close()
+    mock_object.reset_mock()
 
 
 @pytest.mark.django_db
@@ -713,7 +680,6 @@ def test_data_supplied_schema_version(client):
         os.path.join("tests", "fixtures", "tenders_releases_2_releases.xlsx"), "rb"
     ) as fp:
         data.original_file.save("test.xlsx", UploadedFile(fp))
-        data.original_file.close()
     data.current_app = "cove_ocds"
 
     assert data.schema_version == ""
@@ -722,13 +688,11 @@ def test_data_supplied_schema_version(client):
     assert resp.status_code == 200
     assert resp.context["version_used"] == "1.0"
     assert SuppliedData.objects.get(id=data.id).schema_version == "1.0"
-    resp.close()
 
     resp = client.post(data.get_absolute_url(), {"version": "1.1"})
     assert resp.status_code == 200
     assert resp.context["version_used"] == "1.1"
     assert SuppliedData.objects.get(id=data.id).schema_version == "1.1"
-    resp.close()
 
 
 def test_get_additional_codelist_values():
@@ -901,7 +865,6 @@ def test_schema_ocds_extended_schema_file():
         )
     ) as fp:
         data.original_file.save("test.json", UploadedFile(fp))
-        data.original_file.close()
         fp.seek(0)
         json_data = json.load(fp)
     schema = SchemaOCDS(release_data=json_data)
@@ -942,7 +905,6 @@ def test_schema_after_version_change(client):
         )
     ) as fp:
         data.original_file.save("test.json", UploadedFile(fp))
-        data.original_file.close()
 
     resp = client.post(data.get_absolute_url(), {"version": "1.1"})
     assert resp.status_code == 200
@@ -964,6 +926,7 @@ def test_schema_after_version_change(client):
     resp = client.get(data.get_absolute_url())
     assert resp.status_code == 200
     assert "extended_schema.json" in resp.content.decode()
+
     with open(
         os.path.join(data.upload_dir(), "extended_schema.json")
     ) as extended_release_fp:
@@ -971,14 +934,15 @@ def test_schema_after_version_change(client):
             "mainProcurementCategory"
             in json.load(extended_release_fp)["definitions"]["Tender"]["properties"]
         )
+
     with open(
         os.path.join(data.upload_dir(), "validation_errors-3.json")
     ) as validation_errors_fp:
         assert "'version' is missing but required" in validation_errors_fp.read()
-    resp.close()
 
     resp = client.post(data.get_absolute_url(), {"version": "1.0"})
     assert resp.status_code == 200
+
     with open(
         os.path.join(data.upload_dir(), "extended_schema.json")
     ) as extended_release_fp:
@@ -986,11 +950,11 @@ def test_schema_after_version_change(client):
             "mainProcurementCategory"
             not in json.load(extended_release_fp)["definitions"]["Tender"]["properties"]
         )
+
     with open(
         os.path.join(data.upload_dir(), "validation_errors-3.json")
     ) as validation_errors_fp:
         assert "'version' is missing but required" not in validation_errors_fp.read()
-    resp.close()
 
 
 @pytest.mark.django_db
@@ -1008,7 +972,6 @@ def test_schema_after_version_change_record(client):
         new_json.pop("version")
         new_json_file = io.StringIO(json.dumps(new_json))
         data.original_file.save("test.json", UploadedFile(new_json_file))
-        data.original_file.close()
 
     resp = client.post(data.get_absolute_url(), {"version": "1.1"})
     assert resp.status_code == 200
@@ -1030,6 +993,7 @@ def test_schema_after_version_change_record(client):
     resp = client.get(data.get_absolute_url())
     assert resp.status_code == 200
     assert "extended_schema.json" in resp.content.decode()
+
     with open(
         os.path.join(data.upload_dir(), "extended_schema.json")
     ) as extended_release_fp:
@@ -1037,14 +1001,15 @@ def test_schema_after_version_change_record(client):
             "mainProcurementCategory"
             in json.load(extended_release_fp)["definitions"]["Tender"]["properties"]
         )
+
     with open(
         os.path.join(data.upload_dir(), "validation_errors-3.json")
     ) as validation_errors_fp:
         assert "'version' is missing but required" in validation_errors_fp.read()
-    resp.close()
 
     resp = client.post(data.get_absolute_url(), {"version": "1.0"})
     assert resp.status_code == 200
+
     with open(
         os.path.join(data.upload_dir(), "extended_schema.json")
     ) as extended_release_fp:
@@ -1052,11 +1017,11 @@ def test_schema_after_version_change_record(client):
             "mainProcurementCategory"
             not in json.load(extended_release_fp)["definitions"]["Tender"]["properties"]
         )
+
     with open(
         os.path.join(data.upload_dir(), "validation_errors-3.json")
     ) as validation_errors_fp:
         assert "'version' is missing but required" not in validation_errors_fp.read()
-    resp.close()
 
 
 @pytest.mark.parametrize(
@@ -1308,7 +1273,6 @@ def test_context_api_transform_deprecations():
 def test_ocds_json_output_bad_data(json_data):
     data = SuppliedData.objects.create()
     data.original_file.save("bad_data.json", ContentFile(json_data))
-    data.original_file.close()
     with pytest.raises(APIException):
         ocds_json_output(
             data.upload_dir(),
