@@ -48,6 +48,7 @@ def test_explore_page(client, current_app, json_data):
     data.current_app = current_app
     resp = client.get(data.get_absolute_url())
     assert resp.status_code == 200
+    resp.close()
 
 
 @pytest.mark.django_db
@@ -63,3 +64,4 @@ def test_explore_page_duplicate_ids(client, current_app, json_data):
     data.current_app = current_app
     resp = client.get(data.get_absolute_url())
     assert resp.status_code == 200
+    resp.close()
