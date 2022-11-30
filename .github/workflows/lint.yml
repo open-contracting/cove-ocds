@@ -16,4 +16,7 @@ jobs:
       - run: curl -s -S --retry 3 $BASEDIR/tests/install.sh | bash -
       - run: curl -s -S --retry 3 $BASEDIR/tests/script.sh | bash -
       - run: pip install -r requirements_dev.txt
-      - run: pytest /tmp/test_requirements.py
+      - env:
+          # https://github.com/OpenDataServices/lib-cove-web/pull/108
+          STANDARD_MAINTENANCE_SCRIPTS_IGNORE: cove,flattentool,requests,rfc6266_parser
+        run: pytest /tmp/test_requirements.py

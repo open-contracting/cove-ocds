@@ -1276,7 +1276,7 @@ def test_ocds_json_output_bad_data(json_data):
     with pytest.raises(APIException):
         ocds_json_output(
             data.upload_dir(),
-            data.original_file.file.name,
+            data.original_file.path,
             schema_version="",
             convert=False,
         )

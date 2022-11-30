@@ -59,7 +59,7 @@ def explore_ocds(request, pk):
 
     upload_dir = db_data.upload_dir()
     upload_url = db_data.upload_url()
-    file_name = db_data.original_file.file.name
+    file_name = db_data.original_file.path
     file_type = context["file_type"]
 
     post_version_choice = request.POST.get("version")
