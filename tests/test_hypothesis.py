@@ -21,6 +21,8 @@ general_json = st.recursive(
 )
 
 
+# Not sure if hypothesis is leaking a file descriptor. Can upgrade after migrating from Python 3.6.
+@pytest.mark.filterwarnings("ignore:unclosed <socket.socket fd=:ResourceWarning")
 @given(general_json)
 def test_get_releases_aggregates(json_data):
     get_releases_aggregates(json_data)
