@@ -934,6 +934,8 @@ def test_url_input_with_version(
         ),
     ],
 )
+# flattentool leaks file descriptors: https://github.com/OpenDataServices/flatten-tool/issues/412
+@pytest.mark.filterwarnings("ignore:unclosed file <_io.BufferedReader name=:ResourceWarning")
 def test_url_input_with_version_change(
     server_url,
     url_input_browser,
