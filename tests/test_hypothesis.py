@@ -53,6 +53,8 @@ def test_explore_page(client, current_app, json_data):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("current_app", ["cove-ocds"])
+# flattentool leaks file descriptors: https://github.com/OpenDataServices/flatten-tool/issues/412
+@pytest.mark.filterwarnings("ignore:unclosed file <_io.:ResourceWarning")
 @given(general_json)
 @example(1)
 @settings(max_examples=50, deadline=None, suppress_health_check=[HealthCheck.function_scoped_fixture])

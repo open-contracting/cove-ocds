@@ -214,7 +214,7 @@ NOT_FOUND_URL_EXT = "https://standard.open-contracting.org/latest/en/404.json"
 
 
 # flattentool leaks file descriptors: https://github.com/OpenDataServices/flatten-tool/issues/412
-@pytest.mark.filterwarnings("ignore:unclosed file <_io.BufferedReader name=:ResourceWarning")
+@pytest.mark.filterwarnings("ignore:unclosed :ResourceWarning")
 def test_get_releases_aggregates():
     assert get_releases_aggregates({}) == EMPTY_RELEASE_AGGREGATE
     assert get_releases_aggregates({"releases": []}) == EMPTY_RELEASE_AGGREGATE
