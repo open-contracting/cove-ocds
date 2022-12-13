@@ -11,4 +11,3 @@ pytest-django
 pytest-localserver
 requests
 selenium
-transifex-client
