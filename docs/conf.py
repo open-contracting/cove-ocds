@@ -22,8 +22,8 @@ sys.path.insert(0, os.path.abspath(".."))
 # -- Project information -----------------------------------------------------
 
 project = "OCDS Data Review Tool"
-copyright = "2020, Open Contracting Partnership & Open Data Services Co-operative"
-author = "Open Contracting Partnership & Open Data Services Co-operative"
+copyright = "2020, Open Contracting Partnership and Open Data Services Co-operative Limited"
+author = "Open Contracting Partnership and Open Data Services Co-operative Limited"
 
 
 # -- General configuration ---------------------------------------------------
