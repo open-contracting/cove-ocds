@@ -163,24 +163,14 @@ def test_common_index_elements(server_url, browser):
     )
     assert "Terms & Conditions" in browser.find_element_by_tag_name("body").text
     assert "Open Data Services" in browser.find_element_by_tag_name("body").text
-    assert (
-        "Open Data Services Co-operative"
-        not in browser.find_element_by_tag_name("body").text
-    )
     assert "360 Giving" not in browser.find_element_by_tag_name("body").text
 
 
 def test_terms_page(server_url, browser):
     browser.get(server_url + "terms/")
-    assert (
-        "Open Data Services Co-operative Limited"
-        in browser.find_element_by_tag_name("body").text
-    )
-    assert (
-        "Open Data Services Limited"
-        not in browser.find_element_by_tag_name("body").text
-    )
-    assert "360 Giving" not in browser.find_element_by_tag_name("body").text
+
+    assert "Open Contracting Partnership" not in browser.find_element_by_tag_name("body").text
+    assert "Open Data Services" not in browser.find_element_by_tag_name("body").text
 
 
 def test_accordion(server_url, browser):
