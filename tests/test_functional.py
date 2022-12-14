@@ -170,7 +170,6 @@ def test_terms_page(server_url, browser):
     browser.get(server_url + "terms/")
 
     assert "Open Contracting Partnership" in browser.find_element_by_tag_name("body").text
-    assert "Open Data Services" not in browser.find_element_by_tag_name("body").text
 
 
 def test_accordion(server_url, browser):
