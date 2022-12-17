@@ -88,6 +88,8 @@ def url_input_browser(request, server_url, browser, httpserver):
         ),
     ],
 )
+# An unclosed /tmp/flattentool- file from another test might cause a delayed error.
+@pytest.mark.filterwarnings("ignore:unclosed file <_io.:ResourceWarning")
 def test_footer_ocds(server_url, browser, link_text, expected_text, css_selector, url):
     browser.get(server_url)
     footer = browser.find_element_by_id("footer")
