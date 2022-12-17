@@ -6,7 +6,7 @@ Key Field Information is a summary of key statistics about the data that's been 
 Before you start
 ----------------
 
-These instructions assume that you are familiar with OCDS, Django and Python development. The index page of these documents give instructions on how to set up and run the Data Review Tool locally, for development purposes. These instructions also assume that you're working on improvements to the live OCDS Data Review Tool, but they're equally relevant if you're modifying the DRT for a particular local use case. If you're contributing to the live DRT but aren't part of a team doing so for OCP, please contact the OCDS Helpdesk to let us know what you're working on, so that we can help make sure that your work is relevant. 
+These instructions assume that you are familiar with OCDS, Django and Python development. The index page of these documents give instructions on how to set up and run the Data Review Tool locally, for development purposes. These instructions also assume that you're working on improvements to the live OCDS Data Review Tool, but they're equally relevant if you're modifying the DRT for a particular local use case. If you're contributing to the live DRT but aren't part of a team doing so for OCP, please contact the Data Support Team to let us know what you're working on, so that we can help make sure that your work is relevant. 
 
 Because adding to KFI requires changes in both lib-cove-ocds and cove-ocds, you might find it helpful to install lib-cove-ocds using ``pip``'s ``-e`` option, which will ensure that changes that you make to your lib-cove-ocds installation are immediately available in your cove-ocds installation. To do this, simply run ``pip install -e /path/to/lib-cove-ocds`` after installing the normal development requirements. 
 
@@ -99,7 +99,7 @@ In this case, we can carry out the same calculation with ``jq`` and basic UNIX c
 
 (note that various values can be can be null or missing, hence using the ? so that jq doesn't stop with an error)
 
-``EXPECTED_RELEASE_AGGREGATE_RANDOM`` is populated with the expected results from `fixtures/samplerubbish.json <https://github.com/open-contracting/cove-ocds/blob/main/tests/fixtures/samplerubbish.json>`_. This is a large OCDS JSON file that's nonsense, and is intended to provide a more robust test of the code. If the KFI that you're adding can't be calculated from the existing data in that file, then contact the OCDS Helpdesk to discuss generating a new version of the file that does include the relevant fields. 
+``EXPECTED_RELEASE_AGGREGATE_RANDOM`` is populated with the expected results from `fixtures/samplerubbish.json <https://github.com/open-contracting/cove-ocds/blob/main/tests/fixtures/samplerubbish.json>`_. This is a large OCDS JSON file that's nonsense, and is intended to provide a more robust test of the code. If the KFI that you're adding can't be calculated from the existing data in that file, then contact the Data Support Team to discuss generating a new version of the file that does include the relevant fields. 
 
 .. code-block:: bash
 
