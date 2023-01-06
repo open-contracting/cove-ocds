@@ -78,7 +78,7 @@ Because the DRT interface is fully translated, don't forget to add :doc:`transla
 Adding tests
 ------------
 
-Beacuse the DRT has a lib+app architecture, we need to add tests to both the library (lib-cove-ocds) and the app (cove-ocds). This does mean that there's some duplication, but it helps to locate errors when they occur. Because there's already tests for the adjacent code, we will be modifying what's already there rather than adding new tests.
+Because the DRT has a lib+app architecture, we need to add tests to both the library (lib-cove-ocds) and the app (cove-ocds). This does mean that there's some duplication, but it helps to locate errors when they occur. Because there's already tests for the adjacent code, we will be modifying what's already there rather than adding new tests.
 
 First, we'll look at the `unit tests in lib-cove-ocds <https://github.com/open-contracting/lib-cove-ocds/blob/main/tests/lib/test_common_checks.py>`_
 
