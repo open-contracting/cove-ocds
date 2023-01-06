@@ -307,7 +307,7 @@ msgstr ""
 #: cove_ocds/templates/cove_ocds/explore_base.html:37
 msgid ""
 "Switching the schema version will result in changes to CoVE output and "
-"conversions. If you revisit or share this URL, the lastest version selected "
+"conversions. If you revisit or share this URL, the latest version selected "
 "will be used to check your data"
 msgstr ""
 
