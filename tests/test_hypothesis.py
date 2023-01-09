@@ -28,6 +28,8 @@ def test_get_releases_aggregates(json_data):
     get_releases_aggregates(json_data)
 
 
+# Not sure if hypothesis is leaking a file descriptor. Can upgrade after migrating from Python 3.6.
+@pytest.mark.filterwarnings("ignore:unclosed <socket.socket fd=:ResourceWarning")
 @given(general_json)
 @settings(suppress_health_check=[HealthCheck.too_slow])
 def test_get_releases_aggregates_dict(json_data):
