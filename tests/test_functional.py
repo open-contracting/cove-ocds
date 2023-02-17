@@ -140,6 +140,8 @@ def test_index_page_ocds_links(server_url, browser, css_id, link_text, url):
     assert url in href
 
 
+# flattentool leaks file descriptors: https://github.com/OpenDataServices/flatten-tool/issues/412
+@pytest.mark.filterwarnings("ignore:unclosed file <_io.:ResourceWarning")
 def test_common_index_elements(server_url, browser):
     browser.get(server_url)
     browser.find_element_by_css_selector("#more-information .panel-title").click()
@@ -498,6 +500,8 @@ def test_500_error(server_url, browser):
         ),
     ],
 )
+# flattentool leaks file descriptors: https://github.com/OpenDataServices/flatten-tool/issues/412
+@pytest.mark.filterwarnings("ignore:unclosed file <_io.:ResourceWarning")
 def test_url_input(
     server_url,
     url_input_browser,
