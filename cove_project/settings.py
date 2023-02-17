@@ -190,8 +190,6 @@ COVE_CONFIG = {
 # Set default schema version to the latest version
 COVE_CONFIG["schema_version"] = list(COVE_CONFIG["schema_version_choices"].keys())[-1]
 
-URL_PREFIX = "review/"
-
 # Because of how the standard site proxies traffic, we want to use this
 USE_X_FORWARDED_HOST = True
 
