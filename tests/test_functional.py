@@ -15,9 +15,7 @@ BROWSER = os.environ.get("BROWSER", "ChromeHeadless")
 
 OCDS_DEFAULT_SCHEMA_VERSION = settings.COVE_CONFIG["schema_version"]
 OCDS_SCHEMA_VERSIONS = settings.COVE_CONFIG["schema_version_choices"]
-OCDS_SCHEMA_VERSIONS_DISPLAY = [
-    display_url[0] for version, display_url in OCDS_SCHEMA_VERSIONS.items()
-]
+OCDS_SCHEMA_VERSIONS_DISPLAY = [display_url[0] for version, display_url in OCDS_SCHEMA_VERSIONS.items()]
 
 
 @pytest.fixture(scope="module")
@@ -51,8 +49,7 @@ def url_input_browser(request, server_url, browser, httpserver):
         if "CUSTOM_SERVER_URL" in os.environ:
             # Use urls pointing to GitHub if we have a custom (probably non local) server URL
             source_url = (
-                "https://raw.githubusercontent.com/open-contracting/cove-ocds/main/tests/fixtures/"
-                + source_filename
+                "https://raw.githubusercontent.com/open-contracting/cove-ocds/main/tests/fixtures/" + source_filename
             )
         else:
             source_url = httpserver.url + "/" + source_filename
@@ -60,9 +57,7 @@ def url_input_browser(request, server_url, browser, httpserver):
         browser.get(server_url)
         time.sleep(0.5)
         browser.find_element_by_id("id_source_url").send_keys(source_url)
-        browser.find_element_by_css_selector(
-            "#fetchURL > div.form-group > button.btn.btn-primary"
-        ).click()
+        browser.find_element_by_css_selector("#fetchURL > div.form-group > button.btn.btn-primary").click()
 
         if output_source_url:
             return browser, source_url
@@ -151,18 +146,9 @@ def test_common_index_elements(server_url, browser):
     browser.get(server_url)
     browser.find_element_by_css_selector("#more-information .panel-title").click()
     time.sleep(0.5)
-    assert (
-        "What happens to the data I provide to this site?"
-        in browser.find_element_by_tag_name("body").text
-    )
-    assert (
-        "Why do you delete data after 90 days?"
-        in browser.find_element_by_tag_name("body").text
-    )
-    assert (
-        "Why provide converted versions?"
-        in browser.find_element_by_tag_name("body").text
-    )
+    assert "What happens to the data I provide to this site?" in browser.find_element_by_tag_name("body").text
+    assert "Why do you delete data after 90 days?" in browser.find_element_by_tag_name("body").text
+    assert "Why provide converted versions?" in browser.find_element_by_tag_name("body").text
     assert "Terms & Conditions" in browser.find_element_by_tag_name("body").text
     assert "Open Data Services" in browser.find_element_by_tag_name("body").text
     assert "360 Giving" not in browser.find_element_by_tag_name("body").text
@@ -211,9 +197,7 @@ def test_500_error(server_url, browser):
     # Check for the exclamation icon
     # This helps to check that the theme including the css has been loaded
     # properly
-    icon_span = browser.find_element_by_class_name(
-        "panel-danger"
-    ).find_element_by_tag_name("span")
+    icon_span = browser.find_element_by_class_name("panel-danger").find_element_by_tag_name("span")
     assert "Glyphicons Halflings" in icon_span.value_of_css_property("font-family")
     assert icon_span.value_of_css_property("color") == "rgba(255, 255, 255, 1)"
 
@@ -223,8 +207,7 @@ def test_500_error(server_url, browser):
     [
         (
             "tenders_releases_2_releases.json",
-            ["Convert", "Schema", "OCDS release package schema version 1.0. You can"]
-            + OCDS_SCHEMA_VERSIONS_DISPLAY,
+            ["Convert", "Schema", "OCDS release package schema version 1.0. You can"] + OCDS_SCHEMA_VERSIONS_DISPLAY,
             ["Schema Extensions", "The schema version specified in the file is"],
             True,
         ),
@@ -465,9 +448,7 @@ def test_500_error(server_url, browser):
         ),
         (
             "bad_toplevel_list.json",
-            [
-                "OCDS JSON should have an object as the top level, the JSON you supplied does not."
-            ],
+            ["OCDS JSON should have an object as the top level, the JSON you supplied does not."],
             [],
             False,
         ),
@@ -601,9 +582,7 @@ def check_url_input_result_page(
     if conversion_successful:
         if source_filename.endswith(".json"):
             assert "JSON (Original)" in body_text
-            original_file = browser.find_element_by_link_text(
-                "JSON (Original)"
-            ).get_attribute("href")
+            original_file = browser.find_element_by_link_text("JSON (Original)").get_attribute("href")
             if "record" not in source_filename:
                 converted_file = browser.find_element_by_partial_link_text(
                     "Excel Spreadsheet (.xlsx) (Converted from Original using schema version"
@@ -611,18 +590,18 @@ def check_url_input_result_page(
                 assert "flattened.xlsx" in converted_file
         elif source_filename.endswith(".xlsx"):
             assert "(.xlsx) (Original)" in body_text
-            original_file = browser.find_element_by_link_text(
-                "Excel Spreadsheet (.xlsx) (Original)"
-            ).get_attribute("href")
+            original_file = browser.find_element_by_link_text("Excel Spreadsheet (.xlsx) (Original)").get_attribute(
+                "href"
+            )
             converted_file = browser.find_element_by_partial_link_text(
                 "JSON (Converted from Original using schema version"
             ).get_attribute("href")
             assert "unflattened.json" in converted_file
         elif source_filename.endswith(".csv"):
             assert "(.csv) (Original)" in body_text
-            original_file = browser.find_element_by_link_text(
-                "CSV Spreadsheet (.csv) (Original)"
-            ).get_attribute("href")
+            original_file = browser.find_element_by_link_text("CSV Spreadsheet (.csv) (Original)").get_attribute(
+                "href"
+            )
             converted_file = browser.find_element_by_partial_link_text(
                 "JSON (Converted from Original using schema version"
             ).get_attribute("href")
@@ -641,10 +620,7 @@ def check_url_input_result_page(
 
         if "record" not in source_filename:
             converted_file_response = requests.get(converted_file)
-            if (
-                source_filename
-                == "fundingproviders-grants_2_grants_titleswithoutrollup.xlsx"
-            ):
+            if source_filename == "fundingproviders-grants_2_grants_titleswithoutrollup.xlsx":
                 grant1 = converted_file_response.json()["grants"][1]
                 assert grant1["recipientOrganization"][0]["department"] == "Test data"
                 assert grant1["classifications"][0]["title"] == "Test"
@@ -660,10 +636,7 @@ DARK_GREEN = "rgba(155, 175, 0, 1)"
     ("source_filename", "heading_color"),
     [
         # If everything's fine, it should be green
-        (
-            "tenders_releases_2_releases.json",
-            DARK_GREEN
-        ),
+        ("tenders_releases_2_releases.json", DARK_GREEN),
         # It should be red on:
         # * Not valid against the schema
         (
@@ -701,7 +674,7 @@ def test_headlines_class(url_input_browser, source_filename, heading_color):
     actual = headlines_panel.find_element_by_class_name("panel-heading").value_of_css_property("background-color")
 
     # Check that this is actually the headlines panel
-    assert headlines_panel.text.startswith('Headlines')
+    assert headlines_panel.text.startswith("Headlines")
     assert heading_color == actual
 
 
@@ -743,9 +716,7 @@ def test_extension_validation_error_messages(url_input_browser):
 
 @pytest.mark.parametrize("warning_texts", [[], []])
 @pytest.mark.parametrize("flatten_or_unflatten", ["flatten", "unflatten"])
-def test_flattentool_warnings(
-    server_url, browser, httpserver, monkeypatch, warning_texts, flatten_or_unflatten
-):
+def test_flattentool_warnings(server_url, browser, httpserver, monkeypatch, warning_texts, flatten_or_unflatten):
     # If we're testing a remove server then we can't run this test as we can't
     # set up the mocks
     if "CUSTOM_SERVER_URL" in os.environ:
@@ -786,8 +757,7 @@ def test_flattentool_warnings(
     if "CUSTOM_SERVER_URL" in os.environ:
         # Use urls pointing to GitHub if we have a custom (probably non local) server URL
         source_url = (
-            "https://raw.githubusercontent.com/open-contracting/cove-ocds/main/tests/fixtures/"
-            + source_filename
+            "https://raw.githubusercontent.com/open-contracting/cove-ocds/main/tests/fixtures/" + source_filename
         )
     else:
         source_url = httpserver.url + "/" + source_filename
@@ -807,22 +777,14 @@ def test_flattentool_warnings(
         assert "conversion Warnings" not in body_text
 
 
-@pytest.mark.parametrize(
-    ("data_url"), ["data/0", "data/324ea8eb-f080-43ce-a8c1-9f47b28162f3"]
-)
+@pytest.mark.parametrize(("data_url"), ["data/0", "data/324ea8eb-f080-43ce-a8c1-9f47b28162f3"])
 def test_url_invalid_dataset_request(server_url, browser, data_url):
     # Test a badly formed hexadecimal UUID string
     browser.get(server_url + data_url)
-    assert (
-        "We don't seem to be able to find the data you requested."
-        in browser.find_element_by_tag_name("body").text
-    )
+    assert "We don't seem to be able to find the data you requested." in browser.find_element_by_tag_name("body").text
     # Test for well formed UUID that doesn't identify any dataset that exists
     browser.get(server_url + "data/38e267ce-d395-46ba-acbf-2540cdd0c810")
-    assert (
-        "We don't seem to be able to find the data you requested."
-        in browser.find_element_by_tag_name("body").text
-    )
+    assert "We don't seem to be able to find the data you requested." in browser.find_element_by_tag_name("body").text
     assert "360 Giving" not in browser.find_element_by_tag_name("body").text
     # 363 - Tests there is padding round the 'go to home' button
     success_button = browser.find_element_by_class_name("success-button")
@@ -1015,9 +977,7 @@ def test_url_input_with_version_change(
 )
 # flattentool leaks file descriptors: https://github.com/OpenDataServices/flatten-tool/issues/412
 @pytest.mark.filterwarnings("ignore:unclosed file <_io.:ResourceWarning")
-def test_url_input_with_extensions(
-    server_url, url_input_browser, httpserver, source_filename, expected, not_expected
-):
+def test_url_input_with_extensions(server_url, url_input_browser, httpserver, source_filename, expected, not_expected):
     browser = url_input_browser(source_filename)
     schema_extension_box = browser.find_element_by_id("schema-extensions").text
 
@@ -1074,9 +1034,7 @@ def test_url_input_extension_headlines(
     ("source_filename", "expected", "not_expected"),
     [("tenders_releases_extra_data.json", ["uniquedata"], [])],
 )
-def test_ocds_show(
-    server_url, url_input_browser, httpserver, source_filename, expected, not_expected
-):
+def test_ocds_show(server_url, url_input_browser, httpserver, source_filename, expected, not_expected):
     browser = url_input_browser(source_filename)
 
     browser.find_element_by_css_selector("a[href='#extra']").click()
@@ -1108,9 +1066,7 @@ def test_ocds_show(
         ),
     ],
 )
-def test_additional_checks_section(
-    server_url, url_input_browser, httpserver, source_filename, expected, not_expected
-):
+def test_additional_checks_section(server_url, url_input_browser, httpserver, source_filename, expected, not_expected):
     browser = url_input_browser(source_filename)
     additional_checks_text = browser.find_element_by_id("additionalChecksTable").text
 
@@ -1120,9 +1076,7 @@ def test_additional_checks_section(
 
 
 @pytest.mark.parametrize("source_filename", ["full_record.json"])
-def test_additional_checks_section_not_being_displayed(
-    server_url, url_input_browser, httpserver, source_filename
-):
+def test_additional_checks_section_not_being_displayed(server_url, url_input_browser, httpserver, source_filename):
     """Additional checks sections should only be displayed when there are results"""
 
     browser = url_input_browser(source_filename)
@@ -1132,13 +1086,9 @@ def test_additional_checks_section_not_being_displayed(
 
 
 @pytest.mark.parametrize("source_filename", ["basic_release_empty_fields.json"])
-def test_additional_checks_error_modal(
-    server_url, url_input_browser, httpserver, source_filename
-):
+def test_additional_checks_error_modal(server_url, url_input_browser, httpserver, source_filename):
     browser = url_input_browser(source_filename)
-    browser.find_element_by_css_selector(
-        'a[data-target=".additional-checks-1"]'
-    ).click()
+    browser.find_element_by_css_selector('a[data-target=".additional-checks-1"]').click()
     modal = browser.find_element_by_css_selector(".additional-checks-1")
     modal_text = modal.text
     table_rows = browser.find_elements_by_css_selector(".additional-checks-1 tbody tr")
@@ -1147,9 +1097,7 @@ def test_additional_checks_error_modal(
     assert "releases/0/tender/items/0/additionalClassifications" in modal_text
     assert len(table_rows) == 4
 
-    browser.find_element_by_css_selector(
-        "div.modal.additional-checks-1 button.close"
-    ).click()
+    browser.find_element_by_css_selector("div.modal.additional-checks-1 button.close").click()
 
 
 @pytest.fixture
@@ -1385,9 +1333,7 @@ def test_records_table_releases_count(skip_if_remote, url_input_browser):
         ),
     ],
 )
-def test_key_field_information(
-    server_url, url_input_browser, httpserver, source_filename, expected
-):
+def test_key_field_information(server_url, url_input_browser, httpserver, source_filename, expected):
     """Check that KFIs are displaying"""
 
     browser = url_input_browser(source_filename)

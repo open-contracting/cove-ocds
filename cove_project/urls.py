@@ -3,7 +3,6 @@ from cove.urls import urlpatterns
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import re_path
-from django.views.generic import RedirectView
 
 import cove_ocds.views
 

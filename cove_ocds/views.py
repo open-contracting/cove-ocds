@@ -50,12 +50,9 @@ def explore_ocds(request, pk):
     lib_cove_ocds_config = LibCoveOCDSConfig()
     lib_cove_ocds_config.config["current_language"] = translation.get_language()
     lib_cove_ocds_config.config["schema_version_choices"] = format_lang(
-        settings.COVE_CONFIG["schema_version_choices"],
-        request.LANGUAGE_CODE
+        settings.COVE_CONFIG["schema_version_choices"], request.LANGUAGE_CODE
     )
-    lib_cove_ocds_config.config["schema_codelists"] = settings.COVE_CONFIG[
-        "schema_codelists"
-    ]
+    lib_cove_ocds_config.config["schema_codelists"] = settings.COVE_CONFIG["schema_codelists"]
 
     upload_dir = db_data.upload_dir()
     upload_url = db_data.upload_url()
@@ -70,21 +67,25 @@ def explore_ocds(request, pk):
         # open the data first so we can inspect for record package
         with open(file_name, encoding="utf-8") as fp:
             try:
-                json_data = json.load(
-                    fp, parse_float=Decimal, object_pairs_hook=OrderedDict
-                )
+                json_data = json.load(fp, parse_float=Decimal, object_pairs_hook=OrderedDict)
             except UnicodeError as err:
-                raise CoveInputDataError(context={
-                    'sub_title': _("Sorry, we can't process that data"),
-                    'link': 'index',
-                    'link_text': _('Try Again'),
-                    'msg': format_html(
-                        _("The file that you uploaded doesn't appear to be well formed JSON. OCDS JSON follows the "
-                          "I-JSON format, which requires UTF-8 encoding. Ensure that your file uses UTF-8 encoding, "
-                          'then try uploading again.\n\n<span class="glyphicon glyphicon-exclamation-sign" '
-                          'aria-hidden="true"></span> <strong>Error message:</strong> {}'), err),
-                    'error': format(err)
-                })
+                raise CoveInputDataError(
+                    context={
+                        "sub_title": _("Sorry, we can't process that data"),
+                        "link": "index",
+                        "link_text": _("Try Again"),
+                        "msg": format_html(
+                            _(
+                                "The file that you uploaded doesn't appear to be well formed JSON. OCDS JSON follows "
+                                "the I-JSON format, which requires UTF-8 encoding. Ensure that your file uses UTF-8 "
+                                'encoding, then try uploading again.\n\n<span class="glyphicon glyphicon-exclamation-'
+                                'sign" aria-hidden="true"></span> <strong>Error message:</strong> {}'
+                            ),
+                            err,
+                        ),
+                        "error": format(err),
+                    }
+                )
             except ValueError as err:
                 raise CoveInputDataError(
                     context={
@@ -109,9 +110,7 @@ def explore_ocds(request, pk):
                         "sub_title": _("Sorry, we can't process that data"),
                         "link": "index",
                         "link_text": _("Try Again"),
-                        "msg": _(
-                            "OCDS JSON should have an object as the top level, the JSON you supplied does not."
-                        ),
+                        "msg": _("OCDS JSON should have an object as the top level, the JSON you supplied does not."),
                     }
                 )
 
@@ -122,7 +121,7 @@ def explore_ocds(request, pk):
                 select_version=select_version,
                 release_data=json_data,
                 lib_cove_ocds_config=lib_cove_ocds_config,
-                record_pkg="records" in json_data
+                record_pkg="records" in json_data,
             )
 
             if schema_ocds.missing_package:
@@ -131,9 +130,7 @@ def explore_ocds(request, pk):
                 # This shouldn't happen unless the user sends random POST data.
                 exceptions.raise_invalid_version_argument(post_version_choice)
             if schema_ocds.invalid_version_data:
-                if isinstance(version_in_data, str) and re.compile(
-                    r"^\d+\.\d+\.\d+$"
-                ).match(version_in_data):
+                if isinstance(version_in_data, str) and re.compile(r"^\d+\.\d+\.\d+$").match(version_in_data):
                     exceptions.raise_invalid_version_data_with_patch(version_in_data)
                 else:
                     if not isinstance(version_in_data, str):
@@ -154,7 +151,7 @@ def explore_ocds(request, pk):
                 replace_converted = replace and os.path.exists(converted_path + ".xlsx")
 
                 with warnings.catch_warnings():
-                    warnings.filterwarnings('ignore')  # flattentool uses UserWarning, so can't set a specific category
+                    warnings.filterwarnings("ignore")  # flattentool uses UserWarning, so can't set a specific category
 
                     convert_json_context = convert_json(
                         upload_dir,
@@ -171,16 +168,12 @@ def explore_ocds(request, pk):
 
     else:
         # Use the lowest release pkg schema version accepting 'version' field
-        metatab_schema_url = SchemaOCDS(
-            select_version="1.1", lib_cove_ocds_config=lib_cove_ocds_config
-        ).pkg_schema_url
+        metatab_schema_url = SchemaOCDS(select_version="1.1", lib_cove_ocds_config=lib_cove_ocds_config).pkg_schema_url
 
         with warnings.catch_warnings():
-            warnings.filterwarnings('ignore')  # flattentool uses UserWarning, so can't set a specific category
+            warnings.filterwarnings("ignore")  # flattentool uses UserWarning, so can't set a specific category
 
-            metatab_data = get_spreadsheet_meta_data(
-                upload_dir, file_name, metatab_schema_url, file_type
-            )
+            metatab_data = get_spreadsheet_meta_data(upload_dir, file_name, metatab_schema_url, file_type)
 
         if "version" not in metatab_data:
             metatab_data["version"] = "1.0"
@@ -215,7 +208,7 @@ def explore_ocds(request, pk):
         pkg_url = schema_ocds.pkg_schema_url
 
         with warnings.catch_warnings():
-            warnings.filterwarnings('ignore')  # flattentool uses UserWarning, so can't set a specific category
+            warnings.filterwarnings("ignore")  # flattentool uses UserWarning, so can't set a specific category
 
             context.update(
                 convert_spreadsheet(
@@ -231,9 +224,7 @@ def explore_ocds(request, pk):
             )
 
         with open(context["converted_path"], encoding="utf-8") as fp:
-            json_data = json.load(
-                fp, parse_float=Decimal, object_pairs_hook=OrderedDict
-            )
+            json_data = json.load(fp, parse_float=Decimal, object_pairs_hook=OrderedDict)
 
     if replace:
         if os.path.exists(validation_errors_path):
@@ -248,9 +239,7 @@ def explore_ocds(request, pk):
         {
             "data_schema_version": db_data.data_schema_version,
             "first_render": not db_data.rendered,
-            "validation_errors_grouped": group_validation_errors(
-                context["validation_errors"]
-            ),
+            "validation_errors_grouped": group_validation_errors(context["validation_errors"]),
         }
     )
 
@@ -272,9 +261,7 @@ def explore_ocds(request, pk):
         else:
             context["records"] = []
         if isinstance(json_data["records"], list) and len(json_data["records"]) < 100:
-            context["ocds_show_data"] = ocds_show_data(
-                json_data, ocds_show_deref_schema
-            )
+            context["ocds_show_data"] = ocds_show_data(json_data, ocds_show_deref_schema)
     else:
         context["release_or_record"] = "release"
         ocds_show_schema = SchemaOCDS(record_pkg=False)
@@ -282,13 +269,8 @@ def explore_ocds(request, pk):
         template = "cove_ocds/explore_release.html"
         if hasattr(json_data, "get") and hasattr(json_data.get("releases"), "__iter__"):
             context["releases"] = json_data["releases"]
-            if (
-                isinstance(json_data["releases"], list)
-                and len(json_data["releases"]) < 100
-            ):
-                context["ocds_show_data"] = ocds_show_data(
-                    json_data, ocds_show_deref_schema
-                )
+            if isinstance(json_data["releases"], list) and len(json_data["releases"]) < 100:
+                context["ocds_show_data"] = ocds_show_data(json_data, ocds_show_deref_schema)
 
             # Parse release dates into objects so the template can format them.
             for release in context["releases"]:
@@ -311,9 +293,7 @@ def explore_ocds(request, pk):
                 for field in date_fields:
                     if context["releases_aggregates"].get(field):
                         if validate_rfc3339(context["releases_aggregates"][field]):
-                            context["releases_aggregates"][field] = parser.parse(
-                                context["releases_aggregates"][field]
-                            )
+                            context["releases_aggregates"][field] = parser.parse(context["releases_aggregates"][field])
                         else:
                             context["releases_aggregates"][field] = None
         else:

@@ -18,23 +18,20 @@ env = environ.Env(
     HOTJAR_DATE_INFO=(str, ""),
     RELEASES_OR_RECORDS_TABLE_LENGTH=(int, 25),
     DELETE_FILES_AFTER_DAYS=(int, 90),
-    SENTRY_DSN=(str, ''),
+    SENTRY_DSN=(str, ""),
 )
 
 # We use the setting to choose whether to show the section about Sentry in the
 # terms and conditions
-SENTRY_DSN = env('SENTRY_DSN')
+SENTRY_DSN = env("SENTRY_DSN")
 
 if SENTRY_DSN:
     import sentry_sdk
     from sentry_sdk.integrations.django import DjangoIntegration
     from sentry_sdk.integrations.logging import ignore_logger
 
-    ignore_logger('django.security.DisallowedHost')
-    sentry_sdk.init(
-        dsn=env('SENTRY_DSN'),
-        integrations=[DjangoIntegration()]
-    )
+    ignore_logger("django.security.DisallowedHost")
+    sentry_sdk.init(dsn=env("SENTRY_DSN"), integrations=[DjangoIntegration()])
 
 FATHOM = {
     "domain": env("FATHOM_ANALYTICS_DOMAIN"),
@@ -102,9 +99,7 @@ WSGI_APPLICATION = "cove_project.wsgi.application"
 # We can't take DATABASES from cove settings,
 # ... otherwise the files appear under the BASE_DIR that is the Cove library install.
 # That could get messy. We want them to appear in our directory.
-DATABASES = {
-    "default": {"ENGINE": "django.db.backends.sqlite3", "NAME": env("DB_NAME")}
-}
+DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": env("DB_NAME")}}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
