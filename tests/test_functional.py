@@ -153,7 +153,7 @@ def test_common_index_elements(server_url, browser):
 
 
 def test_terms_page(server_url, browser):
-    browser.get(server_url + "terms/")
+    browser.get(server_url + "/terms/")
 
     assert "Open Contracting Partnership" in browser.find_element_by_tag_name("body").text
 
@@ -189,7 +189,7 @@ def test_accordion(server_url, browser):
 
 
 def test_500_error(server_url, browser):
-    browser.get(server_url + "test/500")
+    browser.get(server_url + "/test/500")
     # Check that our nice error message is there
     assert "Something went wrong" in browser.find_element_by_tag_name("body").text
     # Check for the exclamation icon
@@ -775,13 +775,13 @@ def test_flattentool_warnings(server_url, browser, httpserver, monkeypatch, warn
         assert "conversion Warnings" not in body_text
 
 
-@pytest.mark.parametrize(("data_url"), ["data/0", "data/324ea8eb-f080-43ce-a8c1-9f47b28162f3"])
+@pytest.mark.parametrize(("data_url"), ["/data/0", "/data/324ea8eb-f080-43ce-a8c1-9f47b28162f3"])
 def test_url_invalid_dataset_request(server_url, browser, data_url):
     # Test a badly formed hexadecimal UUID string
     browser.get(server_url + data_url)
     assert "We don't seem to be able to find the data you requested." in browser.find_element_by_tag_name("body").text
     # Test for well formed UUID that doesn't identify any dataset that exists
-    browser.get(server_url + "data/38e267ce-d395-46ba-acbf-2540cdd0c810")
+    browser.get(server_url + "/data/38e267ce-d395-46ba-acbf-2540cdd0c810")
     assert "We don't seem to be able to find the data you requested." in browser.find_element_by_tag_name("body").text
     assert "360 Giving" not in browser.find_element_by_tag_name("body").text
     # 363 - Tests there is padding round the 'go to home' button
