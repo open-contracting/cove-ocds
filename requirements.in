@@ -3,8 +3,7 @@ django-bootstrap3
 django-environ
 libcove
 libcoveocds
-# https://github.com/OpenDataServices/lib-cove-web/pull/108
--e git+https://github.com/jpmckinney/lib-cove-web.git@unclosed-file#egg=libcoveweb
+libcoveweb
 python-dateutil
 rfc3339-validator
 sentry-sdk
