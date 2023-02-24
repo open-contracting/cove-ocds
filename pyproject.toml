@@ -1,2 +1,9 @@
+[tool.black]
+line-length = 119
+
+[tool.isort]
+profile = 'black'
+line_length = 119
+
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = 'cove_project.settings'

@@ -220,28 +220,19 @@ def test_get_releases_aggregates():
     assert get_releases_aggregates({"releases": []}) == EMPTY_RELEASE_AGGREGATE
     release_aggregate_3_empty = EMPTY_RELEASE_AGGREGATE.copy()
     release_aggregate_3_empty["release_count"] = 3
-    assert (
-        get_releases_aggregates({"releases": [{}, {}, {}]}) == release_aggregate_3_empty
-    )
+    assert get_releases_aggregates({"releases": [{}, {}, {}]}) == release_aggregate_3_empty
 
     with open(os.path.join("tests", "fixtures", "release_aggregate.json")) as fp:
         data = json.load(fp)
 
-    assert (
-        get_releases_aggregates({"releases": data["releases"]})
-        == EXPECTED_RELEASE_AGGREGATE
-    )
+    assert get_releases_aggregates({"releases": data["releases"]}) == EXPECTED_RELEASE_AGGREGATE
 
     # test if a release is duplicated
     actual = get_releases_aggregates({"releases": data["releases"] + data["releases"]})
     actual_cleaned = {key: actual[key] for key in actual if "doc" not in key}
     actual_cleaned.pop("contracts_without_awards")
 
-    expected_cleaned = {
-        key: EXPECTED_RELEASE_AGGREGATE[key]
-        for key in EXPECTED_RELEASE_AGGREGATE
-        if "doc" not in key
-    }
+    expected_cleaned = {key: EXPECTED_RELEASE_AGGREGATE[key] for key in EXPECTED_RELEASE_AGGREGATE if "doc" not in key}
     expected_cleaned["tags"] = {"planning": 2, "tender": 2}
     expected_cleaned.pop("contracts_without_awards")
     expected_cleaned["release_count"] = 2
@@ -253,9 +244,7 @@ def test_get_releases_aggregates():
         data = json.load(fp)
 
     actual = get_releases_aggregates(data)
-    actual_cleaned = {
-        key: actual[key] for key in actual if isinstance(actual[key], (str, int, float))
-    }
+    actual_cleaned = {key: actual[key] for key in actual if isinstance(actual[key], (str, int, float))}
 
     assert actual_cleaned == EXPECTED_RELEASE_AGGREGATE_RANDOM
 
@@ -271,21 +260,11 @@ def test_get_schema_validation_errors():
     schema_obj = SchemaOCDS(select_version="1.0")
     schema_name = schema_obj.pkg_schema_name
 
-    with open(
-        os.path.join("tests", "fixtures", "tenders_releases_2_releases.json")
-    ) as fp:
-        error_list = cove_common.get_schema_validation_errors(
-            json.load(fp), schema_obj, schema_name, {}, {}
-        )
+    with open(os.path.join("tests", "fixtures", "tenders_releases_2_releases.json")) as fp:
+        error_list = cove_common.get_schema_validation_errors(json.load(fp), schema_obj, schema_name, {}, {})
         assert len(error_list) == 0
-    with open(
-        os.path.join(
-            "tests", "fixtures", "tenders_releases_2_releases_invalid.json"
-        )
-    ) as fp:
-        error_list = cove_common.get_schema_validation_errors(
-            json.load(fp), schema_obj, schema_name, {}, {}
-        )
+    with open(os.path.join("tests", "fixtures", "tenders_releases_2_releases_invalid.json")) as fp:
+        error_list = cove_common.get_schema_validation_errors(json.load(fp), schema_obj, schema_name, {}, {})
         assert len(error_list) > 0
 
 
@@ -319,16 +298,10 @@ def test_get_json_data_deprecated_fields():
 
     schema_obj = SchemaOCDS()
     schema_obj.schema_host = os.path.join("tests", "fixtures/")  # "/" is for urljoin in lib-cove
-    schema_obj.pkg_schema_name = (
-        "release_package_schema_ref_release_schema_deprecated_fields.json"
-    )
-    schema_obj.pkg_schema_url = os.path.join(
-        schema_obj.schema_host, schema_obj.pkg_schema_name
-    )
+    schema_obj.pkg_schema_name = "release_package_schema_ref_release_schema_deprecated_fields.json"
+    schema_obj.pkg_schema_url = os.path.join(schema_obj.schema_host, schema_obj.pkg_schema_name)
     json_data_paths = cove_common.get_json_data_generic_paths(json_data_w_deprecations, generic_paths={})
-    deprecated_data_fields = cove_common.get_json_data_deprecated_fields(
-        json_data_paths, schema_obj
-    )
+    deprecated_data_fields = cove_common.get_json_data_deprecated_fields(json_data_paths, schema_obj)
     expected_result = OrderedDict(
         [
             (
@@ -352,25 +325,15 @@ def test_get_json_data_deprecated_fields():
     )
     for field_name in expected_result.keys():
         assert field_name in deprecated_data_fields
-        assert (
-            expected_result[field_name]["paths"]
-            == deprecated_data_fields[field_name]["paths"]
-        )
-        assert (
-            expected_result[field_name]["explanation"]
-            == deprecated_data_fields[field_name]["explanation"]
-        )
+        assert expected_result[field_name]["paths"] == deprecated_data_fields[field_name]["paths"]
+        assert expected_result[field_name]["explanation"] == deprecated_data_fields[field_name]["explanation"]
 
 
 def test_get_schema_deprecated_paths():
     schema_obj = SchemaOCDS()
     schema_obj.schema_host = os.path.join("tests", "fixtures/")  # "/" is for urljoin in lib-cove
-    schema_obj.pkg_schema_name = (
-        "release_package_schema_ref_release_schema_deprecated_fields.json"
-    )
-    schema_obj.pkg_schema_url = os.path.join(
-        schema_obj.schema_host, schema_obj.pkg_schema_name
-    )
+    schema_obj.pkg_schema_name = "release_package_schema_ref_release_schema_deprecated_fields.json"
+    schema_obj.pkg_schema_url = os.path.join(schema_obj.schema_host, schema_obj.pkg_schema_name)
     deprecated_paths = cove_common._get_schema_deprecated_paths(schema_obj)
     expected_results = [
         (
@@ -378,7 +341,10 @@ def test_get_schema_deprecated_paths():
             ("1.1", "Not a useful field as always has to be tender"),
         ),
         (
-            ("releases", "planning",),
+            (
+                "releases",
+                "planning",
+            ),
             ("1.1", "Testing deprecation for objects with '$ref'"),
         ),
         (("releases", "tender", "hasEnquiries"), ("1.1", "Deprecated just for fun")),
@@ -495,11 +461,7 @@ def test_explore_page_csv(client):
 @pytest.mark.django_db
 def test_explore_not_json(client):
     data = SuppliedData.objects.create()
-    with open(
-        os.path.join(
-            "tests", "fixtures", "tenders_releases_2_releases_not_json.json"
-        )
-    ) as fp:
+    with open(os.path.join("tests", "fixtures", "tenders_releases_2_releases_not_json.json")) as fp:
         data.original_file.save("test.json", UploadedFile(fp))
     resp = client.get(data.get_absolute_url())
     assert resp.status_code == 200
@@ -513,10 +475,7 @@ def test_explore_unconvertable_spreadsheet(client):
         data.original_file.save("basic.xlsx", UploadedFile(fp))
     resp = client.get(data.get_absolute_url())
     assert resp.status_code == 200
-    assert (
-        b"We think you tried to supply a spreadsheet, but we failed to convert it."
-        in resp.content
-    )
+    assert b"We think you tried to supply a spreadsheet, but we failed to convert it." in resp.content
 
 
 @pytest.mark.django_db
@@ -576,9 +535,7 @@ def test_explore_schema_version(client, json_data):
 @pytest.mark.django_db
 def test_wrong_schema_version_in_data(client):
     data = SuppliedData.objects.create()
-    data.original_file.save(
-        "test.json", ContentFile('{"version": "1.bad", "releases": [{"ocid": "xx"}]}')
-    )
+    data.original_file.save("test.json", ContentFile('{"version": "1.bad", "releases": [{"ocid": "xx"}]}'))
     data.current_app = "cove_ocds"
     resp = client.get(data.get_absolute_url())
     assert resp.status_code == 200
@@ -590,14 +547,10 @@ def test_wrong_schema_version_in_data(client):
     ("file_type", "converter", "replace_after_post"),
     [("xlsx", convert_spreadsheet, True), ("json", convert_json, False)],
 )
-def test_explore_schema_version_change(
-    client, file_type, converter, replace_after_post
-):
+def test_explore_schema_version_change(client, file_type, converter, replace_after_post):
     data = SuppliedData.objects.create()
     with open(
-        os.path.join(
-            "tests", "fixtures", f"tenders_releases_2_releases.{file_type}"
-        ),
+        os.path.join("tests", "fixtures", f"tenders_releases_2_releases.{file_type}"),
         "rb",
     ) as fp:
         data.original_file.save(f"test.{file_type}", UploadedFile(fp))
@@ -630,9 +583,7 @@ def test_explore_schema_version_change(
 @patch("cove_ocds.views.convert_json", side_effect=convert_json, autospec=True)
 def test_explore_schema_version_change_with_json_to_xlsx(mock_object, client):
     data = SuppliedData.objects.create()
-    with open(
-        os.path.join("tests", "fixtures", "tenders_releases_2_releases.json")
-    ) as fp:
+    with open(os.path.join("tests", "fixtures", "tenders_releases_2_releases.json")) as fp:
         data.original_file.save("test.json", UploadedFile(fp))
     data.current_app = "cove_ocds"
 
@@ -678,9 +629,7 @@ def test_explore_schema_version_change_with_json_to_xlsx(mock_object, client):
 @pytest.mark.django_db
 def test_data_supplied_schema_version(client):
     data = SuppliedData.objects.create()
-    with open(
-        os.path.join("tests", "fixtures", "tenders_releases_2_releases.xlsx"), "rb"
-    ) as fp:
+    with open(os.path.join("tests", "fixtures", "tenders_releases_2_releases.xlsx"), "rb") as fp:
         data.original_file.save("test.xlsx", UploadedFile(fp))
     data.current_app = "cove_ocds"
 
@@ -698,17 +647,11 @@ def test_data_supplied_schema_version(client):
 
 
 def test_get_additional_codelist_values():
-    with open(
-        os.path.join(
-            "tests", "fixtures", "tenders_releases_2_releases_codelists.json"
-        )
-    ) as fp:
+    with open(os.path.join("tests", "fixtures", "tenders_releases_2_releases_codelists.json")) as fp:
         json_data_w_additial_codelists = json.load(fp)
 
     schema_obj = SchemaOCDS(select_version="1.1")
-    additional_codelist_values = cove_common.get_additional_codelist_values(
-        schema_obj, json_data_w_additial_codelists
-    )
+    additional_codelist_values = cove_common.get_additional_codelist_values(schema_obj, json_data_w_additial_codelists)
 
     assert additional_codelist_values == {
         ("releases/tag"): {
@@ -833,9 +776,7 @@ def test_schema_ocds_constructor(
         ),
     ],
 )
-def test_schema_ocds_extensions(
-    release_data, extensions, invalid_extension, extended, extends_schema
-):
+def test_schema_ocds_extensions(release_data, extensions, invalid_extension, extended, extends_schema):
     schema = SchemaOCDS(release_data=release_data)
     assert schema.extensions == extensions
     assert not schema.extended
@@ -846,14 +787,10 @@ def test_schema_ocds_extensions(
 
     if extends_schema:
         assert "Metric" in schema_obj["definitions"].keys()
-        assert schema_obj["definitions"]["Award"]["properties"].get(
-            "agreedMetrics"
-        )
+        assert schema_obj["definitions"]["Award"]["properties"].get("agreedMetrics")
     else:
         assert "Metric" not in schema_obj["definitions"].keys()
-        assert not schema_obj["definitions"]["Award"]["properties"].get(
-            "agreedMetrics"
-        )
+        assert not schema_obj["definitions"]["Award"]["properties"].get("agreedMetrics")
 
 
 @pytest.mark.django_db
@@ -878,16 +815,10 @@ def test_schema_ocds_extended_schema_file():
     assert not schema.extended_schema_url
 
     schema.create_extended_schema_file(data.upload_dir(), data.upload_url())
-    assert schema.extended_schema_file == os.path.join(
-        data.upload_dir(), "extended_schema.json"
-    )
-    assert schema.extended_schema_url == os.path.join(
-        data.upload_url(), "extended_schema.json"
-    )
+    assert schema.extended_schema_file == os.path.join(data.upload_dir(), "extended_schema.json")
+    assert schema.extended_schema_url == os.path.join(data.upload_url(), "extended_schema.json")
 
-    json_data = json.loads(
-        '{"version": "1.1", "extensions": [], "releases": [{"ocid": "xx"}]}'
-    )
+    json_data = json.loads('{"version": "1.1", "extensions": [], "releases": [{"ocid": "xx"}]}')
     schema = SchemaOCDS(release_data=json_data)
     schema.get_schema_obj()
     schema.create_extended_schema_file(data.upload_dir(), data.upload_url())
@@ -911,17 +842,10 @@ def test_schema_after_version_change(client):
     resp = client.post(data.get_absolute_url(), {"version": "1.1"})
     assert resp.status_code == 200
 
-    with open(
-        os.path.join(data.upload_dir(), "extended_schema.json")
-    ) as extended_release_fp:
-        assert (
-            "mainProcurementCategory"
-            in json.load(extended_release_fp)["definitions"]["Tender"]["properties"]
-        )
+    with open(os.path.join(data.upload_dir(), "extended_schema.json")) as extended_release_fp:
+        assert "mainProcurementCategory" in json.load(extended_release_fp)["definitions"]["Tender"]["properties"]
 
-    with open(
-        os.path.join(data.upload_dir(), "validation_errors-3.json")
-    ) as validation_errors_fp:
+    with open(os.path.join(data.upload_dir(), "validation_errors-3.json")) as validation_errors_fp:
         assert "'version' is missing but required" in validation_errors_fp.read()
 
     # test link is still there.
@@ -929,33 +853,19 @@ def test_schema_after_version_change(client):
     assert resp.status_code == 200
     assert "extended_schema.json" in resp.content.decode()
 
-    with open(
-        os.path.join(data.upload_dir(), "extended_schema.json")
-    ) as extended_release_fp:
-        assert (
-            "mainProcurementCategory"
-            in json.load(extended_release_fp)["definitions"]["Tender"]["properties"]
-        )
+    with open(os.path.join(data.upload_dir(), "extended_schema.json")) as extended_release_fp:
+        assert "mainProcurementCategory" in json.load(extended_release_fp)["definitions"]["Tender"]["properties"]
 
-    with open(
-        os.path.join(data.upload_dir(), "validation_errors-3.json")
-    ) as validation_errors_fp:
+    with open(os.path.join(data.upload_dir(), "validation_errors-3.json")) as validation_errors_fp:
         assert "'version' is missing but required" in validation_errors_fp.read()
 
     resp = client.post(data.get_absolute_url(), {"version": "1.0"})
     assert resp.status_code == 200
 
-    with open(
-        os.path.join(data.upload_dir(), "extended_schema.json")
-    ) as extended_release_fp:
-        assert (
-            "mainProcurementCategory"
-            not in json.load(extended_release_fp)["definitions"]["Tender"]["properties"]
-        )
+    with open(os.path.join(data.upload_dir(), "extended_schema.json")) as extended_release_fp:
+        assert "mainProcurementCategory" not in json.load(extended_release_fp)["definitions"]["Tender"]["properties"]
 
-    with open(
-        os.path.join(data.upload_dir(), "validation_errors-3.json")
-    ) as validation_errors_fp:
+    with open(os.path.join(data.upload_dir(), "validation_errors-3.json")) as validation_errors_fp:
         assert "'version' is missing but required" not in validation_errors_fp.read()
 
 
@@ -978,17 +888,10 @@ def test_schema_after_version_change_record(client):
     resp = client.post(data.get_absolute_url(), {"version": "1.1"})
     assert resp.status_code == 200
 
-    with open(
-        os.path.join(data.upload_dir(), "extended_schema.json")
-    ) as extended_release_fp:
-        assert (
-            "mainProcurementCategory"
-            in json.load(extended_release_fp)["definitions"]["Tender"]["properties"]
-        )
+    with open(os.path.join(data.upload_dir(), "extended_schema.json")) as extended_release_fp:
+        assert "mainProcurementCategory" in json.load(extended_release_fp)["definitions"]["Tender"]["properties"]
 
-    with open(
-        os.path.join(data.upload_dir(), "validation_errors-3.json")
-    ) as validation_errors_fp:
+    with open(os.path.join(data.upload_dir(), "validation_errors-3.json")) as validation_errors_fp:
         assert "'version' is missing but required" in validation_errors_fp.read()
 
     # test link is still there.
@@ -996,33 +899,19 @@ def test_schema_after_version_change_record(client):
     assert resp.status_code == 200
     assert "extended_schema.json" in resp.content.decode()
 
-    with open(
-        os.path.join(data.upload_dir(), "extended_schema.json")
-    ) as extended_release_fp:
-        assert (
-            "mainProcurementCategory"
-            in json.load(extended_release_fp)["definitions"]["Tender"]["properties"]
-        )
+    with open(os.path.join(data.upload_dir(), "extended_schema.json")) as extended_release_fp:
+        assert "mainProcurementCategory" in json.load(extended_release_fp)["definitions"]["Tender"]["properties"]
 
-    with open(
-        os.path.join(data.upload_dir(), "validation_errors-3.json")
-    ) as validation_errors_fp:
+    with open(os.path.join(data.upload_dir(), "validation_errors-3.json")) as validation_errors_fp:
         assert "'version' is missing but required" in validation_errors_fp.read()
 
     resp = client.post(data.get_absolute_url(), {"version": "1.0"})
     assert resp.status_code == 200
 
-    with open(
-        os.path.join(data.upload_dir(), "extended_schema.json")
-    ) as extended_release_fp:
-        assert (
-            "mainProcurementCategory"
-            not in json.load(extended_release_fp)["definitions"]["Tender"]["properties"]
-        )
+    with open(os.path.join(data.upload_dir(), "extended_schema.json")) as extended_release_fp:
+        assert "mainProcurementCategory" not in json.load(extended_release_fp)["definitions"]["Tender"]["properties"]
 
-    with open(
-        os.path.join(data.upload_dir(), "validation_errors-3.json")
-    ) as validation_errors_fp:
+    with open(os.path.join(data.upload_dir(), "validation_errors-3.json")) as validation_errors_fp:
         assert "'version' is missing but required" not in validation_errors_fp.read()
 
 
@@ -1037,14 +926,11 @@ def test_corner_cases_for_deprecated_data_fields(json_data):
     data = json.loads(json_data)
     schema = SchemaOCDS(release_data=data)
     json_data_paths = cove_common.get_json_data_generic_paths(data, generic_paths={})
-    deprecated_fields = cove_common.get_json_data_deprecated_fields(
-        json_data_paths, schema
-    )
+    deprecated_fields = cove_common.get_json_data_deprecated_fields(json_data_paths, schema)
 
     assert deprecated_fields["additionalIdentifiers"]["explanation"][0] == "1.1"
     assert (
-        "parties section at the top level of a release"
-        in deprecated_fields["additionalIdentifiers"]["explanation"][1]
+        "parties section at the top level of a release" in deprecated_fields["additionalIdentifiers"]["explanation"][1]
     )
     assert deprecated_fields["additionalIdentifiers"]["paths"] == ("releases/buyer",)
     assert len(deprecated_fields.keys()) == 1
@@ -1111,32 +997,22 @@ def test_context_api_transform_validation_additional_fields():
     }
     transform_context = context_api_transform(context)
 
-    validation_errors = zip(
-        transform_context["validation_errors"], expected_context["validation_errors"]
-    )
+    validation_errors = zip(transform_context["validation_errors"], expected_context["validation_errors"])
     for result in validation_errors:
         assert len(result[0]) == len(result[1])
         for k, v in result[0].items():
             assert result[1][k] == v
-    assert len(transform_context["validation_errors"]) == len(
-        expected_context["validation_errors"]
-    )
+    assert len(transform_context["validation_errors"]) == len(expected_context["validation_errors"])
 
-    additional_fields = zip(
-        transform_context["additional_fields"], expected_context["additional_fields"]
-    )
+    additional_fields = zip(transform_context["additional_fields"], expected_context["additional_fields"])
     for result in additional_fields:
         assert len(result[0]) == len(result[1])
         for k, v in result[0].items():
             assert result[1][k] == v
-    assert len(transform_context["additional_fields"]) == len(
-        expected_context["additional_fields"]
-    )
+    assert len(transform_context["additional_fields"]) == len(expected_context["additional_fields"])
 
     assert transform_context["extensions"] == expected_context["extensions"]
-    assert (
-        transform_context["deprecated_fields"] == expected_context["deprecated_fields"]
-    )
+    assert transform_context["deprecated_fields"] == expected_context["deprecated_fields"]
     assert "validation_errors_count" not in transform_context.keys()
     assert "additional_fields_count" not in transform_context.keys()
     assert "data_only" not in transform_context.keys()
@@ -1220,14 +1096,8 @@ def test_context_api_transform_extensions():
         for extension in transformed_ext_context["extensions"]:
             assert extension["url"] != inv_extension[0]
 
-    assert (
-        transformed_ext_context["is_extended_schema"]
-        == context["extensions"]["is_extended_schema"]
-    )
-    assert (
-        transformed_ext_context["extended_schema_url"]
-        == context["extensions"]["extended_schema_url"]
-    )
+    assert transformed_ext_context["is_extended_schema"] == context["extensions"]["is_extended_schema"]
+    assert transformed_ext_context["extended_schema_url"] == context["extensions"]["extended_schema_url"]
 
 
 def test_context_api_transform_deprecations():
@@ -1320,17 +1190,13 @@ def test_get_json_data_missing_ids():
         "releases/1/tender/tenderers/4/id",
     ]
     user_data_paths = cove_common.get_json_data_generic_paths(user_data, generic_paths={})
-    missin_ids_paths = cove_common.get_json_data_missing_ids(
-        user_data_paths, schema_obj
-    )
+    missin_ids_paths = cove_common.get_json_data_missing_ids(user_data_paths, schema_obj)
 
     assert missin_ids_paths == results
 
 
 def test_bad_ocds_prefixes():
-    file_name = os.path.join(
-        "tests", "fixtures", "tenders_releases_7_releases_check_ocids.json"
-    )
+    file_name = os.path.join("tests", "fixtures", "tenders_releases_7_releases_check_ocids.json")
     results = [
         ("bad-prefix-000001", "releases/0/ocid"),
         ("bad-prefix-000002", "releases/1/ocid"),

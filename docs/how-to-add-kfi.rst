@@ -51,15 +51,17 @@ Next, we'll add the IDs of each item to that ``set`` when we're iterating throug
 
 For tenders:
 
-.. literalinclude:: code_examples/kfi-item-ids-added.py
-	:diff: code_examples/kfi-item-ids-orig.py
+.. literalinclude:: code_examples/kfi-item-ids.txt
+	:language: python
+	:diff: code_examples/kfi-item-ids.orig
 
 Next, make the same change to the similar code for both awards and contracts. This is left as an exercise for the reader. 
 
 Finally, add the new ``set`` to the return ``dict``:
 
-.. literalinclude:: code_examples/kfi-return-added.py
-	:diff: code_examples/kfi-return-orig.py
+.. literalinclude:: code_examples/kfi-return.txt
+	:language: python
+	:diff: code_examples/kfi-return.orig
 
 
 Presenting the statistics in the template
@@ -113,8 +115,9 @@ Then, we'll look at the `functional tests <https://github.com/open-contracting/c
 
 There's a ``test_key_field_information`` already, so we'll just add our new value to that:
 
-.. literalinclude:: code_examples/kfi-functional-test-added.py
-	:diff: code_examples/kfi-functional-test-orig.py
+.. literalinclude:: code_examples/kfi-functional-test.txt
+	:language: python
+	:diff: code_examples/kfi-functional-test.orig
 
 
 Finishing up

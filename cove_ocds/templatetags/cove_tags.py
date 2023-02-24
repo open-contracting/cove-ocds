@@ -8,14 +8,16 @@ mark_safe_lazy = lazy(mark_safe, str)
 
 # https://github.com/open-contracting/lib-cove-ocds/blob/main/libcoveocds/common_checks.py
 validation_error_lookup = {
-    "date-time": mark_safe_lazy(_(
-        "Incorrect date format. Dates should use the form YYYY-MM-DDT00:00:00Z. Learn more about "
-        '<a href="https://standard.open-contracting.org/latest/en/schema/reference/#date">dates in OCDS</a>.'
-    )),
+    "date-time": mark_safe_lazy(
+        _(
+            "Incorrect date format. Dates should use the form YYYY-MM-DDT00:00:00Z. Learn more about "
+            '<a href="https://standard.open-contracting.org/latest/en/schema/reference/#date">dates in OCDS</a>.'
+        )
+    ),
 }
 
 
-@register.filter(name='html_error_msg')
+@register.filter(name="html_error_msg")
 def html_error_msg_ocds(error):
     if error["error_id"] == "releases_both_embedded_and_linked":
         return _(
@@ -28,7 +30,7 @@ def html_error_msg_ocds(error):
     elif error["error_id"] == "oneOf_each":
         return _("%(instance)s is valid under each of %(reprs)s") % {
             "instance": json_repr(error["instance"]),
-            "reprs": error.get("reprs")
+            "reprs": error.get("reprs"),
         }
 
     new_message = validation_error_lookup.get(error["message_type"])

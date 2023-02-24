@@ -37,25 +37,17 @@ def test_input_post(rf):
 
 @pytest.mark.django_db
 def test_connection_error(rf):
-    resp = v.data_input(
-        fake_cove_middleware(rf.post("/", {"source_url": "http://localhost:1234"}))
-    )
+    resp = v.data_input(fake_cove_middleware(rf.post("/", {"source_url": "http://localhost:1234"})))
     assert b"Connection refused" in resp.content
 
-    resp = v.data_input(
-        fake_cove_middleware(
-            rf.post("/", {"source_url": "https://wrong.host.badssl.com/"})
-        )
-    )
+    resp = v.data_input(fake_cove_middleware(rf.post("/", {"source_url": "https://wrong.host.badssl.com/"})))
     # https://docs.djangoproject.com/en/3.2/releases/3.0/#miscellaneous
     assert b"doesn&#x27;t match either of" in resp.content or b"doesn&#39;t match either of" in resp.content
 
 
 @pytest.mark.django_db
 def test_http_error(rf):
-    resp = v.data_input(
-        fake_cove_middleware(rf.post("/", {"source_url": "http://google.co.uk/cove"}))
-    )
+    resp = v.data_input(fake_cove_middleware(rf.post("/", {"source_url": "http://google.co.uk/cove"})))
     assert b"Not Found" in resp.content
 
 
@@ -70,9 +62,7 @@ def test_extension_from_content_type(rf, httpserver):
 
 @pytest.mark.django_db
 def test_extension_from_content_disposition(rf, httpserver):
-    httpserver.serve_content(
-        "{}", headers={"content-disposition": 'attachment; filename="something.csv"'}
-    )
+    httpserver.serve_content("{}", headers={"content-disposition": 'attachment; filename="something.csv"'})
     v.data_input(fake_cove_middleware(rf.post("/", {"source_url": httpserver.url})))
     supplied_datas = SuppliedData.objects.all()
     assert len(supplied_datas) == 1
@@ -85,9 +75,7 @@ def test_directory_for_empty_filename(rf):
     Check that URLs ending in / correctly create a directory, to test against
     regressions of https://github.com/OpenDataServices/cove/issues/426
     """
-    v.data_input(
-        fake_cove_middleware(rf.post("/", {"source_url": "http://example.org/"}))
-    )
+    v.data_input(fake_cove_middleware(rf.post("/", {"source_url": "http://example.org/"})))
     supplied_datas = SuppliedData.objects.all()
     assert len(supplied_datas) == 1
     assert os.path.isdir(supplied_datas[0].upload_dir())
