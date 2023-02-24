@@ -12,7 +12,7 @@ attrs==21.2.0
     #   markdown-it-py
 backports-datetime-fromisoformat==1.0.0
     # via flattentool
-bleach==3.3.0
+bleach==6.0.0
     # via libcoveocds
 btrees==4.8.0
     # via zodb
@@ -71,7 +71,7 @@ libcove==0.28.0
     #   -r requirements.in
     #   libcoveocds
     #   libcoveweb
-libcoveocds==0.11.1
+libcoveocds==0.11.2
     # via -r requirements.in
 libcoveweb==0.26.0
     # via -r requirements.in
@@ -85,16 +85,12 @@ odfpy==1.4.1
     # via flattentool
 openpyxl==3.0.7
     # via flattentool
-packaging==20.9
-    # via bleach
 persistent==4.7.0
     # via
     #   btrees
     #   zodb
 pycparser==2.20
     # via cffi
-pyparsing==2.4.7
-    # via packaging
 pyrsistent==0.17.3
     # via jsonschema
 python-dateutil==2.8.1

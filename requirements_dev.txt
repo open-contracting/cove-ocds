@@ -19,7 +19,7 @@ backports-datetime-fromisoformat==1.0.0
     # via
     #   -r requirements.txt
     #   flattentool
-bleach==3.3.0
+bleach==6.0.0
     # via
     #   -r requirements.txt
     #   libcoveocds
@@ -122,7 +122,7 @@ libcove==0.28.0
     #   -r requirements.txt
     #   libcoveocds
     #   libcoveweb
-libcoveocds==0.11.1
+libcoveocds==0.11.2
     # via -r requirements.txt
 libcoveweb==0.26.0
     # via -r requirements.txt
@@ -151,10 +151,7 @@ openpyxl==3.0.7
     #   -r requirements.txt
     #   flattentool
 packaging==20.9
-    # via
-    #   -r requirements.txt
-    #   bleach
-    #   pytest
+    # via pytest
 pep517==0.10.0
     # via pip-tools
 persistent==4.7.0
@@ -177,9 +174,7 @@ pycparser==2.20
 pyflakes==2.3.1
     # via flake8
 pyparsing==2.4.7
-    # via
-    #   -r requirements.txt
-    #   packaging
+    # via packaging
 pyrsistent==0.17.3
     # via
     #   -r requirements.txt
@@ -242,7 +237,10 @@ sqlparse==0.4.2
     #   -r requirements.txt
     #   django
 toml==0.10.2
-    # via pytest
+    # via
+    #   coverage
+    #   pep517
+    #   pytest
 transaction==3.0.1
     # via
     #   -r requirements.txt
