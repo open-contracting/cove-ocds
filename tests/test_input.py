@@ -12,6 +12,8 @@ def fake_cove_middleware(request):
 
 
 @pytest.mark.django_db
+# flattentool leaks file descriptors: https://github.com/OpenDataServices/flatten-tool/issues/412
+@pytest.mark.filterwarnings("ignore:unclosed file <_io.:ResourceWarning")
 def test_input(rf):
     resp = v.data_input(fake_cove_middleware(rf.get("/")))
     assert resp.status_code == 200
