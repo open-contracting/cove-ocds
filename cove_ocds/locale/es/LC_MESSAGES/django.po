@@ -260,13 +260,13 @@ msgstr ""
 
 #: cove_ocds/templates/cove_ocds/base.html:139
 msgid ""
-"To preview how the data review tool works, try <a href=\"/review/?"
+"To preview how the data review tool works, try <a href=\"%(index_url)s?"
 "source_url=https://raw.githubusercontent.com/open-contracting/sample-data/"
 "main/fictional-example/1.1/ocds-213czf-000-00001-02-tender.json\"> loading "
 "some sample data. </a>"
 msgstr ""
 "Para ver cómo funciona la herramienta de revisión de datos,  intente <a href="
-"\"/review/?source_url=https://raw.githubusercontent.com/open-contracting/"
+"\"%(index_url)s?source_url=https://raw.githubusercontent.com/open-contracting/"
 "sample-data/main/fictional-example/1.1/ocds-213czf-000-00001-02-tender.json"
 "\"> subir algunos datos de muestra.</a>"
 
