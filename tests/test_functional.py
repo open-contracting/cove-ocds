@@ -132,6 +132,8 @@ def test_index_page_ocds(server_url, browser):
         ),
     ],
 )
+# flattentool leaks file descriptors: https://github.com/OpenDataServices/flatten-tool/issues/412
+@pytest.mark.filterwarnings("ignore:unclosed file <_io.:ResourceWarning")
 def test_index_page_ocds_links(server_url, browser, css_id, link_text, url):
     browser.get(server_url)
     section = browser.find_element_by_id(css_id)
