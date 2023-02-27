@@ -38,6 +38,8 @@ def test_input_post(rf):
 
 
 @pytest.mark.django_db
+# flattentool leaks file descriptors: https://github.com/OpenDataServices/flatten-tool/issues/412
+@pytest.mark.filterwarnings("ignore:unclosed file <_io.:ResourceWarning")
 def test_connection_error(rf):
     resp = v.data_input(fake_cove_middleware(rf.post("/", {"source_url": "http://localhost:1234"})))
     assert b"Connection refused" in resp.content
