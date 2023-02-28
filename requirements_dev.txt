@@ -13,7 +13,6 @@ attrs==21.2.0
     #   -r requirements.txt
     #   hypothesis
     #   jsonschema
-    #   markdown-it-py
     #   pytest
 backports-datetime-fromisoformat==1.0.0
     # via
@@ -132,7 +131,7 @@ lxml==4.9.1
     # via
     #   -r requirements.txt
     #   flattentool
-markdown-it-py==1.1.0
+markdown-it-py==2.2.0
     # via
     #   -r requirements.txt
     #   libcoveocds
@@ -142,6 +141,10 @@ markupsafe==2.1.2
     #   werkzeug
 mccabe==0.6.1
     # via flake8
+mdurl==0.1.2
+    # via
+    #   -r requirements.txt
+    #   markdown-it-py
 odfpy==1.4.1
     # via
     #   -r requirements.txt

@@ -7,9 +7,7 @@
 asgiref==3.3.4
     # via django
 attrs==21.2.0
-    # via
-    #   jsonschema
-    #   markdown-it-py
+    # via jsonschema
 backports-datetime-fromisoformat==1.0.0
     # via flattentool
 bleach==6.0.0
@@ -77,10 +75,12 @@ libcoveweb==0.26.0
     # via -r requirements.in
 lxml==4.9.1
     # via flattentool
-markdown-it-py==1.1.0
+markdown-it-py==2.2.0
     # via libcoveocds
 markupsafe==2.1.2
     # via werkzeug
+mdurl==0.1.2
+    # via markdown-it-py
 odfpy==1.4.1
     # via flattentool
 openpyxl==3.0.7
