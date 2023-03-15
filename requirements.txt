@@ -14,8 +14,6 @@ bleach==6.0.0
     # via libcoveocds
 btrees==4.8.0
     # via zodb
-cached-property==1.5.2
-    # via libcove
 certifi==2022.12.7
     # via
     #   requests
@@ -60,11 +58,11 @@ jsonref==0.2
     # via
     #   flattentool
     #   libcove
-jsonschema==3.2.0
+jsonschema==4.17.3
     # via
     #   libcove
     #   libcoveocds
-libcove==0.29.0
+libcove==0.30.0
     # via
     #   -r requirements.in
     #   libcoveocds
@@ -117,7 +115,6 @@ sentry-sdk==1.1.0
 six==1.16.0
     # via
     #   bleach
-    #   jsonschema
     #   python-dateutil
     #   rfc3339-validator
     #   zodb
