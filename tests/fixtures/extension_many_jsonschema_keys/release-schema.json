@@ -83,7 +83,11 @@
 				},
 				"additionalProperties2": {
 					"type": "object",
-					"patternProperties": ["okay"],
+					"patternProperties": {
+						"okay": {
+							"type": "string"
+						}
+					},
 					"additionalProperties": false
 				},
 				"dependencies": {
