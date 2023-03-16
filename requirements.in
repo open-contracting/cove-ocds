@@ -1,5 +1,7 @@
 django
 django-bootstrap3
+# https://github.com/OpenDataServices/lib-cove/pull/117
+jsonschema<4.10
 libcove
 libcoveocds
 libcoveweb
