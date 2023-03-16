@@ -2,28 +2,14 @@ import os
 from collections import OrderedDict
 from pathlib import Path
 
-import environ
 from cove import settings
 
 # Build paths inside the project like this: BASE_DIR / "subdir".
 BASE_DIR = Path(__file__).resolve().parents[1]
 
-env = environ.Env(
-    # set casting, default value
-    DB_NAME=(str, str(BASE_DIR / "db.sqlite3")),
-    FATHOM_ANALYTICS_DOMAIN=(str, "cdn.usefathom.com"),
-    FATHOM_ANALYTICS_ID=(str, ""),
-    HOTJAR_ID=(str, ""),
-    HOTJAR_SV=(str, ""),
-    HOTJAR_DATE_INFO=(str, ""),
-    RELEASES_OR_RECORDS_TABLE_LENGTH=(int, 25),
-    DELETE_FILES_AFTER_DAYS=(int, 90),
-    SENTRY_DSN=(str, ""),
-)
-
 # We use the setting to choose whether to show the section about Sentry in the
 # terms and conditions
-SENTRY_DSN = env("SENTRY_DSN")
+SENTRY_DSN = os.getenv("SENTRY_DSN", "")
 
 if SENTRY_DSN:
     import sentry_sdk
@@ -31,21 +17,21 @@ if SENTRY_DSN:
     from sentry_sdk.integrations.logging import ignore_logger
 
     ignore_logger("django.security.DisallowedHost")
-    sentry_sdk.init(dsn=env("SENTRY_DSN"), integrations=[DjangoIntegration()])
+    sentry_sdk.init(dsn=SENTRY_DSN, integrations=[DjangoIntegration()])
 
 FATHOM = {
-    "domain": env("FATHOM_ANALYTICS_DOMAIN"),
-    "id": env("FATHOM_ANALYTICS_ID"),
+    "domain": os.getenv("FATHOM_ANALYTICS_DOMAIN", "cdn.usefathom.com"),
+    "id": os.getenv("FATHOM_ANALYTICS_ID", ""),
 }
 HOTJAR = {
-    "id": env("HOTJAR_ID"),
-    "sv": env("HOTJAR_SV"),
-    "date_info": env("HOTJAR_DATE_INFO"),
+    "id": os.getenv("HOTJAR_ID", ""),
+    "sv": os.getenv("HOTJAR_SV", ""),
+    "date_info": os.getenv("HOTJAR_DATE_INFO", ""),
 }
-RELEASES_OR_RECORDS_TABLE_LENGTH = env("RELEASES_OR_RECORDS_TABLE_LENGTH")
+RELEASES_OR_RECORDS_TABLE_LENGTH = int(os.getenv("RELEASES_OR_RECORDS_TABLE_LENGTH", 25))
 VALIDATION_ERROR_LOCATIONS_LENGTH = settings.VALIDATION_ERROR_LOCATIONS_LENGTH
 VALIDATION_ERROR_LOCATIONS_SAMPLE = settings.VALIDATION_ERROR_LOCATIONS_SAMPLE
-DELETE_FILES_AFTER_DAYS = env("DELETE_FILES_AFTER_DAYS")
+DELETE_FILES_AFTER_DAYS = int(os.getenv("DELETE_FILES_AFTER_DAYS", 90))
 
 # We can't take MEDIA_ROOT and MEDIA_URL from cove settings,
 # ... otherwise the files appear under the BASE_DIR that is the Cove library install.
@@ -99,7 +85,7 @@ WSGI_APPLICATION = "cove_project.wsgi.application"
 # We can't take DATABASES from cove settings,
 # ... otherwise the files appear under the BASE_DIR that is the Cove library install.
 # That could get messy. We want them to appear in our directory.
-DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": env("DB_NAME")}}
+DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": str(BASE_DIR / "db.sqlite3")}}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators

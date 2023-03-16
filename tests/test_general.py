@@ -776,6 +776,8 @@ def test_schema_ocds_constructor(
         ),
     ],
 )
+# flattentool leaks file descriptors: https://github.com/OpenDataServices/flatten-tool/issues/412
+@pytest.mark.filterwarnings("ignore:unclosed :ResourceWarning")
 def test_schema_ocds_extensions(release_data, extensions, invalid_extension, extended, extends_schema):
     schema = SchemaOCDS(release_data=release_data)
     assert schema.extensions == extensions
