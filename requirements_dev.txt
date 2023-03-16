@@ -107,7 +107,7 @@ jsonref==0.2
     #   -r requirements.txt
     #   flattentool
     #   libcove
-jsonschema==4.17.3
+jsonschema==4.9.1
     # via
     #   -r requirements.txt
     #   libcove
