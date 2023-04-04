@@ -7,6 +7,7 @@ from django.conf import settings
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 
 BROWSER = os.environ.get("BROWSER", "ChromeHeadless")
@@ -54,7 +55,7 @@ def url_input_browser(request, server_url, browser, httpserver):
 
         browser.get(server_url)
         time.sleep(0.5)
-        browser.find_element_by_id("id_source_url").send_keys(source_url)
+        browser.find_element(By.ID, "id_source_url").send_keys(source_url)
         browser.find_element_by_css_selector("#fetchURL > div.form-group > button.btn.btn-primary").click()
 
         if output_source_url:
@@ -85,7 +86,7 @@ def url_input_browser(request, server_url, browser, httpserver):
 @pytest.mark.filterwarnings("ignore:unclosed file <_io.:ResourceWarning")
 def test_footer_ocds(server_url, browser, link_text, expected_text, css_selector, url):
     browser.get(server_url)
-    footer = browser.find_element_by_id("footer")
+    footer = browser.find_element(By.ID, "footer")
     link = footer.find_element_by_link_text(link_text)
     href = link.get_attribute("href")
     assert url in href
@@ -136,7 +137,7 @@ def test_index_page_ocds(server_url, browser):
 @pytest.mark.filterwarnings("ignore:unclosed file <_io.:ResourceWarning")
 def test_index_page_ocds_links(server_url, browser, css_id, link_text, url):
     browser.get(server_url)
-    section = browser.find_element_by_id(css_id)
+    section = browser.find_element(By.ID, css_id)
     link = section.find_element_by_link_text(link_text)
     href = link.get_attribute("href")
     assert url in href
@@ -181,13 +182,13 @@ def test_accordion(server_url, browser):
     assert "Paste (JSON only)" in browser.find_elements_by_tag_name("label")[2].text
 
     # Now test that the whole banner is clickable
-    browser.find_element_by_id("headingOne").click()
+    browser.find_element(By.ID, "headingOne").click()
     time.sleep(0.5)
     assert buttons() == [True, False, False]
-    browser.find_element_by_id("headingTwo").click()
+    browser.find_element(By.ID, "headingTwo").click()
     time.sleep(0.5)
     assert buttons() == [False, True, False]
-    browser.find_element_by_id("headingThree").click()
+    browser.find_element(By.ID, "headingThree").click()
     time.sleep(0.5)
     assert buttons() == [False, False, True]
 
@@ -841,7 +842,7 @@ def test_url_input_with_version(
 ):
     browser = url_input_browser(source_filename)
     body_text = browser.find_element_by_tag_name("body").text
-    additional_field_box = browser.find_element_by_id("additionalFieldTable").text
+    additional_field_box = browser.find_element(By.ID, "additionalFieldTable").text
 
     assert expected in body_text
     assert not_expected not in body_text
@@ -913,7 +914,7 @@ def test_url_input_with_version_change(
     time.sleep(0.5)
 
     body_text = browser.find_element_by_tag_name("body").text
-    additional_field_box = browser.find_element_by_id("additionalFieldTable").text
+    additional_field_box = browser.find_element(By.ID, "additionalFieldTable").text
 
     assert expected in body_text
     assert not_expected not in body_text
@@ -983,7 +984,7 @@ def test_url_input_with_version_change(
 @pytest.mark.filterwarnings("ignore:unclosed file <_io.:ResourceWarning")
 def test_url_input_with_extensions(server_url, url_input_browser, httpserver, source_filename, expected, not_expected):
     browser = url_input_browser(source_filename)
-    schema_extension_box = browser.find_element_by_id("schema-extensions").text
+    schema_extension_box = browser.find_element(By.ID, "schema-extensions").text
 
     for text in expected:
         assert text in schema_extension_box
@@ -1072,7 +1073,7 @@ def test_ocds_show(server_url, url_input_browser, httpserver, source_filename, e
 )
 def test_additional_checks_section(server_url, url_input_browser, httpserver, source_filename, expected, not_expected):
     browser = url_input_browser(source_filename)
-    additional_checks_text = browser.find_element_by_id("additionalChecksTable").text
+    additional_checks_text = browser.find_element(By.ID, "additionalChecksTable").text
 
     for text in expected:
         assert text in additional_checks_text
@@ -1341,7 +1342,7 @@ def test_key_field_information(server_url, url_input_browser, httpserver, source
     """Check that KFIs are displaying"""
 
     browser = url_input_browser(source_filename)
-    kfi_text = browser.find_element_by_id("kfi").text
+    kfi_text = browser.find_element(By.ID, "kfi").text
     for text in expected:
         assert text in kfi_text
 
