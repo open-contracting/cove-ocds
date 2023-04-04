@@ -167,11 +167,11 @@ def test_accordion(server_url, browser):
     browser.get(server_url)
 
     def buttons():
-        return [b.is_displayed() for b in browser.find_elements_by_tag_name("button")]
+        return [b.is_displayed() for b in browser.find_elements(By.TAG_NAME, "button")]
 
     time.sleep(0.5)
     assert buttons() == [True, False, False]
-    assert "Supply a URL" in browser.find_elements_by_tag_name("label")[0].text
+    assert "Supply a URL" in browser.find_elements(By.TAG_NAME, "label")[0].text
     browser.find_element(By.PARTIAL_LINK_TEXT, "Upload").click()
     browser.implicitly_wait(1)
     time.sleep(0.5)
@@ -179,7 +179,7 @@ def test_accordion(server_url, browser):
     browser.find_element(By.PARTIAL_LINK_TEXT, "Paste").click()
     time.sleep(0.5)
     assert buttons() == [False, False, True]
-    assert "Paste (JSON only)" in browser.find_elements_by_tag_name("label")[2].text
+    assert "Paste (JSON only)" in browser.find_elements(By.TAG_NAME, "label")[2].text
 
     # Now test that the whole banner is clickable
     browser.find_element(By.ID, "headingOne").click()
@@ -675,7 +675,7 @@ DARK_GREEN = "rgba(155, 175, 0, 1)"
 )
 def test_headlines_class(url_input_browser, source_filename, heading_color):
     browser = url_input_browser(source_filename)
-    headlines_panel = browser.find_elements_by_class_name("panel")[0]
+    headlines_panel = browser.find_elements(By.CLASS_NAME, "panel")[0]
     actual = headlines_panel.find_element(By.CLASS_NAME, "panel-heading").value_of_css_property("background-color")
 
     # Check that this is actually the headlines panel
@@ -1085,7 +1085,7 @@ def test_additional_checks_section_not_being_displayed(server_url, url_input_bro
     """Additional checks sections should only be displayed when there are results"""
 
     browser = url_input_browser(source_filename)
-    additional_checks = browser.find_elements_by_id("additionalChecksTable")
+    additional_checks = browser.find_elements(By.ID, "additionalChecksTable")
 
     assert additional_checks == []
 
@@ -1096,7 +1096,7 @@ def test_additional_checks_error_modal(server_url, url_input_browser, httpserver
     browser.find_element(By.CSS_SELECTOR, 'a[data-target=".additional-checks-1"]').click()
     modal = browser.find_element(By.CSS_SELECTOR, ".additional-checks-1")
     modal_text = modal.text
-    table_rows = browser.find_elements_by_css_selector(".additional-checks-1 tbody tr")
+    table_rows = browser.find_elements(By.CSS_SELECTOR, ".additional-checks-1 tbody tr")
 
     assert "Location" in modal_text
     assert "releases/0/tender/items/0/additionalClassifications" in modal_text
@@ -1123,7 +1123,7 @@ def test_releases_table_25_rows(skip_if_remote, url_input_browser):
     assert "This file contains 30 releases" in browser.find_element(By.TAG_NAME, "body").text
     panel = browser.find_element(By.CSS_SELECTOR, "#releases-table-panel")
     assert "first 25 releases" in panel.text
-    table_rows = browser.find_elements_by_css_selector("#releases-table-panel table tbody tr")
+    table_rows = browser.find_elements(By.CSS_SELECTOR, "#releases-table-panel table tbody tr")
     assert len(table_rows) == 25
 
 
@@ -1137,7 +1137,7 @@ def test_releases_table_7_rows(skip_if_remote, url_input_browser):
     assert "This file contains 7 releases" in browser.find_element(By.TAG_NAME, "body").text
     panel = browser.find_element(By.CSS_SELECTOR, "#releases-table-panel")
     assert "first 25 releases" not in panel.text
-    table_rows = browser.find_elements_by_css_selector("#releases-table-panel table tbody tr")
+    table_rows = browser.find_elements(By.CSS_SELECTOR, "#releases-table-panel table tbody tr")
     assert len(table_rows) == 7
 
 
@@ -1158,7 +1158,7 @@ def test_releases_table_10_rows_env_var(skip_if_remote, settings_releases_table_
     assert "This file contains 30 releases" in browser.find_element(By.TAG_NAME, "body").text
     panel = browser.find_element(By.CSS_SELECTOR, "#releases-table-panel")
     assert "first 10 releases" in panel.text
-    table_rows = browser.find_elements_by_css_selector("#releases-table-panel table tbody tr")
+    table_rows = browser.find_elements(By.CSS_SELECTOR, "#releases-table-panel table tbody tr")
     assert len(table_rows) == 10
 
 
@@ -1173,7 +1173,7 @@ def test_releases_table_7_rows_env_var(skip_if_remote, settings_releases_table_1
     panel = browser.find_element(By.CSS_SELECTOR, "#releases-table-panel")
     assert "first 25 releases" not in panel.text
     assert "first 10 releases" not in panel.text
-    table_rows = browser.find_elements_by_css_selector("#releases-table-panel table tbody tr")
+    table_rows = browser.find_elements(By.CSS_SELECTOR, "#releases-table-panel table tbody tr")
     assert len(table_rows) == 7
 
 
@@ -1187,7 +1187,7 @@ def test_records_table_25_rows(skip_if_remote, url_input_browser):
     assert "This file contains 30 records" in browser.find_element(By.TAG_NAME, "body").text
     panel = browser.find_element(By.CSS_SELECTOR, "#records-table-panel")
     assert "first 25 records" in panel.text
-    table_rows = browser.find_elements_by_css_selector("#records-table-panel table tbody tr")
+    table_rows = browser.find_elements(By.CSS_SELECTOR, "#records-table-panel table tbody tr")
     assert len(table_rows) == 25
 
 
@@ -1201,7 +1201,7 @@ def test_records_table_7_rows(skip_if_remote, url_input_browser):
     assert "This file contains 7 records" in browser.find_element(By.TAG_NAME, "body").text
     panel = browser.find_element(By.CSS_SELECTOR, "#records-table-panel")
     assert "first 25 records" not in panel.text
-    table_rows = browser.find_elements_by_css_selector("#records-table-panel table tbody tr")
+    table_rows = browser.find_elements(By.CSS_SELECTOR, "#records-table-panel table tbody tr")
     assert len(table_rows) == 7
 
 
@@ -1222,7 +1222,7 @@ def test_records_table_10_rows_env_var(skip_if_remote, settings_records_table_10
     assert "This file contains 30 records" in browser.find_element(By.TAG_NAME, "body").text
     panel = browser.find_element(By.CSS_SELECTOR, "#records-table-panel")
     assert "first 10 records" in panel.text
-    table_rows = browser.find_elements_by_css_selector("#records-table-panel table tbody tr")
+    table_rows = browser.find_elements(By.CSS_SELECTOR, "#records-table-panel table tbody tr")
     assert len(table_rows) == 10
 
 
@@ -1237,7 +1237,7 @@ def test_records_table_7_rows_env_var(skip_if_remote, settings_records_table_10,
     panel = browser.find_element(By.CSS_SELECTOR, "#records-table-panel")
     assert "first 25 records" not in panel.text
     assert "first 10 records" not in panel.text
-    table_rows = browser.find_elements_by_css_selector("#records-table-panel table tbody tr")
+    table_rows = browser.find_elements(By.CSS_SELECTOR, "#records-table-panel table tbody tr")
     assert len(table_rows) == 7
 
 
@@ -1254,7 +1254,7 @@ def test_error_list_1000_lines(skip_if_remote, url_input_browser):
     assert "first 1000 locations for this error" in modal_body.text
     assert "releases/999" in modal_body.text
     assert "releases/1000" not in modal_body.text
-    table_rows = modal_body.find_elements_by_css_selector("table tbody tr")
+    table_rows = modal_body.find_elements(By.CSS_SELECTOR, "table tbody tr")
     assert len(table_rows) == 1000
 
 
@@ -1271,7 +1271,7 @@ def test_error_list_999_lines(skip_if_remote, url_input_browser):
     assert "first 999 locations for this error" not in modal_body.text
     assert "releases/998" in modal_body.text
     assert "releases/999" not in modal_body.text
-    table_rows = modal_body.find_elements_by_css_selector("table tbody tr")
+    table_rows = modal_body.find_elements(By.CSS_SELECTOR, "table tbody tr")
     assert len(table_rows) == 999
 
 
@@ -1293,7 +1293,7 @@ def test_error_list_1000_lines_sample(skip_if_remote, settings_error_locations_s
     browser.find_element(By.LINK_TEXT, "1001").click()
     modal_body = browser.find_element(By.CSS_SELECTOR, ".modal-body")
     assert "random 1000 locations for this error" in modal_body.text
-    table_rows = modal_body.find_elements_by_css_selector("table tbody tr")
+    table_rows = modal_body.find_elements(By.CSS_SELECTOR, "table tbody tr")
     assert len(table_rows) == 1000
 
 
@@ -1310,7 +1310,7 @@ def test_error_list_999_lines_sample(skip_if_remote, settings_error_locations_sa
     assert "first 999 locations for this error" not in modal_body.text
     assert "releases/998" in modal_body.text
     assert "releases/999" not in modal_body.text
-    table_rows = modal_body.find_elements_by_css_selector("table tbody tr")
+    table_rows = modal_body.find_elements(By.CSS_SELECTOR, "table tbody tr")
     assert len(table_rows) == 999
 
 
@@ -1320,9 +1320,9 @@ def test_records_table_releases_count(skip_if_remote, url_input_browser):
     """
 
     browser = url_input_browser("30_records.json")
-    assert "release" in browser.find_elements_by_css_selector("#records-table-panel table thead th")[1].text
-    table_rows = browser.find_elements_by_css_selector("#records-table-panel table tbody tr")
-    assert table_rows[0].find_elements_by_css_selector("td")[1].text == "5"
+    assert "release" in browser.find_elements(By.CSS_SELECTOR, "#records-table-panel table thead th")[1].text
+    table_rows = browser.find_elements(By.CSS_SELECTOR, "#records-table-panel table tbody tr")
+    assert table_rows[0].find_elements(By.CSS_SELECTOR, "td")[1].text == "5"
 
 
 @pytest.mark.parametrize(
@@ -1400,16 +1400,16 @@ def test_jsonschema_translation(
     browser = url_input_browser(source_filename)
 
     # Ensure language is English
-    browser.find_elements_by_xpath("//*[contains(text(), 'español')]")[0].click()
-    browser.find_elements_by_xpath("//*[contains(text(), 'English')]")[0].click()
+    browser.find_elements(By.XPATH, "//*[contains(text(), 'español')]")[0].click()
+    browser.find_elements(By.XPATH, "//*[contains(text(), 'English')]")[0].click()
 
     body_text = browser.find_element(By.TAG_NAME, "body").text
 
     for message in english_validation_messages:
         assert message in body_text
 
-    browser.find_elements_by_xpath("//*[contains(text(), 'English')]")[0].click()
-    browser.find_elements_by_xpath("//*[contains(text(), 'español')]")[0].click()
+    browser.find_elements(By.XPATH, "//*[contains(text(), 'English')]")[0].click()
+    browser.find_elements(By.XPATH, "//*[contains(text(), 'español')]")[0].click()
     body_text = browser.find_element(By.TAG_NAME, "body").text
 
     for message in english_validation_messages:
@@ -1460,16 +1460,16 @@ def test_jsonschema_translation_2(
     browser = url_input_browser(source_filename)
 
     # Ensure language is English
-    browser.find_elements_by_xpath("//*[contains(text(), 'español')]")[0].click()
-    browser.find_elements_by_xpath("//*[contains(text(), 'English')]")[0].click()
+    browser.find_elements(By.XPATH, "//*[contains(text(), 'español')]")[0].click()
+    browser.find_elements(By.XPATH, "//*[contains(text(), 'English')]")[0].click()
 
     body_text = browser.find_element(By.TAG_NAME, "body").text
 
     for message in english_validation_messages:
         assert message in body_text
 
-    browser.find_elements_by_xpath("//*[contains(text(), 'English')]")[0].click()
-    browser.find_elements_by_xpath("//*[contains(text(), 'español')]")[0].click()
+    browser.find_elements(By.XPATH, "//*[contains(text(), 'English')]")[0].click()
+    browser.find_elements(By.XPATH, "//*[contains(text(), 'español')]")[0].click()
     body_text = browser.find_element(By.TAG_NAME, "body").text
 
     for message in english_validation_messages:
