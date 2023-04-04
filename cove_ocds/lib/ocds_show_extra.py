@@ -18,7 +18,6 @@ def add_extra_fields(data, deref_release_schema):
 
 
 def add_extra_fields_to_obj(obj, all_schema_fields, current_path):
-
     if not isinstance(obj, dict):
         return
     obj["__extra"] = {}

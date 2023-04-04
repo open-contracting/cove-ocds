@@ -589,8 +589,8 @@ def check_url_input_result_page(
             assert "JSON (Original)" in body_text
             original_file = browser.find_element(By.LINK_TEXT, "JSON (Original)").get_attribute("href")
             if "record" not in source_filename:
-                converted_file = browser.find_element(By.PARTIAL_LINK_TEXT, 
-                    "Excel Spreadsheet (.xlsx) (Converted from Original using schema version"
+                converted_file = browser.find_element(
+                    By.PARTIAL_LINK_TEXT, "Excel Spreadsheet (.xlsx) (Converted from Original using schema version"
                 ).get_attribute("href")
                 assert "flattened.xlsx" in converted_file
         elif source_filename.endswith(".xlsx"):
@@ -598,8 +598,8 @@ def check_url_input_result_page(
             original_file = browser.find_element(By.LINK_TEXT, "Excel Spreadsheet (.xlsx) (Original)").get_attribute(
                 "href"
             )
-            converted_file = browser.find_element(By.PARTIAL_LINK_TEXT, 
-                "JSON (Converted from Original using schema version"
+            converted_file = browser.find_element(
+                By.PARTIAL_LINK_TEXT, "JSON (Converted from Original using schema version"
             ).get_attribute("href")
             assert "unflattened.json" in converted_file
         elif source_filename.endswith(".csv"):
@@ -607,11 +607,11 @@ def check_url_input_result_page(
             original_file = browser.find_element(By.LINK_TEXT, "CSV Spreadsheet (.csv) (Original)").get_attribute(
                 "href"
             )
-            converted_file = browser.find_element(By.PARTIAL_LINK_TEXT, 
-                "JSON (Converted from Original using schema version"
+            converted_file = browser.find_element(
+                By.PARTIAL_LINK_TEXT, "JSON (Converted from Original using schema version"
             ).get_attribute("href")
-            assert "unflattened.json" in browser.find_element(By.PARTIAL_LINK_TEXT, 
-                "JSON (Converted from Original using schema version"
+            assert "unflattened.json" in browser.find_element(
+                By.PARTIAL_LINK_TEXT, "JSON (Converted from Original using schema version"
             ).get_attribute("href")
 
         assert source_filename in original_file
