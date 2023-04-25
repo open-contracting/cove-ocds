@@ -85,6 +85,7 @@ et-xmlfile==1.1.0
     #   openpyxl
 exceptiongroup==1.1.1
     # via
+    #   hypothesis
     #   trio
     #   trio-websocket
 flake8==3.9.2
@@ -97,7 +98,7 @@ flattentool==0.19.0
     #   libcoveweb
 h11==0.14.0
     # via wsproto
-hypothesis==6.31.6
+hypothesis==6.72.4
     # via -r requirements_dev.in
 idna==2.10
     # via

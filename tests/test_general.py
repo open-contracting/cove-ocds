@@ -213,8 +213,6 @@ UNKNOWN_URL_EXT = "http://bad-url-for-extensions.com/extension.json"
 NOT_FOUND_URL_EXT = "https://standard.open-contracting.org/latest/en/404.json"
 
 
-# flattentool leaks file descriptors: https://github.com/OpenDataServices/flatten-tool/issues/412
-@pytest.mark.filterwarnings("ignore:unclosed :ResourceWarning")
 def test_get_releases_aggregates():
     assert get_releases_aggregates({}) == EMPTY_RELEASE_AGGREGATE
     assert get_releases_aggregates({"releases": []}) == EMPTY_RELEASE_AGGREGATE
@@ -776,8 +774,6 @@ def test_schema_ocds_constructor(
         ),
     ],
 )
-# flattentool leaks file descriptors: https://github.com/OpenDataServices/flatten-tool/issues/412
-@pytest.mark.filterwarnings("ignore:unclosed :ResourceWarning")
 def test_schema_ocds_extensions(release_data, extensions, invalid_extension, extended, extends_schema):
     schema = SchemaOCDS(release_data=release_data)
     assert schema.extensions == extensions

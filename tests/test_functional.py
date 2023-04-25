@@ -82,8 +82,6 @@ def url_input_browser(request, server_url, browser, httpserver):
         ),
     ],
 )
-# An unclosed /tmp/flattentool- file from another test might cause a delayed error.
-@pytest.mark.filterwarnings("ignore:unclosed file <_io.:ResourceWarning")
 def test_footer_ocds(server_url, browser, link_text, expected_text, css_selector, url):
     browser.get(server_url)
     footer = browser.find_element(By.ID, "footer")
@@ -133,8 +131,6 @@ def test_index_page_ocds(server_url, browser):
         ),
     ],
 )
-# flattentool leaks file descriptors: https://github.com/OpenDataServices/flatten-tool/issues/412
-@pytest.mark.filterwarnings("ignore:unclosed file <_io.:ResourceWarning")
 def test_index_page_ocds_links(server_url, browser, css_id, link_text, url):
     browser.get(server_url)
     section = browser.find_element(By.ID, css_id)
@@ -143,8 +139,6 @@ def test_index_page_ocds_links(server_url, browser, css_id, link_text, url):
     assert url in href
 
 
-# flattentool leaks file descriptors: https://github.com/OpenDataServices/flatten-tool/issues/412
-@pytest.mark.filterwarnings("ignore:unclosed file <_io.:ResourceWarning")
 def test_common_index_elements(server_url, browser):
     browser.get(server_url)
     browser.find_element(By.CSS_SELECTOR, "#more-information .panel-title").click()
@@ -503,8 +497,6 @@ def test_500_error(server_url, browser):
         ),
     ],
 )
-# flattentool leaks file descriptors: https://github.com/OpenDataServices/flatten-tool/issues/412
-@pytest.mark.filterwarnings("ignore:unclosed file <_io.:ResourceWarning")
 def test_url_input(
     server_url,
     url_input_browser,
@@ -828,8 +820,6 @@ def test_url_invalid_dataset_request(server_url, browser, data_url):
         ),
     ],
 )
-# flattentool leaks file descriptors: https://github.com/OpenDataServices/flatten-tool/issues/412
-@pytest.mark.filterwarnings("ignore:unclosed file <_io.:ResourceWarning")
 def test_url_input_with_version(
     server_url,
     url_input_browser,
@@ -894,8 +884,6 @@ def test_url_input_with_version(
         ),
     ],
 )
-# flattentool leaks file descriptors: https://github.com/OpenDataServices/flatten-tool/issues/412
-@pytest.mark.filterwarnings("ignore:unclosed file <_io.:ResourceWarning")
 def test_url_input_with_version_change(
     server_url,
     url_input_browser,
@@ -980,8 +968,6 @@ def test_url_input_with_version_change(
         ),
     ],
 )
-# flattentool leaks file descriptors: https://github.com/OpenDataServices/flatten-tool/issues/412
-@pytest.mark.filterwarnings("ignore:unclosed file <_io.:ResourceWarning")
 def test_url_input_with_extensions(server_url, url_input_browser, httpserver, source_filename, expected, not_expected):
     browser = url_input_browser(source_filename)
     schema_extension_box = browser.find_element(By.ID, "schema-extensions").text
