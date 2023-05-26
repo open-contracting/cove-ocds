@@ -202,11 +202,11 @@ pytest==7.3.1
     #   -r requirements_dev.in
     #   pytest-cov
     #   pytest-django
-pytest-cov==2.12.0
+pytest-cov==4.1.0
     # via -r requirements_dev.in
-pytest-django==4.3.0
+pytest-django==4.5.2
     # via -r requirements_dev.in
-pytest-localserver==0.5.0
+pytest-localserver==0.7.1
     # via -r requirements_dev.in
 python-dateutil==2.8.1
     # via -r requirements.txt
