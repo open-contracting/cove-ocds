@@ -30,6 +30,8 @@ btrees==4.8.0
     # via
     #   -r requirements.txt
     #   zodb
+build==0.10.0
+    # via pip-tools
 certifi==2022.12.7
     # via
     #   -r requirements.txt
@@ -40,7 +42,7 @@ cffi==1.14.5
     # via
     #   -r requirements.txt
     #   persistent
-chardet==4.0.0
+charset-normalizer==3.1.0
     # via
     #   -r requirements.txt
     #   requests
@@ -165,15 +167,15 @@ openpyxl==3.0.7
 outcome==1.2.0
     # via trio
 packaging==20.9
-    # via pytest
-pep517==0.10.0
-    # via pip-tools
+    # via
+    #   build
+    #   pytest
 persistent==4.7.0
     # via
     #   -r requirements.txt
     #   btrees
     #   zodb
-pip-tools==6.4.0
+pip-tools==6.13.0
     # via -r requirements_dev.in
 pluggy==0.13.1
     # via pytest
@@ -189,6 +191,8 @@ pyflakes==2.3.1
     # via flake8
 pyparsing==2.4.7
     # via packaging
+pyproject-hooks==1.0.0
+    # via build
 pyrsistent==0.17.3
     # via
     #   -r requirements.txt
@@ -213,7 +217,7 @@ pytz==2021.1
     #   -r requirements.txt
     #   django
     #   flattentool
-requests==2.25.1
+requests==2.31.0
     # via
     #   -r requirements.txt
     #   -r requirements_dev.in
@@ -258,8 +262,11 @@ sqlparse==0.4.4
 toml==0.10.2
     # via
     #   coverage
-    #   pep517
     #   pytest
+tomli==2.0.1
+    # via
+    #   build
+    #   pyproject-hooks
 transaction==3.0.1
     # via
     #   -r requirements.txt
