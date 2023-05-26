@@ -78,11 +78,11 @@ def raise_missing_package_error():
             "msg": mark_safe_lazy(
                 _(
                     "We could not detect a package structure at the top-level of your data. "
-                    'OCDS releases and records should be published within a <a href="http://'
+                    'OCDS releases and records should be published within a <a href="https://'
                     'standard.open-contracting.org/latest/en/schema/release_package/">release '
-                    'package </a> or <a href="http://standard.open-contracting.org/latest/en'
+                    'package </a> or <a href="https://standard.open-contracting.org/latest/en'
                     '/schema/record_package/"> record package</a> to provide important meta-'
-                    'data. For more information, please refer to the <a href="http://standard.'
+                    'data. For more information, please refer to the <a href="https://standard.'
                     'open-contracting.org/latest/en/getting_started/releases_and_records/"> '
                     "Releases and Records section </a> in the OCDS documentation.\n\n<span "
                     'class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> '
