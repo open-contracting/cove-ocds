@@ -72,13 +72,13 @@ def url_input_browser(request, server_url, browser, httpserver):
             "Open Contracting",
             "Our world runs on public contracts.",
             "h2",
-            "http://www.open-contracting.org/",
+            "https://www.open-contracting.org/",
         ),
         (
             "Open Contracting Data Standard",
             "Open Contracting Data Standard",
             "#open-contracting-data-standard",
-            "http://standard.open-contracting.org/",
+            "https://standard.open-contracting.org/",
         ),
     ],
 )
@@ -107,27 +107,27 @@ def test_index_page_ocds(server_url, browser):
         (
             "introduction",
             "schema",
-            "http://standard.open-contracting.org/latest/en/schema/",
+            "https://standard.open-contracting.org/latest/en/schema/",
         ),
         (
             "introduction",
             "Open Contracting Data Standard (OCDS)",
-            "http://standard.open-contracting.org/",
+            "https://standard.open-contracting.org/",
         ),
         (
             "how-to-use",
             "'release' and 'record'",
-            "http://standard.open-contracting.org/latest/en/getting_started/releases_and_records/",
+            "https://standard.open-contracting.org/latest/en/getting_started/releases_and_records/",
         ),
         (
             "how-to-use",
             "flattened serialization of OCDS",
-            "http://standard.open-contracting.org/latest/en/implementation/serialization/",
+            "https://standard.open-contracting.org/latest/en/implementation/serialization/",
         ),
         (
             "how-to-use",
             "Open Contracting Data Standard",
-            "http://standard.open-contracting.org/",
+            "https://standard.open-contracting.org/",
         ),
     ],
 )
