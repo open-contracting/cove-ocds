@@ -220,7 +220,7 @@ def test_500_error(server_url, browser):
                 "The schema version specified in the file is 1.1",
                 "Organization scale",
             ],
-            ["scale", "/releases/parties/details", "fetching failed"],
+            ["/releases/parties/details", "fetching failed"],
             True,
         ),
         (
