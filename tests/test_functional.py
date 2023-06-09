@@ -218,7 +218,7 @@ def test_500_error(server_url, browser):
                 "Structural Errors",
                 "name is missing but required within buyer",
                 "The schema version specified in the file is 1.1",
-                "Party Scale",
+                "Organization scale",
             ],
             ["scale", "/releases/parties/details", "fetching failed"],
             True,
@@ -231,7 +231,7 @@ def test_500_error(server_url, browser):
                 "scale",
                 "/releases/parties/details",
             ],
-            ["Party Scale"],
+            ["Organization scale"],
             True,
         ),
         (
@@ -264,7 +264,7 @@ def test_500_error(server_url, browser):
         (
             "tenders_records_1_record_with_invalid_extensions.json",
             [
-                "Party Scale",
+                "Organization scale",
                 "The metrics extension supports publication of forecasts",
                 "Get a copy of the schema with extension patches applied",
                 "The following extensions failed",
@@ -924,7 +924,7 @@ def test_url_input_with_version_change(
         (
             "tenders_releases_1_release_with_extensions_1_1.json",
             [
-                "Party Scale",
+                "Organization scale",
                 "The metrics extension supports publication of forecasts",
                 "All the extensions above were applied to extend the schema",
                 "Get a copy of the schema with extension patches applied",
@@ -937,7 +937,7 @@ def test_url_input_with_version_change(
         (
             "tenders_releases_1_release_with_invalid_extensions.json",
             [
-                "Party Scale",
+                "Organization scale",
                 "The metrics extension supports publication of forecasts",
                 "Get a copy of the schema with extension patches applied",
                 "The following extensions failed",
@@ -951,12 +951,12 @@ def test_url_input_with_version_change(
                 "None of the extensions above could be applied",
                 "extensions were not introduced in the schema until version 1.1.",
             ],
-            ["Party Scale", "Get a copy of the schema with extension patches applied"],
+            ["Organization scale", "Get a copy of the schema with extension patches applied"],
         ),
         (
             "tenders_releases_2_releases_with_metatab_version_1_1_extensions.xlsx",
             [
-                "Party Scale",
+                "Organization scale",
                 "The metrics extension supports publication of forecasts",
                 "All the extensions above were applied to extend the schema",
                 "Get a copy of the schema with extension patches applied",
