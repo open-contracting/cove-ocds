@@ -1,7 +1,6 @@
 import io
 import json
 import os
-from collections import OrderedDict
 from unittest.mock import patch
 
 import libcove.lib.common as cove_common
@@ -300,27 +299,16 @@ def test_get_json_data_deprecated_fields():
     schema_obj.pkg_schema_url = os.path.join(schema_obj.schema_host, schema_obj.pkg_schema_name)
     json_data_paths = cove_common.get_json_data_generic_paths(json_data_w_deprecations, generic_paths={})
     deprecated_data_fields = cove_common.get_json_data_deprecated_fields(json_data_paths, schema_obj)
-    expected_result = OrderedDict(
-        [
-            (
-                "initiationType",
-                {
-                    "paths": ("releases/0", "releases/1"),
-                    "explanation": (
-                        "1.1",
-                        "Not a useful field as always has to be tender",
-                    ),
-                },
-            ),
-            (
-                "quantity",
-                {
-                    "paths": ("releases/0/tender/items/0",),
-                    "explanation": ("1.1", "Nobody cares about quantities"),
-                },
-            ),
-        ]
-    )
+    expected_result = {
+        "initiationType": {
+            "paths": ("releases/0", "releases/1"),
+            "explanation": ("1.1", "Not a useful field as always has to be tender"),
+        },
+        "quantity": {
+            "paths": ("releases/0/tender/items/0",),
+            "explanation": ("1.1", "Nobody cares about quantities"),
+        },
+    }
     for field_name in expected_result.keys():
         assert field_name in deprecated_data_fields
         assert expected_result[field_name]["paths"] == deprecated_data_fields[field_name]["paths"]

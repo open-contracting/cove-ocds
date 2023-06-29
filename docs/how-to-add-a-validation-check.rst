@@ -47,7 +47,7 @@ To loop through the input data to process it, you can flatten it first, ie:
 
 .. code-block:: python
 
-    flattened_data = OrderedDict(flatten_dict(data))
+    flattened_data = dict(flatten_dict(data))
 
     for key, value in flattened_data.items():
         # do stuff with each field

@@ -4,7 +4,6 @@ import logging
 import os
 import re
 import warnings
-from collections import OrderedDict
 from decimal import Decimal
 
 from cove.views import cove_web_input_error, explore_data_context
@@ -35,7 +34,7 @@ def format_lang(choices, lang):
     Format the urls with `{lang}` contained in a schema_version_choices.
     """
 
-    formatted_choices = OrderedDict()
+    formatted_choices = {}
     for version, (display, url) in choices.items():
         formatted_choices[version] = (display, url.format(lang=lang))
     return formatted_choices
@@ -67,7 +66,7 @@ def explore_ocds(request, pk):
         # open the data first so we can inspect for record package
         with open(file_name, encoding="utf-8") as fp:
             try:
-                json_data = json.load(fp, parse_float=Decimal, object_pairs_hook=OrderedDict)
+                json_data = json.load(fp, parse_float=Decimal)
             except UnicodeError as err:
                 raise CoveInputDataError(
                     context={
@@ -224,7 +223,7 @@ def explore_ocds(request, pk):
             )
 
         with open(context["converted_path"], encoding="utf-8") as fp:
-            json_data = json.load(fp, parse_float=Decimal, object_pairs_hook=OrderedDict)
+            json_data = json.load(fp, parse_float=Decimal)
 
     if replace:
         if os.path.exists(validation_errors_path):
