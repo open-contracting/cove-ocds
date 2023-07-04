@@ -117,7 +117,7 @@ json-merge-patch==0.2
     # via
     #   -r requirements.txt
     #   libcoveocds
-jsonref==0.2
+jsonref==1.1.0
     # via
     #   -r requirements.txt
     #   flattentool
@@ -134,7 +134,7 @@ libcove==0.30.0
     #   libcoveweb
 libcoveocds==0.11.3
     # via -r requirements.txt
-libcoveweb==0.26.0
+libcoveweb==0.27.0
     # via -r requirements.txt
 libsass==0.20.1
     # via -r requirements_dev.in
@@ -166,7 +166,7 @@ openpyxl==3.0.7
     #   flattentool
 outcome==1.2.0
     # via trio
-packaging==20.9
+packaging==23.1
     # via
     #   build
     #   pytest
@@ -187,8 +187,6 @@ pycparser==2.20
     #   cffi
 pyflakes==2.3.1
     # via flake8
-pyparsing==2.4.7
-    # via packaging
 pyproject-hooks==1.0.0
     # via build
 pyrsistent==0.17.3
@@ -197,7 +195,7 @@ pyrsistent==0.17.3
     #   jsonschema
 pysocks==1.7.1
     # via urllib3
-pytest==7.3.1
+pytest==7.4.0
     # via
     #   -r requirements_dev.in
     #   pytest-cov

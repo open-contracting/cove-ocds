@@ -52,7 +52,7 @@ ijson==3.1.4
     # via flattentool
 json-merge-patch==0.2
     # via libcoveocds
-jsonref==0.2
+jsonref==1.1.0
     # via
     #   flattentool
     #   libcove
@@ -68,7 +68,7 @@ libcove==0.30.0
     #   libcoveweb
 libcoveocds==0.11.3
     # via -r requirements.in
-libcoveweb==0.26.0
+libcoveweb==0.27.0
     # via -r requirements.in
 lxml==4.9.1
     # via flattentool
