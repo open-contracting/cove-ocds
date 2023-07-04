@@ -4,7 +4,8 @@ django-bootstrap3
 jsonschema<4.10
 libcove
 libcoveocds
-libcoveweb
+# https://github.com/OpenDataServices/lib-cove-web/issues/117
+libcoveweb!=0.27.0
 python-dateutil
 rfc3339-validator
 sentry-sdk
