@@ -56,12 +56,12 @@ jsonref==1.1.0
     # via
     #   flattentool
     #   libcove
-jsonschema==4.9.1
+jsonschema==4.17.3
     # via
     #   -r requirements.in
     #   libcove
     #   libcoveocds
-libcove==0.30.0
+libcove @ git+https://github.com/jpmckinney/lib-cove.git@hotfix
     # via
     #   -r requirements.in
     #   libcoveocds
