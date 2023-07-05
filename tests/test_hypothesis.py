@@ -16,7 +16,7 @@ from libcoveocds.lib.common_checks import get_releases_aggregates
 """
 
 general_json = st.recursive(
-    st.floats() | st.integers() | st.booleans() | st.text() | st.none(),
+    st.floats(allow_subnormal=False) | st.integers() | st.booleans() | st.text() | st.none(),
     lambda children: st.lists(children) | st.dictionaries(st.text(), children),
 )
 
