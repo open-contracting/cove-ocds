@@ -12,7 +12,7 @@ from django.core.files.uploadedfile import UploadedFile
 from libcove.lib.converters import convert_json, convert_spreadsheet
 from libcoveocds.api import APIException, ocds_json_output
 from libcoveocds.lib.api import context_api_transform
-from libcoveocds.lib.common_checks import get_bad_ocds_prefixes, get_releases_aggregates
+from libcoveocds.lib.common_checks import get_bad_ocid_prefixes, get_releases_aggregates
 from libcoveocds.schema import SchemaOCDS
 
 OCDS_DEFAULT_SCHEMA_VERSION = settings.COVE_CONFIG["schema_version"]
@@ -1181,7 +1181,7 @@ def test_get_json_data_missing_ids():
     assert missin_ids_paths == results
 
 
-def test_bad_ocds_prefixes():
+def test_bad_ocid_prefixes():
     file_name = os.path.join("tests", "fixtures", "tenders_releases_7_releases_check_ocids.json")
     results = [
         ("bad-prefix-000001", "releases/0/ocid"),
@@ -1201,4 +1201,4 @@ def test_bad_ocds_prefixes():
 
     assert len(user_data_ocids) == 7  # 1 good, 6 bad ocds prefixes
     assert "ocds-00good-000003" in user_data_ocids  # good ocds prefix
-    assert get_bad_ocds_prefixes(user_data) == results
+    assert get_bad_ocid_prefixes(user_data) == results
