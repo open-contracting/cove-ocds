@@ -15,7 +15,7 @@
             <td>{% trans 'The data includes fields that are empty or contain only whitespaces. Fields that are not being used, or that have no value, should be excluded in their entirety (key and value) from the data' %}</td>
             <td>
               <ul class="list-unstyled">
-                {% for value in values|slice:":3" %}
+                {% for value in values|dictsort:"json_location"|slice:":3" %}
                   <li>{{ value.json_location }}</li>
                 {% endfor %}
                 {% if values|length > 3 %}
@@ -30,5 +30,5 @@
 </table>
 
 {% for type, values in additional_checks.items %}
-  {% cove_modal_errors className="additional-checks-"|concat:forloop.counter modalTitle="" errorList=values|list_from_attribute:"json_location" file_type=file_type full_table=False %}
+  {% cove_modal_errors className="additional-checks-"|concat:forloop.counter modalTitle="" errorList=values|dictsort:"json_location"|list_from_attribute:"json_location" file_type=file_type full_table=False %}
 {% endfor %}
