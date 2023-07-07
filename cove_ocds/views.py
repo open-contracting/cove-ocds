@@ -35,8 +35,8 @@ def format_lang(choices, lang):
     """
 
     formatted_choices = {}
-    for version, (display, url) in choices.items():
-        formatted_choices[version] = (display, url.format(lang=lang))
+    for version, (display, url, tag) in choices.items():
+        formatted_choices[version] = (display, url.format(lang=lang), tag)
     return formatted_choices
 
 
@@ -118,7 +118,7 @@ def explore_ocds(request, pk):
             select_version = post_version_choice or db_data.schema_version
             schema_ocds = SchemaOCDS(
                 select_version=select_version,
-                release_data=json_data,
+                package_data=json_data,
                 lib_cove_ocds_config=lib_cove_ocds_config,
                 record_pkg="records" in json_data,
             )
@@ -182,7 +182,7 @@ def explore_ocds(request, pk):
         select_version = post_version_choice or db_data.schema_version
         schema_ocds = SchemaOCDS(
             select_version=select_version,
-            release_data=metatab_data,
+            package_data=metatab_data,
             lib_cove_ocds_config=lib_cove_ocds_config,
         )
 

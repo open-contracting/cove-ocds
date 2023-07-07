@@ -41,7 +41,7 @@ Some configuration variables are set in ``COVE_CONFIG``, found in ``cove_project
 
 * ``app_name``, ``app_verbose_name``, ``app_strapline``, ``support_email``: set human readable strings for the DRT that can be reused in templates etc.
 * ``app_base_template``, ``input_template``, ``input_methods``: set the templates for the landing page.
-* ``schema_name``, ``schema_item_name``, ``schema_host``, ``schema_version_choices`` (``(version: (display, url))``), ``schema_codelists``: point to JSON schema files that the DRT uses for validating and converting data. Since there is more than one version of the Open Contracting Data Standard, this lets the user choose which version of the scheme they are validating against.
+* ``schema_host``, ``schema_version_choices`` (``(version: (display, url))``), ``schema_codelists``: point to JSON schema files that the DRT uses for validating and converting data. Since there is more than one version of the Open Contracting Data Standard, this lets the user choose which version of the scheme they are validating against.
 * ``root_list_path``, ``root_id``: set so the DRT knows which key to use as the root of the data, and which key to use as the main identifier when parsing the data. These, along with ``convert_titles`` are passed to the flattentool library.
 
 

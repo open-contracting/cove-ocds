@@ -253,13 +253,12 @@ def test_get_releases_aggregates():
 
 def test_get_schema_validation_errors():
     schema_obj = SchemaOCDS(select_version="1.0")
-    schema_name = schema_obj.pkg_schema_name
 
     with open(os.path.join("tests", "fixtures", "tenders_releases_2_releases.json")) as fp:
-        error_list = cove_common.get_schema_validation_errors(json.load(fp), schema_obj, schema_name, {}, {})
+        error_list = cove_common.get_schema_validation_errors(json.load(fp), schema_obj, "-", {}, {})
         assert len(error_list) == 0
     with open(os.path.join("tests", "fixtures", "tenders_releases_2_releases_invalid.json")) as fp:
-        error_list = cove_common.get_schema_validation_errors(json.load(fp), schema_obj, schema_name, {}, {})
+        error_list = cove_common.get_schema_validation_errors(json.load(fp), schema_obj, "-", {}, {})
         assert len(error_list) > 0
 
 
@@ -674,7 +673,7 @@ def test_schema_ocds_extended_schema_file():
         data.original_file.save("test.json", UploadedFile(fp))
         fp.seek(0)
         json_data = json.load(fp)
-    schema = SchemaOCDS(release_data=json_data)
+    schema = SchemaOCDS(package_data=json_data)
     assert not schema.extended
 
     schema.get_schema_obj()
@@ -687,7 +686,7 @@ def test_schema_ocds_extended_schema_file():
     assert schema.extended_schema_url == os.path.join(data.upload_url(), "extended_schema.json")
 
     json_data = json.loads('{"version": "1.1", "extensions": [], "releases": [{"ocid": "xx"}]}')
-    schema = SchemaOCDS(release_data=json_data)
+    schema = SchemaOCDS(package_data=json_data)
     schema.get_schema_obj()
     schema.create_extended_schema_file(data.upload_dir(), data.upload_url())
     assert not schema.extended
@@ -792,7 +791,7 @@ def test_schema_after_version_change_record(client):
 )
 def test_corner_cases_for_deprecated_data_fields(json_data):
     data = json.loads(json_data)
-    schema = SchemaOCDS(release_data=data)
+    schema = SchemaOCDS(package_data=data)
     json_data_paths = cove_common.get_json_data_generic_paths(data, generic_paths={})
     deprecated_fields = cove_common.get_json_data_deprecated_fields(json_data_paths, schema)
 
@@ -845,7 +844,7 @@ def test_get_json_data_missing_ids():
     with open(os.path.join(file_name)) as fp:
         user_data = json.load(fp)
 
-    schema_obj = SchemaOCDS(release_data=user_data)
+    schema_obj = SchemaOCDS(package_data=user_data)
     results = [
         "releases/0/tender/tenderers/1/id",
         "releases/0/tender/tenderers/2/id",
