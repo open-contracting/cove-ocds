@@ -155,16 +155,16 @@
       <ul>
         {% for ext_descriptor_url, ext_details in ext.items %}
           {% if ext_details %}
-          <li><a href="{% if ext_details.documentationUrl %}{{ext_details.documentationUrl}}{% else %}{{ext_details.url}}{% endif %}">{{ext_details.name}}</a>
-            {% if ext_details.release_schema_url %}
-              &nbsp;(<a href="{{ext_details.release_schema_url}}">{% trans "release schema" %}</a>)
+          <li><a href="{% if ext_details.documentationUrl %}{{ ext_details.documentationUrl }}{% else %}{{ ext_details.url }}{% endif %}">{{ ext_details.name }}</a>
+            {% if ext_details.schema_url %}
+              &nbsp;(<a href="{{ ext_details.schema_url }}">{% trans "release schema" %}</a>)
             {% endif %} 
-            &nbsp;&nbsp;<span class="font-tick tick"></span><p><small>{{ext_details.description}}</small><p>
+            &nbsp;&nbsp;<span class="font-tick tick"></span><p><small>{{ ext_details.description }}</small><p>
             {% if ext_details.failed_codelists %}
               <ul class="list-unstyled">
                 {% for codelist, codelist_error in ext_details.failed_codelists.items %}
                     <li>
-                    <span class="font-tick cross"></span> <strong>{{codelist}}:</strong> {{codelist_error}}
+                    <span class="font-tick cross"></span> <strong>{{ codelist }}:</strong> {{ codelist_error }}
                     </li>
                 {% endfor %}
               </ul>
