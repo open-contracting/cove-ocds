@@ -208,8 +208,6 @@ EXPECTED_RELEASE_AGGREGATE_RANDOM = {
 DEFAULT_OCDS_VERSION = settings.COVE_CONFIG["schema_version"]
 METRICS_EXT = "https://raw.githubusercontent.com/open-contracting-extensions/ocds_metrics_extension/master/extension.json"  # noqa: E501
 CODELIST_EXT = "https://raw.githubusercontent.com/INAImexico/ocds_extendedProcurementCategory_extension/0ed54770c85500cf21f46e88fb06a30a5a2132b1/extension.json"  # noqa: E501
-UNKNOWN_URL_EXT = "http://bad-url-for-extensions.com/extension.json"
-NOT_FOUND_URL_EXT = "https://standard.open-contracting.org/latest/en/404.json"
 
 
 def test_get_releases_aggregates():
@@ -661,122 +659,6 @@ def test_get_additional_codelist_values():
             "values": ["GSINS"],
         },
     }
-
-
-@pytest.mark.parametrize(
-    (
-        "select_version",
-        "release_data",
-        "version",
-        "invalid_version_argument",
-        "invalid_version_data",
-        "extensions",
-    ),
-    [
-        (None, None, DEFAULT_OCDS_VERSION, False, False, {}),
-        ("1.0", None, "1.0", False, False, {}),
-        (None, {"version": "1.1"}, "1.1", False, False, {}),
-        (
-            None,
-            {"version": "1.1", "extensions": ["c", "d"]},
-            "1.1",
-            False,
-            False,
-            {"c": (), "d": ()},
-        ),
-        ("1.1", {"version": "1.0"}, "1.1", False, False, {}),
-        ("1.bad", {"version": "1.1"}, "1.1", True, False, {}),
-        ("1.wrong", {"version": "1.bad"}, DEFAULT_OCDS_VERSION, True, True, {}),
-        (None, {"version": "1.bad"}, DEFAULT_OCDS_VERSION, False, True, {}),
-        (None, {"extensions": ["a", "b"]}, "1.0", False, False, {"a": (), "b": ()}),
-        (
-            None,
-            {"version": "1.1", "extensions": ["a", "b"]},
-            "1.1",
-            False,
-            False,
-            {"a": (), "b": ()},
-        ),
-    ],
-)
-def test_schema_ocds_constructor(
-    select_version,
-    release_data,
-    version,
-    invalid_version_argument,
-    invalid_version_data,
-    extensions,
-):
-    schema = SchemaOCDS(select_version=select_version, release_data=release_data)
-    name = settings.COVE_CONFIG["schema_name"]["release"]
-    host = settings.COVE_CONFIG["schema_version_choices"][version][1].format(lang="en")
-    url = host + name
-
-    assert schema.version == version
-    assert schema.pkg_schema_name == name
-    assert schema.schema_host == host
-    assert schema.pkg_schema_url == url
-    assert schema.invalid_version_argument == invalid_version_argument
-    assert schema.invalid_version_data == invalid_version_data
-    assert schema.extensions == extensions
-
-
-@pytest.mark.parametrize(
-    ("release_data", "extensions", "invalid_extension", "extended", "extends_schema"),
-    [
-        (None, {}, {}, False, False),
-        (
-            {"version": "1.1", "extensions": [NOT_FOUND_URL_EXT]},
-            {NOT_FOUND_URL_EXT: ()},
-            {NOT_FOUND_URL_EXT: "404: not found"},
-            False,
-            False,
-        ),
-        (
-            {"version": "1.1", "extensions": [UNKNOWN_URL_EXT]},
-            {UNKNOWN_URL_EXT: ()},
-            {UNKNOWN_URL_EXT: "fetching failed"},
-            False,
-            False,
-        ),
-        (
-            {"version": "1.1", "extensions": [METRICS_EXT]},
-            {METRICS_EXT: ()},
-            {},
-            True,
-            True,
-        ),
-        (
-            {"version": "1.1", "extensions": [CODELIST_EXT]},
-            {CODELIST_EXT: ()},
-            {},
-            True,
-            False,
-        ),
-        (
-            {"version": "1.1", "extensions": [UNKNOWN_URL_EXT, METRICS_EXT]},
-            {UNKNOWN_URL_EXT: (), METRICS_EXT: ()},
-            {UNKNOWN_URL_EXT: "fetching failed"},
-            True,
-            True,
-        ),
-    ],
-)
-def test_schema_ocds_extensions(release_data, extensions, invalid_extension, extended, extends_schema):
-    schema = SchemaOCDS(release_data=release_data)
-    assert schema.extensions == extensions
-    assert not schema.extended
-
-    schema_obj = schema.get_schema_obj()
-    assert schema.invalid_extension == invalid_extension
-    assert schema.extended == extended
-
-    if extends_schema:
-        assert "Metric" in schema_obj["definitions"].keys()
-        assert schema_obj["definitions"]["Award"]["properties"].get("agreedMetrics")
-    else:
-        assert "Metric" not in schema_obj["definitions"].keys()
-        assert not schema_obj["definitions"]["Award"]["properties"].get("agreedMetrics")
 
 
 @pytest.mark.django_db
