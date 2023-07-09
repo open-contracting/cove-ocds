@@ -63,7 +63,7 @@ def test_get_json_data_deprecated_fields():
     schema_obj = SchemaOCDS()
     schema_obj.schema_host = os.path.join("tests", "fixtures/")  # "/" is for urljoin in lib-cove
     schema_obj.pkg_schema_name = "release_package_schema_ref_release_schema_deprecated_fields.json"
-    schema_obj.pkg_schema_url = os.path.join(schema_obj.schema_host, schema_obj.pkg_schema_name)
+    schema_obj._test_override_package_schema = os.path.join(schema_obj.schema_host, schema_obj.pkg_schema_name)
     json_data_paths = cove_common.get_json_data_generic_paths(json_data_w_deprecations, generic_paths={})
     deprecated_data_fields = cove_common.get_json_data_deprecated_fields(json_data_paths, schema_obj)
     expected_result = {
@@ -86,7 +86,7 @@ def test_get_schema_deprecated_paths():
     schema_obj = SchemaOCDS()
     schema_obj.schema_host = os.path.join("tests", "fixtures/")  # "/" is for urljoin in lib-cove
     schema_obj.pkg_schema_name = "release_package_schema_ref_release_schema_deprecated_fields.json"
-    schema_obj.pkg_schema_url = os.path.join(schema_obj.schema_host, schema_obj.pkg_schema_name)
+    schema_obj._test_override_package_schema = os.path.join(schema_obj.schema_host, schema_obj.pkg_schema_name)
     deprecated_paths = cove_common._get_schema_deprecated_paths(schema_obj)
     expected_results = [
         (
@@ -114,9 +114,9 @@ def test_get_schema_deprecated_paths():
             ("1.1", "Nobody cares about quantities"),
         ),
     ]
-    assert len(deprecated_paths) == 6
     for path in expected_results:
         assert path in deprecated_paths
+    assert len(deprecated_paths) == 6
 
 
 @pytest.mark.django_db

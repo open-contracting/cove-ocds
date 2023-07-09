@@ -3,7 +3,7 @@ django-bootstrap3
 jsonschema
 # https://github.com/OpenDataServices/lib-cove/pull/118 120 121
 libcove[flatten] @ git+https://github.com/jpmckinney/lib-cove.git@hotfix
-libcoveocds
+libcoveocds[web]
 # https://github.com/OpenDataServices/lib-cove-web/issues/117
 libcoveweb!=0.27.0
 python-dateutil
