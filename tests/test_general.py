@@ -11,8 +11,6 @@ from django.core.files.base import ContentFile
 from django.core.files.uploadedfile import UploadedFile
 from libcove.lib.converters import convert_json, convert_spreadsheet
 from libcoveocds.api import APIException, ocds_json_output
-from libcoveocds.lib.api import context_api_transform
-from libcoveocds.lib.common_checks import get_bad_ocid_prefixes, get_releases_aggregates
 from libcoveocds.schema import SchemaOCDS
 
 OCDS_DEFAULT_SCHEMA_VERSION = settings.COVE_CONFIG["schema_version"]
