@@ -397,7 +397,6 @@ def test_500_error(server_url, browser):
             ["Missing OCDS package"],
             True,
         ),
-        ("badfile.json", "Statistics cannot be produced", [], True),
         # Test unconvertable JSON (main sheet "releases" is missing)
         ("unconvertable_json.json", "could not be converted", [], False),
         (
@@ -486,9 +485,8 @@ def test_500_error(server_url, browser):
             "tenders_releases_1_release_with_various_codelists.json",
             [
                 "needsAssessment, notADocumentType, tariffIllustration",
-                "+releaseTag.csv: Codelist Error, Could not find code field in codelist",
-                "-documentType.csv: Codelist error, Trying to remove non existing codelist value notACodelistValueAtAll",  # noqa: E501
-                "+method.csv: Unicode Error, codelists need to be in UTF-8",
+                "-documentType.csv: References non-existing code(s): notACodelistValueAtAll",
+                "+method.csv: Has non-UTF-8 characters",
                 "chargePaidBy.csv",
                 "notAPaidByCodelist",
             ],
@@ -625,8 +623,8 @@ def check_url_input_result_page(
             assert int(converted_file_response.headers["content-length"]) != 0
 
 
-DARK_RED = "rgba(169, 68, 66, 1)"
-DARK_GREEN = "rgba(155, 175, 0, 1)"
+DARK_RED = "169, 68, 66, 1"
+DARK_GREEN = "155, 175, 0, 1"
 
 
 @pytest.mark.parametrize(
@@ -672,7 +670,7 @@ def test_headlines_class(url_input_browser, source_filename, heading_color):
 
     # Check that this is actually the headlines panel
     assert headlines_panel.text.startswith("Headlines")
-    assert heading_color == actual
+    assert actual == f"rgba({heading_color})"
 
 
 def test_validation_error_messages(url_input_browser):

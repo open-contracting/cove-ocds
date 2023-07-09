@@ -139,16 +139,11 @@ COVE_CONFIG = {
     "app_base_template": "cove_ocds/base.html",
     "app_verbose_name": "Open Contracting Data Review Tool",
     "app_strapline": "Review your OCDS data.",
-    "schema_name": {
-        "release": "release-package-schema.json",
-        "record": "record-package-schema.json",
-    },
-    "schema_item_name": "release-schema.json",
     "schema_host": None,
     "schema_version_choices": {
-        # version: (display, url),
-        "1.0": ("1.0", "https://standard.open-contracting.org/1.0/{lang}/"),
-        "1.1": ("1.1", "https://standard.open-contracting.org/1.1/{lang}/"),
+        # version: (display, url, tag),
+        "1.0": ("1.0", "https://standard.open-contracting.org/1.0/{lang}/", "1__0__3"),
+        "1.1": ("1.1", "https://standard.open-contracting.org/1.1/{lang}/", "1__1__5"),
     },
     "schema_codelists": {
         # version: codelist_dir,
@@ -157,8 +152,8 @@ COVE_CONFIG = {
     "root_list_path": "releases",
     "root_id": "ocid",
     "convert_titles": False,
-    "input_template": "cove_ocds/input.html",
     "input_methods": ["upload", "url", "text"],
+    "input_template": "cove_ocds/input.html",
     "support_email": "data@open-contracting.org",
 }
 
