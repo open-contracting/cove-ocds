@@ -139,7 +139,6 @@ COVE_CONFIG = {
     "app_base_template": "cove_ocds/base.html",
     "app_verbose_name": "Open Contracting Data Review Tool",
     "app_strapline": "Review your OCDS data.",
-    "schema_host": None,
     "schema_version_choices": {
         # version: (display, url, tag),
         "1.0": ("1.0", "https://standard.open-contracting.org/1.0/{lang}/", "1__0__3"),

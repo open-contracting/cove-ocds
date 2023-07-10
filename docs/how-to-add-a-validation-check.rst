@@ -12,59 +12,15 @@ What follows is an outline of how to add a check. This will involve making chang
 Changes to ``lib-cove-ocds``
 ----------------------------
 
-Make new class for your check, subclassing the ``AdditionalCheck`` class in ``lib/additional_checks.py``. This class makes variables available to store whether a check has failed (``self.failed``, a bool) and the output of the check (``self.output``, an array), and expects you to override the ``process`` method in order to carry out the check.
+Make a new function for your check in ``lib/additional_checks.py``. The function must yield a dict for each check failure. The dict contains any information to be displayed in the template. See the ``empty_field`` function as an example.
+
+Add the new function to the list of checks, so that it runs when ``run_additional_checks()`` is called from `the top-level common_checks.py <https://github.com/open-contracting/lib-cove-ocds/blob/main/libcoveocds/common_checks.py>`_).
 
 .. code-block:: python
 
-    class SampleCheck(AdditionalCheck):
-        """A check on some field to make sure the data smells right."""
+    CHECKS = {"all": [empty_field, my_new_function], "none": []}
 
-        def process(self, data, path_prefix):
-            pass
-
-
-The items in the ``output`` array should be dicts with a key for ``type`` at a minimum as well as anything else you want to pass through to be displayed in the template. The value of ``type`` is just a string so that in the template you can customize the display of the results of each type of check. Other things in the output might be the JSON path of the value which failed the check, and the value itself.
-
-Carry out the validation in the ``process`` function of your new class:
-
-.. code-block:: python
-
-    def process(self, data, path_prefix):
-
-        # Do your validation here
-
-        # When something fails:
-        self.failed = True
-
-        # Pass results through with, eg:
-        self.output.append({
-         'type': 'sample_check',
-         'something_useful': a_helpful_value,
-         'json_location': path_prefix
-        })
-
-To loop through the input data to process it, you can flatten it first, ie:
-
-.. code-block:: python
-
-    flattened_data = dict(flatten_dict(data))
-
-    for key, value in flattened_data.items():
-        # do stuff with each field
-
-Add the class to the array of checks so they get run when data is loaded (this happens in `the top level common_checks.py <https://github.com/open-contracting/lib-cove-ocds/blob/main/libcoveocds/common_checks.py>`_).
-
-.. code-block:: python
-
-    TEST_CLASSES = {
-        'additional': [
-            # ...
-            SampleCheck
-            # ...
-        ]
-    }
-
-Add tests for your new check in ``tests/test_additional_checks.py``. You might need to add new test data in ``tests/fixtures/additional_checks/``.
+Add tests for the new function in ``tests/test_additional_checks.py`` and any fixtures in ``tests/fixtures/additional_checks/``.
 
 Changes to ``cove-ocds``
 ------------------------
