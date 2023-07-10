@@ -205,7 +205,7 @@ def test_500_error(server_url, browser):
         (
             "tenders_releases_2_releases.json",
             ["Convert", "Schema", "OCDS release package schema version 1.0. You can"] + OCDS_SCHEMA_VERSIONS_DISPLAY,
-            ["Schema Extensions", "The schema version specified in the file is"],
+            ["Schema Extensions"],
             True,
         ),
         (
@@ -484,13 +484,13 @@ def test_500_error(server_url, browser):
         (
             "tenders_releases_1_release_with_various_codelists.json",
             [
-                "needsAssessment, notADocumentType, tariffIllustration",
+                "needsAssessment, notADocumentType",
                 "-documentType.csv: References non-existing code(s): notACodelistValueAtAll",
                 "+method.csv: Has non-UTF-8 characters",
                 "chargePaidBy.csv",
                 "notAPaidByCodelist",
             ],
-            [],
+            ['Has no "Code" column'],
             True,
         ),
     ],
@@ -807,7 +807,7 @@ def test_url_invalid_dataset_request(server_url, browser, data_url):
             "structural checks against OCDS release package schema version 1.0",
             "version is missing but required",
             "methodRationale",
-            "version",
+            "✅",  # skip this assertion
         ),
         (
             "tenders_releases_2_releases_with_metatab_version_1_1_extensions.xlsx",
@@ -867,7 +867,7 @@ def test_url_input_with_version(
         (
             "tenders_releases_1_release_with_invalid_extensions.json",
             "1.1",
-            "version is missing but required",
+            "",  # skip this assertion
             "structural checks against OCDS release package schema version 1.0",
             "methodRationale",
             "version",

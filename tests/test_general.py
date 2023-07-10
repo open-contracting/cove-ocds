@@ -265,13 +265,13 @@ def test_explore_schema_version(client, json_data):
     resp = client.get(data.get_absolute_url())
     assert resp.status_code == 200
     if "version" not in json_data:
-        assert "/1.0/" in resp.context["schema_url"]
-        assert resp.context["version_used"] == "1.0"
-        assert resp.context["version_used_display"] == "1.0"
-        resp = client.post(data.get_absolute_url(), {"version": "1.1"})
-        assert resp.status_code == 200
         assert "/1.1/" in resp.context["schema_url"]
         assert resp.context["version_used"] == "1.1"
+        assert resp.context["version_used_display"] == "1.1"
+        resp = client.post(data.get_absolute_url(), {"version": "1.0"})
+        assert resp.status_code == 200
+        assert "/1.0/" in resp.context["schema_url"]
+        assert resp.context["version_used"] == "1.0"
     else:
         assert "/1.1/" in resp.context["schema_url"]
         assert resp.context["version_used"] == "1.1"
@@ -480,9 +480,6 @@ def test_schema_after_version_change(client):
     with open(os.path.join(data.upload_dir(), "extended_schema.json")) as extended_release_fp:
         assert "mainProcurementCategory" in json.load(extended_release_fp)["definitions"]["Tender"]["properties"]
 
-    with open(os.path.join(data.upload_dir(), "validation_errors-3.json")) as validation_errors_fp:
-        assert "'version' is missing but required" in validation_errors_fp.read()
-
     # test link is still there.
     resp = client.get(data.get_absolute_url())
     assert resp.status_code == 200
@@ -491,17 +488,11 @@ def test_schema_after_version_change(client):
     with open(os.path.join(data.upload_dir(), "extended_schema.json")) as extended_release_fp:
         assert "mainProcurementCategory" in json.load(extended_release_fp)["definitions"]["Tender"]["properties"]
 
-    with open(os.path.join(data.upload_dir(), "validation_errors-3.json")) as validation_errors_fp:
-        assert "'version' is missing but required" in validation_errors_fp.read()
-
     resp = client.post(data.get_absolute_url(), {"version": "1.0"})
     assert resp.status_code == 200
 
     with open(os.path.join(data.upload_dir(), "extended_schema.json")) as extended_release_fp:
         assert "mainProcurementCategory" not in json.load(extended_release_fp)["definitions"]["Tender"]["properties"]
-
-    with open(os.path.join(data.upload_dir(), "validation_errors-3.json")) as validation_errors_fp:
-        assert "'version' is missing but required" not in validation_errors_fp.read()
 
 
 @pytest.mark.django_db

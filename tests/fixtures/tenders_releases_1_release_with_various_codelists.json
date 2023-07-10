@@ -7,7 +7,8 @@
     },
     "extensions": [
         "https://raw.githubusercontent.com/open-contracting-extensions/ocds_tariffs_extension/d9df2969030b0a555c24c7db685262c714b4da24/extension.json",
-        "https://raw.githubusercontent.com/open-contracting/cove-ocds/013a67c249a332f5feacb9dc5987a1881893ce64/tests/fixtures/codelist_extension/extension.json"
+        "https://raw.githubusercontent.com/open-contracting/cove-ocds/013a67c249a332f5feacb9dc5987a1881893ce64/tests/fixtures/codelist_extension/extension.json",
+        "http://standard.open-contracting.org/profiles/ppp/latest/es/extension.json"
     ],
     "version": "1.1",
     "releases": [
