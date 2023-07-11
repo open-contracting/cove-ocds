@@ -146,7 +146,7 @@ libcove @ git+https://github.com/jpmckinney/lib-cove.git@hotfix
     #   -r requirements.txt
     #   libcoveocds
     #   libcoveweb
-libcoveocds[web]==0.12.2
+libcoveocds[web]==0.12.3
     # via -r requirements.txt
 libcoveweb==0.26.0
     # via -r requirements.txt
