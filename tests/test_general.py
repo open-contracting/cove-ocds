@@ -10,7 +10,8 @@ from django.conf import settings
 from django.core.files.base import ContentFile
 from django.core.files.uploadedfile import UploadedFile
 from libcove.lib.converters import convert_json, convert_spreadsheet
-from libcoveocds.api import APIException, ocds_json_output
+from libcoveocds.api import ocds_json_output
+from libcoveocds.exceptions import OCDSVersionError
 from libcoveocds.schema import SchemaOCDS
 
 OCDS_DEFAULT_SCHEMA_VERSION = settings.COVE_CONFIG["schema_version"]
@@ -564,11 +565,13 @@ def test_corner_cases_for_deprecated_data_fields(json_data):
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize("json_data", ["{[,]}", '{"version": "1.bad"}'])
-def test_ocds_json_output_bad_data(json_data):
+@pytest.mark.parametrize(
+    "json_data,exception", [("{[,]}", json.JSONDecodeError), ('{"version": "1.bad"}', OCDSVersionError)]
+)
+def test_ocds_json_output_bad_data(json_data, exception):
     data = SuppliedData.objects.create()
     data.original_file.save("bad_data.json", ContentFile(json_data))
-    with pytest.raises(APIException):
+    with pytest.raises(exception):
         ocds_json_output(
             data.upload_dir(),
             data.original_file.path,
