@@ -73,7 +73,7 @@ jsonschema==4.18.0
     #   libcoveocds
 jsonschema-specifications==2023.6.1
     # via jsonschema
-libcove @ git+https://github.com/jpmckinney/lib-cove.git@hotfix
+libcove @ https://github.com/jpmckinney/lib-cove/archive/hotfix.zip
     # via
     #   -r requirements.in
     #   libcoveocds

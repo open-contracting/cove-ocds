@@ -141,7 +141,7 @@ jsonschema-specifications==2023.6.1
     # via
     #   -r requirements.txt
     #   jsonschema
-libcove @ git+https://github.com/jpmckinney/lib-cove.git@hotfix
+libcove @ https://github.com/jpmckinney/lib-cove/archive/hotfix.zip
     # via
     #   -r requirements.txt
     #   libcoveocds
