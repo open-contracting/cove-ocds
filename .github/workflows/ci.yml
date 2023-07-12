@@ -23,7 +23,7 @@ jobs:
       - run: ./manage.py compilemessages
       - name: Run checks and tests
         env:
-          PYTHONWARNINGS: error,ignore::DeprecationWarning
+          PYTHONWARNINGS: error,ignore::DeprecationWarning:libcove.lib.common
         shell: bash
         run: |
           ./manage.py migrate
@@ -31,7 +31,7 @@ jobs:
           ./manage.py check --fail-level WARNING
           # https://github.com/OpenDataServices/lib-cove/issues/112
           # https://github.com/OpenDataServices/flatten-tool/issues/412
-          pytest -W error -W ignore::DeprecationWarning -W ignore::ResourceWarning --cov cove_ocds --cov cove_project
+          pytest -W error -W ignore::DeprecationWarning:libcove.lib.common -W ignore::ResourceWarning --cov cove_ocds --cov cove_project
       - env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: coveralls --service=github
