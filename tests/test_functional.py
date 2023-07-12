@@ -268,7 +268,9 @@ def test_500_error(server_url, browser):
                 "The metrics extension supports publication of forecasts",
                 "Get a copy of the schema with extension patches applied",
                 "The following extensions failed",
-                "Invalid code found in scale",
+                "Codelist Errors",
+                "records/compiledRelease/parties/details",
+                "mooo",
                 "/records/compiledRelease/tender/targets",
                 "The schema version specified in the file is 1.1",
                 "/records/releases/tender/targets",
@@ -335,8 +337,9 @@ def test_500_error(server_url, browser):
                 "The date on which the information contained in the release was first recorded in, or published by, any system.",  # noqa: E501
                 "Invalid 'uri' found",
                 "The URI of this package that identifies it uniquely in the world.",
-                "Invalid code found in currency",
-                "The currency of the amount, from the closed currency codelist.",
+                "Codelist Errors",
+                "releases/tender/value",
+                "badCurrencyCode",
                 "numberOfTenderers is not a integer. Check that the value doesn’t contain decimal points or any characters other than 0-9. Integer values should not be in quotes.",  # noqa: E501
                 "The number of parties who submit a bid.",
                 "amount is not a number. Check that the value doesn’t contain any characters other than 0-9 and dot (.). Number values should not be in quotes",  # noqa: E501
@@ -681,7 +684,6 @@ def test_validation_error_messages(url_input_browser):
         "<code>id</code> is missing but required within <code>tender</code>",
         "<code>initiationType</code> is missing but required",
         'Incorrect date format. Dates should use the form YYYY-MM-DDT00:00:00Z. Learn more about <a href="https://standard.open-contracting.org/latest/en/schema/reference/#date">dates in OCDS</a>.',  # noqa: E501
-        "Invalid code found in <code>currency</code>",
         "<code>numberOfTenderers</code> is not a integer",
         "<code>amount</code> is not a number. Check that the value  doesn’t contain any characters other than 0-9 and dot (<code>.</code>).",  # noqa: E501
         "<code>ocid</code> is not a string. Check that the value is not null, and has quotes at the start and end. Escape any quotes in the value with <code>\\</code>",  # noqa: E501
@@ -1419,7 +1421,6 @@ def test_jsonschema_translation_2(
         "Incorrect date format. Dates should use the form YYYY-MM-DDT00:00:00Z. Learn more about dates in OCDS.",
         "Invalid 'uri' found",
         '"" is too short. Strings must be at least one character. This error typically indicates a missing value.',
-        "Invalid code found in currency",
         "[] is too short. You must supply at least one value, or remove the item entirely (unless it’s required).",
     ]
 
@@ -1436,7 +1437,6 @@ def test_jsonschema_translation_2(
         "Formato de fecha inválido. Las fechas deben usar el formato YYYY-MM-DDT00:00:00Z. Lea más sobre fechas en OCDS",  # noqa: E501
         "Se ha encontrado una 'uri' inválida",
         '""es muy corto. Las cadenas deben ser de al menos un caracter. Este error generalmente indica que hay un valor faltante.',  # noqa: E501
-        "Código inválido encontrado en currency",
         "[]es muy corto. Debe proporcionar al menos un valor o eliminar el artículo por completo (a menos que sea necesario)",  # noqa: E501
     ]
 
