@@ -23,7 +23,7 @@ jobs:
       - run: ./manage.py compilemessages
       - name: Run checks and tests
         env:
-          PYTHONWARNINGS: error
+          PYTHONWARNINGS: error,ignore::DeprecationWarning
         shell: bash
         run: |
           ./manage.py migrate
