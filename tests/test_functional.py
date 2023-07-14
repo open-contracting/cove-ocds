@@ -1361,23 +1361,23 @@ def test_jsonschema_translation(
 
     spanish_validation_messages = [
         "'a' no coincide con ninguna de las expresiones regulares: 'okay'",
-        '"a"es una dependencia de "b"',
+        '"a" es una dependencia de "b"',
         '"a" no es un "email"',
         '"a" no es válido bajo ninguno de los esquemas dados',
         '"a" no es válido bajo ninguno de los esquemas dados',
-        '"a"es muy corto',
-        '"aaa"es muy largo',
+        '"a" es muy corto',
+        '"aaa" es muy largo',
         "1 es menor que el mínimo de 2",
-        "1es válido bajo cada uno de {'type': 'integer'}, {'type': 'number'}",
-        "2es mayor o igual que el máximo de 2",
+        "1 es válido bajo cada uno de {'type': 'integer'}, {'type': 'number'}",
+        "2 es mayor o igual que el máximo de 2",
         "2 es menor o igual que el mínimo de 2",
         "2 no es un múltiplo de 3",
         "3 es mayor que el máximo de 2",
         "Items adicionales no están permitidos (['a'] fue inesperado)",
         "Propiedades adicionales no están permitidas (['a'] fue inesperado )",
         '{"a": 1, "b": 2, "c": 3} tiene demasiadas propiedades',
-        '["a", "a", "a"]es muy largo',
-        '["a"]es muy corto',
+        '["a", "a", "a"] es muy largo',
+        '["a"] es muy corto',
         '"a" no es válido bajo ninguno de los esquemas dados',
         '{"type": "string"} no está permitido para "a"',
     ]
@@ -1426,9 +1426,9 @@ def test_jsonschema_translation_2(
 
     spanish_validation_messages = [
         "id falta pero se requiere dentro de tender",
-        "initiationTypefalta pero se requiere",
+        "initiationType falta pero se requiere",
         "versionno coincide con la expresión regular ^(\\d+\\.)(\\d+)$",
-        "amountno es un número. Compruebe que el valor no contenga ningún carácter más que 0-9 y el punto (.). Los valores numéricos no deben estar entre comillas",  # noqa: E501
+        "amount no es un número. Compruebe que el valor no contenga ningún carácter más que 0-9 y el punto (.). Los valores numéricos no deben estar entre comillas",  # noqa: E501
         "buyer no es un objeto JSON.",
         "numberOfTenderers no es un entero. Compruebe que el valor no contenga puntos decimales ni ningún otro carácter que no sea 0-9. Los valores enteros no deben estar entre comillas.",  # noqa: E501
         "ocid no es un hilo. Revise que el valor no es 'null', y tenga comillas al principio y al final. Escapa de cualquier comillas con el valor \\",  # noqa: E501
@@ -1436,8 +1436,8 @@ def test_jsonschema_translation_2(
         "title no es un hilo. Revise que el valor tenga comillas al principio y al final. Escapa de cualquier comillas con el valor \\",  # noqa: E501
         "Formato de fecha inválido. Las fechas deben usar el formato YYYY-MM-DDT00:00:00Z. Lea más sobre fechas en OCDS",  # noqa: E501
         "Se ha encontrado una 'uri' inválida",
-        '""es muy corto. Las cadenas deben ser de al menos un caracter. Este error generalmente indica que hay un valor faltante.',  # noqa: E501
-        "[]es muy corto. Debe proporcionar al menos un valor o eliminar el artículo por completo (a menos que sea necesario)",  # noqa: E501
+        '"" es muy corto. Las cadenas deben ser de al menos un caracter. Este error generalmente indica que hay un valor faltante.',  # noqa: E501
+        "[] es muy corto. Debe proporcionar al menos un valor o eliminar el artículo por completo (a menos que sea necesario)",  # noqa: E501
     ]
 
     source_filename = "badfile_all_validation_errors.json"
