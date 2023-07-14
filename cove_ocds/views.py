@@ -113,7 +113,7 @@ def explore_ocds(request, pk):
                     }
                 )
 
-            version_in_data = json_data.get("version", "")
+            version_in_data = json_data.get("version") or ""
             db_data.data_schema_version = version_in_data
             select_version = post_version_choice or db_data.schema_version
             schema_ocds = SchemaOCDS(
