@@ -1374,7 +1374,7 @@ def test_jsonschema_translation(
         "2 no es un múltiplo de 3",
         "3 es mayor que el máximo de 2",
         "Items adicionales no están permitidos (['a'] fue inesperado)",
-        "Propiedades adicionales no están permitidas (['a'] fue inesperado )",
+        "Propiedades adicionales no están permitidas (['a'] fue inesperado)",
         '{"a": 1, "b": 2, "c": 3} tiene demasiadas propiedades',
         '["a", "a", "a"] es muy largo',
         '["a"] es muy corto',
@@ -1427,7 +1427,7 @@ def test_jsonschema_translation_2(
     spanish_validation_messages = [
         "id falta pero se requiere dentro de tender",
         "initiationType falta pero se requiere",
-        "versionno coincide con la expresión regular ^(\\d+\\.)(\\d+)$",
+        "version no coincide con la expresión regular ^(\\d+\\.)(\\d+)$",
         "amount no es un número. Compruebe que el valor no contenga ningún carácter más que 0-9 y el punto (.). Los valores numéricos no deben estar entre comillas",  # noqa: E501
         "buyer no es un objeto JSON.",
         "numberOfTenderers no es un entero. Compruebe que el valor no contenga puntos decimales ni ningún otro carácter que no sea 0-9. Los valores enteros no deben estar entre comillas.",  # noqa: E501

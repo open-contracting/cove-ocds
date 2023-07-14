@@ -330,7 +330,7 @@ msgid ""
 "         "
 msgstr ""
 "\n"
-"<td> Obsoleto en %(version)s%(description)s</td>"
+"<td> Obsoleto en %(version)s %(description)s</td>"
 
 #: cove_ocds/templates/cove_ocds/explore_base.html:5
 msgid "Load New File"
@@ -1634,7 +1634,7 @@ msgstr "%s no es válido bajo ninguno de los esquemas dados"
 #: cove_ocds/templatetags/cove_tags.py:29
 #, python-format
 msgid "%(instance)s is valid under each of %(reprs)s"
-msgstr "%(instance)ses válido bajo cada uno de %(reprs)s"
+msgstr "%(instance)s es válido bajo cada uno de %(reprs)s"
 
 #: cove_ocds/views.py:78 cove_ocds/views.py:91 cove_ocds/views.py:109
 msgid "Sorry, we can't process that data"
