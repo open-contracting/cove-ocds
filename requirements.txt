@@ -80,7 +80,7 @@ libcove @ https://github.com/jpmckinney/lib-cove/archive/hotfix2.zip
     #   libcoveweb
 libcoveocds[web]==0.12.5
     # via -r requirements.in
-libcoveweb==0.26.0
+libcoveweb==0.28.0
     # via -r requirements.in
 lxml==4.9.1
     # via flattentool

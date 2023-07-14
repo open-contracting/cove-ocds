@@ -148,7 +148,7 @@ libcove @ https://github.com/jpmckinney/lib-cove/archive/hotfix2.zip
     #   libcoveweb
 libcoveocds[web]==0.12.5
     # via -r requirements.txt
-libcoveweb==0.26.0
+libcoveweb==0.28.0
     # via -r requirements.txt
 libsass==0.20.1
     # via -r requirements_dev.in
