@@ -78,7 +78,7 @@ libcove @ https://github.com/jpmckinney/lib-cove/archive/hotfix2.zip
     #   -r requirements.in
     #   libcoveocds
     #   libcoveweb
-libcoveocds[web]==0.12.5
+libcoveocds[perf,web]==0.12.5
     # via -r requirements.in
 libcoveweb==0.28.0
     # via -r requirements.in
@@ -96,6 +96,8 @@ odfpy==1.4.1
     # via flattentool
 openpyxl==3.0.7
     # via flattentool
+orjson==3.9.5
+    # via libcoveocds
 persistent==4.7.0
     # via
     #   btrees
