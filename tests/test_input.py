@@ -41,8 +41,7 @@ def test_connection_error(rf):
     assert b"Connection refused" in resp.content
 
     resp = v.data_input(fake_cove_middleware(rf.post("/", {"source_url": "https://wrong.host.badssl.com/"})))
-    # https://docs.djangoproject.com/en/3.2/releases/3.0/#miscellaneous
-    assert b"doesn&#x27;t match either of" in resp.content or b"doesn&#39;t match either of" in resp.content
+    assert b"Hostname mismatch, certificate is not valid" in resp.content
 
 
 @pytest.mark.django_db
