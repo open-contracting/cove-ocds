@@ -105,6 +105,7 @@ flattentool==0.19.0
     # via
     #   -r requirements.txt
     #   -r requirements_dev.in
+    #   libcove
     #   libcoveweb
 h11==0.14.0
     # via wsproto
@@ -141,7 +142,7 @@ jsonschema-specifications==2023.6.1
     # via
     #   -r requirements.txt
     #   jsonschema
-libcove @ https://github.com/jpmckinney/lib-cove/archive/hotfix2.zip
+libcove[flatten] @ https://github.com/jpmckinney/lib-cove/archive/hotfix2.zip
     # via
     #   -r requirements.txt
     #   libcoveocds
