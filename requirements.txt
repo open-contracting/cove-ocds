@@ -68,7 +68,6 @@ jsonref==1.1.0
     #   ocdsextensionregistry
 jsonschema==4.18.0
     # via
-    #   -r requirements.in
     #   libcove
     #   libcoveocds
 jsonschema-specifications==2023.6.1
