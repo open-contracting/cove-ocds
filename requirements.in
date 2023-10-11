@@ -1,6 +1,5 @@
 django
 django-bootstrap3
-jsonschema
 # https://github.com/OpenDataServices/lib-cove/pulls
 libcove[flatten] @ https://github.com/jpmckinney/lib-cove/archive/hotfix2.zip
 libcoveocds[perf,web]
