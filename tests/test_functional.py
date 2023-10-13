@@ -10,7 +10,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 
-BROWSER = os.environ.get("BROWSER", "ChromeHeadless")
+BROWSER = os.getenv("BROWSER", "ChromeHeadless")
 
 OCDS_DEFAULT_SCHEMA_VERSION = settings.COVE_CONFIG["schema_version"]
 OCDS_SCHEMA_VERSIONS = settings.COVE_CONFIG["schema_version_choices"]
