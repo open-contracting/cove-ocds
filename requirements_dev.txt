@@ -92,13 +92,7 @@ et-xmlfile==1.1.0
     #   -r requirements.txt
     #   openpyxl
 exceptiongroup==1.1.2
-    # via
-    #   -r requirements.txt
-    #   cattrs
-    #   hypothesis
-    #   pytest
-    #   trio
-    #   trio-websocket
+    # via trio-websocket
 flake8==3.9.2
     # via -r requirements_dev.in
 flattentool==0.19.0
@@ -298,11 +292,6 @@ sqlparse==0.4.4
     #   django
 toml==0.10.2
     # via coverage
-tomli==2.0.1
-    # via
-    #   build
-    #   pyproject-hooks
-    #   pytest
 transaction==3.0.1
     # via
     #   -r requirements.txt
@@ -313,15 +302,11 @@ trio==0.22.0
     #   trio-websocket
 trio-websocket==0.10.2
     # via selenium
-typing-extensions==4.7.1
-    # via
-    #   -r requirements.txt
-    #   cattrs
 url-normalize==1.4.3
     # via
     #   -r requirements.txt
     #   requests-cache
-urllib3[socks]==2.0.6
+urllib3[socks]==2.0.7
     # via
     #   -r requirements.txt
     #   requests
