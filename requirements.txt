@@ -77,7 +77,7 @@ libcove[flatten] @ https://github.com/jpmckinney/lib-cove/archive/hotfix2.zip
     #   -r requirements.in
     #   libcoveocds
     #   libcoveweb
-libcoveocds[perf,web]==0.12.5
+libcoveocds[perf,web]==0.12.7
     # via -r requirements.in
 libcoveweb==0.28.0
     # via -r requirements.in
