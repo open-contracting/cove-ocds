@@ -148,7 +148,9 @@ libcove[flatten] @ https://github.com/jpmckinney/lib-cove/archive/hotfix2.zip
     #   libcoveocds
     #   libcoveweb
 libcoveocds[perf,web]==0.12.7
-    # via -r requirements.txt
+    # via
+    #   -r requirements.txt
+    #   libcoveocds
 libcoveweb==0.28.0
     # via -r requirements.txt
 libsass==0.20.1
