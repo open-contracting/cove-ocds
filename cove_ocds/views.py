@@ -232,11 +232,11 @@ def explore_ocds(request, pk):
     context = common_checks_ocds(context, upload_dir, json_data, schema_ocds)
 
     # Construct the Open Contracting specific urls for codelists in the docs
-    for key in ['additional_closed_codelist_values', 'additional_open_codelist_values']:
+    for key in ["additional_closed_codelist_values", "additional_open_codelist_values"]:
         for path_string, codelist_info in context[key].items():
-            codelist_info['codelist_url'] = (
-                'https://standard.open-contracting.org/{}/en/schema/codelists/#'.format(db_data.data_schema_version) +
-                re.sub(r'([A-Z])', r'-\1', codelist_info['codelist'].split('.')[0]).lower()
+            codelist_info["codelist_url"] = (
+                "https://standard.open-contracting.org/{}/en/schema/codelists/#".format(db_data.data_schema_version)
+                + re.sub(r"([A-Z])", r"-\1", codelist_info["codelist"].split(".")[0]).lower()
             )
 
     if schema_ocds.json_deref_error:
