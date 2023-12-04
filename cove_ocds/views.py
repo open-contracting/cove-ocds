@@ -265,10 +265,10 @@ def explore_ocds(request, pk):
         template = "cove_ocds/explore_record.html"
         if hasattr(json_data, "get") and hasattr(json_data.get("records"), "__iter__"):
             context["records"] = json_data["records"]
+            if isinstance(json_data["records"], list) and len(json_data["records"]) < 100:
+                context["ocds_show_data"] = ocds_show_data(json_data, ocds_show_deref_schema)
         else:
             context["records"] = []
-        if isinstance(json_data["records"], list) and len(json_data["records"]) < 100:
-            context["ocds_show_data"] = ocds_show_data(json_data, ocds_show_deref_schema)
     else:
         context["release_or_record"] = "release"
         ocds_show_schema = SchemaOCDS(record_pkg=False)
