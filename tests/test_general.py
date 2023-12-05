@@ -619,3 +619,31 @@ def test_get_json_data_missing_ids():
     missin_ids_paths = cove_common.get_json_data_missing_ids(user_data_paths, schema_obj)
 
     assert missin_ids_paths == results
+
+
+@pytest.mark.django_db
+def test_codelist_url_rewriting(client):
+    file_name = os.path.join(
+        "tests",
+        "fixtures",
+        "tenders_releases_2_releases_codelists.json",
+    )
+    with open(os.path.join(file_name)) as fp:
+        user_data = fp.read()
+    data = SuppliedData.objects.create()
+    data.original_file.save("test.json", ContentFile(user_data))
+    data.current_app = "cove_ocds"
+    resp = client.get(data.get_absolute_url())
+    assert resp.status_code == 200
+    assert len(resp.context["additional_closed_codelist_values"]) == 1
+    assert (
+        resp.context["additional_closed_codelist_values"]["releases/tag"].get("codelist_url")
+        == "https://standard.open-contracting.org/1.1/en/schema/codelists/#release-tag"
+    )
+    assert len(resp.context["additional_open_codelist_values"]) == 1
+    assert (
+        resp.context["additional_open_codelist_values"]["releases/tender/items/classification/scheme"].get(
+            "codelist_url"
+        )
+        == "https://standard.open-contracting.org/1.1/en/schema/codelists/#item-classification-scheme"
+    )
