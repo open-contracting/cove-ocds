@@ -246,9 +246,7 @@ def explore_ocds(request, pk):
         for path_string, codelist_info in context[key].items():
             if codelist_info["codelist_url"].startswith(schema_ocds.codelists):
                 codelist_info["codelist_url"] = (
-                    "https://standard.open-contracting.org/{}/en/schema/codelists/#".format(
-                        db_data.data_schema_version
-                    )
+                    f"https://standard.open-contracting.org/{db_data.data_schema_version}/en/schema/codelists/#"
                     + re.sub(r"([A-Z])", r"-\1", codelist_info["codelist"].split(".")[0]).lower()
                 )
 
