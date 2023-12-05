@@ -242,6 +242,14 @@ def explore_ocds(request, pk):
         }
     )
 
+    for key in ("additional_closed_codelist_values", "additional_open_codelist_values"):
+        for path_string, codelist_info in context[key].items():
+            if codelist_info["codelist_url"].startswith(schema_ocds.codelists):
+                codelist_info["codelist_url"] = (
+                    f"https://standard.open-contracting.org/{db_data.data_schema_version}/en/schema/codelists/#"
+                    + re.sub(r"([A-Z])", r"-\1", codelist_info["codelist"].split(".")[0]).lower()
+                )
+
     schema_version = getattr(schema_ocds, "version", None)
     if schema_version:
         db_data.schema_version = schema_version
