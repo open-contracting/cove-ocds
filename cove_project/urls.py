@@ -7,5 +7,4 @@ from django.urls import re_path
 import cove_ocds.views
 
 urlpatterns += [re_path(r"^data/(.+)$", cove_ocds.views.explore_ocds, name="explore")]
-
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
