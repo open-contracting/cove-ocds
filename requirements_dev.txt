@@ -138,15 +138,13 @@ jsonschema-specifications==2023.6.1
     # via
     #   -r requirements.txt
     #   jsonschema
-libcove[flatten] @ https://github.com/jpmckinney/lib-cove/archive/hotfix2.zip
+libcove==0.32.0
     # via
     #   -r requirements.txt
     #   libcoveocds
     #   libcoveweb
-libcoveocds[perf,web]==0.12.7
-    # via
-    #   -r requirements.txt
-    #   libcoveocds
+libcoveocds[perf,web]==0.13.0
+    # via -r requirements.txt
 libcoveweb==0.30.0
     # via -r requirements.txt
 libsass==0.20.1
@@ -239,6 +237,7 @@ referencing==0.29.1
     #   -r requirements.txt
     #   jsonschema
     #   jsonschema-specifications
+    #   libcove
     #   libcoveocds
 requests==2.31.0
     # via
