@@ -7,7 +7,7 @@
     },
     "extensions": [
         "https://raw.githubusercontent.com/open-contracting-extensions/ocds_simpleIdentifier_extension/master/extension.json",
-        "https://raw.githubusercontent.com/open-contracting-extensions/ocds_lots_extension/master/extension.json"
+        "https://raw.githubusercontent.com/open-contracting-extensions/ocds_lots_extension/v1.1.5/extension.json"
     ],
     "version": "1.1",
     "releases": [
