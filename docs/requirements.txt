@@ -1,7 +1,1 @@
--r ../requirements.txt
-# sphinx>=4.4.0 requires importlib-metadata>=4.4, but django-bootstrap3 requires <3.
-# https://github.com/zostera/django-bootstrap3/issues/608
-# https://github.com/zostera/django-bootstrap4/issues/380
-sphinx<4.4.0
-# sphinx<4.4.4 requires a specific version of furo.
-furo==2022.4.7
+furo

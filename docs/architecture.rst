@@ -17,7 +17,6 @@ cove-ocds
 
 ``cove_project/`` contains the Django components (settings, URL paths, server).
 
-
 lib-cove-ocds
 -------------
 
@@ -34,8 +33,13 @@ The OCDS Data Review Tool is just one manifestation of software historically kno
 * lib-cove-web (`opendataservices/lib-cove-web <https://github.com/opendataservices/lib-cove-web>`_): provides a barebones Django configuration, and baseline CSS, JS and templates that are common for all CoVE instances. It is also a place for common functions relating to presentation or display of data or output. Any templates edited here typically affect all CoVE instances. Sometimes this is useful, but for OCDS-only changes, templates can be overridden in cove-ocds. This and cove-ocds are the only places where frontend output and translatable strings should be.
 * flatten-tool (`opendataservices/flatten-tool <https://github.com/opendataservices/flatten-tool>`_): a general purpose library for converting data between JSON and CSV/XLS formats. While not CoVE-specific, it is listed here because it is a specialized tool of which the DRT makes heavy use.
 
-Config
-------
+OCDS Show
+---------
+
+`OCDS Show <https://github.com/open-contracting/ocds-show>`_ is a JavaScript application for embedding visualizations of OCDS data. The DRT generates data for OCDS Show in ``views.py`` so that it can be embedded in the ``explore_`` templates. Additional functions to help with the data generation for OCDS show are in ``cove_ocds/lib/ocds_show_extra.py``.
+
+Configuration
+-------------
 
 Some configuration variables are set in ``COVE_CONFIG``, found in ``cove_project/settings.py``.
 

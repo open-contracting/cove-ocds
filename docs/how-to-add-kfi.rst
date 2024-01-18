@@ -1,5 +1,5 @@
-How to add to Key Field Information
-===================================
+How to add key field information
+================================
 
 Key Field Information is a summary of key statistics about the data that's been provided.
 

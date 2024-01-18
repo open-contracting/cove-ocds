@@ -1,5 +1,5 @@
-OCDS Data Review Tool: Developer Documentation
-==============================================
+OCDS Data Review Tool
+=====================
 
 .. include:: ../README.rst
 
@@ -20,7 +20,6 @@ The `CoVE <https://cove.readthedocs.io/en/latest/>`__ documentation might also b
    how-to-config-frontend
    how-to-add-kfi
    tests
-   ocds-show
 
 There are `drafts <https://docs.google.com/document/d/1EER_GjXi7F0SPZ_Mra9JuQBY5JxU0NGRSS9mYzB4guU/edit>`__ of another couple how-tos for adding headlines and modifying validation error messages.
 
@@ -56,10 +55,3 @@ This will make the test site available on the local machine only. If you are run
     ALLOWED_HOSTS='XXX.XXX.XXX.XXX' python manage.py runserver 0.0.0.0:8000
 
 where XXX.XXX.XXX.XXX is the IP address that you'll be using to access the running service. 
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
