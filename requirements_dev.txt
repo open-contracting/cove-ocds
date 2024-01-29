@@ -144,9 +144,7 @@ libcove==0.32.0
     #   libcoveocds
     #   libcoveweb
 libcoveocds[perf,web]==0.13.0
-    # via
-    #   -r requirements.txt
-    #   libcoveocds
+    # via -r requirements.txt
 libcoveweb==0.30.0
     # via -r requirements.txt
 libsass==0.20.1
@@ -196,7 +194,7 @@ persistent==4.7.0
     #   -r requirements.txt
     #   btrees
     #   zodb
-pip-tools==6.13.0
+pip-tools==7.3.0
     # via -r requirements_dev.in
 platformdirs==3.8.1
     # via
@@ -300,6 +298,7 @@ toml==0.10.2
 tomli==2.0.1
     # via
     #   build
+    #   pip-tools
     #   pyproject-hooks
     #   pytest
 transaction==3.0.1
