@@ -66,7 +66,7 @@ def explore_ocds(request, pk):
         # open the data first so we can inspect for record package
         with open(file_name, encoding="utf-8") as fp:
             try:
-                json_data = json.load(fp, parse_float=Decimal)
+                json_data = json.load(fp)
             except UnicodeError as err:
                 raise CoveInputDataError(
                     context={
@@ -223,7 +223,7 @@ def explore_ocds(request, pk):
             )
 
         with open(context["converted_path"], encoding="utf-8") as fp:
-            json_data = json.load(fp, parse_float=Decimal)
+            json_data = json.load(fp)
 
     if replace:
         if os.path.exists(validation_errors_path):
