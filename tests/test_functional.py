@@ -123,12 +123,12 @@ def test_index_page_ocds(server_url, browser):
         (
             "how-to-use",
             "'release' and 'record'",
-            "https://standard.open-contracting.org/latest/en/getting_started/releases_and_records/",
+            "https://standard.open-contracting.org/latest/en/primer/releases_and_records/",
         ),
         (
             "how-to-use",
             "flattened serialization of OCDS",
-            "https://standard.open-contracting.org/latest/en/implementation/serialization/",
+            "https://standard.open-contracting.org/latest/en/guidance/build/serialization/",
         ),
         (
             "how-to-use",

@@ -83,7 +83,7 @@ def raise_missing_package_error():
                     'package </a> or <a href="https://standard.open-contracting.org/latest/en'
                     '/schema/record_package/"> record package</a> to provide important meta-'
                     'data. For more information, please refer to the <a href="https://standard.'
-                    'open-contracting.org/latest/en/getting_started/releases_and_records/"> '
+                    'open-contracting.org/latest/en/primer/releases_and_records/"> '
                     "Releases and Records section </a> in the OCDS documentation.\n\n<span "
                     'class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> '
                     "<strong>Error message:</strong> <em>Missing OCDS package</em>"
