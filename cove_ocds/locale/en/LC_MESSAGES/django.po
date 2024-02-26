@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-05 22:36+0000\n"
+"POT-Creation-Date: 2024-02-26 20:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,13 +17,30 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: docs/code_examples/kfi-template-added.html:1
+#: docs/code_examples/kfi-template-orig.html:1
+#: cove_ocds/templates/cove_ocds/explore_release.html:193
+msgid "Total Items: "
+msgstr ""
+
+#: docs/code_examples/kfi-template-added.html:2
+#: cove_ocds/templates/cove_ocds/explore_release.html:194
+msgid "Unique Item IDs: "
+msgstr ""
+
+#: docs/code_examples/kfi-template-added.html:3
+#: docs/code_examples/kfi-template-orig.html:2
+#: cove_ocds/templates/cove_ocds/explore_release.html:195
+msgid "Items ID schemes: "
+msgstr ""
+
 #: cove_ocds/lib/exceptions.py:12
 msgid "Unrecognised version of the schema"
 msgstr ""
 
 #: cove_ocds/lib/exceptions.py:14 cove_ocds/lib/exceptions.py:34
 #: cove_ocds/lib/exceptions.py:57 cove_ocds/lib/exceptions.py:77
-#: cove_ocds/views.py:80 cove_ocds/views.py:93 cove_ocds/views.py:111
+#: cove_ocds/views.py:75 cove_ocds/views.py:93 cove_ocds/views.py:111
 msgid "Try Again"
 msgstr ""
 
@@ -57,8 +74,8 @@ msgid ""
 "a> or <a href=\"https://standard.open-contracting.org/latest/en/schema/"
 "record_package/\"> record package</a> to provide important meta-data. For "
 "more information, please refer to the <a href=\"https://standard.open-"
-"contracting.org/latest/en/primer/releases_and_records/\"> Releases "
-"and Records section </a> in the OCDS documentation.\n"
+"contracting.org/latest/en/primer/releases_and_records/\"> Releases and "
+"Records section </a> in the OCDS documentation.\n"
 "\n"
 "<span class=\"glyphicon glyphicon-exclamation-sign\" aria-hidden=\"true\"></"
 "span> <strong>Error message:</strong> <em>Missing OCDS package</em>"
@@ -152,50 +169,50 @@ msgid ""
 "further review."
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/base.html:128
+#: cove_ocds/templates/cove_ocds/base.html:129
 msgid "Using the data review tool"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/base.html:129
+#: cove_ocds/templates/cove_ocds/base.html:130
 msgid ""
-"You can upload, paste or provide a link to data published using the <a href="
-"\"https://standard.open-contracting.org/\">Open Contracting Data Standard</"
-"a>. This can be:"
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/base.html:132
-msgid "<b> JSON </b> - following the OCDS schema; "
+"You can upload, paste or provide a link to data published using the <a "
+"href=\"https://standard.open-contracting.org/\">Open Contracting Data "
+"Standard</a>. This can be:"
 msgstr ""
 
 #: cove_ocds/templates/cove_ocds/base.html:133
+msgid "<b> JSON </b> - following the OCDS schema; "
+msgstr ""
+
+#: cove_ocds/templates/cove_ocds/base.html:134
 msgid ""
 "<b> A CSV file or Excel Spreadsheet </b> - using the <a href=\"https://"
 "standard.open-contracting.org/latest/en/guidance/build/serialization/"
 "\">flattened serialization of OCDS</a>; "
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/base.html:135
+#: cove_ocds/templates/cove_ocds/base.html:136
 msgid ""
 "Supported encodings are UTF-8 for JSON and UTF-8, Windows-1252 and "
 "ISO-8859-1 for CSV."
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/base.html:136
+#: cove_ocds/templates/cove_ocds/base.html:137
 msgid ""
 "The application works with both <a href=\"https://standard.open-contracting."
-"org/latest/en/primer/releases_and_records/\">'release' and "
-"'record'</a> OCDS documents that conform to the <a href=\"https://standard."
-"open-contracting.org/\">Open Data Contracting Standard</a> "
+"org/latest/en/primer/releases_and_records/\">'release' and 'record'</a> OCDS "
+"documents that conform to the <a href=\"https://standard.open-contracting."
+"org/\">Open Data Contracting Standard</a> "
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/base.html:137
+#: cove_ocds/templates/cove_ocds/base.html:138
 msgid ""
 "If your data passes basic structural checks, the tool will then present a "
 "report on data quality, and information about the contents of your file. It "
 "will also offer alternative copies of the data for download. "
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/base.html:138
+#: cove_ocds/templates/cove_ocds/base.html:139
 #, python-format
 msgid ""
 "Data is stored for %(delete_files_after_days)s days at a randomly generated "
@@ -203,7 +220,8 @@ msgid ""
 "quality.  "
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/base.html:139
+#: cove_ocds/templates/cove_ocds/base.html:140
+#, python-format
 msgid ""
 "To preview how the data review tool works, try <a href=\"%(index_url)s?"
 "source_url=https://raw.githubusercontent.com/open-contracting/sample-data/"
@@ -211,35 +229,35 @@ msgid ""
 "some sample data. </a>"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/base.html:152
+#: cove_ocds/templates/cove_ocds/base.html:153
 msgid "Built by"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/base.html:152
+#: cove_ocds/templates/cove_ocds/base.html:153
 msgid "Open Data Services"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/base.html:153
+#: cove_ocds/templates/cove_ocds/base.html:154
 msgid "The code for this site is available on"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/base.html:153
+#: cove_ocds/templates/cove_ocds/base.html:154
 msgid "GitHub"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/base.html:153
+#: cove_ocds/templates/cove_ocds/base.html:154
 msgid "Licence"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/base.html:153
+#: cove_ocds/templates/cove_ocds/base.html:154
 msgid "AGPLv3"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/base.html:153
+#: cove_ocds/templates/cove_ocds/base.html:154
 msgid "Report/View issues"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/base.html:153
+#: cove_ocds/templates/cove_ocds/base.html:154
 msgid "cove-ocds issues"
 msgstr ""
 
@@ -486,9 +504,9 @@ msgstr ""
 msgid ""
 "This data includes the following fields which are not part of the OCDS "
 "schema. You should check whether the data in these fields could be provided "
-"by using a field in the OCDS schema or by using an existing <a href=\"https://"
-"standard.open-contracting.org/latest/en/extensions/\">extension</a> to the "
-"schema."
+"by using a field in the OCDS schema or by using an existing <a "
+"href=\"https://standard.open-contracting.org/latest/en/extensions/"
+"\">extension</a> to the schema."
 msgstr ""
 
 #: cove_ocds/templates/cove_ocds/explore_base.html:403
@@ -509,11 +527,11 @@ msgstr ""
 #: cove_ocds/templates/cove_ocds/explore_base.html:413
 msgid ""
 "Make sure you list the definition of any additional codelist values you "
-"include within your <a href=\"https://standard.open-contracting.org/latest/en/"
-"implementation/publication_policy/\">publication policy</a>, and if you "
-"believe they should be added as recommended values in the open codelist, "
-"please suggest this via the <a href=\"https://github.com/open-contracting/"
-"standard/issues/new\"> OCDS issue tracker.</a>"
+"include within your <a href=\"https://standard.open-contracting.org/latest/"
+"en/guidance/publish/#finalize-your-publication-policy\">publication policy</"
+"a>, and if you believe they should be added as recommended values in the "
+"open codelist, please suggest this via the <a href=\"https://github.com/open-"
+"contracting/standard/issues/new\"> OCDS issue tracker.</a>"
 msgstr ""
 
 #: cove_ocds/templates/cove_ocds/explore_base.html:423
@@ -961,23 +979,6 @@ msgstr ""
 msgid "Tenderers: "
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_release.html:193
-#: docs/code_examples/kfi-template-added.html:1
-#: docs/code_examples/kfi-template-orig.html:1
-msgid "Total Items: "
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:194
-#: docs/code_examples/kfi-template-added.html:2
-msgid "Unique Item IDs: "
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:195
-#: docs/code_examples/kfi-template-added.html:3
-#: docs/code_examples/kfi-template-orig.html:2
-msgid "Items ID schemes: "
-msgstr ""
-
 #: cove_ocds/templates/cove_ocds/explore_release.html:196
 msgid "Item Types: "
 msgstr ""
@@ -1379,35 +1380,35 @@ msgstr ""
 msgid "Column"
 msgstr ""
 
-#: cove_ocds/templatetags/cove_tags.py:12
+#: cove_ocds/templatetags/cove_tags.py:13
 msgid ""
 "Incorrect date format. Dates should use the form YYYY-MM-DDT00:00:00Z. Learn "
 "more about <a href=\"https://standard.open-contracting.org/latest/en/schema/"
 "reference/#date\">dates in OCDS</a>."
 msgstr ""
 
-#: cove_ocds/templatetags/cove_tags.py:22
+#: cove_ocds/templatetags/cove_tags.py:24
 msgid ""
 "This array should contain either entirely embedded releases or linked "
 "releases. Embedded releases contain an 'id' whereas linked releases do not. "
 "Your releases contain a mixture."
 msgstr ""
 
-#: cove_ocds/templatetags/cove_tags.py:27
+#: cove_ocds/templatetags/cove_tags.py:29
 #, python-format
 msgid "%s is not valid under any of the given schemas"
 msgstr ""
 
-#: cove_ocds/templatetags/cove_tags.py:29
+#: cove_ocds/templatetags/cove_tags.py:31
 #, python-format
 msgid "%(instance)s is valid under each of %(reprs)s"
 msgstr ""
 
-#: cove_ocds/views.py:78 cove_ocds/views.py:91 cove_ocds/views.py:109
+#: cove_ocds/views.py:73 cove_ocds/views.py:91 cove_ocds/views.py:109
 msgid "Sorry, we can't process that data"
 msgstr ""
 
-#: cove_ocds/views.py:82
+#: cove_ocds/views.py:78
 msgid ""
 "The file that you uploaded doesn't appear to be well formed JSON. OCDS JSON "
 "follows the I-JSON format, which requires UTF-8 encoding. Ensure that your "
@@ -1425,7 +1426,7 @@ msgid ""
 "span> <strong>Error message:</strong> {}"
 msgstr ""
 
-#: cove_ocds/views.py:113
+#: cove_ocds/views.py:112
 msgid ""
 "OCDS JSON should have an object as the top level, the JSON you supplied does "
 "not."
