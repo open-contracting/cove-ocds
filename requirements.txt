@@ -64,7 +64,7 @@ jsonref==1.1.0
     #   libcove
     #   libcoveocds
     #   ocdsextensionregistry
-jsonschema==4.18.0
+jsonschema==4.21.1
     # via
     #   libcove
     #   libcoveocds
