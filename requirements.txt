@@ -75,7 +75,7 @@ libcove==0.32.0
     #   -r requirements.in
     #   libcoveocds
     #   libcoveweb
-libcoveocds[perf,web]==0.14.0
+libcoveocds[perf,web]==0.14.1
     # via -r requirements.in
 libcoveweb==0.30.2
     # via -r requirements.in
