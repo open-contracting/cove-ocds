@@ -144,7 +144,9 @@ libcove==0.32.0
     #   libcoveocds
     #   libcoveweb
 libcoveocds[perf,web]==0.14.0
-    # via -r requirements.txt
+    # via
+    #   -r requirements.txt
+    #   libcoveocds
 libcoveweb==0.30.2
     # via -r requirements.txt
 libsass==0.20.1
