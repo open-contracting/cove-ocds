@@ -135,25 +135,20 @@ LOGGING["loggers"]["django.security.DisallowedHost"] = {
 # OCDS Config
 
 COVE_CONFIG = {
+    # lib-cove-web options
     "app_name": "cove_ocds",
     "app_base_template": "cove_ocds/base.html",
     "app_verbose_name": "Open Contracting Data Review Tool",
     "app_strapline": "Review your OCDS data.",
+    "input_methods": ["upload", "url", "text"],
+    "input_template": "cove_ocds/input.html",
+    "support_email": "data@open-contracting.org",
+    # SchemaOCDS options (add {lang} to the path)
     "schema_version_choices": {
         # version: (display, url, tag),
         "1.0": ("1.0", "https://standard.open-contracting.org/1.0/{lang}/", "1__0__3"),
         "1.1": ("1.1", "https://standard.open-contracting.org/1.1/{lang}/", "1__1__5"),
     },
-    "schema_codelists": {
-        # version: codelist_dir,
-        "1.1": "https://raw.githubusercontent.com/open-contracting/standard/1.1/schema/codelists/",
-    },
-    "root_list_path": "releases",
-    "root_id": "ocid",
-    "convert_titles": False,
-    "input_methods": ["upload", "url", "text"],
-    "input_template": "cove_ocds/input.html",
-    "support_email": "data@open-contracting.org",
 }
 
 # Set default schema version to the latest version
