@@ -46,12 +46,11 @@ def explore_ocds(request, pk):
     if error:
         return error
 
-    lib_cove_ocds_config = LibCoveOCDSConfig()
+    lib_cove_ocds_config = LibCoveOCDSConfig(settings.COVE_CONFIG)
     lib_cove_ocds_config.config["current_language"] = translation.get_language()
     lib_cove_ocds_config.config["schema_version_choices"] = format_lang(
-        settings.COVE_CONFIG["schema_version_choices"], request.LANGUAGE_CODE
+        lib_cove_ocds_config.config["schema_version_choices"], request.LANGUAGE_CODE
     )
-    lib_cove_ocds_config.config["schema_codelists"] = settings.COVE_CONFIG["schema_codelists"]
 
     upload_dir = db_data.upload_dir()
     upload_url = db_data.upload_url()
