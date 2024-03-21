@@ -76,7 +76,7 @@ def url_input_browser(request, server_url, browser, httpserver):
     [
         (
             "Open Contracting",
-            "Our world runs on public contracts.",
+            "better serve people and protect our planet",
             "h2",
             "https://www.open-contracting.org/",
         ),
