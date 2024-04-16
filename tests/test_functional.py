@@ -368,9 +368,9 @@ def test_500_error(server_url, browser):
             "badfile_extension_validation_errors.json",
             [
                 "Incorrect date format. Dates should use the form YYYY-MM-DDT00:00:00Z.",
-                "The date when this bid was received.",
-                "A local identifier for this bid",
-                "Summary statistics on the number and nature of bids received.",
+                "The date when the bid or expression of interest was received.",
+                "A local identifier for the bid or expression of interest.",
+                "Summary statistics about the number of bidders, bids and expressions of interest.",
             ],
             ["Reference Docs"],
             True,
