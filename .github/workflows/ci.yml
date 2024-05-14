@@ -11,10 +11,14 @@ jobs:
           python-version: '3.10'
           cache: pip
           cache-dependency-path: '**/requirements*.txt'
-      - run: pip install -r requirements.txt
+      # Don't install editable projects in the current working directory.
+      # https://pip.pypa.io/en/latest/reference/pip_install/#install-src
+      - run: pip install --src $GITHUB_WORKSPACE/../src -r requirements.txt
       # Check requirements.txt contains production requirements.
       - run: ./manage.py --help
-      - run: pip install -r requirements_dev.txt
+      # Don't install editable projects in the current working directory.
+      # https://pip.pypa.io/en/latest/reference/pip_install/#install-src
+      - run: pip install --src $GITHUB_WORKSPACE/../src -r requirements_dev.txt
       # Compile messages, so that lib-cove-web translations are available.
       - name: Install gettext
         run: |
