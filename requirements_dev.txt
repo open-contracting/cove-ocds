@@ -4,6 +4,11 @@
 #
 #    pip-compile requirements_dev.in
 #
+-e git+https://github.com/jpmckinney/lib-cove.git@unique-perf#egg=libcove
+    # via
+    #   -r requirements.txt
+    #   libcoveocds
+    #   libcoveweb
 asgiref==3.3.4
     # via
     #   -r requirements.txt
@@ -138,11 +143,6 @@ jsonschema-specifications==2023.6.1
     # via
     #   -r requirements.txt
     #   jsonschema
-libcove==0.32.0
-    # via
-    #   -r requirements.txt
-    #   libcoveocds
-    #   libcoveweb
 libcoveocds[perf,web]==0.14.1
     # via -r requirements.txt
 libcoveweb==0.30.2

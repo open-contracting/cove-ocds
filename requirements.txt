@@ -4,6 +4,11 @@
 #
 #    pip-compile
 #
+-e git+https://github.com/jpmckinney/lib-cove.git@unique-perf#egg=libcove
+    # via
+    #   -r requirements.in
+    #   libcoveocds
+    #   libcoveweb
 asgiref==3.3.4
     # via django
 attrs==23.1.0
@@ -70,11 +75,6 @@ jsonschema==4.21.1
     #   libcoveocds
 jsonschema-specifications==2023.6.1
     # via jsonschema
-libcove==0.32.0
-    # via
-    #   -r requirements.in
-    #   libcoveocds
-    #   libcoveweb
 libcoveocds[perf,web]==0.14.1
     # via -r requirements.in
 libcoveweb==0.30.2

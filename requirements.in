@@ -1,6 +1,7 @@
 django
 django-bootstrap3
-libcove
+# https://github.com/OpenDataServices/lib-cove/pull/144
+-e git+https://github.com/jpmckinney/lib-cove.git@unique-perf#egg=libcove
 libcoveocds[perf,web]
 libcoveweb
 python-dateutil
