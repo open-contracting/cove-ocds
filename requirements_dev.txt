@@ -239,7 +239,7 @@ referencing==0.29.1
     #   jsonschema-specifications
     #   libcove
     #   libcoveocds
-requests==2.31.0
+requests==2.32.0
     # via
     #   -r requirements.txt
     #   -r requirements_dev.in
