@@ -145,7 +145,7 @@ jsonschema-specifications==2023.6.1
     #   jsonschema
 libcoveocds[perf,web]==0.14.1
     # via -r requirements.txt
-libcoveweb==0.30.2
+libcoveweb==0.30.3
     # via -r requirements.txt
 libsass==0.20.1
     # via -r requirements_dev.in

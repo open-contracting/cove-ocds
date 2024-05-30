@@ -77,7 +77,7 @@ jsonschema-specifications==2023.6.1
     # via jsonschema
 libcoveocds[perf,web]==0.14.1
     # via -r requirements.in
-libcoveweb==0.30.2
+libcoveweb==0.30.3
     # via -r requirements.in
 lxml==4.9.1
     # via flattentool
