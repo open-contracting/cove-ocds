@@ -4,7 +4,7 @@
 #
 #    pip-compile requirements_dev.in
 #
--e git+https://github.com/jpmckinney/lib-cove.git@unique-perf#egg=libcove
+-e git+https://github.com/opendataservices/lib-cove.git@3623ecf#egg=libcove
     # via
     #   -r requirements.txt
     #   libcoveocds
