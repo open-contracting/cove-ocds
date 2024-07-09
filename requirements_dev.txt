@@ -4,11 +4,6 @@
 #
 #    pip-compile requirements_dev.in
 #
--e git+https://github.com/opendataservices/lib-cove.git@3623ecf#egg=libcove
-    # via
-    #   -r requirements.txt
-    #   libcoveocds
-    #   libcoveweb
 asgiref==3.3.4
     # via
     #   -r requirements.txt
@@ -102,7 +97,7 @@ exceptiongroup==1.1.3
     #   trio-websocket
 flake8==3.9.2
     # via -r requirements_dev.in
-flattentool==0.24.1
+flattentool==0.25.0
     # via
     #   -r requirements.txt
     #   -r requirements_dev.in
@@ -143,9 +138,14 @@ jsonschema-specifications==2023.6.1
     # via
     #   -r requirements.txt
     #   jsonschema
+libcove==0.32.1
+    # via
+    #   -r requirements.txt
+    #   libcoveocds
+    #   libcoveweb
 libcoveocds[perf,web]==0.14.1
     # via -r requirements.txt
-libcoveweb==0.30.3
+libcoveweb==0.30.4
     # via -r requirements.txt
 libsass==0.20.1
     # via -r requirements_dev.in

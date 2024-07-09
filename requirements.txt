@@ -4,11 +4,6 @@
 #
 #    pip-compile
 #
--e git+https://github.com/opendataservices/lib-cove.git@3623ecf#egg=libcove
-    # via
-    #   -r requirements.in
-    #   libcoveocds
-    #   libcoveweb
 asgiref==3.3.4
     # via django
 attrs==23.1.0
@@ -53,7 +48,7 @@ et-xmlfile==1.1.0
     # via openpyxl
 exceptiongroup==1.1.3
     # via cattrs
-flattentool==0.24.1
+flattentool==0.25.0
     # via
     #   libcove
     #   libcoveweb
@@ -75,9 +70,14 @@ jsonschema==4.21.1
     #   libcoveocds
 jsonschema-specifications==2023.6.1
     # via jsonschema
+libcove==0.32.1
+    # via
+    #   -r requirements.in
+    #   libcoveocds
+    #   libcoveweb
 libcoveocds[perf,web]==0.14.1
     # via -r requirements.in
-libcoveweb==0.30.3
+libcoveweb==0.30.4
     # via -r requirements.in
 lxml==4.9.1
     # via flattentool
