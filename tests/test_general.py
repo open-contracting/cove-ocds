@@ -232,13 +232,13 @@ def test_explore_unconvertable_spreadsheet(client):
 
 
 @pytest.mark.django_db
-def test_explore_unconvertable_json(client):
+def test_explore_non_dict_json(client):
     data = SuppliedData.objects.create()
-    with open(os.path.join("tests", "fixtures", "unconvertable_json.json")) as fp:
-        data.original_file.save("unconvertable_json.json", UploadedFile(fp))
+    with open(os.path.join("tests", "fixtures", "non_dict_json.json")) as fp:
+        data.original_file.save("non_dict_json.json", UploadedFile(fp))
     resp = client.post(data.get_absolute_url(), {"flatten": "true"})
     assert resp.status_code == 200
-    assert b"could not be converted" in resp.content
+    assert b"could not be converted" not in resp.content
 
 
 @pytest.mark.django_db

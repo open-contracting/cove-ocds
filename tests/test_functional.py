@@ -389,14 +389,14 @@ def test_500_error(server_url, browser):
         ),
         ("tenders_releases_2_releases_codelists.json", ["oh no", "GSINS"], [], True),
         # Test UTF-8 support
-        ("utf8.json", "Convert", ["Ensure that your file uses UTF-8 encoding"], True),
+        ("utf8.json", ["Convert"], ["Ensure that your file uses UTF-8 encoding"], True),
         # Test that non UTF-8 files get an error, with a helpful message
-        ("latin1.json", "Ensure that your file uses UTF-8 encoding", [], False),
-        ("utf-16.json", "Ensure that your file uses UTF-8 encoding", [], False),
+        ("latin1.json", ["Ensure that your file uses UTF-8 encoding"], [], False),
+        ("utf-16.json", ["Ensure that your file uses UTF-8 encoding"], [], False),
         # But we expect to see an error message if a file is not well formed JSON at all
         (
             "tenders_releases_2_releases_not_json.json",
-            "not well formed JSON",
+            ["not well formed JSON"],
             [],
             False,
         ),
@@ -406,8 +406,8 @@ def test_500_error(server_url, browser):
             ["Missing OCDS package"],
             True,
         ),
-        # Test unconvertable JSON (main sheet "releases" is missing)
-        ("unconvertable_json.json", "could not be converted", [], False),
+        # Test non-dict JSON (main sheet "releases" is missing)
+        ("non_dict_json.json", [], ["could not be converted"], False),
         (
             "full_record.json",
             [
