@@ -210,7 +210,7 @@ def explore_ocds(request, pk):
 
             try:
                 context.update(
-                    convert_spreadsheet(
+                    convert_spreadsheet.__wrapped__(
                         upload_dir,
                         upload_url,
                         file_name,
@@ -242,9 +242,11 @@ def explore_ocds(request, pk):
                             "error": format(err),
                         }
                     )
-
                 else:
                     raise
+            except Exception as err:
+                logger.exception(err, extra={"request": request})
+                raise CoveInputDataError(wrapped_err=err)
 
         with open(context["converted_path"], encoding="utf-8") as fp:
             json_data = json.load(fp)
