@@ -210,7 +210,7 @@ def explore_ocds(request, pk):
 
             try:
                 context.update(
-                    convert_spreadsheet.__wrapped__(
+                    getattr(convert_spreadsheet, "__wrapped__", convert_spreadsheet)(
                         upload_dir,
                         upload_url,
                         file_name,
