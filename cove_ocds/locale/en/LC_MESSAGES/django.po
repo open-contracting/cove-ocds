@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-26 20:45+0000\n"
+"POT-Creation-Date: 2024-07-16 17:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,30 +17,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: docs/code_examples/kfi-template-added.html:1
-#: docs/code_examples/kfi-template-orig.html:1
-#: cove_ocds/templates/cove_ocds/explore_release.html:193
-msgid "Total Items: "
-msgstr ""
-
-#: docs/code_examples/kfi-template-added.html:2
-#: cove_ocds/templates/cove_ocds/explore_release.html:194
-msgid "Unique Item IDs: "
-msgstr ""
-
-#: docs/code_examples/kfi-template-added.html:3
-#: docs/code_examples/kfi-template-orig.html:2
-#: cove_ocds/templates/cove_ocds/explore_release.html:195
-msgid "Items ID schemes: "
-msgstr ""
-
 #: cove_ocds/lib/exceptions.py:12
 msgid "Unrecognised version of the schema"
 msgstr ""
 
 #: cove_ocds/lib/exceptions.py:14 cove_ocds/lib/exceptions.py:34
 #: cove_ocds/lib/exceptions.py:57 cove_ocds/lib/exceptions.py:77
-#: cove_ocds/views.py:75 cove_ocds/views.py:93 cove_ocds/views.py:111
+#: cove_ocds/views.py:74 cove_ocds/views.py:92 cove_ocds/views.py:110
+#: cove_ocds/views.py:231
 msgid "Try Again"
 msgstr ""
 
@@ -979,6 +963,18 @@ msgstr ""
 msgid "Tenderers: "
 msgstr ""
 
+#: cove_ocds/templates/cove_ocds/explore_release.html:193
+msgid "Total Items: "
+msgstr ""
+
+#: cove_ocds/templates/cove_ocds/explore_release.html:194
+msgid "Unique Item IDs: "
+msgstr ""
+
+#: cove_ocds/templates/cove_ocds/explore_release.html:195
+msgid "Items ID schemes: "
+msgstr ""
+
 #: cove_ocds/templates/cove_ocds/explore_release.html:196
 msgid "Item Types: "
 msgstr ""
@@ -1404,11 +1400,12 @@ msgstr ""
 msgid "%(instance)s is valid under each of %(reprs)s"
 msgstr ""
 
-#: cove_ocds/views.py:73 cove_ocds/views.py:91 cove_ocds/views.py:109
+#: cove_ocds/views.py:72 cove_ocds/views.py:90 cove_ocds/views.py:108
+#: cove_ocds/views.py:229
 msgid "Sorry, we can't process that data"
 msgstr ""
 
-#: cove_ocds/views.py:78
+#: cove_ocds/views.py:77
 msgid ""
 "The file that you uploaded doesn't appear to be well formed JSON. OCDS JSON "
 "follows the I-JSON format, which requires UTF-8 encoding. Ensure that your "
@@ -1418,7 +1415,7 @@ msgid ""
 "span> <strong>Error message:</strong> {}"
 msgstr ""
 
-#: cove_ocds/views.py:96
+#: cove_ocds/views.py:95
 msgid ""
 "We think you tried to upload a JSON file, but it is not well formed JSON.\n"
 "\n"
@@ -1426,8 +1423,19 @@ msgid ""
 "span> <strong>Error message:</strong> {}"
 msgstr ""
 
-#: cove_ocds/views.py:112
+#: cove_ocds/views.py:111
 msgid ""
 "OCDS JSON should have an object as the top level, the JSON you supplied does "
 "not."
+msgstr ""
+
+#: cove_ocds/views.py:234
+msgid ""
+"The table isn't structured correctly. For example, a JSON Pointer "
+"(<code>tender</code>) can't be both a value (<code>tender</code>), a path to "
+"an object (<code>tender/id</code>) and a path to an array (<code>tender/0/"
+"title</code>).\n"
+"\n"
+"<span class=\"glyphicon glyphicon-exclamation-sign\" aria-hidden=\"true\"></"
+"span> <strong>Error message:</strong> {}"
 msgstr ""
