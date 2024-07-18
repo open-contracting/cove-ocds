@@ -136,7 +136,7 @@ rpds-py==0.8.8
     #   referencing
 schema==0.7.4
     # via flattentool
-sentry-sdk==1.19.0
+sentry-sdk==2.8.0
     # via -r requirements.in
 six==1.16.0
     # via
