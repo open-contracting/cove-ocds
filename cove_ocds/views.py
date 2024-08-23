@@ -13,7 +13,7 @@ from django.shortcuts import render
 from django.utils import translation
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
-from flattentool.exceptions import FlattenToolWarning
+from flattentool.exceptions import FlattenToolValueError, FlattenToolWarning
 from libcove.lib.common import get_spreadsheet_meta_data
 from libcove.lib.converters import convert_json, convert_spreadsheet
 from libcove.lib.exceptions import CoveInputDataError
@@ -222,29 +222,25 @@ def explore_ocds(request, pk):
                         replace=replace,
                     )
                 )
-            except ValueError as err:
-                # https://github.com/OpenDataServices/flatten-tool/issues/450
-                if str(err).startswith("There is an array at "):
-                    raise CoveInputDataError(
-                        context={
-                            "sub_title": _("Sorry, we can't process that data"),
-                            "link": "index",
-                            "link_text": _("Try Again"),
-                            "msg": format_html(
-                                _(
-                                    "The table isn't structured correctly. For example, a JSON Pointer (<code>tender"
-                                    "</code>) can't be both a value (<code>tender</code>), a path to an object (<code>"
-                                    "tender/id</code>) and a path to an array (<code>tender/0/title</code>)."
-                                    '\n\n<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true">'
-                                    "</span> <strong>Error message:</strong> {}",
-                                ),
-                                err,
+            except FlattenToolValueError as err:
+                raise CoveInputDataError(
+                    context={
+                        "sub_title": _("Sorry, we can't process that data"),
+                        "link": "index",
+                        "link_text": _("Try Again"),
+                        "msg": format_html(
+                            _(
+                                "The table isn't structured correctly. For example, a JSON Pointer (<code>tender"
+                                "</code>) can't be both a value (<code>tender</code>), a path to an object (<code>"
+                                "tender/id</code>) and a path to an array (<code>tender/0/title</code>)."
+                                '\n\n<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true">'
+                                "</span> <strong>Error message:</strong> {}",
                             ),
-                            "error": format(err),
-                        }
-                    )
-                else:
-                    raise
+                            err,
+                        ),
+                        "error": format(err),
+                    }
+                )
             except Exception as err:
                 logger.exception(err, extra={"request": request})
                 raise CoveInputDataError(wrapped_err=err)
