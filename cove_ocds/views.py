@@ -13,6 +13,7 @@ from django.shortcuts import render
 from django.utils import translation
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
+from flattentool.exceptions import FlattenToolWarning
 from libcove.lib.common import get_spreadsheet_meta_data
 from libcove.lib.converters import convert_json, convert_spreadsheet
 from libcove.lib.exceptions import CoveInputDataError
@@ -149,7 +150,7 @@ def explore_ocds(request, pk):
                 replace_converted = replace and os.path.exists(converted_path + ".xlsx")
 
                 with warnings.catch_warnings():
-                    warnings.filterwarnings("ignore")  # flattentool uses UserWarning, so can't set a specific category
+                    warnings.filterwarnings("ignore", category=FlattenToolWarning)
 
                     convert_json_context = convert_json(
                         upload_dir,
@@ -169,7 +170,7 @@ def explore_ocds(request, pk):
         metatab_schema_url = SchemaOCDS(select_version="1.1", lib_cove_ocds_config=lib_cove_ocds_config).pkg_schema_url
 
         with warnings.catch_warnings():
-            warnings.filterwarnings("ignore")  # flattentool uses UserWarning, so can't set a specific category
+            warnings.filterwarnings("ignore", category=FlattenToolWarning)
 
             metatab_data = get_spreadsheet_meta_data(upload_dir, file_name, metatab_schema_url, file_type)
 
@@ -206,7 +207,7 @@ def explore_ocds(request, pk):
         pkg_url = schema_ocds.pkg_schema_url
 
         with warnings.catch_warnings():
-            warnings.filterwarnings("ignore")  # flattentool uses UserWarning, so can't set a specific category
+            warnings.filterwarnings("ignore", category=FlattenToolWarning)
 
             try:
                 context.update(
