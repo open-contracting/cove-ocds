@@ -145,7 +145,6 @@ six==1.16.0
     #   python-dateutil
     #   rfc3339-validator
     #   url-normalize
-    #   zodb
 sqlparse==0.5.0
     # via django
 transaction==3.0.1
@@ -171,7 +170,7 @@ zc-zlibstorage==1.2.0
     # via flattentool
 zconfig==3.6.0
     # via zodb
-zodb==5.6.0
+zodb==6.0
     # via
     #   flattentool
     #   zc-zlibstorage

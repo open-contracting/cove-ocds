@@ -297,7 +297,6 @@ six==1.16.0
     #   python-dateutil
     #   rfc3339-validator
     #   url-normalize
-    #   zodb
 sniffio==1.3.0
     # via trio
 sortedcontainers==2.4.0
@@ -372,7 +371,7 @@ zconfig==3.6.0
     # via
     #   -r requirements.txt
     #   zodb
-zodb==5.6.0
+zodb==6.0
     # via
     #   -r requirements.txt
     #   flattentool

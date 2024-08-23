@@ -33,8 +33,9 @@ jobs:
           ./manage.py migrate
           ./manage.py makemigrations --check --dry-run
           ./manage.py check --fail-level WARNING
+          # https://github.com/OpenDataServices/flatten-tool/pull/458
           # https://github.com/OpenDataServices/flatten-tool/issues/412
-          pytest -W error -W ignore::ResourceWarning --cov cove_ocds --cov cove_project
+          pytest -W error -W ignore::DeprecationWarning:ijson.compat -W ignore::ResourceWarning --cov cove_ocds --cov cove_project
       - env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: coveralls --service=github
