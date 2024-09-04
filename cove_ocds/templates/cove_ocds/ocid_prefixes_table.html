@@ -1,5 +1,5 @@
 {% load i18n %}
-{% load cove_tags %}
+{% load cove_ocds %}
 <p>
   {% blocktrans count n_prefixes=conformance_errors.ocds_prefixes_bad_format|length %}<strong>{{n_prefixes}}</strong> of your <code>ocid</code> fields has a problem: {% plural %}<strong>{{n_prefixes}}</strong> of your <code>ocid</code> fields have a problem: {% endblocktrans %}{% trans "there is no prefix or the prefix format is not recognised." %}
   <a class="view-all" role="region" aria-expanded="false" aria-controls="OCDSprefixesTable" data-toggle="collapse" data-target="#OCDSprefixesTable"><small>{% trans "View all errors &#9660;" %}</small></a>

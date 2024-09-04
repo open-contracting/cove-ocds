@@ -4,7 +4,7 @@ from pathlib import Path
 from cove import settings
 
 # Build paths inside the project like this: BASE_DIR / "subdir".
-BASE_DIR = Path(__file__).resolve().parents[1]
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 # We use the setting to choose whether to show the section about Sentry in the
 # terms and conditions
@@ -87,7 +87,7 @@ WSGI_APPLICATION = "cove_project.wsgi.application"
 DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": str(BASE_DIR / "db.sqlite3")}}
 
 # Password validation
-# https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
+# https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -100,12 +100,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # Internationalization
-# https://docs.djangoproject.com/en/2.1/topics/i18n/
+# https://docs.djangoproject.com/en/4.2/topics/i18n/
 
 LANGUAGE_CODE = settings.LANGUAGE_CODE
 TIME_ZONE = settings.TIME_ZONE
 USE_I18N = settings.USE_I18N
-USE_L10N = settings.USE_L10N
 USE_TZ = settings.USE_TZ
 
 LANGUAGES = settings.LANGUAGES
@@ -113,12 +112,12 @@ LANGUAGES = settings.LANGUAGES
 LOCALE_PATHS = (BASE_DIR / "cove_ocds" / "locale",)
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.1/howto/static-files/
+# https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 # We can't take STATIC_URL and STATIC_ROOT from cove settings,
 # ... otherwise the files appear under the BASE_DIR that is the Cove library install.
 # and that doesn't work with our standard Apache setup.
-STATIC_URL = "/static/"
+STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "static"
 
 # Misc
@@ -157,5 +156,5 @@ COVE_CONFIG["schema_version"] = list(COVE_CONFIG["schema_version_choices"])[-1]
 # Because of how the standard site proxies traffic, we want to use this
 USE_X_FORWARDED_HOST = True
 
-# https://docs.djangoproject.com/en/3.2/ref/settings/#data-upload-max-memory-size
+# https://docs.djangoproject.com/en/4.2/ref/settings/#data-upload-max-memory-size
 DATA_UPLOAD_MAX_MEMORY_SIZE = 52428800  # 5 MB

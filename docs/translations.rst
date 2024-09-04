@@ -1,7 +1,7 @@
 Translations
 ============
 
-The OCDS DRT uses `Django's translation framework <https://docs.djangoproject.com/en/1.8/topics/i18n/translation/>`_. This means you should wrap text in templates in ``{% trans 'Text to translate' %}`` tags and human readable strings embedded in code should be wrapped with ``_('text to translate')``.
+The OCDS DRT uses `Django's translation framework <https://docs.djangoproject.com/en/4.2/topics/i18n/translation/>`_. This means you should wrap text in templates in ``{% trans 'Text to translate' %}`` tags and human readable strings embedded in code should be wrapped with ``_('text to translate')``.
 
 When new strings are added or existing ones edited, extract them and push them to Transifex for translation:
 

@@ -12,7 +12,7 @@ from django.conf import settings
 from django.shortcuts import render
 from django.utils import translation
 from django.utils.html import format_html
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext as _
 from flattentool.exceptions import FlattenToolValueError, FlattenToolWarning
 from libcove.lib.common import get_spreadsheet_meta_data
 from libcove.lib.converters import convert_json, convert_spreadsheet

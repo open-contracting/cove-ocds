@@ -1,6 +1,6 @@
 from django.utils.functional import lazy
 from django.utils.html import format_html, mark_safe
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext as _
 from libcove.lib.exceptions import CoveInputDataError
 
 mark_safe_lazy = lazy(mark_safe, str)
@@ -21,7 +21,7 @@ def raise_invalid_version_argument(version):
                     version,
                 )
             ),
-            "error": _("%(version)s is not a known schema version", version),
+            "error": _("%(version)s is not a known schema version") % {"version": version},
         }
     )
 
@@ -44,7 +44,7 @@ def raise_invalid_version_data_with_patch(version):
                     version,
                 )
             ),
-            "error": _("%(version)s is not a known schema version", version),
+            "error": _("%(version)s is not a known schema version") % {"version": version},
         }
     )
 
@@ -64,7 +64,7 @@ def raise_json_deref_error(error):
                     error,
                 )
             ),
-            "error": _("%(error)s", error),
+            "error": _("%(error)s") % {"error": error},
         }
     )
 

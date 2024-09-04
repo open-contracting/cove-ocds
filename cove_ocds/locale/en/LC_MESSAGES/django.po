@@ -1376,26 +1376,26 @@ msgstr ""
 msgid "Column"
 msgstr ""
 
-#: cove_ocds/templatetags/cove_tags.py:13
+#: cove_ocds/templatetags/cove_ocds.py:13
 msgid ""
 "Incorrect date format. Dates should use the form YYYY-MM-DDT00:00:00Z. Learn "
 "more about <a href=\"https://standard.open-contracting.org/latest/en/schema/"
 "reference/#date\">dates in OCDS</a>."
 msgstr ""
 
-#: cove_ocds/templatetags/cove_tags.py:24
+#: cove_ocds/templatetags/cove_ocds.py:24
 msgid ""
 "This array should contain either entirely embedded releases or linked "
 "releases. Embedded releases contain an 'id' whereas linked releases do not. "
 "Your releases contain a mixture."
 msgstr ""
 
-#: cove_ocds/templatetags/cove_tags.py:29
+#: cove_ocds/templatetags/cove_ocds.py:29
 #, python-format
 msgid "%s is not valid under any of the given schemas"
 msgstr ""
 
-#: cove_ocds/templatetags/cove_tags.py:31
+#: cove_ocds/templatetags/cove_ocds.py:31
 #, python-format
 msgid "%(instance)s is valid under each of %(reprs)s"
 msgstr ""
