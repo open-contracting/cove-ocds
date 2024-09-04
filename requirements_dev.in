@@ -4,7 +4,6 @@ flake8
 flattentool>=0.14.0
 hypothesis
 libsass
-pip-tools
 pre-commit
 pytest
 pytest-cov

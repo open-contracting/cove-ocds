@@ -15,13 +15,13 @@ repos:
     rev: 5.13.2
     hooks:
       - id: isort
-  - repo: https://github.com/jazzband/pip-tools
-    rev: 7.4.1
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.4.4
     hooks:
       - id: pip-compile
         name: pip-compile requirements.in
-        files: ^requirements\.(in|txt)$
+        args: [requirements.in, -o, requirements.txt, --no-strip-extras]
       - id: pip-compile
         name: pip-compile requirements_dev.in
-        files: ^requirements(_dev)?\.(in|txt)$
-        args: [requirements_dev.in]
+        args: [requirements_dev.in, -o, requirements_dev.txt, --no-strip-extras]
+        files: ^requirements_dev\.(in|txt)$
