@@ -5,7 +5,7 @@ Run the tests with:
 
 .. code:: bash
 
-    pytest --cov cove_ocds --cov cove_project
+    coverage run --source=cove_ocds,cove_project -m pytest
 
 See ``tests/fixtures`` for good and bad JSON and XML files for testing the DRT.
 
