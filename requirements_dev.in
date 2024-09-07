@@ -3,6 +3,7 @@ coverage
 flattentool>=0.14.0
 hypothesis
 libsass
+pre-commit
 pytest
 pytest-django
 pytest-localserver
