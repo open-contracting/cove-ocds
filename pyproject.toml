@@ -7,7 +7,7 @@ line-length = 119
 target-version = "py310"
 
 [tool.ruff.lint]
-select = ["E", "F", "I", "W"]
+select = ["E", "C4", "F", "I", "W"]
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = 'cove_project.settings'
