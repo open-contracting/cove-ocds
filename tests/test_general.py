@@ -17,7 +17,9 @@ from libcoveocds.schema import SchemaOCDS
 schema_version = list(settings.COVE_CONFIG["schema_version_choices"])[-1]
 OCDS_DEFAULT_SCHEMA_VERSION = schema_version
 DEFAULT_OCDS_VERSION = schema_version
-METRICS_EXT = "https://raw.githubusercontent.com/open-contracting-extensions/ocds_metrics_extension/master/extension.json"  # noqa: E501
+METRICS_EXT = (
+    "https://raw.githubusercontent.com/open-contracting-extensions/ocds_metrics_extension/master/extension.json"
+)
 CODELIST_EXT = "https://raw.githubusercontent.com/INAImexico/ocds_extendedProcurementCategory_extension/0ed54770c85500cf21f46e88fb06a30a5a2132b1/extension.json"  # noqa: E501
 
 
