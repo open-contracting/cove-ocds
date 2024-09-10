@@ -1,5 +1,7 @@
-from cove.urls import handler500  # noqa: F401
-from cove.urls import urlpatterns
+from cove.urls import (
+    handler500,  # noqa: F401
+    urlpatterns,
+)
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import re_path
