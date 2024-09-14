@@ -1,3 +1,4 @@
+import contextlib
 import os
 import time
 
@@ -42,13 +43,12 @@ def browser(request):
 def server_url(request, live_server):
     if "CUSTOM_SERVER_URL" in os.environ:
         return os.environ["CUSTOM_SERVER_URL"]
-    else:
-        return live_server.url
+    return live_server.url
 
 
 @pytest.fixture()
 def url_input_browser(request, server_url, browser, httpserver):
-    def _url_input_browser(source_filename, output_source_url=False):
+    def _url_input_browser(source_filename, *, output_source_url=False):
         with open(os.path.join("tests", "fixtures", source_filename), "rb") as fp:
             httpserver.serve_content(fp.read())
         if "CUSTOM_SERVER_URL" in os.environ:
@@ -210,7 +210,7 @@ def test_500_error(server_url, browser):
     [
         (
             "tenders_releases_2_releases.json",
-            ["Convert", "Schema", "OCDS release package schema version 1.0. You can"] + OCDS_SCHEMA_VERSIONS_DISPLAY,
+            ["Convert", "Schema", "OCDS release package schema version 1.0. You can", *OCDS_SCHEMA_VERSIONS_DISPLAY],
             ["Schema Extensions"],
             True,
         ),
@@ -402,7 +402,7 @@ def test_500_error(server_url, browser):
         ),
         (
             "tenders_releases_2_releases.xlsx",
-            ["Convert", "Schema"] + OCDS_SCHEMA_VERSIONS_DISPLAY,
+            ["Convert", "Schema", *OCDS_SCHEMA_VERSIONS_DISPLAY],
             ["Missing OCDS package"],
             True,
         ),
@@ -566,10 +566,8 @@ def check_url_input_result_page(
     ]
 
     if source_filename.endswith(".json") and source_filename not in dont_convert:
-        try:
+        with contextlib.suppress(NoSuchElementException):
             browser.find_element(By.NAME, "flatten").click()
-        except NoSuchElementException:
-            pass
 
     body_text = browser.find_element(By.TAG_NAME, "body").text
     if isinstance(expected_text, str):
@@ -581,7 +579,6 @@ def check_url_input_result_page(
         assert text not in body_text
 
     assert "Data Review Tool" in browser.find_element(By.TAG_NAME, "body").text
-    # assert 'Release Table' in browser.find_element(By.TAG_NAME, 'body').text
 
     if conversion_successful:
         if source_filename.endswith(".json"):

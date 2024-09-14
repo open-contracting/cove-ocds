@@ -24,7 +24,7 @@ def test_input_post(rf):
             rf.post(
                 "/",
                 {
-                    "source_url": "https://raw.githubusercontent.com/OpenDataServices/flatten-tool/main/flattentool/tests/fixtures/tenders_releases_2_releases.json"  # noqa: E501
+                    "source_url": "https://raw.githubusercontent.com/OpenDataServices/flatten-tool/main/flattentool/tests/fixtures/tenders_releases_2_releases.json"
                 },
             )
         )

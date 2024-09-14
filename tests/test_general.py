@@ -20,7 +20,7 @@ DEFAULT_OCDS_VERSION = schema_version
 METRICS_EXT = (
     "https://raw.githubusercontent.com/open-contracting-extensions/ocds_metrics_extension/master/extension.json"
 )
-CODELIST_EXT = "https://raw.githubusercontent.com/INAImexico/ocds_extendedProcurementCategory_extension/0ed54770c85500cf21f46e88fb06a30a5a2132b1/extension.json"  # noqa: E501
+CODELIST_EXT = "https://raw.githubusercontent.com/INAImexico/ocds_extendedProcurementCategory_extension/0ed54770c85500cf21f46e88fb06a30a5a2132b1/extension.json"
 
 
 def test_get_schema_validation_errors():
@@ -78,7 +78,7 @@ def test_get_json_data_deprecated_fields():
             "explanation": ("1.1", "Nobody cares about quantities"),
         },
     }
-    for field_name in expected_result.keys():
+    for field_name in expected_result:
         assert field_name in deprecated_data_fields
         assert expected_result[field_name]["paths"] == deprecated_data_fields[field_name]["paths"]
         assert expected_result[field_name]["explanation"] == deprecated_data_fields[field_name]["explanation"]
@@ -411,7 +411,7 @@ def test_get_additional_codelist_values():
     assert additional_codelist_values == {
         ("releases/tag"): {
             "codelist": "releaseTag.csv",
-            "codelist_url": "https://raw.githubusercontent.com/open-contracting/standard/1.1/schema/codelists/releaseTag.csv",  # noqa: E501
+            "codelist_url": "https://raw.githubusercontent.com/open-contracting/standard/1.1/schema/codelists/releaseTag.csv",
             "codelist_amend_urls": [],
             "field": "tag",
             "extension_codelist": False,
@@ -421,7 +421,7 @@ def test_get_additional_codelist_values():
         },
         ("releases/tender/items/classification/scheme"): {
             "codelist": "itemClassificationScheme.csv",
-            "codelist_url": "https://raw.githubusercontent.com/open-contracting/standard/1.1/schema/codelists/itemClassificationScheme.csv",  # noqa: E501
+            "codelist_url": "https://raw.githubusercontent.com/open-contracting/standard/1.1/schema/codelists/itemClassificationScheme.csv",
             "codelist_amend_urls": [],
             "extension_codelist": False,
             "field": "scheme",
@@ -549,7 +549,7 @@ def test_schema_after_version_change_record(client):
     "json_data",
     [
         '{"version":"1.1", "releases":{"buyer":{"additionalIdentifiers":[]}, "initiationType": "tender"}}',
-        # TODO: add more ...
+        # Add more ...
     ],
 )
 def test_corner_cases_for_deprecated_data_fields(json_data):

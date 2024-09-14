@@ -28,6 +28,7 @@ from .lib import exceptions
 from .lib.ocds_show_extra import add_extra_fields
 
 logger = logging.getLogger(__name__)
+MAXIMUM_RELEASES_OR_RECORDS = 100
 
 
 def format_lang(choices, lang):
@@ -84,7 +85,7 @@ def explore_ocds(request, pk):
                         ),
                         "error": format(err),
                     }
-                )
+                ) from None
             except ValueError as err:
                 raise CoveInputDataError(
                     context={
@@ -101,7 +102,7 @@ def explore_ocds(request, pk):
                         ),
                         "error": format(err),
                     }
-                )
+                ) from None
 
             if not isinstance(json_data, dict):
                 raise CoveInputDataError(
@@ -240,17 +241,16 @@ def explore_ocds(request, pk):
                         ),
                         "error": format(err),
                     }
-                )
+                ) from None
             except Exception as err:
-                logger.exception(err, extra={"request": request})
-                raise CoveInputDataError(wrapped_err=err)
+                logger.exception(extra={"request": request})
+                raise CoveInputDataError(wrapped_err=err) from None
 
         with open(context["converted_path"], encoding="utf-8") as fp:
             json_data = json.load(fp)
 
-    if replace:
-        if os.path.exists(validation_errors_path):
-            os.remove(validation_errors_path)
+    if replace and os.path.exists(validation_errors_path):
+        os.remove(validation_errors_path)
 
     context = common_checks_ocds(context, upload_dir, json_data, schema_ocds)
 
@@ -266,7 +266,7 @@ def explore_ocds(request, pk):
     )
 
     for key in ("additional_closed_codelist_values", "additional_open_codelist_values"):
-        for path_string, codelist_info in context[key].items():
+        for codelist_info in context[key].values():
             if codelist_info["codelist_url"].startswith(schema_ocds.codelists):
                 codelist_info["codelist_url"] = (
                     f"https://standard.open-contracting.org/{db_data.data_schema_version}/en/schema/codelists/#"
@@ -288,7 +288,7 @@ def explore_ocds(request, pk):
         template = "cove_ocds/explore_record.html"
         if hasattr(json_data, "get") and hasattr(json_data.get("records"), "__iter__"):
             context["records"] = json_data["records"]
-            if isinstance(json_data["records"], list) and len(json_data["records"]) < 100:
+            if isinstance(json_data["records"], list) and len(json_data["records"]) < MAXIMUM_RELEASES_OR_RECORDS:
                 context["ocds_show_data"] = ocds_show_data(json_data, ocds_show_deref_schema)
         else:
             context["records"] = []
@@ -299,7 +299,7 @@ def explore_ocds(request, pk):
         template = "cove_ocds/explore_release.html"
         if hasattr(json_data, "get") and hasattr(json_data.get("releases"), "__iter__"):
             context["releases"] = json_data["releases"]
-            if isinstance(json_data["releases"], list) and len(json_data["releases"]) < 100:
+            if isinstance(json_data["releases"], list) and len(json_data["releases"]) < MAXIMUM_RELEASES_OR_RECORDS:
                 context["ocds_show_data"] = ocds_show_data(json_data, ocds_show_deref_schema)
 
             # Parse release dates into objects so the template can format them.
@@ -344,4 +344,4 @@ class DecimalEncoder(json.JSONEncoder):
     def default(self, o):
         if isinstance(o, Decimal):
             return float(o)
-        return super(DecimalEncoder, self).default(o)
+        return super().default(o)

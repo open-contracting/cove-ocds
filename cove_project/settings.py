@@ -27,10 +27,10 @@ HOTJAR = {
     "sv": os.getenv("HOTJAR_SV", ""),
     "date_info": os.getenv("HOTJAR_DATE_INFO", ""),
 }
-RELEASES_OR_RECORDS_TABLE_LENGTH = int(os.getenv("RELEASES_OR_RECORDS_TABLE_LENGTH", 25))
+RELEASES_OR_RECORDS_TABLE_LENGTH = int(os.getenv("RELEASES_OR_RECORDS_TABLE_LENGTH", "25"))
 VALIDATION_ERROR_LOCATIONS_LENGTH = settings.VALIDATION_ERROR_LOCATIONS_LENGTH
 VALIDATION_ERROR_LOCATIONS_SAMPLE = settings.VALIDATION_ERROR_LOCATIONS_SAMPLE
-DELETE_FILES_AFTER_DAYS = int(os.getenv("DELETE_FILES_AFTER_DAYS", 90))
+DELETE_FILES_AFTER_DAYS = int(os.getenv("DELETE_FILES_AFTER_DAYS", "90"))
 
 # We can't take MEDIA_ROOT and MEDIA_URL from cove settings,
 # ... otherwise the files appear under the BASE_DIR that is the Cove library install.
