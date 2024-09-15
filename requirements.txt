@@ -72,7 +72,7 @@ libcove==0.32.1
     #   -r requirements.in
     #   libcoveocds
     #   libcoveweb
-libcoveocds==0.14.1
+libcoveocds==0.15.0
     # via -r requirements.in
 libcoveweb==0.30.4
     # via -r requirements.in
@@ -84,7 +84,7 @@ markupsafe==2.1.2
     # via werkzeug
 mdurl==0.1.2
     # via markdown-it-py
-ocdsextensionregistry==0.3.4
+ocdsextensionregistry==0.4.0
     # via libcoveocds
 odfpy==1.4.1
     # via flattentool

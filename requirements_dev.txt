@@ -125,7 +125,7 @@ libcove==0.32.1
     #   -r requirements.txt
     #   libcoveocds
     #   libcoveweb
-libcoveocds==0.14.1
+libcoveocds==0.15.0
     # via -r requirements.txt
 libcoveweb==0.30.4
     # via -r requirements.txt
@@ -145,7 +145,7 @@ mdurl==0.1.2
     # via
     #   -r requirements.txt
     #   markdown-it-py
-ocdsextensionregistry==0.3.4
+ocdsextensionregistry==0.4.0
     # via
     #   -r requirements.txt
     #   libcoveocds
