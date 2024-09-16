@@ -25,7 +25,7 @@ def slow():
 
 
 @pytest.fixture(scope="module")
-def browser(request):
+def browser():
     if BROWSER == "ChromeHeadless":
         options = Options()
         options.add_argument("--headless")
@@ -40,7 +40,7 @@ def browser(request):
 
 
 @pytest.fixture(scope="module")
-def server_url(request, live_server):
+def server_url(live_server):
     if "CUSTOM_SERVER_URL" in os.environ:
         return os.environ["CUSTOM_SERVER_URL"]
     return live_server.url
@@ -714,9 +714,8 @@ def test_extension_validation_error_messages(url_input_browser):
         assert html not in browser.page_source
 
 
-@pytest.mark.parametrize("warning_texts", [[], []])
 @pytest.mark.parametrize("flatten_or_unflatten", ["flatten", "unflatten"])
-def test_flattentool_warnings(server_url, browser, httpserver, monkeypatch, warning_texts, flatten_or_unflatten):
+def test_flattentool_warnings(server_url, browser, httpserver, monkeypatch, flatten_or_unflatten):
     # If we're testing a remove server then we can't run this test as we can't
     # set up the mocks
     if "CUSTOM_SERVER_URL" in os.environ:
@@ -728,10 +727,7 @@ def test_flattentool_warnings(server_url, browser, httpserver, monkeypatch, warn
     else:
         source_filename = "tenders_releases_2_releases.xlsx"
 
-    import warnings
-
     import flattentool
-    from flattentool.exceptions import DataErrorWarning
 
     def mockunflatten(input_name, output_name, *args, **kwargs):
         with open(kwargs["cell_source_map"], "w") as fp:
@@ -740,14 +736,10 @@ def test_flattentool_warnings(server_url, browser, httpserver, monkeypatch, warn
             fp.write("{}")
         with open(output_name, "w") as fp:
             fp.write("{}")
-            for warning_text in warning_texts:
-                warnings.warn(warning_text, DataErrorWarning)
 
     def mockflatten(input_name, output_name, *args, **kwargs):
         with open(output_name + ".xlsx", "w") as fp:
             fp.write("{}")
-            for warning_text in warning_texts:
-                warnings.warn(warning_text, DataErrorWarning)
 
     mocks = {"flatten": mockflatten, "unflatten": mockunflatten}
     monkeypatch.setattr(flattentool, flatten_or_unflatten, mocks[flatten_or_unflatten])
@@ -768,13 +760,8 @@ def test_flattentool_warnings(server_url, browser, httpserver, monkeypatch, warn
         browser.find_element(By.NAME, "flatten").click()
 
     body_text = browser.find_element(By.TAG_NAME, "body").text
-    if len(warning_texts) == 0:
-        assert "conversion Errors" not in body_text
-        assert "Conversion Warnings" not in body_text
-    else:
-        assert warning_texts[0] in body_text
-        assert "Conversion Errors" in body_text
-        assert "conversion Warnings" not in body_text
+    assert "conversion Errors" not in body_text
+    assert "Conversion Warnings" not in body_text
 
 
 @pytest.mark.parametrize(("data_url"), ["/data/0", "/data/324ea8eb-f080-43ce-a8c1-9f47b28162f3"])

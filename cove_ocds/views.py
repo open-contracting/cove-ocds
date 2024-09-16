@@ -32,10 +32,7 @@ MAXIMUM_RELEASES_OR_RECORDS = 100
 
 
 def format_lang(choices, lang):
-    """
-    Format the urls with `{lang}` contained in a schema_version_choices.
-    """
-
+    """Format the urls with `{lang}` contained in a schema_version_choices."""
     formatted_choices = {}
     for version, (display, url, tag) in choices.items():
         formatted_choices[version] = (display, url.format(lang=lang), tag)
