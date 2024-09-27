@@ -8,7 +8,7 @@ def group_validation_errors(validation_errors):
         error = json.loads(error_json)
         if error["message_type"] == "required":
             validation_errors_grouped["required"].append((error_json, values))
-        elif error["message_type"] in [
+        elif error["message_type"] in {
             "format",
             "pattern",
             "number",
@@ -18,7 +18,7 @@ def group_validation_errors(validation_errors):
             "object",
             "integer",
             "array",
-        ]:
+        }:
             validation_errors_grouped["format"].append((error_json, values))
         else:
             validation_errors_grouped["other"].append((error_json, values))
