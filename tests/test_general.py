@@ -579,7 +579,6 @@ def test_ocds_json_output_bad_data(json_data, exception):
             data.upload_dir(),
             data.original_file.path,
             schema_version="",
-            convert=False,
         )
 
 

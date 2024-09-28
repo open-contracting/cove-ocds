@@ -1,5 +1,4 @@
-tender_items = tender.get("items", [])
-for item in tender_items:
+for item in tender.get("items", []):
     item_id = item.get("id")
     if item_id:
         unique_item_ids.add(item_id)
