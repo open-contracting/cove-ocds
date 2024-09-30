@@ -31,5 +31,5 @@ jobs:
           ./manage.py migrate
           ./manage.py makemigrations --check --dry-run
           ./manage.py check --fail-level WARNING
-          coverage run --source=cove_ocds,cove_project -m pytest -W error -W ignore::DeprecationWarning:ijson.compat -W ignore::ResourceWarning
+          coverage run --source=core,cove_ocds -m pytest -W error -W ignore::DeprecationWarning:ijson.compat -W ignore::ResourceWarning
       - uses: coverallsapp/github-action@v2

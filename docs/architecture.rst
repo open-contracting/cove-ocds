@@ -15,7 +15,7 @@ cove-ocds
 
 ``cove_ocds/views.py`` does most of the heavy lifting of taking an input file from the web interface and carrying out the various validation checks and conversions, then piping the output back to the right templates.
 
-``cove_project/`` contains the Django components (settings, URL paths, server).
+``core/`` contains the Django components (settings, URL paths, server).
 
 lib-cove-ocds
 -------------
@@ -41,7 +41,7 @@ OCDS Show
 Configuration
 -------------
 
-Some configuration variables are set in ``COVE_CONFIG``, found in ``cove_project/settings.py``.
+Some configuration variables are set in ``COVE_CONFIG``, found in ``core/settings.py``.
 
 * ``app_name``, ``app_verbose_name``, ``app_strapline``, ``support_email``: set human readable strings for the DRT that can be reused in templates etc.
 * ``app_base_template``, ``input_template``, ``input_methods``: set the templates for the landing page.
