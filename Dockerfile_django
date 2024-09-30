@@ -1,0 +1,43 @@
+FROM python:3.11 as build-stage
+
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
+
+WORKDIR /workdir
+
+COPY . .
+
+ENV DJANGO_ENV=production
+
+RUN python manage.py collectstatic --noinput -v2
+
+FROM python:3.11
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      gettext \
+   && rm -rf /var/lib/apt/lists/*
+
+RUN groupadd -r runner && useradd --no-log-init -r -g runner runner
+
+# Must match the settings.DATABASES default value.
+RUN mkdir -p /data/db && chown -R runner:runner /data/db
+# Must match the settings.MEDIA_ROOT default value.
+RUN mkdir -p /data/media && chown -R runner:runner /data/media
+
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
+
+WORKDIR /workdir
+USER runner:runner
+COPY --chown=runner:runner . .
+
+# Django needs a copy of the staticfiles.json manifest file.
+COPY --from=build-stage --chown=runner:runner /workdir/static/staticfiles.json /workdir/static/staticfiles.json
+
+ENV DJANGO_ENV=production
+ENV WEB_CONCURRENCY=2
+
+RUN python manage.py compilemessages
+
+EXPOSE 8000
+CMD ["gunicorn", "core.wsgi", "--bind", "0.0.0.0:8000", "--worker-tmp-dir", "/dev/shm", "--threads", "2", "--name", "cove"]
