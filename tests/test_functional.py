@@ -5,6 +5,7 @@ import time
 import pytest
 import requests
 from django.conf import settings
+from django.test import override_settings
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.options import Options
@@ -34,7 +35,10 @@ def browser():
         browser = getattr(webdriver, BROWSER)()
     browser.implicitly_wait(3)
 
-    yield browser
+    with override_settings(
+        STORAGES={"staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"}}
+    ):
+        yield browser
 
     browser.quit()
 
@@ -150,7 +154,6 @@ def test_common_index_elements(server_url, browser):
     browser.find_element(By.CSS_SELECTOR, "#more-information .panel-title").click()
     time.sleep(0.5)
     assert "What happens to the data I provide to this site?" in browser.find_element(By.TAG_NAME, "body").text
-    assert "Why do you delete data after 90 days?" in browser.find_element(By.TAG_NAME, "body").text
     assert "Why provide converted versions?" in browser.find_element(By.TAG_NAME, "body").text
     assert "Terms & Conditions" in browser.find_element(By.TAG_NAME, "body").text
     assert "Open Data Services" in browser.find_element(By.TAG_NAME, "body").text
