@@ -3,14 +3,14 @@ How to replace frontend hardcoding with a configurable variable
 
 Pick a name for the environment variable you want to configure cove with. In this example we use `MY_ENV_VAR`.
 
-Edit `cove_project/settings.py`, and add a setting. The setting's name typically matches the environment variable's name. Set a default value, if appropriate. For example:
+Edit `core/settings.py`, and add a setting. The setting's name typically matches the environment variable's name. Set a default value, if appropriate. For example:
 
 .. code:: python
 
     MY_ENV_VAR = os.getenv("MY_ENV_VAR", "default value")
 
 
-Edit `cove_project/context_processors.py`, and add a mapping between the setting name, and what name you want use in the template: we've picked `my_var`.
+Edit `core/context_processors.py`, and add a mapping between the setting name, and what name you want use in the template: we've picked `my_var`.
 
 .. code:: python
 
