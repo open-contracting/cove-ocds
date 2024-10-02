@@ -1,6 +1,7 @@
 django
 django-bootstrap3
 flattentool
+gunicorn[setproctitle]
 libcove
 libcoveocds[perf,web]
 libcoveweb
