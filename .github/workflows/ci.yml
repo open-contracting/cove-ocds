@@ -21,6 +21,7 @@ jobs:
           sudo apt update
           sudo apt install gettext
       - run: ./manage.py compilemessages
+      - run: ./manage.py collectstatic --noinput -v2
       - name: Run checks and tests
         env:
           PYTHONWARNINGS: error
