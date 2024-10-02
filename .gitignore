@@ -6,6 +6,7 @@
 .coverage
 __pycache__
 /media
+/static
 /venv
 docs/_build
 .hypothesis
