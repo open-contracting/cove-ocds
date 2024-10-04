@@ -56,9 +56,9 @@ def explore_ocds(request, pk):
                 "msg": _(
                     "The data you were hoping to explore no longer exists.\n\nThis is because all "
                     "data supplied to this website is automatically deleted after %s days, and therefore "
-                    "the analysis of that data is no longer available.",
-                    getattr(settings, "DELETE_FILES_AFTER_DAYS", 7),
-                ),
+                    "the analysis of that data is no longer available."
+                )
+                % getattr(settings, "DELETE_FILES_AFTER_DAYS", 7),
             },
             status=404,
         )
