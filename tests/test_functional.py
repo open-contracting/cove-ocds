@@ -1220,6 +1220,7 @@ def test_records_table_7_rows_env_var(skip_if_remote, settings_records_table_10,
     assert len(table_rows) == 7
 
 
+@override_settings(VALIDATION_ERROR_LOCATIONS_LENGTH=1000)
 def test_error_list_1000_lines(skip_if_remote, url_input_browser):
     """
     Check that when there are more than 1000 error locations, only 1001 are
@@ -1237,6 +1238,7 @@ def test_error_list_1000_lines(skip_if_remote, url_input_browser):
     assert len(table_rows) == 1000
 
 
+@override_settings(VALIDATION_ERROR_LOCATIONS_LENGTH=1000)
 def test_error_list_999_lines(skip_if_remote, url_input_browser):
     """
     Check that when there are less than 1000 error locations, they are all shown
@@ -1261,6 +1263,7 @@ def settings_error_locations_sample(settings):
     settings.VALIDATION_ERROR_LOCATIONS_SAMPLE = True
 
 
+@override_settings(VALIDATION_ERROR_LOCATIONS_LENGTH=1000)
 def test_error_list_1000_lines_sample(skip_if_remote, settings_error_locations_sample, url_input_browser):
     """
     Check that when there are more than 1000 error locations, only 1001 are
@@ -1276,6 +1279,7 @@ def test_error_list_1000_lines_sample(skip_if_remote, settings_error_locations_s
     assert len(table_rows) == 1000
 
 
+@override_settings(VALIDATION_ERROR_LOCATIONS_LENGTH=1000)
 def test_error_list_999_lines_sample(skip_if_remote, settings_error_locations_sample, url_input_browser):
     """
     Check that when there are less than 1000 error locations, they are all shown
