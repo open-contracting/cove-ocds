@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-16 17:08+0000\n"
+"POT-Creation-Date: 2024-10-04 16:02+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,8 +23,8 @@ msgstr ""
 
 #: cove_ocds/lib/exceptions.py:14 cove_ocds/lib/exceptions.py:34
 #: cove_ocds/lib/exceptions.py:57 cove_ocds/lib/exceptions.py:77
-#: cove_ocds/views.py:74 cove_ocds/views.py:92 cove_ocds/views.py:110
-#: cove_ocds/views.py:231
+#: cove_ocds/views.py:93 cove_ocds/views.py:111 cove_ocds/views.py:129
+#: cove_ocds/views.py:248
 msgid "Try Again"
 msgstr ""
 
@@ -964,14 +964,19 @@ msgid "Tenderers: "
 msgstr ""
 
 #: cove_ocds/templates/cove_ocds/explore_release.html:193
+#: docs/code_examples/kfi-template-added.html:1
+#: docs/code_examples/kfi-template-orig.html:1
 msgid "Total Items: "
 msgstr ""
 
 #: cove_ocds/templates/cove_ocds/explore_release.html:194
+#: docs/code_examples/kfi-template-added.html:2
 msgid "Unique Item IDs: "
 msgstr ""
 
 #: cove_ocds/templates/cove_ocds/explore_release.html:195
+#: docs/code_examples/kfi-template-added.html:3
+#: docs/code_examples/kfi-template-orig.html:2
 msgid "Items ID schemes: "
 msgstr ""
 
@@ -1376,36 +1381,54 @@ msgstr ""
 msgid "Column"
 msgstr ""
 
-#: cove_ocds/templatetags/cove_ocds.py:13
-msgid ""
-"Incorrect date format. Dates should use the form YYYY-MM-DDT00:00:00Z. Learn "
-"more about <a href=\"https://standard.open-contracting.org/latest/en/schema/"
-"reference/#date\">dates in OCDS</a>."
-msgstr ""
-
-#: cove_ocds/templatetags/cove_ocds.py:24
+#: cove_ocds/templatetags/cove_ocds.py:11
 msgid ""
 "This array should contain either entirely embedded releases or linked "
 "releases. Embedded releases contain an 'id' whereas linked releases do not. "
 "Your releases contain a mixture."
 msgstr ""
 
-#: cove_ocds/templatetags/cove_ocds.py:29
+#: cove_ocds/templatetags/cove_ocds.py:17
 #, python-format
 msgid "%s is not valid under any of the given schemas"
 msgstr ""
 
-#: cove_ocds/templatetags/cove_ocds.py:31
+#: cove_ocds/templatetags/cove_ocds.py:20
 #, python-format
 msgid "%(instance)s is valid under each of %(reprs)s"
 msgstr ""
 
-#: cove_ocds/views.py:72 cove_ocds/views.py:90 cove_ocds/views.py:108
-#: cove_ocds/views.py:229
+#: cove_ocds/templatetags/cove_ocds.py:29
+msgid ""
+"Incorrect date format. Dates should use the form YYYY-MM-DDT00:00:00Z. Learn "
+"more about <a href=\"https://standard.open-contracting.org/latest/en/schema/"
+"reference/#date\">dates in OCDS</a>."
+msgstr ""
+
+#: cove_ocds/views.py:52
+msgid "Sorry, the page you are looking for is not available"
+msgstr ""
+
+#: cove_ocds/views.py:54
+msgid "Go to Home page"
+msgstr ""
+
+#: cove_ocds/views.py:57
+#, python-format
+msgid ""
+"The data you were hoping to explore no longer exists.\n"
+"\n"
+"This is because all data supplied to this website is automatically deleted "
+"after %s days, and therefore the analysis of that data is no longer "
+"available."
+msgstr ""
+
+#: cove_ocds/views.py:91 cove_ocds/views.py:109 cove_ocds/views.py:127
+#: cove_ocds/views.py:246
 msgid "Sorry, we can't process that data"
 msgstr ""
 
-#: cove_ocds/views.py:77
+#: cove_ocds/views.py:96
 msgid ""
 "The file that you uploaded doesn't appear to be well formed JSON. OCDS JSON "
 "follows the I-JSON format, which requires UTF-8 encoding. Ensure that your "
@@ -1415,7 +1438,7 @@ msgid ""
 "span> <strong>Error message:</strong> {}"
 msgstr ""
 
-#: cove_ocds/views.py:95
+#: cove_ocds/views.py:114
 msgid ""
 "We think you tried to upload a JSON file, but it is not well formed JSON.\n"
 "\n"
@@ -1423,13 +1446,13 @@ msgid ""
 "span> <strong>Error message:</strong> {}"
 msgstr ""
 
-#: cove_ocds/views.py:111
+#: cove_ocds/views.py:130
 msgid ""
 "OCDS JSON should have an object as the top level, the JSON you supplied does "
 "not."
 msgstr ""
 
-#: cove_ocds/views.py:234
+#: cove_ocds/views.py:251
 msgid ""
 "The table isn't structured correctly. For example, a JSON Pointer "
 "(<code>tender</code>) can't be both a value (<code>tender</code>), a path to "

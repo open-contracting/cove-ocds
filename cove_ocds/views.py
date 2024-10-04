@@ -41,7 +41,27 @@ def format_lang(choices, lang):
 
 @cove_web_input_error
 def explore_ocds(request, pk):
-    context, db_data, error = explore_data_context(request, pk)
+    try:
+        context, db_data, error = explore_data_context(request, pk)
+    # https://github.com/OpenDataServices/lib-cove-web/pull/145
+    except FileNotFoundError:
+        return render(
+            request,
+            "error.html",
+            {
+                "sub_title": _("Sorry, the page you are looking for is not available"),
+                "link": "index",
+                "link_text": _("Go to Home page"),
+                "support_email": settings.COVE_CONFIG.get("support_email"),
+                "msg": _(
+                    "The data you were hoping to explore no longer exists.\n\nThis is because all "
+                    "data supplied to this website is automatically deleted after %s days, and therefore "
+                    "the analysis of that data is no longer available.",
+                    getattr(settings, "DELETE_FILES_AFTER_DAYS", 7),
+                ),
+            },
+            status=404,
+        )
     if error:
         return error
 
