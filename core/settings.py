@@ -231,7 +231,6 @@ if "SENTRY_DSN" in os.environ:
         traces_sample_rate=1.0,
     )
 
-
 COVE_CONFIG = {
     # lib-cove-web options
     "app_name": "cove_ocds",
@@ -250,6 +249,10 @@ COVE_CONFIG = {
 }
 # Set default schema version to the latest version.
 COVE_CONFIG["schema_version"] = list(COVE_CONFIG["schema_version_choices"])[-1]
+
+DELETE_FILES_AFTER_DAYS = int(os.getenv("DELETE_FILES_AFTER_DAYS", "90"))  # default 7
+REQUESTS_TIMEOUT = int(os.getenv("REQUESTS_TIMEOUT", "10"))  # default None
+VALIDATION_ERROR_LOCATIONS_LENGTH = int(os.getenv("VALIDATION_ERROR_LOCATIONS_LENGTH", "100"))  # default 1000
 
 
 # Project configuration
