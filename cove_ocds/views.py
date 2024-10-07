@@ -317,12 +317,10 @@ def explore_ocds(request, pk):
 def ocds_show_data(json_data, ocds_show_deref_schema):
     new_json_data = copy.deepcopy(json_data)
     add_extra_fields(new_json_data, ocds_show_deref_schema)
-    return json.dumps(new_json_data, cls=DecimalEncoder)
+    return json.dumps(new_json_data, default=default)
 
 
-# From stackoverflow:  https://stackoverflow.com/questions/1960516/python-json-serialize-a-decimal-object
-class DecimalEncoder(json.JSONEncoder):
-    def default(self, o):
-        if isinstance(o, Decimal):
-            return float(o)
-        return super().default(o)
+def default(self, obj):
+    if isinstance(obj, Decimal):
+        return float(obj)
+    return json.JSONEncoder().default(obj)
