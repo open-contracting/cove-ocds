@@ -7,7 +7,6 @@ import warnings
 from decimal import Decimal
 
 from cove.views import cove_web_input_error, explore_data_context
-from dateutil import parser
 from django.conf import settings
 from django.shortcuts import render
 from django.utils import translation
@@ -20,7 +19,6 @@ from libcove.lib.exceptions import CoveInputDataError
 from libcoveocds.common_checks import common_checks_ocds
 from libcoveocds.config import LibCoveOCDSConfig
 from libcoveocds.schema import SchemaOCDS
-from rfc3339_validator import validate_rfc3339
 
 from cove_ocds.lib.views import group_validation_errors
 
@@ -81,7 +79,6 @@ def explore_ocds(request, pk):
     validation_errors_path = os.path.join(upload_dir, "validation_errors-3.json")
 
     if file_type == "json":
-        # open the data first so we can inspect for record package
         with open(file_name, encoding="utf-8") as fp:
             try:
                 json_data = json.load(fp)
@@ -144,7 +141,6 @@ def explore_ocds(request, pk):
             if schema_ocds.missing_package:
                 exceptions.raise_missing_package_error()
             if schema_ocds.invalid_version_argument:
-                # This shouldn't happen unless the user sends random POST data.
                 exceptions.raise_invalid_version_argument(post_version_choice)
             if schema_ocds.invalid_version_data:
                 if isinstance(version_in_data, str) and re.compile(r"^\d+\.\d+\.\d+$").match(version_in_data):
@@ -163,10 +159,6 @@ def explore_ocds(request, pk):
             if "records" in json_data:
                 context["conversion"] = None
             else:
-                # Replace the spreadsheet conversion only if it exists already.
-                converted_path = os.path.join(upload_dir, "flattened")
-                replace_converted = replace and os.path.exists(converted_path + ".xlsx")
-
                 with warnings.catch_warnings():
                     warnings.filterwarnings("ignore", category=FlattenToolWarning)
 
@@ -176,7 +168,8 @@ def explore_ocds(request, pk):
                         file_name,
                         lib_cove_ocds_config,
                         schema_url=url,
-                        replace=replace_converted,
+                        # Unsure why exists() was added in https://github.com/open-contracting/cove-ocds/commit/d793c49
+                        replace=replace and os.path.exists(os.path.join(upload_dir, "flattened.xlsx")),
                         request=request,
                         flatten=request.POST.get("flatten"),
                     )
@@ -184,7 +177,6 @@ def explore_ocds(request, pk):
                 context.update(convert_json_context)
 
     else:
-        # Use the lowest release pkg schema version accepting 'version' field
         metatab_schema_url = SchemaOCDS(select_version="1.1", lib_cove_ocds_config=lib_cove_ocds_config).pkg_schema_url
 
         with warnings.catch_warnings():
@@ -204,9 +196,7 @@ def explore_ocds(request, pk):
             lib_cove_ocds_config=lib_cove_ocds_config,
         )
 
-        # Unlike for JSON data case above, do not check for missing data package
         if schema_ocds.invalid_version_argument:
-            # This shouldn't happen unless the user sends random POST data.
             exceptions.raise_invalid_version_argument(post_version_choice)
         if schema_ocds.invalid_version_data:
             version_in_data = metatab_data.get("version")
@@ -215,8 +205,7 @@ def explore_ocds(request, pk):
             else:
                 context["unrecognized_version_data"] = version_in_data
 
-        # Replace json conversion when user chooses a different schema version.
-        if db_data.schema_version and schema_ocds.version != db_data.schema_version:
+        if db_data.schema_version and schema_ocds.version != db_data.schema_version:  # if user changes schema version
             replace = True
 
         if schema_ocds.extensions:
@@ -318,31 +307,6 @@ def explore_ocds(request, pk):
             context["releases"] = json_data["releases"]
             if isinstance(json_data["releases"], list) and len(json_data["releases"]) < MAXIMUM_RELEASES_OR_RECORDS:
                 context["ocds_show_data"] = ocds_show_data(json_data, ocds_show_deref_schema)
-
-            # Parse release dates into objects so the template can format them.
-            for release in context["releases"]:
-                if hasattr(release, "get") and release.get("date"):
-                    if validate_rfc3339(release["date"]):
-                        release["date"] = parser.parse(release["date"])
-                    else:
-                        release["date"] = None
-            if context.get("releases_aggregates"):
-                date_fields = [
-                    "max_award_date",
-                    "max_contract_date",
-                    "max_release_date",
-                    "max_tender_date",
-                    "min_award_date",
-                    "min_contract_date",
-                    "min_release_date",
-                    "min_tender_date",
-                ]
-                for field in date_fields:
-                    if context["releases_aggregates"].get(field):
-                        if validate_rfc3339(context["releases_aggregates"][field]):
-                            context["releases_aggregates"][field] = parser.parse(context["releases_aggregates"][field])
-                        else:
-                            context["releases_aggregates"][field] = None
         else:
             context["releases"] = []
 
