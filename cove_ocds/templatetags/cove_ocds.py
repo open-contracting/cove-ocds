@@ -38,6 +38,6 @@ def html_error_msg_ocds(error):
 
 @register.filter
 def to_datetime(value):
-    if validate_rfc3339(value):
+    if value and validate_rfc3339(value):
         return parser.parse(value)
     return None
