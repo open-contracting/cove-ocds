@@ -26,7 +26,7 @@ def add_extra_fields_to_obj(obj, all_schema_fields, current_path):
         if key == "__extra":
             continue
 
-        new_path = current_path + "/" + key
+        new_path = f"{current_path}/{key}"
         if new_path not in all_schema_fields:
             obj["__extra"][key] = value
             continue
