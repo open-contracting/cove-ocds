@@ -44,15 +44,16 @@ def server_url(live_server):
 @pytest.fixture()
 def url_input_browser(request, server_url, browser, httpserver):
     def _url_input_browser(source_filename, *, output_source_url=False):
-        with open(os.path.join("tests", "fixtures", source_filename), "rb") as fp:
-            httpserver.serve_content(fp.read())
-        if "CUSTOM_SERVER_URL" in os.environ:
-            # Use urls pointing to GitHub if we have a custom (probably non local) server URL
+        if source_filename.startswith("http"):
+            source_url = source_filename
+        elif "CUSTOM_SERVER_URL" in os.environ:
             source_url = (
-                "https://raw.githubusercontent.com/open-contracting/cove-ocds/main/tests/fixtures/" + source_filename
+                f"https://raw.githubusercontent.com/open-contracting/cove-ocds/main/tests/fixtures/{source_filename}"
             )
         else:
-            source_url = httpserver.url + "/" + source_filename
+            with open(os.path.join("tests", "fixtures", source_filename), "rb") as fp:
+                httpserver.serve_content(fp.read())
+            source_url = f"{httpserver.url}/{source_filename}"
 
         browser.get(server_url)
         time.sleep(0.5)

@@ -467,21 +467,9 @@ def test_url_input(
         conversion_successful,
     )
 
-    selected_examples = ["tenders_releases_2_releases_invalid.json"]
-
-    if source_filename in selected_examples:
+    if source_filename == "tenders_releases_2_releases_invalid.json":
         # refresh page to now check if tests still work after caching some data
         browser.get(browser.current_url)
-        check_url_input_result_page(
-            server_url,
-            browser,
-            httpserver,
-            source_filename,
-            expected_text,
-            not_expected_text,
-            conversion_successful,
-        )
-        browser.get(server_url + "?source_url=" + source_url)
         check_url_input_result_page(
             server_url,
             browser,
@@ -658,7 +646,7 @@ def test_extension_validation_error_messages(url_input_browser):
 
 
 @pytest.mark.parametrize("flatten_or_unflatten", ["flatten", "unflatten"])
-def test_flattentool_warnings(server_url, browser, httpserver, monkeypatch, flatten_or_unflatten):
+def test_flattentool_warnings(server_url, url_input_browser, httpserver, monkeypatch, flatten_or_unflatten):
     # If we're testing a remove server then we can't run this test as we can't
     # set up the mocks
     if "CUSTOM_SERVER_URL" in os.environ:
@@ -681,23 +669,22 @@ def test_flattentool_warnings(server_url, browser, httpserver, monkeypatch, flat
             fp.write("{}")
 
     def mockflatten(input_name, output_name, *args, **kwargs):
-        with open(output_name + ".xlsx", "w") as fp:
+        with open(f"{output_name}.xlsx", "w") as fp:
             fp.write("{}")
 
     mocks = {"flatten": mockflatten, "unflatten": mockunflatten}
     monkeypatch.setattr(flattentool, flatten_or_unflatten, mocks[flatten_or_unflatten])
 
-    with open(os.path.join("tests", "fixtures", source_filename), "rb") as fp:
-        httpserver.serve_content(fp.read())
     if "CUSTOM_SERVER_URL" in os.environ:
-        # Use urls pointing to GitHub if we have a custom (probably non local) server URL
         source_url = (
-            "https://raw.githubusercontent.com/open-contracting/cove-ocds/main/tests/fixtures/" + source_filename
+            f"https://raw.githubusercontent.com/open-contracting/cove-ocds/main/tests/fixtures/{source_filename}"
         )
     else:
-        source_url = httpserver.url + "/" + source_filename
+        with open(os.path.join("tests", "fixtures", source_filename), "rb") as fp:
+            httpserver.serve_content(fp.read())
+        source_url = f"{httpserver.url}/{source_filename}"
 
-    browser.get(server_url + "?source_url=" + source_url)
+    browser = url_input_browser(source_url)
 
     if source_filename.endswith(".json"):
         browser.find_element(By.NAME, "flatten").click()

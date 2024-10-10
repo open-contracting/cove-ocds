@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-04 16:02+0000\n"
+"POT-Creation-Date: 2024-10-10 00:56+0000\n"
 "PO-Revision-Date: 2020-09-08 08:53+0000\n"
 "Last-Translator: James McKinney, 2024\n"
 "Language-Team: Spanish (https://app.transifex.com/open-contracting-"
@@ -33,8 +33,8 @@ msgstr "Versión del esquema no reconocida"
 
 #: cove_ocds/lib/exceptions.py:14 cove_ocds/lib/exceptions.py:34
 #: cove_ocds/lib/exceptions.py:57 cove_ocds/lib/exceptions.py:77
-#: cove_ocds/views.py:93 cove_ocds/views.py:111 cove_ocds/views.py:129
-#: cove_ocds/views.py:248
+#: cove_ocds/views.py:90 cove_ocds/views.py:108 cove_ocds/views.py:126
+#: cove_ocds/views.py:237
 msgid "Try Again"
 msgstr "Inténtelo de nuevo"
 
@@ -262,17 +262,15 @@ msgstr ""
 "discutir sobre la calidad de los datos."
 
 #: cove_ocds/templates/cove_ocds/base.html:140
-#, python-format
 msgid ""
-"To preview how the data review tool works, try <a href=\"%(index_url)s?"
-"source_url=https://raw.githubusercontent.com/open-contracting/sample-data/"
-"main/fictional-example/1.1/ocds-213czf-000-00001-02-tender.json\"> loading "
-"some sample data. </a>"
+"To preview how the data review tool works, try loading: <code>https://raw."
+"githubusercontent.com/open-contracting/sample-data/main/fictional-"
+"example/1.1/ocds-213czf-000-00001-02-tender.json</code>"
 msgstr ""
-"Para ver cómo funciona la herramienta de revisión de datos,  intente <a "
-"href=\"%(index_url)s?source_url=https://raw.githubusercontent.com/open-"
+"Para ver cómo funciona la herramienta de revisión de datos, intente subir "
+"<code>https://raw.githubusercontent.com/open-"
 "contracting/sample-data/main/fictional-example/1.1/ocds-213czf-000-00001-02-"
-"tender.json\"> subir algunos datos de muestra.</a>"
+"tender.json</code>"
 
 #: cove_ocds/templates/cove_ocds/base.html:153
 msgid "Built by"
@@ -1632,7 +1630,7 @@ msgstr "Fila"
 msgid "Column"
 msgstr "Columna"
 
-#: cove_ocds/templatetags/cove_ocds.py:11
+#: cove_ocds/templatetags/cove_ocds.py:13
 msgid ""
 "This array should contain either entirely embedded releases or linked "
 "releases. Embedded releases contain an 'id' whereas linked releases do not. "
@@ -1642,17 +1640,17 @@ msgstr ""
 "vinculadas. Las entregas integradas contienen un \"identificador\", mientras "
 "que las entregas vinculadas no. Estas entregas contienen una mezcla de ambos."
 
-#: cove_ocds/templatetags/cove_ocds.py:17
+#: cove_ocds/templatetags/cove_ocds.py:19
 #, python-format
 msgid "%s is not valid under any of the given schemas"
 msgstr "%s no es válido bajo ninguno de los esquemas dados"
 
-#: cove_ocds/templatetags/cove_ocds.py:20
+#: cove_ocds/templatetags/cove_ocds.py:22
 #, python-format
 msgid "%(instance)s is valid under each of %(reprs)s"
 msgstr "%(instance)s es válido bajo cada uno de %(reprs)s"
 
-#: cove_ocds/templatetags/cove_ocds.py:29
+#: cove_ocds/templatetags/cove_ocds.py:31
 msgid ""
 "Incorrect date format. Dates should use the form YYYY-MM-DDT00:00:00Z. Learn "
 "more about <a href=\"https://standard.open-contracting.org/latest/en/schema/"
@@ -1662,15 +1660,15 @@ msgstr ""
 "DDT00:00:00Z. Lea más sobre <a href=\"https://standard.open-contracting.org/"
 "latest/es/schema/reference/#date\"> fechas en OCDS</a>"
 
-#: cove_ocds/views.py:52
+#: cove_ocds/views.py:50
 msgid "Sorry, the page you are looking for is not available"
 msgstr "Lo sentimos, la página que está buscando no está disponible"
 
-#: cove_ocds/views.py:54
+#: cove_ocds/views.py:52
 msgid "Go to Home page"
 msgstr "Ir a la Página de Inicio"
 
-#: cove_ocds/views.py:57
+#: cove_ocds/views.py:55
 #, python-format
 msgid ""
 "The data you were hoping to explore no longer exists.\n"
@@ -1686,12 +1684,12 @@ msgstr ""
 "automáticamente después de %s días, y por lo tanto el análisis de esos datos "
 "ya no está disponible."
 
-#: cove_ocds/views.py:91 cove_ocds/views.py:109 cove_ocds/views.py:127
-#: cove_ocds/views.py:246
+#: cove_ocds/views.py:88 cove_ocds/views.py:106 cove_ocds/views.py:124
+#: cove_ocds/views.py:235
 msgid "Sorry, we can't process that data"
 msgstr "Lo sentimos, no podemos procesar esos datos"
 
-#: cove_ocds/views.py:96
+#: cove_ocds/views.py:93
 msgid ""
 "The file that you uploaded doesn't appear to be well formed JSON. OCDS JSON "
 "follows the I-JSON format, which requires UTF-8 encoding. Ensure that your "
@@ -1708,7 +1706,7 @@ msgstr ""
 "<span class=\"glyphicon glyphicon-exclamation-sign\" aria-hidden=\"true\"></"
 "span> <strong>Mensaje del error:</strong> {}"
 
-#: cove_ocds/views.py:114
+#: cove_ocds/views.py:111
 msgid ""
 "We think you tried to upload a JSON file, but it is not well formed JSON.\n"
 "\n"
@@ -1721,7 +1719,7 @@ msgstr ""
 "<span class=\"glyphicon glyphicon-exclamation-sign\" aria-hidden=\"true\"></"
 "span> <strong>Mensaje del error:</strong> {}"
 
-#: cove_ocds/views.py:130
+#: cove_ocds/views.py:127
 msgid ""
 "OCDS JSON should have an object as the top level, the JSON you supplied does "
 "not."
@@ -1729,7 +1727,7 @@ msgstr ""
 "OCDS JSON debe ser un objeto al nivel más alto pero el JSON que usted ha "
 "aportado no lo es."
 
-#: cove_ocds/views.py:251
+#: cove_ocds/views.py:240
 msgid ""
 "The table isn't structured correctly. For example, a JSON Pointer "
 "(<code>tender</code>) can't be both a value (<code>tender</code>), a path to "
