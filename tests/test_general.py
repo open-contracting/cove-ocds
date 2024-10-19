@@ -253,6 +253,15 @@ def test_explore_page_null_tag(client):
 
 
 @pytest.mark.django_db
+def test_explore_page_null_version(client):
+    data = SuppliedData.objects.create()
+    data.original_file.save("test.json", ContentFile('{"version":null,"releases":[{}]}'))
+    data.current_app = "cove_ocds"
+    resp = client.get(data.get_absolute_url())
+    assert resp.status_code == 200
+
+
+@pytest.mark.django_db
 @pytest.mark.parametrize(
     "json_data",
     [
