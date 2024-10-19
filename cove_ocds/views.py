@@ -1,6 +1,5 @@
 import json
 import logging
-import os
 import re
 import warnings
 from collections import defaultdict
@@ -46,9 +45,7 @@ def explore_ocds(request, pk):
     if context["file_type"] == "json":
         package_data = util.read_json(supplied_data.original_file.path)
 
-        schema_ocds, schema_url, replace = util.get_schema(
-            request, context, supplied_data, lib_cove_ocds_config, package_data
-        )
+        schema_ocds = util.get_schema(lib_cove_ocds_config, package_data)
     else:
         with warnings.catch_warnings():
             warnings.filterwarnings("ignore", category=FlattenToolWarning)
@@ -60,13 +57,15 @@ def explore_ocds(request, pk):
                 context["file_type"],
             )
 
-        meta_data.setdefault("version", "1.0")
+        meta_data.setdefault("version", "1.1")
         # Make "missing_package" pass.
         meta_data["releases"] = {}
 
-        schema_ocds, schema_url, replace = util.get_schema(
-            request, context, supplied_data, lib_cove_ocds_config, meta_data
-        )
+        schema_ocds = util.get_schema(lib_cove_ocds_config, meta_data)
+
+        # Used in conversions.
+        if schema_ocds.extensions:
+            schema_ocds.create_extended_schema_file(supplied_data.upload_dir(), supplied_data.upload_url())
 
         with warnings.catch_warnings():
             warnings.filterwarnings("ignore", category=FlattenToolWarning)
@@ -87,9 +86,9 @@ def explore_ocds(request, pk):
                         file_name=supplied_data.original_file.path,
                         file_type=context["file_type"],
                         lib_cove_config=lib_cove_ocds_config,
-                        schema_url=schema_url,
+                        # If the schema is not extended, extended_schema_file is None.
+                        schema_url=schema_ocds.extended_schema_file or schema_ocds.schema_url,
                         pkg_schema_url=schema_ocds.pkg_schema_url,
-                        replace=replace,
                     )
                 )
             except FlattenToolValueError as err:
@@ -120,10 +119,6 @@ def explore_ocds(request, pk):
 
     # Perform the validation.
 
-    # common_checks_ocds() calls libcove.lib.common.common_checks_context(), which writes `validation_errors-3.json`.
-    validation_errors_path = os.path.join(supplied_data.upload_dir(), "validation_errors-3.json")
-    if replace and os.path.exists(validation_errors_path):
-        os.remove(validation_errors_path)
     context = common_checks_ocds(context, supplied_data.upload_dir(), package_data, schema_ocds)
 
     # Set by SchemaOCDS.get_schema_obj(deref=True), which, at the latest, is called indirectly by common_checks_ocds().
@@ -154,7 +149,7 @@ def explore_ocds(request, pk):
     supplied_data.rendered = True  # not relevant to CoVE OCDS
     supplied_data.save()
 
-    # Finalize the context and select the template.
+    # Finalize the context.
 
     validation_errors_grouped = defaultdict(list)
     for error_json, values in context["validation_errors"]:
@@ -167,12 +162,8 @@ def explore_ocds(request, pk):
                 key = "other"
         validation_errors_grouped[key].append((error_json, values))
 
-    context.update(
-        {
-            "data_schema_version": supplied_data.data_schema_version,
-            "validation_errors_grouped": validation_errors_grouped,
-        }
-    )
+    context["data_schema_version"] = json.dumps(package_data.get("version"))
+    context["validation_errors_grouped"] = validation_errors_grouped
 
     for key in ("additional_closed_codelist_values", "additional_open_codelist_values"):
         for additional_codelist_values in context[key].values():
@@ -182,12 +173,11 @@ def explore_ocds(request, pk):
                     + re.sub(r"([A-Z])", r"-\1", additional_codelist_values["codelist"].split(".")[0]).lower()
                 )
 
-    has_records = "records" in package_data
-    if has_records:
-        template = "cove_ocds/explore_record.html"
-        context["release_or_record"] = "record"
-    else:
-        template = "cove_ocds/explore_release.html"
-        context["release_or_record"] = "release"
+    if "version" in package_data:
+        data_version = package_data["version"]
+        if not isinstance(data_version, str) or data_version not in schema_ocds.version_choices:
+            context["unrecognized_version_data"] = json.dumps(data_version)
 
-    return render(request, template, context)
+    context["has_records"] = "records" in package_data
+
+    return render(request, "cove_ocds/explore_base.html", context)

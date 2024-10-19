@@ -6,7 +6,6 @@ import requests
 from django.conf import settings
 from django.test import override_settings
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import Select
 
 OCDS_DEFAULT_SCHEMA_VERSION = list(settings.COVE_CONFIG["schema_version_choices"])[-1]
 OCDS_SCHEMA_VERSIONS = settings.COVE_CONFIG["schema_version_choices"]
@@ -148,9 +147,7 @@ def test_500_error(server_url, browser):
         (
             "tenders_releases_2_releases.json",
             [
-                "Submitted Files",
-                "Schema",
-                "OCDS release package schema version 1.0. You can",
+                "OCDS release package schema version 1.1.",
                 *OCDS_SCHEMA_VERSIONS_DISPLAY,
             ],
             ["Schema Extensions"],
@@ -165,7 +162,7 @@ def test_500_error(server_url, browser):
                 "copy of the schema with extension",
                 "Structural Errors",
                 "name is missing but required within buyer",
-                "The schema version specified in the file is 1.1",
+                'The schema version specified in the file is "1.1"',
                 "Organization scale",
             ],
             ["/releases/parties/details", "fetching failed"],
@@ -220,7 +217,7 @@ def test_500_error(server_url, browser):
                 "records/compiledRelease/parties/details",
                 "mooo",
                 "/records/compiledRelease/tender/targets",
-                "The schema version specified in the file is 1.1",
+                'The schema version specified in the file is "1.1"',
                 "/records/releases/tender/targets",
             ],
             ["checked against a schema with no extensions"],
@@ -266,7 +263,7 @@ def test_500_error(server_url, browser):
         ),
         (
             "ocds_release_nulls.json",
-            ["Submitted Files", "Save or Share these results"],
+            ["Save or Share these results"],
             [],
             True,
         ),
@@ -320,7 +317,6 @@ def test_500_error(server_url, browser):
         (
             "tenders_releases_2_releases_invalid.json",
             [
-                "Submitted Files",
                 "Structural Errors",
                 "id is missing but required",
                 "Invalid 'uri' found",
@@ -330,7 +326,7 @@ def test_500_error(server_url, browser):
         ),
         ("tenders_releases_2_releases_codelists.json", ["oh no", "GSINS"], [], True),
         # Test UTF-8 support
-        ("utf8.json", ["Submitted Files"], ["Ensure that your file uses UTF-8 encoding"], True),
+        ("utf8.json", [], ["Ensure that your file uses UTF-8 encoding"], True),
         # Test that non UTF-8 files get an error, with a helpful message
         ("latin1.json", ["Ensure that your file uses UTF-8 encoding"], [], False),
         ("utf-16.json", ["Ensure that your file uses UTF-8 encoding"], [], False),
@@ -343,7 +339,7 @@ def test_500_error(server_url, browser):
         ),
         (
             "tenders_releases_2_releases.xlsx",
-            ["Submitted Files", "Schema", *OCDS_SCHEMA_VERSIONS_DISPLAY],
+            ["1.1"],
             ["Missing OCDS package"],
             True,
         ),
@@ -363,8 +359,8 @@ def test_500_error(server_url, browser):
         (
             "tenders_releases_1_release_with_unrecognized_version.json",
             [
-                "Your data specifies a version 123.123 which is not recognised",
-                f"checked against OCDS release package schema version {OCDS_DEFAULT_SCHEMA_VERSION}. You can",
+                'Your data specifies a version "123.123" which is not recognised',
+                f"structural checks against OCDS release package schema version {OCDS_DEFAULT_SCHEMA_VERSION}.",
                 "checked against the current default version.",
             ],
             ["Additional Fields (fields in data not in schema)", "Error message"],
@@ -373,8 +369,8 @@ def test_500_error(server_url, browser):
         (
             "tenders_releases_1_release_with_wrong_version_type.json",
             [
-                "Your data specifies a version 1000 (not a string) which is not recognised",
-                f"checked against OCDS release package schema version {OCDS_DEFAULT_SCHEMA_VERSION}. You can",
+                "Your data specifies a version 1000 which is not recognised",
+                f"structural checks against OCDS release package schema version {OCDS_DEFAULT_SCHEMA_VERSION}.",
             ],
             ["Additional Fields (fields in data not in schema)", "Error message"],
             False,
@@ -382,11 +378,10 @@ def test_500_error(server_url, browser):
         (
             "tenders_releases_1_release_with_patch_in_version.json",
             [
-                '"version" field in your data follows the major.minor.patch pattern',
-                '"100.100.0" format does not comply with the schema',
-                "Error message",
+                'Your data specifies a version "100.100.0" which is not recognised',
+                f"structural checks against OCDS release package schema version {OCDS_DEFAULT_SCHEMA_VERSION}.",
             ],
-            [],
+            ["Error message"],
             False,
         ),
         (
@@ -400,7 +395,7 @@ def test_500_error(server_url, browser):
             [
                 "JSON reference error",
                 "Unresolvable JSON pointer:",
-                "/definitions/OrganizationReference",
+                "/definitions/Broken",
             ],
             [],
             False,
@@ -497,26 +492,9 @@ def check_url_input_result_page(
     assert "Data Review Tool" in browser.find_element(By.TAG_NAME, "body").text
 
     if conversion_successful and source_filename.endswith((".xlsx", ".csv")):
-        if source_filename.endswith(".xlsx"):
-            assert "(.xlsx) (Original)" in body_text
-            original_file = browser.find_element(By.LINK_TEXT, "Excel Spreadsheet (.xlsx) (Original)").get_attribute(
-                "href"
-            )
-            converted_file = browser.find_element(
-                By.PARTIAL_LINK_TEXT, "JSON (Converted from Original using schema version"
-            ).get_attribute("href")
-            assert "unflattened.json" in converted_file
-        elif source_filename.endswith(".csv"):
-            assert "(.csv) (Original)" in body_text
-            original_file = browser.find_element(By.LINK_TEXT, "CSV Spreadsheet (.csv) (Original)").get_attribute(
-                "href"
-            )
-            converted_file = browser.find_element(
-                By.PARTIAL_LINK_TEXT, "JSON (Converted from Original using schema version"
-            ).get_attribute("href")
-            assert "unflattened.json" in browser.find_element(
-                By.PARTIAL_LINK_TEXT, "JSON (Converted from Original using schema version"
-            ).get_attribute("href")
+        original_file = browser.find_element(By.PARTIAL_LINK_TEXT, "cached").get_attribute("href")
+        converted_file = browser.find_element(By.PARTIAL_LINK_TEXT, "download").get_attribute("href")
+        assert "unflattened.json" in converted_file
 
         assert source_filename in original_file
         assert "0 bytes" not in body_text
@@ -698,7 +676,7 @@ def test_url_invalid_dataset_request(server_url, browser, data_url):
         ),
         (
             "tenders_releases_1_release_with_invalid_extensions.json",
-            "structural checks against OCDS release package schema version 1.0",
+            "structural checks against OCDS release package schema version 1.1",
             "version is missing but required",
             "methodRationale",
             "✅",  # skip this assertion
@@ -741,76 +719,6 @@ def test_url_input_with_version(
 
 
 @pytest.mark.parametrize(
-    (
-        "source_filename",
-        "select_version",
-        "expected",
-        "not_expected",
-        "expected_additional_field",
-        "not_expected_additional_field",
-    ),
-    [
-        (
-            "tenders_releases_1_release_with_extensions_1_1.json",
-            "1.0",
-            "structural checks against OCDS release package schema version 1.0",
-            "version is missing but required",
-            "version",
-            "publisher",
-        ),
-        (
-            "tenders_releases_1_release_with_invalid_extensions.json",
-            "1.1",
-            "",  # skip this assertion
-            "structural checks against OCDS release package schema version 1.0",
-            "methodRationale",
-            "version",
-        ),
-        (
-            "tenders_releases_2_releases_with_metatab_version_1_1_extensions.xlsx",
-            "1.0",
-            "structural checks against OCDS release package schema version 1.0",
-            "version is missing but required",
-            "version",
-            "publisher",
-        ),
-    ],
-)
-def test_url_input_with_version_change(
-    server_url,
-    url_input_browser,
-    httpserver,
-    select_version,
-    source_filename,
-    expected,
-    not_expected,
-    expected_additional_field,
-    not_expected_additional_field,
-):
-    browser = url_input_browser(source_filename)
-    select = Select(browser.find_element(By.NAME, "version"))
-    select.select_by_value(select_version)
-    browser.find_element(By.CSS_SELECTOR, ".btn-primary[value='Go']").click()
-    time.sleep(0.5)
-
-    body_text = browser.find_element(By.TAG_NAME, "body").text
-    additional_field_box = browser.find_element(By.ID, "additionalFieldTable").text
-
-    assert expected in body_text
-    assert not_expected not in body_text
-    assert expected_additional_field in additional_field_box
-    assert not_expected_additional_field not in additional_field_box
-
-    # Refresh page to check if tests still work after caching the data
-    browser.get(browser.current_url)
-
-    assert expected in body_text
-    assert not_expected not in body_text
-    assert expected_additional_field in additional_field_box
-    assert not_expected_additional_field not in additional_field_box
-
-
-@pytest.mark.parametrize(
     ("source_filename", "expected", "not_expected"),
     [
         (
@@ -823,7 +731,6 @@ def test_url_input_with_version_change(
             ],
             [
                 "The following extensions failed",
-                "extensions were not introduced in the schema until version 1.1.",
             ],
         ),
         (
@@ -833,7 +740,6 @@ def test_url_input_with_version_change(
                 "The metrics extension supports publication of forecasts",
                 "Get a copy of the schema with extension patches applied",
                 "The following extensions failed",
-                "extensions were not introduced in the schema until version 1.1.",
             ],
             ["checked against a schema with no extensions"],
         ),
@@ -841,7 +747,6 @@ def test_url_input_with_version_change(
             "tenders_releases_1_release_with_all_invalid_extensions.json",
             [
                 "None of the extensions above could be applied",
-                "extensions were not introduced in the schema until version 1.1.",
             ],
             ["Organization scale", "Get a copy of the schema with extension patches applied"],
         ),
@@ -855,7 +760,6 @@ def test_url_input_with_version_change(
             ],
             [
                 "The following extensions failed",
-                "extensions were not introduced in the schema until version 1.1.",
             ],
         ),
     ],

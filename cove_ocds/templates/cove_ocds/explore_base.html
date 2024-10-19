@@ -1,5 +1,6 @@
 {% extends 'explore.html' %}
 {% load i18n %}
+{% load cove_tags %}{# subtract #}
 {% load cove_ocds %}
 {% block header_button %}
   <a href="{% url 'index' %}" class="btn btn-large btn-success">{% trans 'Load New File' %}</a>
@@ -8,94 +9,133 @@
 {% block explore_content %}
 <div class="row">
 
-{% block key_facts %}
-{% endblock %}
-
-{% block converted_files %}
-  <div class="col-md-6">
-    <div class="panel panel-primary">
+  <div class="col-md-12">
+    <div class="panel panel-primary {% if validation_errors or additional_closed_codelist_values or extensions and extensions.invalid_extension %}panel-danger{% endif %}">
       <div class="panel-heading">
-        <h4 class="panel-title">{% trans "Schema" %}</h4>
+        <h4 class="panel-title">{% trans 'Headlines' %}</h4>
       </div>
       <div class="panel-body">
+        {% if conversion_warning_messages %}
+          <div class="conversion message"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span>{% blocktrans %}Please read the <a href="#conversion-warning">conversion warnings</a> below.{% endblocktrans %}</div>
+        {% endif %}
+
+        <div class="validation message">
+          <span class="glyphicon glyphicon-{% if validation_errors or additional_closed_codelist_values %}remove{% else %}ok{% endif %}" aria-hidden="true"></span>
+          {% if validation_errors or additional_closed_codelist_values %}
+            {% if has_records %}
+              {% blocktrans %}<b>Failed</b> structural checks against <a href="{{ schema_url }}">OCDS record package schema version {{ version_used_display }}</a>.{% endblocktrans %}
+            {% else %}
+              {% blocktrans %}<b>Failed</b> structural checks against <a href="{{ schema_url }}">OCDS release package schema version {{ version_used_display }}</a>.{% endblocktrans %}
+            {% endif %}
+          {% else %}
+            {% if has_records %}
+              {% blocktrans %}Passed structural checks against <a href="{{ schema_url }}">OCDS record package schema version {{ version_used_display }}</a>.{% endblocktrans %}
+            {% else %}
+              {% blocktrans %}Passed structural checks against <a href="{{ schema_url }}">OCDS release package schema version {{ version_used_display }}</a>.{% endblocktrans %}
+            {% endif %}
+          {% endif %}
+          {% if validation_errors %}
+          <br/>
+          {% blocktrans %}See <a href="#validation-errors">Structural Errors</a> below.{% endblocktrans %}
+          {% endif %}
+        </div>
+
         {% if unrecognized_version_data %}
           <div class="bg-danger text-danger in-panel-warning">
             <small><span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> &nbsp;{% blocktrans %}Your data specifies a version <strong>{{unrecognized_version_data}}</strong> which is not recognised. For that reason, it's been checked against the current default version.{% endblocktrans %}</small>
           </div>
         {% endif %}
-        <p>{% blocktrans %}This data has been checked against <a href="{{ schema_url }}">OCDS {{ release_or_record }} package schema version {{ version_used_display }}</a>.{% endblocktrans %} {% blocktrans %}You can choose a different version of the schema to check and explore your data.{% endblocktrans %}</p>
-        <br>
-        <strong>{% blocktrans %}Check and explore same data against a different version of the schema{% endblocktrans %}</strong>
-        <div class="ttip">
-          <sup><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></sup>
-          <span class="ttiptext">{% blocktrans %}Switching the schema version will result in changes to CoVE output and conversions. If you revisit or share this URL, the latest version selected will be used to check your data{% endblocktrans %}</span>
-        </div>
-        <br>
-        <br>
-        <div>
-          <form class="form-inline" action="{% url 'explore' data_uuid %}" method="post">
-          {% csrf_token %}
-            <select class="form-control" name="version">
-            {% for version in version_display_choices %}
-              <option value="{{ version.0 }}" {% if version.0 == version_used %}selected{% endif %}>
-                 {{ version.1 }}
-              </option>
-            {% endfor %}
-            </select>
-              {# Translators: Label of a button that triggers search #}
-              <input class="btn btn-primary" type="submit" value={% trans "Go" %} />
-              <img id="small-loading" style="display: none; margin:0; margin-left:2%" class="spinner" src="//i1.wp.com/cdnjs.cloudflare.com/ajax/libs/galleriffic/2.0.1/css/loader.gif" alt="spinner" width="20" height="20">
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-<!--Download Converted Files-->
-  <div class="col-md-6">
-    <div class="panel {% if conversion_warning_messages %}panel-warning{% else %}panel-primary{% endif %}">
-      <div class="panel-heading">
-        <h4 class="panel-title">
-          {% trans 'Submitted Files' %}
-        </h4>
-      </div>
-          
-      <div class="panel-body">
-        <div class="conversion message">
-          {% if conversion_warning_messages %}
-            <p><span class="glyphicon glyphicon-flag" aria-hidden="true"></span>{% blocktrans %}There were <a href="#conversion-warning">conversion warnings</a> when processing your file. The converted data may not represent your data as you want it to be.{% endblocktrans %}</p>
-          {% endif %}
-          {% if conversion == 'unflatten' %}
-            <p>{% blocktrans %}We have tried to convert your data into JSON format.{% endblocktrans %}</p><p>{% blocktrans %}The results can be seen below.{% endblocktrans %}</p>
-            <ul class="list-unstyled">
-              <li>
-                <span class="glyphicon glyphicon-download" aria-hidden="true"></span>
-                <a href="{{original_file.url}}">
-                  {% if file_type == 'xlsx' %}
-                    {{xlsx}} <small>({{original}})</small>
-                  {% elif file_type == 'csv' %}
-                    {{csv}} <small>({{original}})</small>
-                  {% endif %}
-                  </a> 
-                  <small>{{original_file.size|filesizeformat }}</small>
-                </li>
-                <li>
-                  <span class="glyphicon glyphicon-download" aria-hidden="true"></span><a href="{{converted_url}}">{{JSON}} <small>({{converted}} {% trans "using schema version" %} {{version_used_display}})</small></a> <small>{{converted_file_size|filesizeformat }}</small>
-                </li>
-            </ul>
-          {% else %}
-            <ul class="list-unstyled">
-              <li>
-                <span class="glyphicon glyphicon-download" aria-hidden="true"></span><a href="{{original_file.url}}">{{JSON}} <small>({{original}})</small></a> <small>{{original_file.size|filesizeformat }}</small>
-              </li>
-            </ul>
-          {% endif %}
-        </div>
-      </div>
-    </div>
-  </div>
-{% endblock %}
 
-</div><!--End Row -->
+        {% if extensions and extensions.invalid_extension %}
+        <div class="message">
+          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>{% blocktrans count count=extensions.invalid_extension.keys|length %}<strong>Failed</strong> to apply {{count}} extension to the schema.{% plural %}<strong>Failed</strong> to apply {{count}} extensions to the schema.{% endblocktrans %}<br/>
+          {% blocktrans %}See <a href="#schema-extensions">Extensions</a> below.{% endblocktrans %}
+        </div>
+        {% endif %}
+
+        {% if conversion %}
+        <div class="message">
+          <span class="glyphicon glyphicon-download" aria-hidden="true"></span>{% blocktrans with size=converted_file_size|filesizeformat %}To validated your file, we converted it to JSON format <a href="{{converted_url}}">({{size}} download)</a>.{% endblocktrans %}
+        </div>
+        {% endif %}
+
+          <div class="key-facts message">
+           <strong>{% trans "At a glance" %}</strong>
+           <ul>
+             {% if count %}
+             <li><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+             {% if has_records %}
+             {% blocktrans count count=count %}This file contains <strong>{{count}} record</strong>{% plural %}This file contains <strong>{{count}} records</strong>{% endblocktrans %}
+             {% else %}
+             {% blocktrans count count=count %}This file contains <strong>{{count}} release</strong>{% plural %}This file contains <strong>{{count}} releases</strong>{% endblocktrans %}
+             {% endif %}
+             {% blocktrans count count=unique_ocids_count %} describing <strong>{{count}} contracting process</strong>{% plural %} describing <strong>{{count}} contracting processes.</strong>{% endblocktrans %}
+             </li>
+             {% endif %}
+
+             {% if data_schema_version %}
+                <li><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                  {% blocktrans %}The schema version specified in the file is <strong>{{data_schema_version}}</strong>.{% endblocktrans %}
+                </li>
+             {% endif %}
+
+             {% if json_data.publisher %}
+                <li><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                  {% blocktrans %}The publisher named in the file is <strong>{{json_data.publisher.name}}</strong>.{% endblocktrans %}
+                </li>
+             {% endif %}
+
+             {% if json_data.license %}
+                <li><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                  {% blocktrans %}The license is <a href="{{json_data.license}}">{{json_data.license}}</a>.{% endblocktrans %}
+                </li>
+             {% endif %}
+
+             {% if json_data.publicationPolicy %}
+                <li><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                  {% blocktrans %}Publication policy is <a href="{{json_data.publicationPolicy}}">{{json_data.publicationPolicy}}</a>.{% endblocktrans %}
+                </li>
+             {% endif %}
+
+             {% if extensions and extensions.is_extended_schema %}
+                <li><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                  {% with n_invalid=extensions.invalid_extension.keys|length %}
+                    {% blocktrans count count=extensions.extensions.keys|length|subtract:n_invalid %}This file applies {{count}} valid <a href="#schema-extensions">extension</a> to the schema.{% plural %}This file applies {{count}} valid <a href="#schema-extensions">extensions</a> to the schema.{% endblocktrans %}
+                  {% endwith %}
+                </li>
+             {% endif %}
+
+            {% if data_only %}
+            <li><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                {% blocktrans count count=data_only|length %}This file uses {{count}} <a href="#additional-fields">additional field</a> not used in the standard.{% plural %}This file uses {{count}} <a href="#additional-fields">additional fields</a> not used in the standard.{% endblocktrans %}
+             </li>
+             {% endif %}
+
+             {% if csv_encoding and csv_encoding != "utf-8-sig" %}
+             <li><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                {% blocktrans %}This file is not 'utf-8' encoded (it is <strong>{{csv_encoding}}</strong> encoded).{% endblocktrans %}
+             </li>
+             {% endif %}
+
+             {% if deprecated_fields %}
+             <li><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                {% blocktrans count count=deprecated_fields|length %}This file uses {{count}} <a href="#deprecated-fields">deprecated field</a>.{% plural %} This file uses {{count}} <a href="#deprecated-fields">deprecated fields</a>.{% endblocktrans %}
+              </li>
+             {% endif %}
+
+             <li><span class="glyphicon glyphicon-download" aria-hidden="true"></span>
+               {% if source_url %}
+                  {% blocktrans with url=original_file.url size=original_file.size|filesizeformat %}Data downloaded <a href="{{url}}">({{size}} cached)</a> from <code>{{ source_url }}</code> on {{ created_datetime }}.{% endblocktrans %}
+               {% else %}
+                 {% blocktrans with url=original_file.url size=original_file.size|filesizeformat %}Data uploaded <a href="{{url}}">({{size}} cached)</a> on {{ created_datetime }}.{% endblocktrans %}
+               {% endif %}<br>
+            </li>
+           </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 {% if extensions %}
   {% with ext=extensions.extensions ext_errors=extensions.invalid_extension %}
@@ -106,11 +146,6 @@
       </h4>
     </div>
     <div class="panel-body">
-      {% if extensions and version_used_display == "1.0" %}
-        <div class="bg-danger text-danger in-panel-warning">
-          <small><span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> &nbsp;{% blocktrans %}Your data has been checked against schema version <strong>1.0</strong> and includes extensions but extensions were not introduced in the schema until version <strong>1.1</strong>.{% endblocktrans %}</small>
-        </div>
-      {% endif %}
       <p>{% blocktrans %}Your data contains the following schema extensions{% endblocktrans %}{% if not extensions.is_extended_schema %}{% blocktrans %}, but it wasn't possible to fetch them{% endblocktrans %}{% endif %}:</p>
       <ul>
         {% for ext_descriptor_url, ext_details in ext.items %}
