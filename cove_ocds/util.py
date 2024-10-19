@@ -4,7 +4,6 @@ from decimal import Decimal
 
 from django.utils.html import format_html, mark_safe
 from django.utils.translation import gettext as _
-from libcove.lib.common import schema_dict_fields_generator
 from libcove.lib.exceptions import CoveInputDataError
 from libcoveocds.schema import SchemaOCDS
 
@@ -161,43 +160,3 @@ def default(obj):
     if isinstance(obj, Decimal):
         return float(obj)
     return json.JSONEncoder().default(obj)
-
-
-def add_extra_fields(data, deref_release_schema):
-    all_schema_fields = set(schema_dict_fields_generator(deref_release_schema))
-
-    if "releases" in data:
-        for release in data.get("releases", []):
-            if not isinstance(release, dict):
-                return
-            _add_extra_fields_to_obj(release, all_schema_fields, "")
-    elif "records" in data:
-        for record in data.get("records", []):
-            if not isinstance(record, dict):
-                return
-            for release in record.get("releases", []):
-                _add_extra_fields_to_obj(release, all_schema_fields, "")
-
-
-def _add_extra_fields_to_obj(obj, all_schema_fields, current_path):
-    if not isinstance(obj, dict):
-        return
-    obj["__extra"] = {}
-
-    for key, value in list(obj.items()):
-        if key == "__extra":
-            continue
-
-        new_path = f"{current_path}/{key}"
-        if new_path not in all_schema_fields:
-            obj["__extra"][key] = value
-            continue
-
-        if isinstance(value, list):
-            for item in value:
-                _add_extra_fields_to_obj(item, all_schema_fields, new_path)
-        elif isinstance(value, dict):
-            _add_extra_fields_to_obj(value, all_schema_fields, new_path)
-
-    if not obj["__extra"]:
-        obj.pop("__extra")

@@ -1,4 +1,3 @@
-import copy
 import json
 import logging
 import os
@@ -209,13 +208,6 @@ def explore_ocds(request, pk):
     if isinstance(package_data, dict) and isinstance(package_data.get(key), list):
         # This is for the "Releases Table" and "Records Table" features.
         context[key] = package_data[key]
-
-        # This is for the OCDS Show feature.
-        # https://github.com/open-contracting/cove-ocds/commit/d8dbf55
-        if len(package_data[key]) < MAXIMUM_RELEASES_OR_RECORDS:
-            new_package_data = copy.deepcopy(package_data)
-            util.add_extra_fields(new_package_data, SchemaOCDS(record_pkg=has_records).get_schema_obj(deref=True))
-            context["ocds_show_data"] = json.dumps(new_package_data, default=util.default)
     else:
         context[key] = []
 
