@@ -199,16 +199,8 @@ def explore_ocds(request, pk):
     if has_records:
         template = "cove_ocds/explore_record.html"
         context["release_or_record"] = "record"
-        key = "records"
     else:
         template = "cove_ocds/explore_release.html"
         context["release_or_record"] = "release"
-        key = "releases"
-
-    if isinstance(package_data, dict) and isinstance(package_data.get(key), list):
-        # This is for the "Releases Table" and "Records Table" features.
-        context[key] = package_data[key]
-    else:
-        context[key] = []
 
     return render(request, template, context)

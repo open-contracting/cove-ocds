@@ -994,120 +994,6 @@ def test_additional_checks_error_modal(server_url, url_input_browser, httpserver
     browser.find_element(By.CSS_SELECTOR, "div.modal.additional-checks-1 button.close").click()
 
 
-def test_releases_table_25_rows(skip_if_remote, url_input_browser):
-    """
-    Check that when there are more than 25 releases, only 25 are shown in the
-    table, and there is a message.
-    """
-
-    browser = url_input_browser("30_releases.json")
-    assert "This file contains 30 releases" in browser.find_element(By.TAG_NAME, "body").text
-    panel = browser.find_element(By.CSS_SELECTOR, "#releases-table-panel")
-    assert "first 25 releases" in panel.text
-    table_rows = browser.find_elements(By.CSS_SELECTOR, "#releases-table-panel table tbody tr")
-    assert len(table_rows) == 25
-
-
-def test_releases_table_7_rows(skip_if_remote, url_input_browser):
-    """
-    Check that when there are less than 25 releases, they are all shown in the
-    table, and there is no message.
-    """
-
-    browser = url_input_browser("tenders_releases_7_releases_check_ocids.json")
-    assert "This file contains 7 releases" in browser.find_element(By.TAG_NAME, "body").text
-    panel = browser.find_element(By.CSS_SELECTOR, "#releases-table-panel")
-    assert "first 25 releases" not in panel.text
-    table_rows = browser.find_elements(By.CSS_SELECTOR, "#releases-table-panel table tbody tr")
-    assert len(table_rows) == 7
-
-
-def test_releases_table_10_rows_env_var(skip_if_remote, settings_releases_table_10, url_input_browser):
-    """
-    Check that when the appropriate setting is set, and there are more than 10
-    releases, only 10 are shown in the table, and there is a message.
-    """
-
-    browser = url_input_browser("30_releases.json")
-    assert "This file contains 30 releases" in browser.find_element(By.TAG_NAME, "body").text
-    panel = browser.find_element(By.CSS_SELECTOR, "#releases-table-panel")
-    assert "first 10 releases" in panel.text
-    table_rows = browser.find_elements(By.CSS_SELECTOR, "#releases-table-panel table tbody tr")
-    assert len(table_rows) == 10
-
-
-def test_releases_table_7_rows_env_var(skip_if_remote, settings_releases_table_10, url_input_browser):
-    """
-    Check that when the appropriate setting is set, and there are less than 10
-    releases, they are all shown in the table, and there is no message.
-    """
-
-    browser = url_input_browser("tenders_releases_7_releases_check_ocids.json")
-    assert "This file contains 7 releases" in browser.find_element(By.TAG_NAME, "body").text
-    panel = browser.find_element(By.CSS_SELECTOR, "#releases-table-panel")
-    assert "first 25 releases" not in panel.text
-    assert "first 10 releases" not in panel.text
-    table_rows = browser.find_elements(By.CSS_SELECTOR, "#releases-table-panel table tbody tr")
-    assert len(table_rows) == 7
-
-
-def test_records_table_25_rows(skip_if_remote, url_input_browser):
-    """
-    Check that when there are more than 25 records, only 25 are shown in the
-    table, and there is a message.
-    """
-
-    browser = url_input_browser("30_records.json")
-    assert "This file contains 30 records" in browser.find_element(By.TAG_NAME, "body").text
-    panel = browser.find_element(By.CSS_SELECTOR, "#records-table-panel")
-    assert "first 25 records" in panel.text
-    table_rows = browser.find_elements(By.CSS_SELECTOR, "#records-table-panel table tbody tr")
-    assert len(table_rows) == 25
-
-
-def test_records_table_7_rows(skip_if_remote, url_input_browser):
-    """
-    Check that when there are less than 25 records, they are all shown in the
-    table, and there is no message.
-    """
-
-    browser = url_input_browser("7_records.json")
-    assert "This file contains 7 records" in browser.find_element(By.TAG_NAME, "body").text
-    panel = browser.find_element(By.CSS_SELECTOR, "#records-table-panel")
-    assert "first 25 records" not in panel.text
-    table_rows = browser.find_elements(By.CSS_SELECTOR, "#records-table-panel table tbody tr")
-    assert len(table_rows) == 7
-
-
-def test_records_table_10_rows_env_var(skip_if_remote, settings_records_table_10, url_input_browser):
-    """
-    Check that when the appropriate setting is set, and there are more than 10
-    records, only 10 are shown in the table, and there is a message.
-    """
-
-    browser = url_input_browser("30_records.json")
-    assert "This file contains 30 records" in browser.find_element(By.TAG_NAME, "body").text
-    panel = browser.find_element(By.CSS_SELECTOR, "#records-table-panel")
-    assert "first 10 records" in panel.text
-    table_rows = browser.find_elements(By.CSS_SELECTOR, "#records-table-panel table tbody tr")
-    assert len(table_rows) == 10
-
-
-def test_records_table_7_rows_env_var(skip_if_remote, settings_records_table_10, url_input_browser):
-    """
-    Check that when the appropriate setting is set, and there are less than 10
-    records, they are all shown in the table, and there is no message.
-    """
-
-    browser = url_input_browser("7_records.json")
-    assert "This file contains 7 records" in browser.find_element(By.TAG_NAME, "body").text
-    panel = browser.find_element(By.CSS_SELECTOR, "#records-table-panel")
-    assert "first 25 records" not in panel.text
-    assert "first 10 records" not in panel.text
-    table_rows = browser.find_elements(By.CSS_SELECTOR, "#records-table-panel table tbody tr")
-    assert len(table_rows) == 7
-
-
 @override_settings(VALIDATION_ERROR_LOCATIONS_LENGTH=1000)
 def test_error_list_1000_lines(skip_if_remote, url_input_browser):
     """
@@ -1176,17 +1062,6 @@ def test_error_list_999_lines_sample(skip_if_remote, settings_error_locations_sa
     assert "releases/999" not in modal_body.text
     table_rows = modal_body.find_elements(By.CSS_SELECTOR, "table tbody tr")
     assert len(table_rows) == 999
-
-
-def test_records_table_releases_count(skip_if_remote, url_input_browser):
-    """
-    Check that the correct releases count is shown in the records table.
-    """
-
-    browser = url_input_browser("30_records.json")
-    assert "release" in browser.find_elements(By.CSS_SELECTOR, "#records-table-panel table thead th")[1].text
-    table_rows = browser.find_elements(By.CSS_SELECTOR, "#records-table-panel table tbody tr")
-    assert table_rows[0].find_elements(By.CSS_SELECTOR, "td")[1].text == "5"
 
 
 @pytest.mark.parametrize(

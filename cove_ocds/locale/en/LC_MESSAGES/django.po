@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-19 05:34+0000\n"
+"POT-Creation-Date: 2024-10-19 05:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -674,14 +674,10 @@ msgid "Is structurally correct?"
 msgstr ""
 
 #: cove_ocds/templates/cove_ocds/explore_record.html:105
-#: cove_ocds/templates/cove_ocds/explore_record.html:167
-#: cove_ocds/templates/cove_ocds/explore_record.html:168
 msgid "No"
 msgstr ""
 
 #: cove_ocds/templates/cove_ocds/explore_record.html:105
-#: cove_ocds/templates/cove_ocds/explore_record.html:167
-#: cove_ocds/templates/cove_ocds/explore_record.html:168
 msgid "Yes"
 msgstr ""
 
@@ -691,19 +687,6 @@ msgstr ""
 
 #: cove_ocds/templates/cove_ocds/explore_record.html:126
 msgid "Unique OCIDs"
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/explore_record.html:144
-msgid "Records Table:"
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/explore_record.html:150
-#, python-format
-msgid "Showing the first %(releases_or_records_table_length)s records."
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/explore_record.html:157
-msgid "release count"
 msgstr ""
 
 #: cove_ocds/templates/cove_ocds/explore_release.html:22
@@ -972,70 +955,6 @@ msgstr ""
 
 #: cove_ocds/templates/cove_ocds/explore_release.html:326
 msgid "Statistics cannot be produced as data is not structurally correct."
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:340
-msgid "Releases Table:"
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:346
-#, python-format
-msgid ""
-"Showing the first %(releases_or_records_table_length)s releases. To explore "
-"all your data in a tabular format, convert it to a spreadsheet using the "
-"\"Convert\" section, above."
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:353
-msgid "Release Date"
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:354
-msgid "Tags"
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:355
-msgid "Descriptions"
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:356
-msgid "Purchasers"
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:368
-msgid "Tender Title:"
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:371
-msgid "Tender Description:"
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:375
-msgid "Tender Item Description:"
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:380
-msgid "Award Title:"
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:383
-msgid "Award Description:"
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:388
-msgid "Contract Title:"
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:391
-msgid "Contract Description:"
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:399
-msgid "Buyer:"
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:405
-msgid "Procuring Entity:"
 msgstr ""
 
 #: cove_ocds/templates/cove_ocds/input.html:6
