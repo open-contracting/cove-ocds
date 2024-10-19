@@ -3,9 +3,8 @@ import json
 import pytest
 from cove.input.models import SuppliedData
 from django.core.files.base import ContentFile
-from hypothesis import HealthCheck, assume, example, given, settings
+from hypothesis import HealthCheck, example, given, settings
 from hypothesis import strategies as st
-from libcoveocds.lib.common_checks import get_releases_aggregates
 
 """
 ## Suggested testing patterns (from CamPUG talk)
@@ -19,18 +18,6 @@ general_json = st.recursive(
     st.floats(allow_subnormal=False) | st.integers() | st.booleans() | st.text() | st.none(),
     lambda children: st.lists(children) | st.dictionaries(st.text(), children),
 )
-
-
-@given(general_json)
-def test_get_releases_aggregates(json_data):
-    get_releases_aggregates(json_data)
-
-
-@given(general_json)
-@settings(suppress_health_check=[HealthCheck.too_slow])
-def test_get_releases_aggregates_dict(json_data):
-    assume(type(json_data) is dict)
-    get_releases_aggregates(json_data)
 
 
 @pytest.mark.xfail

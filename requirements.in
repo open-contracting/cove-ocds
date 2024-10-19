@@ -5,6 +5,4 @@ gunicorn[setproctitle]
 libcove
 libcoveocds[perf,web]
 libcoveweb
-python-dateutil
-rfc3339-validator
 sentry-sdk

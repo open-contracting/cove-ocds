@@ -1,9 +1,7 @@
 from cove.html_error_msg import html_error_msg, json_repr
 from cove.templatetags.cove_tags import register  # as such, `load cove_ocds` implicitly calls `load cove_tags`
-from dateutil import parser
 from django.utils.html import mark_safe
 from django.utils.translation import gettext as _
-from rfc3339_validator import validate_rfc3339
 
 
 @register.filter(name="html_error_msg")
@@ -34,10 +32,3 @@ def html_error_msg_ocds(error):
         )
 
     return html_error_msg(error)
-
-
-@register.filter
-def to_datetime(value):
-    if value and validate_rfc3339(value):
-        return parser.parse(value)
-    return None

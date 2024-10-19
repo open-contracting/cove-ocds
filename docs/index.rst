@@ -18,7 +18,6 @@ The `CoVE <https://cove.readthedocs.io/en/latest/>`__ documentation might also b
    how-to-add-a-validation-check
    how-to-edit-stylesheet
    how-to-config-frontend
-   how-to-add-kfi
    tests
 
 There are `drafts <https://docs.google.com/document/d/1EER_GjXi7F0SPZ_Mra9JuQBY5JxU0NGRSS9mYzB4guU/edit>`__ of another couple how-tos for adding headlines and modifying validation error messages.

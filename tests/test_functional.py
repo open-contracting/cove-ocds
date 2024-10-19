@@ -235,7 +235,6 @@ def test_500_error(server_url, browser):
                 "documents at the milestone level is now deprecated",
                 "releases/0/contracts/1/milestones/0",
                 "releases/1/tender",
-                "Contracts with no awards: 3",
             ],
             ["copy of the schema with extension"],
             True,
@@ -354,7 +353,6 @@ def test_500_error(server_url, browser):
         (
             "full_record.json",
             [
-                "Number of records",
                 "Structural Errors",
                 "compiledRelease",
                 "versionedRelease",
@@ -1062,28 +1060,6 @@ def test_error_list_999_lines_sample(skip_if_remote, settings_error_locations_sa
     assert "releases/999" not in modal_body.text
     table_rows = modal_body.find_elements(By.CSS_SELECTOR, "table tbody tr")
     assert len(table_rows) == 999
-
-
-@pytest.mark.parametrize(
-    ("source_filename", "expected"),
-    [
-        (
-            "release_aggregate.json",
-            [
-                "Unique OCIDs: 1",
-                "Unique Item IDs: 2",
-                "Currencies: EUR, GBP, USD, YEN",
-            ],
-        ),
-    ],
-)
-def test_key_field_information(server_url, url_input_browser, httpserver, source_filename, expected):
-    """Check that KFIs are displaying"""
-
-    browser = url_input_browser(source_filename)
-    kfi_text = browser.find_element(By.ID, "kfi").text
-    for text in expected:
-        assert text in kfi_text
 
 
 def test_jsonschema_translation(

@@ -1,140 +1,105 @@
 {% extends 'cove_ocds/explore_base.html' %}
 {% load i18n %}
-
+{% load cove_tags %}{# subtract #}
 
 {% block key_facts %}
-{% with releases_aggregates as ra %}
-
-
-  <div class="col-md-6">
+  <div class="col-md-12">
     <div class="panel panel-primary {% if validation_errors or additional_closed_codelist_values or extensions and extensions.invalid_extension %}panel-danger{% endif %}">
       <div class="panel-heading">
         <h4 class="panel-title">{% trans 'Headlines' %}</h4>
       </div>
       <div class="panel-body">
-
         {% if conversion_warning_messages or conversion_warning_messages_titles %}
           <div class="conversion message"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span>{% blocktrans %}Please read the <a href="#conversion-warning">conversion warnings</a> below.{% endblocktrans %}</div>
-        {% endif %} 
-        <div class="validation message">  
+        {% endif %}
+
+        <div class="validation message">
         {% if validation_errors or additional_closed_codelist_values %}
           <span class="glyphicon glyphicon-remove" aria-hidden="true"></span><b>{% trans "Failed " %}</b>
-        {% else %} 
-          <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>{% trans "Passed " %} 
+        {% else %}
+          <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>{% trans "Passed " %}
         {% endif %}
-        {% blocktrans %}structural checks against {% endblocktrans %}<a href="{{ schema_url }}">{% blocktrans %}OCDS record package schema version{% endblocktrans %} {{ version_used_display }}</a>.
+        {% blocktrans %}structural checks against <a href="{{ schema_url }}">OCDS record package schema version {{ version_used_display }}</a>.{% endblocktrans %}
         {% if validation_errors %}<br/>{% blocktrans %}See <a href="#validation-errors">Structural Errors</a> below.{% endblocktrans %}{% endif %}
         </div>
 
-         <div class="key-facts message">
+        {% if extensions and extensions.invalid_extension %}
+        <div class="message">
+          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>{% blocktrans count count=extensions.invalid_extension.keys|length %}<strong>Failed</strong> to apply {{count}} extension to the schema.{% plural %}<strong>Failed</strong> to apply {{count}} extensions to the schema.{% endblocktrans %}<br/>
+          {% blocktrans %}See <a href="#schema-extensions">Extensions</a> below.{% endblocktrans %}
+        </div>
+        {% endif %}
+
+          <div class="key-facts message">
            <strong>{% trans "At a glance" %}</strong>
            <ul>
+             {% if count %}
              <li><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-             {% if records_aggregates.count %}
-             {% blocktrans count count=records_aggregates.count %}This file contains <strong>{{count}} record.</strong>{% plural %}This file contains <strong>{{count}} records.</strong>{% endblocktrans %}
-             {% endif %}
+             {% blocktrans count count=count %}This file contains <strong>{{count}} record</strong>{% plural %}This file contains <strong>{{count}} records</strong>{% endblocktrans %}
+             {% blocktrans count count=unique_ocids_count %} describing <strong>{{count}} contracting process</strong>{% plural %} describing <strong>{{count}} contracting processes.</strong>{% endblocktrans %}
              </li>
+             {% endif %}
+
              {% if data_schema_version %}
                 <li><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
                   {% trans "The schema version specified in the file is" %} <strong>{{data_schema_version}}</strong>.
                 </li>
              {% endif %}
-             <li><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-             {% blocktrans count count=records_aggregates.unique_ocids|length %}There is <strong>{{count}} unique OCID.</strong>{% plural %}There are <strong>{{count}} unique OCIDs.</strong>{% endblocktrans %}
-             </li>
+
              {% if json_data.publisher %}
                 <li><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
                   {% trans "The publisher named in the file is" %} <strong>{{json_data.publisher.name}}</strong>.
                 </li>
              {% endif %}
+
              {% if json_data.license %}
                 <li><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
                   {% trans "The license is" %} <a href="{{json_data.license}}">{{json_data.license}}</a>.
                 </li>
              {% endif %}
+
              {% if json_data.publicationPolicy %}
                 <li><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
                   {% trans "Publication policy is" %} <a href="{{json_data.publicationPolicy}}">{{json_data.publicationPolicy}}</a>.
                 </li>
              {% endif %}
-              
-             {% if ra.duplicate_release_ids %} 
-                <li><span class="glyphicon glyphicon-flag" aria-hidden="true"></span>
-                  {% blocktrans count count=ra.duplicate_release_ids|length %}There is {{ count }} <a href="#key-field-info">duplicate release ID</a> in this package.{% plural %}There are {{ count }} <a href="#key-field-info">duplicate release IDs</a> in this package.{% endblocktrans %}
+
+             {% if extensions and extensions.is_extended_schema %}
+                <li><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                  {% with n_invalid=extensions.invalid_extension.keys|length %}
+                    {% blocktrans count count=extensions.extensions.keys|length|subtract:n_invalid %}This file applies {{count}} valid <a href="#schema-extensions">extension</a> to the schema.{% plural %}This file applies {{count}} valid <a href="#schema-extensions">extensions</a> to the schema.{% endblocktrans %}
+                  {% endwith %}
                 </li>
              {% endif %}
-             
+
             {% if data_only %}
             <li><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
                 {% blocktrans count count=data_only|length %}This file uses {{count}} <a href="#additional-fields">additional field</a> not used in the standard.{% plural %}This file uses {{count}} <a href="#additional-fields">additional fields</a> not used in the standard.{% endblocktrans %}
              </li>
              {% endif %}
+
              {% if csv_encoding and csv_encoding != "utf-8-sig" %}
              <li><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-              {% trans "This file is not 'utf-8' encoded (it is" %} <strong>{{csv_encoding}}</strong> {% trans "encoded)." %}
+                {% blocktrans %}This file is not 'utf-8' encoded (it is <strong>{{csv_encoding}}</strong> encoded).{% endblocktrans %}
              </li>
              {% endif %}
+
+             {% if deprecated_fields %}
              <li><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-               {% trans "Data " %} 
+                {% blocktrans count count=deprecated_fields|length %}This file uses {{count}} <a href="#deprecated-fields">deprecated field</a>.{% plural %} This file uses {{count}} <a href="#deprecated-fields">deprecated fields</a>.{% endblocktrans %}
+              </li>
+             {% endif %}
+
+             <li><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
                {% if source_url %}
-                  {% trans "downloaded from " %} {{source_url}} 
+                  {% blocktrans %}Data downloaded from {{ source_url }} on {{ created_datetime }}.{% endblocktrans %}
                {% else %}
-                 {% trans "uploaded " %} 
+                 {% blocktrans %}Data uploaded on {{ created_datetime }}.{% endblocktrans %}
                {% endif %}
-               {% trans "on " %} {{created_datetime}}
             </li>
            </ul>
-         </div>
+        </div>
       </div>
     </div>
   </div>
-
-{% endwith %}
-{% endblock %}
-
-{% block explore_additional_content %}
-<div class="row">
-  {% if schema_url %}
-
-  <div class="col-md-3">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h4 class="panel-title">{% trans 'Is structurally correct?' %}</h4>
-      </div>
-      <div class="panel-body">
-        {% if validation_errors %}{% trans "No" %}{% else %}{% trans "Yes" %}{% endif %}
-
-      </div>
-    </div>
-  </div>
-
-  {% endif %}
-  <div class="col-md-3">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h4 class="panel-title">{% trans 'Number of records' %}</h4>
-      </div>
-      <div class="panel-body">
-        {{records_aggregates.count}}
-      </div>
-    </div>
-  </div>
-  <div class="col-md-3">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h4 class="panel-title">
-          {% blocktrans %}Unique OCIDs{% endblocktrans %} ({{records_aggregates.unique_ocids|length}})
-        </h4>
-      </div>
-      <div class="panel-body">
-        <ul>
-        {% for ocid in records_aggregates.unique_ocids %}
-        <li>{{ocid}}</li>
-        {% endfor %}
-        </ul>
-      </div>
-    </div>
-  </div>
-</div><!--End Row -->
-
 {% endblock %}

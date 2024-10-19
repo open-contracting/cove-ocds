@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-19 05:35+0000\n"
+"POT-Creation-Date: 2024-10-19 07:48+0000\n"
 "PO-Revision-Date: 2020-09-08 08:53+0000\n"
 "Last-Translator: James McKinney, 2024\n"
 "Language-Team: Spanish (https://app.transifex.com/open-contracting-"
@@ -659,13 +659,13 @@ msgstr "Advertencias de Calidad"
 msgid "Additional Fields (fields in data not in schema)"
 msgstr "Campos adicionales (campos en los datos que no están en el esquema)"
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:12
-#: cove_ocds/templates/cove_ocds/explore_release.html:10
+#: cove_ocds/templates/cove_ocds/explore_record.html:9
+#: cove_ocds/templates/cove_ocds/explore_release.html:9
 msgid "Headlines"
 msgstr "Titulares"
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:17
-#: cove_ocds/templates/cove_ocds/explore_release.html:14
+#: cove_ocds/templates/cove_ocds/explore_record.html:13
+#: cove_ocds/templates/cove_ocds/explore_release.html:13
 msgid ""
 "Please read the <a href=\"#conversion-warning\">conversion warnings</a> "
 "below."
@@ -673,94 +673,110 @@ msgstr ""
 "Por favor, lea las <a href=\"#conversion-warning\">advertencias de "
 "conversión</a> más abajo."
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:21
+#: cove_ocds/templates/cove_ocds/explore_record.html:18
 #: cove_ocds/templates/cove_ocds/explore_release.html:18
 msgid "Failed "
 msgstr "Ha fallado "
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:23
+#: cove_ocds/templates/cove_ocds/explore_record.html:20
 #: cove_ocds/templates/cove_ocds/explore_release.html:20
 msgid "Passed "
 msgstr "Ha pasado "
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:25
-#: cove_ocds/templates/cove_ocds/explore_release.html:22
-msgid "structural checks against "
-msgstr "comprobaciones estructurales contra"
+#: cove_ocds/templates/cove_ocds/explore_record.html:22
+#, python-format
+msgid ""
+"structural checks against <a href=\"%(schema_url)s\">OCDS record package "
+"schema version %(version_used_display)s</a>."
+msgstr ""
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:25
-msgid "OCDS record package schema version"
-msgstr "Versión del esquema del paquete de registros OCDS"
-
-#: cove_ocds/templates/cove_ocds/explore_record.html:26
+#: cove_ocds/templates/cove_ocds/explore_record.html:23
 #: cove_ocds/templates/cove_ocds/explore_release.html:23
 msgid "See <a href=\"#validation-errors\">Structural Errors</a> below."
 msgstr ""
 "Ver <a href=\"#validation-errors\">Errores Estructurales</a> más abajo."
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:30
-#: cove_ocds/templates/cove_ocds/explore_release.html:32
+#: cove_ocds/templates/cove_ocds/explore_record.html:28
+#: cove_ocds/templates/cove_ocds/explore_release.html:28
+#, python-format
+msgid "<strong>Failed</strong> to apply %(count)s extension to the schema."
+msgid_plural ""
+"<strong>Failed</strong> to apply %(count)s extensions to the schema."
+msgstr[0] ""
+"<strong>Ha fallado</strong> al aplicar %(count)s extensión al esquema."
+msgstr[1] ""
+"<strong>Ha fallado</strong> al aplicar %(count)s extensiones al esquema."
+msgstr[2] ""
+"<strong>Ha fallado</strong> al aplicar %(count)s extensiones al esquema."
+
+#: cove_ocds/templates/cove_ocds/explore_record.html:29
+#: cove_ocds/templates/cove_ocds/explore_release.html:29
+msgid "See <a href=\"#schema-extensions\">Extensions</a> below."
+msgstr "Vea <a href=\"#schema-extensions\">Extensiones</a> más abajo."
+
+#: cove_ocds/templates/cove_ocds/explore_record.html:34
+#: cove_ocds/templates/cove_ocds/explore_release.html:34
 msgid "At a glance"
 msgstr "De un vistazo"
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:34
+#: cove_ocds/templates/cove_ocds/explore_record.html:38
 #, python-format
-msgid "This file contains <strong>%(count)s record.</strong>"
-msgid_plural "This file contains <strong>%(count)s records.</strong>"
-msgstr[0] "Este archivo <strong>contiene %(count)s registro.</strong>"
-msgstr[1] "Este archivo contiene <strong>%(count)s registros.</strong>"
-msgstr[2] "Este archivo contiene <strong>%(count)s registros.</strong>"
+msgid "This file contains <strong>%(count)s record</strong>"
+msgid_plural "This file contains <strong>%(count)s records</strong>"
+msgstr[0] "Este archivo <strong>contiene %(count)s registro</strong>"
+msgstr[1] "Este archivo contiene <strong>%(count)s registros</strong>"
+msgstr[2] "Este archivo contiene <strong>%(count)s registros</strong>"
 
 #: cove_ocds/templates/cove_ocds/explore_record.html:39
-#: cove_ocds/templates/cove_ocds/explore_release.html:42
+#: cove_ocds/templates/cove_ocds/explore_release.html:39
+#, python-format
+msgid " describing <strong>%(count)s contracting process</strong>"
+msgid_plural " describing <strong>%(count)s contracting processes.</strong>"
+msgstr[0] "<strong>describiendo un proceso de contratación</strong>"
+msgstr[1] "<strong>describiendo %(count)s procesos de contratación.</strong>"
+msgstr[2] "<strong>describiendo %(count)s procesos de contratación.</strong>"
+
+#: cove_ocds/templates/cove_ocds/explore_record.html:45
+#: cove_ocds/templates/cove_ocds/explore_release.html:45
 msgid "The schema version specified in the file is"
 msgstr "La versión del esquema especificada en el archivo es "
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:43
-#, python-format
-msgid "There is <strong>%(count)s unique OCID.</strong>"
-msgid_plural "There are <strong>%(count)s unique OCIDs.</strong>"
-msgstr[0] "<strong>Hay una OCID.</strong>"
-msgstr[1] "<strong>Hay %(count)s es OCIDs únicas.</strong>"
-msgstr[2] "<strong>Hay %(count)s es OCIDs únicas.</strong>"
-
-#: cove_ocds/templates/cove_ocds/explore_record.html:47
-#: cove_ocds/templates/cove_ocds/explore_release.html:47
+#: cove_ocds/templates/cove_ocds/explore_record.html:51
+#: cove_ocds/templates/cove_ocds/explore_release.html:51
 msgid "The publisher named in the file is"
 msgstr "El publicador nombrado en el archivo es"
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:52
-#: cove_ocds/templates/cove_ocds/explore_release.html:52
+#: cove_ocds/templates/cove_ocds/explore_record.html:57
+#: cove_ocds/templates/cove_ocds/explore_release.html:57
 msgid "The license is"
 msgstr "La licencia es "
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:57
-#: cove_ocds/templates/cove_ocds/explore_release.html:57
+#: cove_ocds/templates/cove_ocds/explore_record.html:63
+#: cove_ocds/templates/cove_ocds/explore_release.html:63
 msgid "Publication policy is"
 msgstr "Una política de publicación es"
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:63
-#: cove_ocds/templates/cove_ocds/explore_release.html:69
+#: cove_ocds/templates/cove_ocds/explore_record.html:70
+#: cove_ocds/templates/cove_ocds/explore_release.html:70
 #, python-format
 msgid ""
-"There is %(count)s <a href=\"#key-field-info\">duplicate release ID</a> in "
-"this package."
+"This file applies %(count)s valid <a href=\"#schema-extensions\">extension</"
+"a> to the schema."
 msgid_plural ""
-"There are %(count)s <a href=\"#key-field-info\">duplicate release IDs</a> in "
-"this package."
+"This file applies %(count)s valid <a href=\"#schema-extensions\">extensions</"
+"a> to the schema."
 msgstr[0] ""
-"Hay una<a href=\\\"#key-field-info\\\">ID de versión duplicada</a> en este "
-"\"\n"
-"\"paquete."
+"Este archivo incorpora %(count)s <a href=\"#schema-extensions\">extensión</"
+"a> válida al esquema."
 msgstr[1] ""
-"Hay %(count)s <a href=\"#key-field-info\">IDs de versión duplicadas</a> en "
-"este paquete."
+"Este archivo incorpora %(count)s <a href=\"#schema-extensions\">extensiones</"
+"a> válida al esquema."
 msgstr[2] ""
-"Hay %(count)s <a href=\"#key-field-info\">IDs de versión duplicadas</a> en "
-"este paquete."
+"Este archivo incorpora %(count)s <a href=\"#schema-extensions\">extensiones</"
+"a> válida al esquema."
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:69
-#: cove_ocds/templates/cove_ocds/explore_release.html:74
+#: cove_ocds/templates/cove_ocds/explore_record.html:77
+#: cove_ocds/templates/cove_ocds/explore_release.html:77
 #, python-format
 msgid ""
 "This file uses %(count)s <a href=\"#additional-fields\">additional field</a> "
@@ -779,114 +795,18 @@ msgstr[2] ""
 "Este archivo utiliza %(count)s <a href=\"#additional-fields\">campos "
 "adicionales</a>no incluidos en el estándar."
 
-#: cove_ocds/templates/cove_ocds/explore_record.html:74
-#: cove_ocds/templates/cove_ocds/explore_release.html:79
-msgid "This file is not 'utf-8' encoded (it is"
-msgstr "Este archivo no ha sido codificado con 'utf-8' (ha sido "
-
-#: cove_ocds/templates/cove_ocds/explore_record.html:74
-#: cove_ocds/templates/cove_ocds/explore_release.html:79
-msgid "encoded)."
-msgstr "codificado)."
-
-#: cove_ocds/templates/cove_ocds/explore_record.html:78
-#: cove_ocds/templates/cove_ocds/explore_release.html:88
-msgid "Data "
-msgstr "Datos "
-
-#: cove_ocds/templates/cove_ocds/explore_record.html:80
-#: cove_ocds/templates/cove_ocds/explore_release.html:90
-msgid "downloaded from "
-msgstr "descargado desde "
-
-#: cove_ocds/templates/cove_ocds/explore_record.html:82
-#: cove_ocds/templates/cove_ocds/explore_release.html:92
-msgid "uploaded "
-msgstr "subido "
-
-#: cove_ocds/templates/cove_ocds/explore_record.html:84
-#: cove_ocds/templates/cove_ocds/explore_release.html:94
-msgid "on "
-msgstr "el "
-
-#: cove_ocds/templates/cove_ocds/explore_record.html:102
-msgid "Is structurally correct?"
-msgstr "¿Es estructuralmente correcto?"
-
-#: cove_ocds/templates/cove_ocds/explore_record.html:105
-msgid "No"
-msgstr "No"
-
-#: cove_ocds/templates/cove_ocds/explore_record.html:105
-msgid "Yes"
-msgstr "Si"
-
-#: cove_ocds/templates/cove_ocds/explore_record.html:115
-msgid "Number of records"
-msgstr "Número de registros"
-
-#: cove_ocds/templates/cove_ocds/explore_record.html:126
-msgid "Unique OCIDs"
-msgstr "OCIDs únicas"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:22
-msgid "OCDS release package schema version"
-msgstr "Versión del esquema del paquete de entrega de OCDS"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:27
-msgid "<strong>Failed </strong>to apply "
-msgstr "<strong> Ha fallado </strong> al aplicar"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:27
+#: cove_ocds/templates/cove_ocds/explore_record.html:83
+#: cove_ocds/templates/cove_ocds/explore_release.html:83
 #, python-format
-msgid " %(count)s extension "
-msgid_plural "%(count)s extensions "
-msgstr[0] "%(count)s extensión"
-msgstr[1] "%(count)s extensiones"
-msgstr[2] "%(count)s extensiones"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:27
 msgid ""
-" to the schema.<br/>See <a href=\"#schema-extensions\">Extensions</a> below."
+"This file is not 'utf-8' encoded (it is <strong>%(csv_encoding)s</strong> "
+"encoded)."
 msgstr ""
-"al esquema.<br/> Vea <a href=\"#schema-extensions\">Extensiones </a> más "
-"abajo."
+"Este archivo no ha sido codificado con 'utf-8' (ha sido codificado con "
+"<strong>%(csv_encoding)s</strong>)."
 
-#: cove_ocds/templates/cove_ocds/explore_release.html:36
-#, python-format
-msgid "This file contains <strong>%(count)s release</strong>"
-msgid_plural "This file contains <strong>%(count)s releases</strong>"
-msgstr[0] "Este archivo <strong>contiene una entrega</strong>"
-msgstr[1] "Este archivo contiene <strong>%(count)s entregas</strong>"
-msgstr[2] "Este archivo contiene <strong>%(count)s entregas</strong>"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:37
-#, python-format
-msgid " describing <strong>%(count)s contracting process</strong>"
-msgid_plural " describing <strong>%(count)s contracting processes.</strong>"
-msgstr[0] "<strong>describiendo un proceso de contratación</strong>"
-msgstr[1] "<strong>describiendo %(count)s procesos de contratación.</strong>"
-msgstr[2] "<strong>describiendo %(count)s procesos de contratación.</strong>"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:63
-msgid "This file applies"
-msgstr "Este archivo incorpora "
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:63
-#, python-format
-msgid "%(count)s valid <a href=\"#schema-extensions\">extension</a>"
-msgid_plural " %(count)s valid <a href=\"#schema-extensions\">extensions</a> "
-msgstr[0] "%(count)s <a href=\\\"#schema-extensions\\\">extensión</a> válida"
-msgstr[1] ""
-"%(count)s <a href=\\\"#schema-extensions\\\">extensiones</a> válidas "
-msgstr[2] ""
-"%(count)s <a href=\\\"#schema-extensions\\\">extensiones</a> válidas "
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:63
-msgid "to the schema"
-msgstr "al esquema"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:84
+#: cove_ocds/templates/cove_ocds/explore_record.html:89
+#: cove_ocds/templates/cove_ocds/explore_release.html:89
 #, python-format
 msgid ""
 "This file uses %(count)s <a href=\"#deprecated-fields\">deprecated field</a>."
@@ -902,216 +822,32 @@ msgstr[2] ""
 "Este archivo usa %(count)s <a href=\\\"#deprecated-fields\\\">campos "
 "obsoletos</a>."
 
-#: cove_ocds/templates/cove_ocds/explore_release.html:113
-msgid "Key Field Information"
-msgstr "Información de Campos Clave"
+#: cove_ocds/templates/cove_ocds/explore_record.html:95
+#: cove_ocds/templates/cove_ocds/explore_release.html:95
+#, python-format
+msgid "Data downloaded from %(source_url)s on %(created_datetime)s."
+msgstr "Datos descargado desde %(source_url)s el %(created_datetime)s."
 
-#: cove_ocds/templates/cove_ocds/explore_release.html:118
-msgid "Initiation Types: "
-msgstr "Tipos de iniciación:"
+#: cove_ocds/templates/cove_ocds/explore_record.html:97
+#: cove_ocds/templates/cove_ocds/explore_release.html:97
+#, python-format
+msgid "Data uploaded on %(created_datetime)s."
+msgstr "Datos subido el %(created_datetime)s."
 
-#: cove_ocds/templates/cove_ocds/explore_release.html:119
-msgid "Tags:"
-msgstr "Etiquetas:"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:125
-msgid "Planning: "
-msgstr "Planificación:"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:126
-msgid "Tenders: "
-msgstr "Licitaciones:"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:128
-msgid "Awards: "
-msgstr "Adjudicaciones:"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:130
-#: cove_ocds/templates/cove_ocds/explore_release.html:136
-#: cove_ocds/templates/cove_ocds/explore_release.html:145
-msgid "Total Count: "
-msgstr "Total:"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:131
-#: cove_ocds/templates/cove_ocds/explore_release.html:137
-#: cove_ocds/templates/cove_ocds/explore_release.html:146
-msgid "Unique OCIDs: "
-msgstr "OCIDs únicas:"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:134
-msgid "Contracts: "
-msgstr "Contratos:"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:139
-msgid "Contracts with no awards: "
-msgstr "Contratos sin adjudicaciones:"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:143
-msgid "Implementation: "
-msgstr "Implementación:"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:150
-msgid "Earliest release: "
-msgstr "Apertura de entrega:"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:151
-msgid "Latest release: "
-msgstr "Última entrega:"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:152
-msgid "Earliest tender start: "
-msgstr "Apertura de inicio de licitación:"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:153
-msgid "Latest tender start: "
-msgstr "Último inicio de licitación:"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:154
-msgid "Earliest award: "
-msgstr "Apertura de adjudicación:"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:155
-msgid "Latest award: "
-msgstr "Última adjudicación:"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:156
-msgid "Earliest contract start: "
-msgstr "Apertura de inicio del contrato:"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:157
-msgid "Latest contract start: "
-msgstr "Último inicio del contrato:"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:160
-msgid "Total Unique Organizations: "
-msgstr "Número Total de Organizaciones Distintas:"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:162
-msgid "with address details: "
-msgstr "con detalles de dirección:"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:163
-msgid "with contact points: "
-msgstr "con puntos de contacto:"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:164
-msgid "that have identifiers: "
-msgstr "que tienen identificadores:"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:165
-msgid "using schemes: "
-msgstr "utilizando esquemas:"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:168
-msgid "Organization Roles: "
-msgstr "Roles de la Organización:"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:172
-msgid "Buyers: "
-msgstr "Compradores:"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:177
-msgid "Suppliers: "
-msgstr "Proveedores:"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:182
-msgid "Procuring Entities: "
-msgstr "Entidades Contratantes:"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:187
-msgid "Tenderers: "
-msgstr "Llicitadores:"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:192
-#: docs/code_examples/kfi-template-added.html:1
-#: docs/code_examples/kfi-template-orig.html:1
-msgid "Total Items: "
-msgstr "Número Total de Artículos:"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:193
-#: docs/code_examples/kfi-template-added.html:2
-msgid "Unique Item IDs: "
-msgstr "IDs de artículos únicos"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:194
-#: docs/code_examples/kfi-template-added.html:3
-#: docs/code_examples/kfi-template-orig.html:2
-msgid "Items ID schemes: "
-msgstr "Esquemas de ID de artículos:"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:195
-msgid "Item Types: "
-msgstr "Tipos de Artículos:"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:197
-msgid "Tender: "
-msgstr "Licitación:"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:198
-msgid "Award: "
-msgstr "Adjudicación:"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:199
-msgid "Contract: "
-msgstr "Contrato:"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:202
-msgid "Languages: "
-msgstr "Idiomas:"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:203
-msgid "Currencies: "
-msgstr "Divisas:"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:221
-msgid "Documents"
-msgstr "Documentos"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:226
-msgid "Part of Contracting Process"
-msgstr "Parte del Proceso de Contratación"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:227
-msgid "Count of Docs"
-msgstr "Total de Documentos"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:228
-msgid "Document Types"
-msgstr "Tipos de Documentos"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:234
-msgid "Planning"
-msgstr "Planificación"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:246
-msgid "Tender"
-msgstr "Licitación"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:258
-msgid "Tender Milestones"
-msgstr "Hitos de la Licitación"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:270
-msgid "Awards"
-msgstr "Adjudicaciones"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:282
-msgid "Contracts"
-msgstr "Contratos"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:294
-msgid "Implementation"
-msgstr "Implementación"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:306
-msgid "Implementation Milestones"
-msgstr "Hitos de ejecución"
-
-#: cove_ocds/templates/cove_ocds/explore_release.html:326
-msgid "Statistics cannot be produced as data is not structurally correct."
+#: cove_ocds/templates/cove_ocds/explore_release.html:22
+#, python-format
+msgid ""
+"structural checks against <a href=\"%(schema_url)s\">OCDS release package "
+"schema version %(version_used_display)s</a>."
 msgstr ""
-"No se pueden producir estadísticas porque los datos no son estructuralmente "
-"correctos."
+
+#: cove_ocds/templates/cove_ocds/explore_release.html:38
+#, python-format
+msgid "This file contains <strong>%(count)s release</strong>"
+msgid_plural "This file contains <strong>%(count)s releases</strong>"
+msgstr[0] "Este archivo <strong>contiene una entrega</strong>"
+msgstr[1] "Este archivo contiene <strong>%(count)s entregas</strong>"
+msgstr[2] "Este archivo contiene <strong>%(count)s entregas</strong>"
 
 #: cove_ocds/templates/cove_ocds/input.html:6
 msgid "Loading"
@@ -1447,7 +1183,7 @@ msgstr "Fila"
 msgid "Column"
 msgstr "Columna"
 
-#: cove_ocds/templatetags/cove_ocds.py:13
+#: cove_ocds/templatetags/cove_ocds.py:11
 msgid ""
 "This array should contain either entirely embedded releases or linked "
 "releases. Embedded releases contain an 'id' whereas linked releases do not. "
@@ -1457,17 +1193,17 @@ msgstr ""
 "vinculadas. Las entregas integradas contienen un \"identificador\", mientras "
 "que las entregas vinculadas no. Estas entregas contienen una mezcla de ambos."
 
-#: cove_ocds/templatetags/cove_ocds.py:19
+#: cove_ocds/templatetags/cove_ocds.py:17
 #, python-format
 msgid "%s is not valid under any of the given schemas"
 msgstr "%s no es válido bajo ninguno de los esquemas dados"
 
-#: cove_ocds/templatetags/cove_ocds.py:22
+#: cove_ocds/templatetags/cove_ocds.py:20
 #, python-format
 msgid "%(instance)s is valid under each of %(reprs)s"
 msgstr "%(instance)s es válido bajo cada uno de %(reprs)s"
 
-#: cove_ocds/templatetags/cove_ocds.py:31
+#: cove_ocds/templatetags/cove_ocds.py:29
 msgid ""
 "Incorrect date format. Dates should use the form YYYY-MM-DDT00:00:00Z. Learn "
 "more about <a href=\"https://standard.open-contracting.org/latest/en/schema/"
@@ -1626,118 +1362,3 @@ msgstr "Error de referencia en JSON"
 #, python-format
 msgid "%(error)s"
 msgstr "%(error)s"
-
-#~ msgid "Records Table:"
-#~ msgstr "Tabla de Registros:"
-
-#, python-format
-#~ msgid "Showing the first %(releases_or_records_table_length)s records."
-#~ msgstr ""
-#~ "Mostrando los primeros %(releases_or_records_table_length)s registros."
-
-#~ msgid "release count"
-#~ msgstr "cantidad de entregas"
-
-#~ msgid "Releases Table:"
-#~ msgstr "Tabla de Entregas:"
-
-#, python-format
-#~ msgid ""
-#~ "Showing the first %(releases_or_records_table_length)s releases. To "
-#~ "explore all your data in a tabular format, convert it to a spreadsheet "
-#~ "using the \"Convert\" section, above."
-#~ msgstr ""
-#~ "Mostrando los primeros %(releases_or_records_table_length)s lanzamientos. "
-#~ "Para explorar todos tus datos en formato tabular, conviértalos a una hoja "
-#~ "de cálculo usando la sección \"Convertir\", arriba."
-
-#~ msgid "Release Date"
-#~ msgstr "Fecha de Entrega"
-
-#~ msgid "Tags"
-#~ msgstr "Etiquetas"
-
-#~ msgid "Descriptions"
-#~ msgstr "Descripciones"
-
-#~ msgid "Purchasers"
-#~ msgstr "Compradores"
-
-#~ msgid "Tender Title:"
-#~ msgstr "Título de la Licitación:"
-
-#~ msgid "Tender Description:"
-#~ msgstr "Descripción de la Licitación:"
-
-#~ msgid "Tender Item Description:"
-#~ msgstr "Descripción del Artículo de la Licitación:"
-
-#~ msgid "Award Title:"
-#~ msgstr "Título de la Adjudicación:"
-
-#~ msgid "Award Description:"
-#~ msgstr "Descripción de la Adjudicación:"
-
-#~ msgid "Contract Title:"
-#~ msgstr "Título del Contrato:"
-
-#~ msgid "Contract Description:"
-#~ msgstr "Descripción del Contrato:"
-
-#~ msgid "Buyer:"
-#~ msgstr "Comprador:"
-
-#~ msgid "Procuring Entity:"
-#~ msgstr "Entidad Contratante:"
-
-#~ msgid "Explore your data:"
-#~ msgstr "Explora tus datos:"
-
-#~ msgid ""
-#~ "This section provides a visual representation of the data, use it to "
-#~ "check whether the data makes sense in the type of tool a user might use "
-#~ "to explore it."
-#~ msgstr ""
-#~ "Esta sección proporciona una representación visual de los datos, "
-#~ "utilícela para verificar si tienen sentido en el tipo de herramienta que "
-#~ "un usuario podría usar para explorarlos."
-
-#~ msgid ""
-#~ "Extensions and additional fields are hidden by default, click the 'Extra "
-#~ "fields' buttons or open the 'Extra fields' section to view them."
-#~ msgstr ""
-#~ "Las extensiones y los campos adicionales están ocultos por defecto, haga "
-#~ "clic en los botones \"Campos adicionales\" o abra la sección \"Campos "
-#~ "adicionales\" para verlos."
-
-#~ msgid ""
-#~ "When viewing an OCDS record, use the numbers at the top of the "
-#~ "visualization to browse the change history. New and changed fields are "
-#~ "highlighted, use this feature to check whether any fields have changed "
-#~ "unexpectedly."
-#~ msgstr ""
-#~ "Al ver un registro de OCDS, use los números en la parte superior de la "
-#~ "visualización para navegar en el historial de cambios. Los campos nuevos "
-#~ "y modificados están resaltados, use esta función para verificar si alguno "
-#~ "de los campos ha cambiado inesperadamente."
-
-#~ msgid "Sorry, the page you are looking for is not available"
-#~ msgstr "Lo sentimos, la página que está buscando no está disponible"
-
-#~ msgid "Go to Home page"
-#~ msgstr "Ir a la Página de Inicio"
-
-#, python-format
-#~ msgid ""
-#~ "The data you were hoping to explore no longer exists.\n"
-#~ "\n"
-#~ "This is because all data supplied to this website is automatically "
-#~ "deleted after %s days, and therefore the analysis of that data is no "
-#~ "longer available."
-#~ msgstr ""
-#~ "Los datos que usted quería explorar ya no existen.\n"
-#~ "\n"
-#~ "Esto se debe a que todos los datos suministrados a este sitio web se "
-#~ "borran automáticamente después de 7 días, y por lo tanto el análisis de "
-#~ "esos datos automáticamente después de %s días, y por lo tanto el análisis "
-#~ "de esos datos ya no está disponible."
