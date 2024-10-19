@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-19 07:48+0000\n"
+"POT-Creation-Date: 2024-10-19 18:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -163,35 +163,35 @@ msgid ""
 "example/1.1/ocds-213czf-000-00001-02-tender.json</code>"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/base.html:153
+#: cove_ocds/templates/cove_ocds/base.html:149
 msgid "Built by"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/base.html:153
+#: cove_ocds/templates/cove_ocds/base.html:149
 msgid "Open Data Services"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/base.html:154
+#: cove_ocds/templates/cove_ocds/base.html:150
 msgid "The code for this site is available on"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/base.html:154
+#: cove_ocds/templates/cove_ocds/base.html:150
 msgid "GitHub"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/base.html:154
+#: cove_ocds/templates/cove_ocds/base.html:150
 msgid "Licence"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/base.html:154
+#: cove_ocds/templates/cove_ocds/base.html:150
 msgid "AGPLv3"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/base.html:154
+#: cove_ocds/templates/cove_ocds/base.html:150
 msgid "Report/View issues"
 msgstr ""
 
-#: cove_ocds/templates/cove_ocds/base.html:154
+#: cove_ocds/templates/cove_ocds/base.html:150
 msgid "cove-ocds issues"
 msgstr ""
 
@@ -717,140 +717,6 @@ msgstr ""
 
 #: cove_ocds/templates/cove_ocds/input.html:59
 msgid "Paste"
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/more_info.html:4
-msgid "More Information "
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/more_info.html:4
-msgid "click to see."
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/more_info.html:10
-msgid "What happens to the data I provide to this site?"
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/more_info.html:11
-#, python-format
-msgid ""
-"We retain the data you upload or paste to this site, on our server, for "
-"%(delete_files_after_days)s days."
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/more_info.html:12
-#, python-format
-msgid ""
-"If you supply a link, we fetch the data from that link and store it on our "
-"server for %(delete_files_after_days)s days."
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/more_info.html:13
-#, python-format
-msgid ""
-"We delete all data older than %(delete_files_after_days)s days from our "
-"servers daily, retaining none of the original data."
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/more_info.html:14
-msgid ""
-"While the data is on our servers we may access that data to help us "
-"understand how people are using this application, what types of data are "
-"being supplied, what common errors exist and so on."
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/more_info.html:15
-msgid ""
-"We may also retain data in backups of our servers, which means on occasion, "
-"some data may be retained longer. We have no intention of using this data "
-"for anything other than server recovery in an emergency."
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/more_info.html:16
-msgid ""
-"We do retain some metadata about data supplied to this site. Details can be "
-"found in the code, but may include information about whether or not the file "
-"was uploaded, linked or pasted, the size of the file, the date/time it was "
-"supplied and so on. "
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/more_info.html:18
-#, python-format
-msgid "Why do you delete data after %(delete_files_after_days)s days?"
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/more_info.html:19
-#, python-format
-msgid ""
-"This is service to allow people to explore machine readable data. As such we "
-"see no need to store and gather everything people submit to the site "
-"forever. We have chosen %(delete_files_after_days)s days as a practical time "
-"frame that allows people to share results with colleagues, but also allows "
-"data to disappear over time to save people having to clean up after "
-"themselves."
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/more_info.html:20
-#, python-format
-msgid ""
-"We believe that deleting supplied data after %(delete_files_after_days)s "
-"days provides a level of privacy for the users of this service. "
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/more_info.html:24
-msgid "Why provide converted versions?"
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/more_info.html:25
-msgid "The W3C"
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/more_info.html:25
-msgid "Data on the Web Best Practices"
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/more_info.html:25
-msgid ""
-"recommend making open data available in a range of formats to meet the needs "
-"of different users, for example, developers may want JSON, researchers might "
-"prefer a spreadsheet format."
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/more_info.html:33
-msgid "User Tracking"
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/more_info.html:37
-msgid "What information does the tool collect about website visitors?"
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/more_info.html:39
-#, python-format
-msgid ""
-"In order to understand who is using the Data Review Tool and how they use "
-"it, we collect basic analytics data about users. For more information and to "
-"learn how to opt out of this, see the <a href=\"%(terms_privacy)s\">Privacy "
-"Notice</a>."
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/more_info.html:40
-#, python-format
-msgid ""
-"We also collect server logs, which we analyse from time to time to "
-"understand traffic to the site. Users cannot opt out of this data "
-"collection, and data is treated with respect. For more information, see the "
-"<a href=\"%(terms_privacy)s\">Privacy Notice</a>."
-msgstr ""
-
-#: cove_ocds/templates/cove_ocds/more_info.html:42
-#, python-format
-msgid ""
-"In order to understand the behaviour of website visitors, to help us "
-"understand the most popular features and understand potential sources of "
-"frustration for website users, we are currently running a time-limited "
-"experiment using HotJar behaviour tracking. For more information and to "
-"learn how to opt out of this, see the <a href=\"%(terms_privacy)s\">Privacy "
-"Notice</a>."
 msgstr ""
 
 #: cove_ocds/templates/cove_ocds/ocds_missing_ids_table.html:3

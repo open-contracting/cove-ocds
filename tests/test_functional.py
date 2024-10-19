@@ -91,10 +91,6 @@ def test_index_page_ocds_links(server_url, browser, css_id, link_text, url):
 
 def test_common_index_elements(server_url, browser):
     browser.get(server_url)
-    browser.find_element(By.CSS_SELECTOR, "#more-information .panel-title").click()
-    time.sleep(0.5)
-    assert "What happens to the data I provide to this site?" in browser.find_element(By.TAG_NAME, "body").text
-    assert "Why provide converted versions?" in browser.find_element(By.TAG_NAME, "body").text
     assert "Terms & Conditions" in browser.find_element(By.TAG_NAME, "body").text
     assert "Open Data Services" in browser.find_element(By.TAG_NAME, "body").text
     assert "360 Giving" not in browser.find_element(By.TAG_NAME, "body").text
