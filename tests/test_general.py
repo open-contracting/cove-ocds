@@ -1,6 +1,7 @@
 import io
 import json
 import os
+import shutil
 from unittest.mock import patch
 
 import libcove.lib.common as cove_common
@@ -259,6 +260,17 @@ def test_explore_page_null_version(client):
     data.current_app = "cove_ocds"
     resp = client.get(data.get_absolute_url())
     assert resp.status_code == 200
+
+
+@pytest.mark.django_db
+def test_explore_page_expired_file(client):
+    data = SuppliedData.objects.create()
+    data.original_file.save("test.json", ContentFile('{"releases":[{}]}'))
+    data.current_app = "cove_ocds"
+    shutil.rmtree(data.upload_dir())
+    resp = client.get(data.get_absolute_url())
+    assert resp.status_code == 404
+    assert b"automatically deleted after" in resp.content
 
 
 @pytest.mark.django_db
