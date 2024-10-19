@@ -1,4 +1,3 @@
-import contextlib
 import os
 import time
 
@@ -6,7 +5,6 @@ import pytest
 import requests
 from django.conf import settings
 from django.test import override_settings
-from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 
@@ -149,7 +147,12 @@ def test_500_error(server_url, browser):
     [
         (
             "tenders_releases_2_releases.json",
-            ["Convert", "Schema", "OCDS release package schema version 1.0. You can", *OCDS_SCHEMA_VERSIONS_DISPLAY],
+            [
+                "Submitted Files",
+                "Schema",
+                "OCDS release package schema version 1.0. You can",
+                *OCDS_SCHEMA_VERSIONS_DISPLAY,
+            ],
             ["Schema Extensions"],
             True,
         ),
@@ -263,7 +266,7 @@ def test_500_error(server_url, browser):
         ),
         (
             "ocds_release_nulls.json",
-            ["Convert", "Save or Share these results"],
+            ["Submitted Files", "Save or Share these results"],
             [],
             True,
         ),
@@ -317,7 +320,7 @@ def test_500_error(server_url, browser):
         (
             "tenders_releases_2_releases_invalid.json",
             [
-                "Convert",
+                "Submitted Files",
                 "Structural Errors",
                 "id is missing but required",
                 "Invalid 'uri' found",
@@ -327,7 +330,7 @@ def test_500_error(server_url, browser):
         ),
         ("tenders_releases_2_releases_codelists.json", ["oh no", "GSINS"], [], True),
         # Test UTF-8 support
-        ("utf8.json", ["Convert"], ["Ensure that your file uses UTF-8 encoding"], True),
+        ("utf8.json", ["Submitted Files"], ["Ensure that your file uses UTF-8 encoding"], True),
         # Test that non UTF-8 files get an error, with a helpful message
         ("latin1.json", ["Ensure that your file uses UTF-8 encoding"], [], False),
         ("utf-16.json", ["Ensure that your file uses UTF-8 encoding"], [], False),
@@ -340,7 +343,7 @@ def test_500_error(server_url, browser):
         ),
         (
             "tenders_releases_2_releases.xlsx",
-            ["Convert", "Schema", *OCDS_SCHEMA_VERSIONS_DISPLAY],
+            ["Submitted Files", "Schema", *OCDS_SCHEMA_VERSIONS_DISPLAY],
             ["Missing OCDS package"],
             True,
         ),
@@ -363,7 +366,6 @@ def test_500_error(server_url, browser):
                 "Your data specifies a version 123.123 which is not recognised",
                 f"checked against OCDS release package schema version {OCDS_DEFAULT_SCHEMA_VERSION}. You can",
                 "checked against the current default version.",
-                "Convert to Spreadsheet",
             ],
             ["Additional Fields (fields in data not in schema)", "Error message"],
             False,
@@ -373,7 +375,6 @@ def test_500_error(server_url, browser):
             [
                 "Your data specifies a version 1000 (not a string) which is not recognised",
                 f"checked against OCDS release package schema version {OCDS_DEFAULT_SCHEMA_VERSION}. You can",
-                "Convert to Spreadsheet",
             ],
             ["Additional Fields (fields in data not in schema)", "Error message"],
             False,
@@ -385,7 +386,7 @@ def test_500_error(server_url, browser):
                 '"100.100.0" format does not comply with the schema',
                 "Error message",
             ],
-            ["Convert to Spreadsheet"],
+            [],
             False,
         ),
         (
@@ -401,13 +402,13 @@ def test_500_error(server_url, browser):
                 "Unresolvable JSON pointer:",
                 "/definitions/OrganizationReference",
             ],
-            ["Convert to Spreadsheet"],
+            [],
             False,
         ),
         (
             "tenders_releases_1_release_unpackaged.json",
             ["Missing OCDS package", "Error message: Missing OCDS package"],
-            ["Convert to Spreadsheet"],
+            [],
             False,
         ),
         (
@@ -484,16 +485,6 @@ def check_url_input_result_page(
     not_expected_text,
     conversion_successful,
 ):
-    # Avoid page refresh
-    dont_convert = [
-        "tenders_releases_1_release_with_unrecognized_version.json",
-        "tenders_releases_1_release_with_wrong_version_type.json",
-    ]
-
-    if source_filename.endswith(".json") and source_filename not in dont_convert:
-        with contextlib.suppress(NoSuchElementException):
-            browser.find_element(By.NAME, "flatten").click()
-
     body_text = browser.find_element(By.TAG_NAME, "body").text
     if isinstance(expected_text, str):
         expected_text = [expected_text]
@@ -505,16 +496,8 @@ def check_url_input_result_page(
 
     assert "Data Review Tool" in browser.find_element(By.TAG_NAME, "body").text
 
-    if conversion_successful:
-        if source_filename.endswith(".json"):
-            assert "JSON (Original)" in body_text
-            original_file = browser.find_element(By.LINK_TEXT, "JSON (Original)").get_attribute("href")
-            if "record" not in source_filename:
-                converted_file = browser.find_element(
-                    By.PARTIAL_LINK_TEXT, "Excel Spreadsheet (.xlsx) (Converted from Original using schema version"
-                ).get_attribute("href")
-                assert "flattened.xlsx" in converted_file
-        elif source_filename.endswith(".xlsx"):
+    if conversion_successful and source_filename.endswith((".xlsx", ".csv")):
+        if source_filename.endswith(".xlsx"):
             assert "(.xlsx) (Original)" in body_text
             original_file = browser.find_element(By.LINK_TEXT, "Excel Spreadsheet (.xlsx) (Original)").get_attribute(
                 "href"
@@ -639,18 +622,14 @@ def test_extension_validation_error_messages(url_input_browser):
         assert html not in browser.page_source
 
 
-@pytest.mark.parametrize("flatten_or_unflatten", ["flatten", "unflatten"])
-def test_flattentool_warnings(server_url, url_input_browser, httpserver, monkeypatch, flatten_or_unflatten):
+def test_flattentool_warnings(server_url, url_input_browser, httpserver, monkeypatch):
     # If we're testing a remove server then we can't run this test as we can't
     # set up the mocks
     if "CUSTOM_SERVER_URL" in os.environ:
         pytest.skip()
     # Actual input file doesn't matter, as we override
     # flattentool behaviour with a mock below
-    if flatten_or_unflatten == "flatten":
-        source_filename = "tenders_releases_2_releases.json"
-    else:
-        source_filename = "tenders_releases_2_releases.xlsx"
+    source_filename = "tenders_releases_2_releases.xlsx"
 
     import flattentool
 
@@ -666,8 +645,7 @@ def test_flattentool_warnings(server_url, url_input_browser, httpserver, monkeyp
         with open(f"{output_name}.xlsx", "w") as fp:
             fp.write("{}")
 
-    mocks = {"flatten": mockflatten, "unflatten": mockunflatten}
-    monkeypatch.setattr(flattentool, flatten_or_unflatten, mocks[flatten_or_unflatten])
+    monkeypatch.setattr(flattentool, "unflatten", mockunflatten)
 
     if "CUSTOM_SERVER_URL" in os.environ:
         source_url = (

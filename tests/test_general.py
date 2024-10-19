@@ -10,7 +10,7 @@ from cove.input.models import SuppliedData
 from django.conf import settings
 from django.core.files.base import ContentFile
 from django.core.files.uploadedfile import UploadedFile
-from libcove.lib.converters import convert_json, convert_spreadsheet
+from libcove.lib.converters import convert_spreadsheet
 from libcoveocds.api import ocds_json_output
 from libcoveocds.exceptions import OCDSVersionError
 from libcoveocds.schema import SchemaOCDS
@@ -189,22 +189,6 @@ def test_explore_page(client, json_data):
 
 
 @pytest.mark.django_db
-def test_explore_page_convert(client):
-    data = SuppliedData.objects.create()
-    data.original_file.save("test.json", ContentFile('{"releases":[]}'))
-    data.current_app = "cove_ocds"
-    resp = client.get(data.get_absolute_url())
-    assert resp.status_code == 200
-    assert resp.context["conversion"] == "flattenable"
-
-    resp = client.post(data.get_absolute_url(), {"flatten": "true"})
-    assert resp.status_code == 200
-    assert resp.context["conversion"] == "flatten"
-    assert "converted_file_size" in resp.context
-    assert "converted_file_size_titles" not in resp.context
-
-
-@pytest.mark.django_db
 def test_explore_page_csv(client):
     data = SuppliedData.objects.create()
     data.original_file.save("test.csv", ContentFile("a,b"))
@@ -232,16 +216,6 @@ def test_explore_unconvertable_spreadsheet(client):
     resp = client.get(data.get_absolute_url())
     assert resp.status_code == 200
     assert b"We think you tried to supply a spreadsheet, but we failed to convert it." in resp.content
-
-
-@pytest.mark.django_db
-def test_explore_non_dict_json(client):
-    data = SuppliedData.objects.create()
-    with open(os.path.join("tests", "fixtures", "non_dict_json.json")) as fp:
-        data.original_file.save("non_dict_json.json", UploadedFile(fp))
-    resp = client.post(data.get_absolute_url(), {"flatten": "true"})
-    assert resp.status_code == 200
-    assert b"could not be converted" not in resp.content
 
 
 @pytest.mark.django_db
@@ -322,7 +296,7 @@ def test_wrong_schema_version_in_data(client):
 @pytest.mark.django_db
 @pytest.mark.parametrize(
     ("file_type", "converter", "replace_after_post"),
-    [("xlsx", convert_spreadsheet, True), ("json", convert_json, False)],
+    [("xlsx", convert_spreadsheet, True)],
 )
 def test_explore_schema_version_change(client, file_type, converter, replace_after_post):
     data = SuppliedData.objects.create()
@@ -354,53 +328,6 @@ def test_explore_schema_version_change(client, file_type, converter, replace_aft
         assert mock_object.called
         assert "/1.1/" in kwargs["schema_url"]
         assert kwargs["replace"] is replace_after_post
-
-
-@pytest.mark.django_db
-@patch("cove_ocds.views.convert_json", side_effect=convert_json, autospec=True)
-def test_explore_schema_version_change_with_json_to_xlsx(mock_object, client):
-    data = SuppliedData.objects.create()
-    with open(os.path.join("tests", "fixtures", "tenders_releases_2_releases.json")) as fp:
-        data.original_file.save("test.json", UploadedFile(fp))
-    data.current_app = "cove_ocds"
-
-    resp = client.get(data.get_absolute_url())
-    args, kwargs = mock_object.call_args
-    assert resp.status_code == 200
-    assert "/1.0/" in kwargs["schema_url"]
-    assert kwargs["replace"] is False
-    mock_object.reset_mock()
-
-    resp = client.post(data.get_absolute_url(), {"version": "1.1"})
-    args, kwargs = mock_object.call_args
-    assert resp.status_code == 200
-    assert kwargs["replace"] is False
-    mock_object.reset_mock()
-
-    # Convert to spreadsheet
-    resp = client.post(data.get_absolute_url(), {"flatten": "true"})
-    assert kwargs["replace"] is False
-    mock_object.reset_mock()
-
-    # Do replace with version change now that it's been converted once
-    resp = client.post(data.get_absolute_url(), {"version": "1.0"})
-    args, kwargs = mock_object.call_args
-    assert resp.status_code == 200
-    assert kwargs["replace"] is True
-    mock_object.reset_mock()
-
-    # Do not replace if the version does not changed
-    resp = client.post(data.get_absolute_url(), {"version": "1.0"})
-    args, kwargs = mock_object.call_args
-    assert resp.status_code == 200
-    assert kwargs["replace"] is False
-    mock_object.reset_mock()
-
-    resp = client.post(data.get_absolute_url(), {"version": "1.1"})
-    args, kwargs = mock_object.call_args
-    assert resp.status_code == 200
-    assert kwargs["replace"] is True
-    mock_object.reset_mock()
 
 
 @pytest.mark.django_db

@@ -13,7 +13,7 @@ from django.utils.html import format_html
 from django.utils.translation import gettext as _
 from flattentool.exceptions import FlattenToolValueError, FlattenToolWarning
 from libcove.lib.common import get_spreadsheet_meta_data
-from libcove.lib.converters import convert_json, convert_spreadsheet
+from libcove.lib.converters import convert_spreadsheet
 from libcove.lib.exceptions import CoveInputDataError
 from libcoveocds.common_checks import common_checks_ocds
 from libcoveocds.config import LibCoveOCDSConfig
@@ -41,7 +41,7 @@ def explore_ocds(request, pk):
         for version, (display, url, tag) in lib_cove_ocds_config.config["schema_version_choices"].items()
     }
 
-    # Read the supplied data, and convert to alternative formats (if not done on a previous request).
+    # Read the supplied data.
 
     if context["file_type"] == "json":
         package_data = util.read_json(supplied_data.original_file.path)
@@ -49,26 +49,6 @@ def explore_ocds(request, pk):
         schema_ocds, schema_url, replace = util.get_schema(
             request, context, supplied_data, lib_cove_ocds_config, package_data
         )
-
-        if "records" in package_data:
-            context["conversion"] = None
-        else:
-            with warnings.catch_warnings():
-                warnings.filterwarnings("ignore", category=FlattenToolWarning)
-
-                context.update(
-                    convert_json(
-                        upload_dir=supplied_data.upload_dir(),
-                        upload_url=supplied_data.upload_url(),
-                        file_name=supplied_data.original_file.path,
-                        lib_cove_config=lib_cove_ocds_config,
-                        schema_url=schema_url,
-                        # Unsure why exists() was added in https://github.com/open-contracting/cove-ocds/commit/d793c49
-                        replace=replace and os.path.exists(os.path.join(supplied_data.upload_dir(), "flattened.xlsx")),
-                        request=request,
-                        flatten=request.POST.get("flatten"),
-                    )
-                )
     else:
         with warnings.catch_warnings():
             warnings.filterwarnings("ignore", category=FlattenToolWarning)
@@ -92,6 +72,13 @@ def explore_ocds(request, pk):
             warnings.filterwarnings("ignore", category=FlattenToolWarning)
 
             try:
+                # Sets:
+                # - conversion_warning_messages: str (JSON)
+                # - converted_file_size: int (bytes)
+                # - conversion = "unflatten"
+                # - converted_path: str
+                # - converted_url: str
+                # - csv_encoding = "utf-8-sig" | "cp1252" | "latin_1"
                 context.update(
                     # __wrapped__ is missing when the function is patched by tests.
                     getattr(convert_spreadsheet, "__wrapped__", convert_spreadsheet)(

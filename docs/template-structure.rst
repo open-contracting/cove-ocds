@@ -29,8 +29,6 @@ Some of the templates include variables for the translation of generic terms so 
   {% trans 'Original' as original %}
   {% trans 'Excel Spreadsheet (.xlsx)' as xlsx %} 
   {% trans 'CSV Spreadsheet (.csv)' as csv %} 
-  {% trans 'Excel Spreadsheet (.xlsx) with titles' as xlsx_titles %} 
-  {# Translators: JSON probably does not need a translation: http://www.json.org/ #}
   {% trans 'JSON' as JSON %}
   {% trans 'XML' as XML %}
 

@@ -9,7 +9,7 @@
         <h4 class="panel-title">{% trans 'Headlines' %}</h4>
       </div>
       <div class="panel-body">
-        {% if conversion_warning_messages or conversion_warning_messages_titles %}
+        {% if conversion_warning_messages %}
           <div class="conversion message"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span>{% blocktrans %}Please read the <a href="#conversion-warning">conversion warnings</a> below.{% endblocktrans %}</div>
         {% endif %}
 
