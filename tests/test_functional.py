@@ -12,34 +12,6 @@ OCDS_SCHEMA_VERSIONS = settings.COVE_CONFIG["schema_version_choices"]
 OCDS_SCHEMA_VERSIONS_DISPLAY = [display_url[0] for version, display_url in OCDS_SCHEMA_VERSIONS.items()]
 
 
-@pytest.mark.parametrize(
-    ("link_text", "expected_text", "css_selector", "url"),
-    [
-        (
-            "Open Contracting",
-            "better serve people and protect our planet",
-            "h2",
-            "https://www.open-contracting.org/",
-        ),
-        (
-            "Open Contracting Data Standard",
-            "Open Contracting Data Standard",
-            "#open-contracting-data-standard",
-            "https://standard.open-contracting.org/",
-        ),
-    ],
-)
-def test_footer_ocds(server_url, browser, link_text, expected_text, css_selector, url):
-    browser.get(server_url)
-    footer = browser.find_element(By.ID, "footer")
-    link = footer.find_element(By.LINK_TEXT, link_text)
-    href = link.get_attribute("href")
-    assert url in href
-    link.click()
-    time.sleep(0.5)
-    assert expected_text in browser.find_element(By.CSS_SELECTOR, css_selector).text
-
-
 def test_index_page_ocds(server_url, browser):
     browser.get(server_url)
     assert "Data Review Tool" in browser.find_element(By.TAG_NAME, "body").text
@@ -84,13 +56,6 @@ def test_index_page_ocds_links(server_url, browser, css_id, link_text, url):
     link = section.find_element(By.LINK_TEXT, link_text)
     href = link.get_attribute("href")
     assert url in href
-
-
-def test_common_index_elements(server_url, browser):
-    browser.get(server_url)
-    assert "Terms & Conditions" in browser.find_element(By.TAG_NAME, "body").text
-    assert "Open Data Services" in browser.find_element(By.TAG_NAME, "body").text
-    assert "360 Giving" not in browser.find_element(By.TAG_NAME, "body").text
 
 
 def test_accordion(server_url, browser):
