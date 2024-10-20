@@ -79,7 +79,7 @@
                 </li>
              {% endif %}
 
-             {% if json_data.publisher %}
+             {% if json_data.publisher.name %}
                 <li><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
                   {% blocktrans with value=json_data.publisher.name %}The publisher named in the file is <strong>{{value}}</strong>.{% endblocktrans %}
                 </li>
