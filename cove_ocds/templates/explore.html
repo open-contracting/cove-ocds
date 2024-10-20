@@ -73,9 +73,9 @@
              </li>
              {% endif %}
 
-             {% if data_schema_version %}
+             {% if 'version' in json_data %}
                 <li><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-                  {% blocktrans %}The schema version specified in the file is <strong>{{data_schema_version}}</strong>.{% endblocktrans %}
+                  {% blocktrans with value=json_data.version|json %}The schema version specified in the file is <code>{{value}}</code>.{% endblocktrans %}
                 </li>
              {% endif %}
 

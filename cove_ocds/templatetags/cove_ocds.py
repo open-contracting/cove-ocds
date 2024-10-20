@@ -40,6 +40,11 @@ def html_error_msg_ocds(error):
     return html_error_msg(error)
 
 
+@register.filter(name="json")
+def json_dumps(data):
+    return json.dumps(data)
+
+
 # https://github.com/OpenDataServices/lib-cove-web/blob/main/cove/templatetags/cove_tags.py
 
 
@@ -56,7 +61,7 @@ def json_decode(error_json):
 
 @register.filter
 def concat(arg1, arg2):
-    return str(arg1) + str(arg2)
+    return f"{arg1}{arg2}"
 
 
 @register.filter

@@ -2,6 +2,7 @@ import json
 
 import pytest
 from django.core.files.base import ContentFile
+from django.urls import reverse
 from hypothesis import HealthCheck, example, given, settings
 from hypothesis import strategies as st
 
@@ -29,7 +30,7 @@ general_json = st.recursive(
 def test_explore_page(client, json_data):
     data = SuppliedData.objects.create()
     data.original_file.save("test.json", ContentFile(json.dumps(json_data)))
-    resp = client.get(data.get_absolute_url())
+    resp = client.get(reverse("explore", args=(data.pk,)))
     assert resp.status_code == 200
 
 
@@ -41,5 +42,5 @@ def test_explore_page_duplicate_ids(client, json_data):
     duplicate_id_releases = {"releases": [{"id": json_data}, {"id": json_data}]}
     data = SuppliedData.objects.create()
     data.original_file.save("test.json", ContentFile(json.dumps(duplicate_id_releases)))
-    resp = client.get(data.get_absolute_url())
+    resp = client.get(reverse("explore", args=(data.pk,)))
     assert resp.status_code == 200

@@ -10,6 +10,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.utils import translation
 from django.utils.html import format_html, mark_safe
 from django.utils.translation import gettext as _
@@ -55,14 +56,6 @@ def data_input(request, form_classes=default_form_classes, text_file_name="test.
         forms[form_name] = form
         if form.is_valid():
             data = models.SuppliedData() if form_name == "text_form" else form.save(commit=False)
-            data.form_name = form_name
-
-            try:
-                # We don't want to store large chunks of pasted data that might be in the request data.
-                if "paste" not in request_data:
-                    data.parameters = json.dumps(request_data)
-            except TypeError:
-                pass
 
             data.save()
             if form_name == "url_form":
@@ -102,7 +95,7 @@ def data_input(request, form_classes=default_form_classes, text_file_name="test.
                     ) from None
             elif form_name == "text_form":
                 data.original_file.save(text_file_name, ContentFile(form["paste"].value()))
-            return redirect(data.get_absolute_url())
+            return redirect(reverse("explore", args=(data.pk,)))
 
     return render(request, "input.html", {"forms": forms})
 
@@ -336,14 +329,6 @@ def explore_ocds(request, pk):
             ),
         ) from None
 
-    # Update the row in the database.
-
-    # The data_schema_version column is NOT NULL.
-    supplied_data.data_schema_version = package_data.get("version") or ""
-    supplied_data.schema_version = schema_ocds.version
-    supplied_data.rendered = True  # not relevant to CoVE OCDS
-    supplied_data.save()
-
     # Finalize the context.
 
     validation_errors_grouped = defaultdict(list)
@@ -357,15 +342,14 @@ def explore_ocds(request, pk):
                 key = "other"
         validation_errors_grouped[key].append((error_json, values))
 
-    context["data_schema_version"] = json.dumps(package_data.get("version"))
     context["validation_errors_grouped"] = validation_errors_grouped
 
     for key in ("additional_closed_codelist_values", "additional_open_codelist_values"):
         for additional_codelist_values in context[key].values():
             if additional_codelist_values["codelist_url"].startswith(schema_ocds.codelists):
                 additional_codelist_values["codelist_url"] = (
-                    f"https://standard.open-contracting.org/{supplied_data.data_schema_version}/en/schema/codelists/#"
-                    + re.sub(r"([A-Z])", r"-\1", additional_codelist_values["codelist"].split(".")[0]).lower()
+                    f"https://standard.open-contracting.org/{schema_ocds.version}/en/schema/codelists/#"
+                    + re.sub(r"([A-Z])", r"-\1", additional_codelist_values["codelist"].split(".", 1)[0]).lower()
                 )
 
     if "version" in package_data:

@@ -7,6 +7,7 @@ import pytest
 from django.conf import settings
 from django.core.files.base import ContentFile
 from django.core.files.uploadedfile import UploadedFile
+from django.urls import reverse
 from libcoveocds.api import ocds_json_output
 from libcoveocds.exceptions import OCDSVersionError
 from libcoveocds.schema import SchemaOCDS
@@ -185,7 +186,7 @@ def test_get_schema_deprecated_paths():
 def test_explore_page(client, json_data, status_code):
     data = SuppliedData.objects.create()
     data.original_file.save("test.json", ContentFile(json_data))
-    resp = client.get(data.get_absolute_url())
+    resp = client.get(reverse("explore", args=(data.pk,)))
     assert resp.status_code == status_code
 
 
@@ -193,7 +194,7 @@ def test_explore_page(client, json_data, status_code):
 def test_explore_page_csv(client):
     data = SuppliedData.objects.create()
     data.original_file.save("test.csv", ContentFile("a,b"))
-    resp = client.get(data.get_absolute_url())
+    resp = client.get(reverse("explore", args=(data.pk,)))
     assert resp.status_code == 200
     assert resp.context["conversion"] == "unflatten"
     assert resp.context["converted_file_size"] == 22
@@ -204,7 +205,7 @@ def test_explore_not_json(client):
     data = SuppliedData.objects.create()
     with open(os.path.join("tests", "fixtures", "tenders_releases_2_releases_not_json.json")) as fp:
         data.original_file.save("test.json", UploadedFile(fp))
-    resp = client.get(data.get_absolute_url())
+    resp = client.get(reverse("explore", args=(data.pk,)))
     assert resp.status_code == 422
     assert b"not well formed JSON" in resp.content
 
@@ -214,7 +215,7 @@ def test_explore_unconvertable_spreadsheet(client):
     data = SuppliedData.objects.create()
     with open(os.path.join("tests", "fixtures", "bad.xlsx"), "rb") as fp:
         data.original_file.save("basic.xlsx", UploadedFile(fp))
-    resp = client.get(data.get_absolute_url())
+    resp = client.get(reverse("explore", args=(data.pk,)))
     assert resp.status_code == 422
     assert b"We think you tried to supply a spreadsheet, but we failed to convert it." in resp.content
 
@@ -223,7 +224,7 @@ def test_explore_unconvertable_spreadsheet(client):
 def test_explore_page_null_tag(client):
     data = SuppliedData.objects.create()
     data.original_file.save("test.json", ContentFile('{"releases":[{"tag":null}]}'))
-    resp = client.get(data.get_absolute_url())
+    resp = client.get(reverse("explore", args=(data.pk,)))
     assert resp.status_code == 200
 
 
@@ -231,7 +232,7 @@ def test_explore_page_null_tag(client):
 def test_explore_page_null_version(client):
     data = SuppliedData.objects.create()
     data.original_file.save("test.json", ContentFile('{"version":null,"releases":[{}]}'))
-    resp = client.get(data.get_absolute_url())
+    resp = client.get(reverse("explore", args=(data.pk,)))
     assert resp.status_code == 200
     assert b"<strong>null</strong> which is not recognised" in resp.content
 
@@ -241,7 +242,7 @@ def test_explore_page_expired_file(client):
     data = SuppliedData.objects.create()
     data.original_file.save("test.json", ContentFile('{"releases":[{}]}'))
     shutil.rmtree(data.upload_dir())
-    resp = client.get(data.get_absolute_url())
+    resp = client.get(reverse("explore", args=(data.pk,)))
     assert resp.status_code == 404
     assert b"automatically deleted after" in resp.content
 
@@ -259,7 +260,7 @@ def test_explore_schema_version(client, json_data):
     data = SuppliedData.objects.create()
     data.original_file.save("test.json", ContentFile(json_data))
 
-    resp = client.get(data.get_absolute_url())
+    resp = client.get(reverse("explore", args=(data.pk,)))
     assert resp.status_code == 200
     if "version" not in json_data:
         assert "/1.1/" in resp.context["schema_url"]
@@ -275,23 +276,9 @@ def test_explore_schema_version(client, json_data):
 def test_wrong_schema_version_in_data(client):
     data = SuppliedData.objects.create()
     data.original_file.save("test.json", ContentFile('{"version": "1.bad", "releases": [{"ocid": "xx"}]}'))
-    resp = client.get(data.get_absolute_url())
+    resp = client.get(reverse("explore", args=(data.pk,)))
     assert resp.status_code == 200
     assert resp.context["version_used"] == OCDS_DEFAULT_SCHEMA_VERSION
-
-
-@pytest.mark.django_db
-def test_data_supplied_schema_version(client):
-    data = SuppliedData.objects.create()
-    with open(os.path.join("tests", "fixtures", "tenders_releases_2_releases.xlsx"), "rb") as fp:
-        data.original_file.save("test.xlsx", UploadedFile(fp))
-
-    assert data.schema_version == ""
-
-    resp = client.post(data.get_absolute_url())
-    assert resp.status_code == 200
-    assert resp.context["version_used"] == "1.1"
-    assert SuppliedData.objects.get(id=data.id).schema_version == "1.1"
 
 
 def test_get_additional_codelist_values():
@@ -448,7 +435,7 @@ def test_codelist_url_ocds_codelists(client):
         user_data = fp.read()
     data = SuppliedData.objects.create()
     data.original_file.save("test.json", ContentFile(user_data))
-    resp = client.get(data.get_absolute_url())
+    resp = client.get(reverse("explore", args=(data.pk,)))
 
     assert resp.status_code == 200
     assert len(resp.context["additional_closed_codelist_values"]) == 1
@@ -474,7 +461,7 @@ def test_codelist_url_extension_codelists(client):
         user_data = fp.read()
     data = SuppliedData.objects.create()
     data.original_file.save("test.json", ContentFile(user_data))
-    resp = client.get(data.get_absolute_url())
+    resp = client.get(reverse("explore", args=(data.pk,)))
 
     assert resp.status_code == 200
     assert len(resp.context["additional_closed_codelist_values"]) == 1
