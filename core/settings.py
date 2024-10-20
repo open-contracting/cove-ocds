@@ -49,8 +49,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "bootstrap3",
-    "cove",
-    "cove.input",
     "cove_ocds",
 ]
 
@@ -64,7 +62,7 @@ MIDDLEWARE = (
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "cove.middleware.CoveConfigCurrentApp",
+    "cove_ocds.middleware.ExceptionMiddleware",
 )
 
 ROOT_URLCONF = "core.urls"
@@ -81,7 +79,6 @@ TEMPLATES = [
                 "django.template.context_processors.i18n",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "cove.context_processors.from_settings",
                 "core.context_processors.from_settings",
             ],
         },
@@ -232,14 +229,6 @@ if "SENTRY_DSN" in os.environ:
     )
 
 COVE_CONFIG = {
-    # lib-cove-web options
-    "app_name": "cove_ocds",
-    "app_base_template": "cove_ocds/base.html",
-    "app_verbose_name": "Open Contracting Data Review Tool",
-    "app_strapline": "Review your OCDS data.",
-    "input_methods": ["upload", "url", "text"],
-    "input_template": "cove_ocds/input.html",
-    "support_email": "data@open-contracting.org",
     # SchemaOCDS options (add {lang} to the path)
     "schema_version_choices": {
         # version: (display, url, tag),
@@ -250,10 +239,6 @@ COVE_CONFIG = {
 # Set default schema version to the latest version.
 COVE_CONFIG["schema_version"] = list(COVE_CONFIG["schema_version_choices"])[-1]
 
-DELETE_FILES_AFTER_DAYS = int(os.getenv("DELETE_FILES_AFTER_DAYS", "90"))  # default 7
-REQUESTS_TIMEOUT = int(os.getenv("REQUESTS_TIMEOUT", "10"))  # default None
-VALIDATION_ERROR_LOCATIONS_LENGTH = int(os.getenv("VALIDATION_ERROR_LOCATIONS_LENGTH", "100"))  # default 1000
-
 
 # Project configuration
 
@@ -261,11 +246,10 @@ FATHOM = {
     "domain": os.getenv("FATHOM_ANALYTICS_DOMAIN") or "cdn.usefathom.com",
     "id": os.getenv("FATHOM_ANALYTICS_ID"),
 }
-
-HOTJAR = {
-    "id": os.getenv("HOTJAR_ID", ""),
-    "sv": os.getenv("HOTJAR_SV", ""),
-    "date_info": os.getenv("HOTJAR_DATE_INFO", ""),
-}
-
-RELEASES_OR_RECORDS_TABLE_LENGTH = int(os.getenv("RELEASES_OR_RECORDS_TABLE_LENGTH", "25"))
+DELETE_FILES_AFTER_DAYS = int(os.getenv("DELETE_FILES_AFTER_DAYS", "90"))
+REQUESTS_TIMEOUT = int(os.getenv("REQUESTS_TIMEOUT", "10"))
+SUPPORT_EMAIL = "data@open-contracting.org"
+VALIDATION_ERROR_LOCATIONS_LENGTH = int(os.getenv("VALIDATION_ERROR_LOCATIONS_LENGTH", "100"))
+USER_AGENT = os.getenv(
+    "USER_AGENT", "DataReviewTool/1.0 (+https://review.standard.open-contracting.org; data@open-contracting.org)"
+)

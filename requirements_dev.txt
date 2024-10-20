@@ -62,11 +62,8 @@ django==4.2.16
     # via
     #   -r requirements.txt
     #   django-bootstrap3
-    #   libcoveweb
 django-bootstrap3==24.2
-    # via
-    #   -r requirements.txt
-    #   libcoveweb
+    # via -r requirements.txt
 et-xmlfile==1.1.0
     # via
     #   -r requirements.txt
@@ -78,7 +75,6 @@ flattentool==0.26.0
     #   -r requirements.txt
     #   -r requirements_dev.in
     #   libcove
-    #   libcoveweb
 gunicorn==23.0.0
     # via -r requirements.txt
 h11==0.14.0
@@ -120,10 +116,7 @@ libcove==0.32.1
     # via
     #   -r requirements.txt
     #   libcoveocds
-    #   libcoveweb
 libcoveocds==0.17.0
-    # via -r requirements.txt
-libcoveweb==0.31.0
     # via -r requirements.txt
 libsass==0.20.1
     # via -r requirements_dev.in
@@ -134,9 +127,7 @@ lxml==4.9.1
 markdown-it-py==2.2.0
     # via -r requirements.txt
 markupsafe==2.1.2
-    # via
-    #   -r requirements.txt
-    #   werkzeug
+    # via werkzeug
 mdurl==0.1.2
     # via
     #   -r requirements.txt
@@ -204,7 +195,6 @@ requests==2.32.3
     #   -r requirements_dev.in
     #   libcove
     #   libcoveocds
-    #   libcoveweb
     #   ocdsextensionregistry
     #   requests-cache
 requests-cache==1.1.0
@@ -284,10 +274,7 @@ webencodings==0.5.1
     #   -r requirements.txt
     #   bleach
 werkzeug==3.0.3
-    # via
-    #   -r requirements.txt
-    #   libcoveweb
-    #   pytest-localserver
+    # via pytest-localserver
 wsproto==1.2.0
     # via trio-websocket
 xmltodict==0.12.0

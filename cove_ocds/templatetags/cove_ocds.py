@@ -1,7 +1,13 @@
-from cove.html_error_msg import html_error_msg, json_repr
-from cove.templatetags.cove_tags import register  # as such, `load cove_ocds` implicitly calls `load cove_tags`
+import json
+
+from django import template
+from django.conf import settings
 from django.utils.html import mark_safe
 from django.utils.translation import gettext as _
+
+from cove_ocds.html_error_msg import html_error_msg, json_repr
+
+register = template.Library()
 
 
 @register.filter(name="html_error_msg")
@@ -32,3 +38,37 @@ def html_error_msg_ocds(error):
         )
 
     return html_error_msg(error)
+
+
+# https://github.com/OpenDataServices/lib-cove-web/blob/main/cove/templatetags/cove_tags.py
+
+
+@register.inclusion_tag("modal_errors.html")
+def cove_modal_errors(**context):
+    context["validation_error_locations_length"] = settings.VALIDATION_ERROR_LOCATIONS_LENGTH
+    return context
+
+
+@register.filter
+def json_decode(error_json):
+    return json.loads(error_json)
+
+
+@register.filter
+def concat(arg1, arg2):
+    return str(arg1) + str(arg2)
+
+
+@register.filter
+def subtract(value, arg):
+    return value - arg
+
+
+@register.filter
+def take_or_sample(population, k):
+    return population[:k]
+
+
+@register.filter
+def list_from_attribute(list_of_dicts, key_name):
+    return [value[key_name] for value in list_of_dicts]

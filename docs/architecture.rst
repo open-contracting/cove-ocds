@@ -28,24 +28,21 @@ External libraries
 The OCDS Data Review Tool is just one manifestation of software historically known as 'CoVE' (Convert, Validate, Explore). Instances of CoVE exist for other standards as well as OCDS. We modularize and reuse code where possible, so as a result the DRT has dependencies on external libraries related to CoVE:
 
 * lib-cove (`opendataservices/lib-cove <https://github.com/opendataservices/lib-cove>`_): contains functions and helpers that may be useful for data validation and review, regardless of the particular data standard.
-* lib-cove-web (`opendataservices/lib-cove-web <https://github.com/opendataservices/lib-cove-web>`_): provides a barebones Django configuration, and baseline CSS, JS and templates that are common for all CoVE instances. It is also a place for common functions relating to presentation or display of data or output. Any templates edited here typically affect all CoVE instances. Sometimes this is useful, but for OCDS-only changes, templates can be overridden in cove-ocds. This and cove-ocds are the only places where frontend output and translatable strings should be.
 
 Configuration
 -------------
 
 Some configuration variables are set in ``COVE_CONFIG``, found in ``core/settings.py``.
 
-* ``app_name``, ``app_verbose_name``, ``app_strapline``, ``support_email``: set human readable strings for the DRT that can be reused in templates etc.
-* ``app_base_template``, ``input_template``, ``input_methods``: set the templates for the landing page.
 * ``schema_version_choices`` (``version: (display, url, tag)``), ``schema_codelists``: point to JSON schema files that the DRT uses for validating data. Since there is more than one version of the Open Contracting Data Standard, this lets the user choose which version of the scheme they are validating against.
 
 Path through the code
 ---------------------
 
-1. The input form on the landing page can be found in the ``input`` template (``cove_ocds/templates``). The OCDS DRT overrides the default input template from lib-cove-web so it can be customized compared to other instances of CoVE. This override is set using the ``input_template`` setting in ``COVE_CONFIG`` (see above).
+1. The input form on the landing page can be found in the ``input`` template (``cove_ocds/templates``).
 2. Submitting the form calls the `explore_ocds` function (``cove_ocds/views.py``).
 
-  * This checks for basic problems with the input file, and adds metadata, using ``explore_data_context`` from lib-cove-web.
+  * This checks for basic problems with the input file, and adds metadata.
   * It then performs OCDS specific JSON checks, if the input data is JSON.
   * And then schema-specific OCDS checks, depending on the version specified, using ``SchemaOCDS`` and ``common_checks`` from lib-cove-ocds. Functions from lib-cove-ocds also takes care of handling any extension data included in the input. lib-cove-ocds calls on lib-cove to perform schema validation that is not specific to OCDS, using JSON Schema and JSONRef, as well as common things like checking for duplicate identifiers.
   * lib-cove-ocds runs additional checks, which are basic data quality checks outside of the OCDS schema.

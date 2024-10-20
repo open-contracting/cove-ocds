@@ -25,7 +25,7 @@ Add tests for the new function in ``tests/test_additional_checks.py`` and any fi
 Changes to ``cove-ocds``
 ------------------------
 
-The templates need updating to display the results of your additional checks. It's likely that the only file you need to modify is ``templates/cove_ocds/additional_checks_table.html``. 
+The templates need updating to display the results of your additional checks. It's likely that the only file you need to modify is ``templates/validation_table.html``.
 
 Add a clause for your new check using ``{% if type == 'sample_check' %}`` (where ``sample_check`` is the ``type`` you set in the output) and then display the results how you see fit. You can integrate them into the existing additional checks table, or output them some other way if that makes more sense. Iterate through the output you set, eg:
 

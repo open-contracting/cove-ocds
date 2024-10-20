@@ -4,5 +4,4 @@ flattentool
 gunicorn[setproctitle]
 libcove
 libcoveocds[perf,web]
-libcoveweb
 sentry-sdk

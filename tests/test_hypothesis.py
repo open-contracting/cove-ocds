@@ -1,10 +1,11 @@
 import json
 
 import pytest
-from cove.input.models import SuppliedData
 from django.core.files.base import ContentFile
 from hypothesis import HealthCheck, example, given, settings
 from hypothesis import strategies as st
+
+from cove_ocds.models import SuppliedData
 
 """
 ## Suggested testing patterns (from CamPUG talk)
@@ -22,27 +23,23 @@ general_json = st.recursive(
 
 @pytest.mark.xfail
 @pytest.mark.django_db
-@pytest.mark.parametrize("current_app", ["cove-ocds"])
 @given(
     general_json | st.fixed_dictionaries({"releases": general_json}) | st.fixed_dictionaries({"records": general_json})
 )
-def test_explore_page(client, current_app, json_data):
+def test_explore_page(client, json_data):
     data = SuppliedData.objects.create()
     data.original_file.save("test.json", ContentFile(json.dumps(json_data)))
-    data.current_app = current_app
     resp = client.get(data.get_absolute_url())
     assert resp.status_code == 200
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize("current_app", ["cove-ocds"])
 @given(general_json)
 @example(1)
 @settings(max_examples=50, deadline=None, suppress_health_check=[HealthCheck.function_scoped_fixture])
-def test_explore_page_duplicate_ids(client, current_app, json_data):
+def test_explore_page_duplicate_ids(client, json_data):
     duplicate_id_releases = {"releases": [{"id": json_data}, {"id": json_data}]}
     data = SuppliedData.objects.create()
     data.original_file.save("test.json", ContentFile(json.dumps(duplicate_id_releases)))
-    data.current_app = current_app
     resp = client.get(data.get_absolute_url())
     assert resp.status_code == 200

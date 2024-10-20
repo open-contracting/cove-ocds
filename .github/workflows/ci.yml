@@ -15,7 +15,6 @@ jobs:
       # Check requirements.txt contains production requirements.
       - run: ./manage.py --help
       - run: pip install -r requirements_dev.txt
-      # Compile messages, so that lib-cove-web translations are available.
       - name: Install gettext
         run: |
           sudo apt update

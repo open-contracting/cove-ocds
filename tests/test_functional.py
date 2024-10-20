@@ -93,12 +93,6 @@ def test_common_index_elements(server_url, browser):
     assert "360 Giving" not in browser.find_element(By.TAG_NAME, "body").text
 
 
-def test_terms_page(server_url, browser):
-    browser.get(f"{server_url}/terms/")
-
-    assert "Open Contracting Partnership" in browser.find_element(By.TAG_NAME, "body").text
-
-
 def test_accordion(server_url, browser):
     browser.get(server_url)
 
@@ -127,18 +121,6 @@ def test_accordion(server_url, browser):
     browser.find_element(By.ID, "headingThree").click()
     time.sleep(0.5)
     assert buttons() == [False, False, True]
-
-
-def test_500_error(server_url, browser):
-    browser.get(f"{server_url}/test/500")
-    # Check that our nice error message is there
-    assert "Something went wrong" in browser.find_element(By.TAG_NAME, "body").text
-    # Check for the exclamation icon
-    # This helps to check that the theme including the css has been loaded
-    # properly
-    icon_span = browser.find_element(By.CLASS_NAME, "panel-danger").find_element(By.TAG_NAME, "span")
-    assert "Glyphicons Halflings" in icon_span.value_of_css_property("font-family")
-    assert icon_span.value_of_css_property("color") == "rgba(255, 255, 255, 1)"
 
 
 @pytest.mark.parametrize(
@@ -907,7 +889,7 @@ def test_error_list_999_lines(skip_if_remote, url_input_browser):
 
 
 @override_settings(VALIDATION_ERROR_LOCATIONS_LENGTH=1000)
-def test_error_list_1000_lines_sample(skip_if_remote, settings_error_locations_sample, url_input_browser):
+def test_error_list_1000_lines_sample(skip_if_remote, url_input_browser):
     """
     Check that when there are more than 1000 error locations, only 1001 are
     shown in the table, and there is a message.
@@ -917,13 +899,13 @@ def test_error_list_1000_lines_sample(skip_if_remote, settings_error_locations_s
     assert "1001" in browser.find_element(By.TAG_NAME, "body").text
     browser.find_element(By.LINK_TEXT, "1001").click()
     modal_body = browser.find_element(By.CSS_SELECTOR, ".modal-body")
-    assert "random 1000 locations for this error" in modal_body.text
+    assert "first 1000 locations for this error" in modal_body.text
     table_rows = modal_body.find_elements(By.CSS_SELECTOR, "table tbody tr")
     assert len(table_rows) == 1000
 
 
 @override_settings(VALIDATION_ERROR_LOCATIONS_LENGTH=1000)
-def test_error_list_999_lines_sample(skip_if_remote, settings_error_locations_sample, url_input_browser):
+def test_error_list_999_lines_sample(skip_if_remote, url_input_browser):
     """
     Check that when there are less than 1000 error locations, they are all shown
     in the table, and there is no message.

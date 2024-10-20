@@ -3,32 +3,160 @@ import logging
 import re
 import warnings
 from collections import defaultdict
+from http import HTTPStatus
 
-from cove.views import cove_web_input_error, explore_data_context
+import requests
 from django.conf import settings
-from django.shortcuts import render
+from django.core.exceptions import ValidationError
+from django.core.files.base import ContentFile
+from django.shortcuts import redirect, render
 from django.utils import translation
-from django.utils.html import format_html
+from django.utils.html import format_html, mark_safe
 from django.utils.translation import gettext as _
+from django.views.decorators.csrf import csrf_protect
 from flattentool.exceptions import FlattenToolValueError, FlattenToolWarning
 from libcove.lib.common import get_spreadsheet_meta_data
 from libcove.lib.converters import convert_spreadsheet
-from libcove.lib.exceptions import CoveInputDataError
+from libcove.lib.exceptions import UnrecognisedFileType
+from libcove.lib.tools import get_file_type
 from libcoveocds.common_checks import common_checks_ocds
 from libcoveocds.config import LibCoveOCDSConfig
 from libcoveocds.schema import SchemaOCDS
 
-from cove_ocds import util
+from cove_ocds import forms, models, util
+from cove_ocds.exceptions import InputError
 
 logger = logging.getLogger(__name__)
-MAXIMUM_RELEASES_OR_RECORDS = 100
 
 
-@cove_web_input_error
+default_form_classes = {
+    "upload_form": forms.UploadForm,
+    "url_form": forms.UrlForm,
+    "text_form": forms.TextForm,
+}
+
+
+@csrf_protect
+def data_input(request, form_classes=default_form_classes, text_file_name="test.json"):
+    forms = {form_name: form_class() for form_name, form_class in form_classes.items()}
+    request_data = None
+    if "source_url" in request.GET and settings.COVE_CONFIG.get("allow_direct_web_fetch", False):
+        request_data = request.GET
+    if request.POST:
+        request_data = request.POST
+    if request_data:
+        if "source_url" in request_data:
+            form_name = "url_form"
+        elif "paste" in request_data:
+            form_name = "text_form"
+        else:
+            form_name = "upload_form"
+        form = form_classes[form_name](request_data, request.FILES)
+        forms[form_name] = form
+        if form.is_valid():
+            data = models.SuppliedData() if form_name == "text_form" else form.save(commit=False)
+            data.form_name = form_name
+
+            try:
+                # We don't want to store large chunks of pasted data that might be in the request data.
+                if "paste" not in request_data:
+                    data.parameters = json.dumps(request_data)
+            except TypeError:
+                pass
+
+            data.save()
+            if form_name == "url_form":
+                try:
+                    data.download()
+                except requests.exceptions.InvalidURL as err:
+                    raise InputError(
+                        status=HTTPStatus.UNPROCESSABLE_ENTITY,
+                        heading=_("The provided URL is invalid"),
+                        message=str(err),
+                    ) from None
+                except requests.Timeout as err:
+                    raise InputError(
+                        status=HTTPStatus.GATEWAY_TIMEOUT,
+                        heading=_("The provided URL timed out after %(timeout)s seconds") % settings.REQUESTS_TIMEOUT,
+                        message=str(err),
+                    ) from None
+                except requests.ConnectionError as err:
+                    raise InputError(
+                        status=HTTPStatus.GATEWAY_TIMEOUT,
+                        heading=_("The provided URL did not respond"),
+                        message=f"{err}\n\n"
+                        + _(
+                            "Check that your URL is accepting web requests: that is, it is not on localhost, is not "
+                            "in an intranet, does not have SSL/TLS errors, and does not block user agents."
+                        ),
+                    ) from None
+                except requests.HTTPError as err:
+                    raise InputError(
+                        status=HTTPStatus.BAD_GATEWAY,
+                        heading=_("The provided URL responded with an error"),
+                        message=f"{err}\n\n"
+                        + _(
+                            "Check that your URL is responding to web requests: that is, it does not require "
+                            "authentication, and does not block user agents."
+                        ),
+                    ) from None
+            elif form_name == "text_form":
+                data.original_file.save(text_file_name, ContentFile(form["paste"].value()))
+            return redirect(data.get_absolute_url())
+
+    return render(request, "input.html", {"forms": forms})
+
+
 def explore_ocds(request, pk):
-    context, supplied_data, error = explore_data_context(request, pk)
-    if error:
-        return error
+    try:
+        supplied_data = models.SuppliedData.objects.get(pk=pk)
+    except (
+        models.SuppliedData.DoesNotExist,
+        ValidationError,
+    ):  # Catches primary key does not exist and badly formed UUID
+        raise InputError(
+            status=HTTPStatus.NOT_FOUND,
+            heading=_("Sorry, the page you are looking for is not available"),
+            message=_("We don't seem to be able to find the data you requested."),
+        ) from None
+
+    try:
+        if supplied_data.original_file.path.endswith("validation_errors-3.json"):
+            raise InputError(
+                status=HTTPStatus.UNPROCESSABLE_ENTITY,
+                heading=_("You are not allowed to upload a file with this name."),
+                message=_("Rename the file or change the URL and try again."),
+            ) from None
+
+        try:
+            file_type = get_file_type(supplied_data.original_file)
+        except UnrecognisedFileType:
+            raise InputError(
+                status=HTTPStatus.UNPROCESSABLE_ENTITY,
+                heading=_("Sorry, we can't process that data"),
+                message=_("We did not recognise the file type.\n\nWe can only process json, csv, ods and xlsx files."),
+            ) from None
+
+        context = {
+            "original_file_url": supplied_data.original_file.url,
+            "original_file_size": supplied_data.original_file.size,
+            "file_type": file_type,
+            "current_url": request.build_absolute_uri(),
+            "source_url": supplied_data.source_url,
+            "created_datetime": supplied_data.created.strftime("%A, %d %B %Y %I:%M%p %Z"),
+            "support_email": settings.SUPPORT_EMAIL,
+        }
+    except FileNotFoundError:
+        raise InputError(
+            status=HTTPStatus.NOT_FOUND,
+            heading=_("Sorry, the page you are looking for is not available"),
+            message=_(
+                "The data you were hoping to explore no longer exists.\n\nThis is because all "
+                "data supplied to this website is automatically deleted after %s days, and therefore "
+                "the analysis of that data is no longer available."
+            )
+            % getattr(settings, "DELETE_FILES_AFTER_DAYS", 7),
+        ) from None
 
     # Initialize the CoVE configuration.
 
@@ -43,23 +171,71 @@ def explore_ocds(request, pk):
     # Read the supplied data.
 
     if context["file_type"] == "json":
-        package_data = util.read_json(supplied_data.original_file.path)
+        # Read as text, because the json module can read binary UTF-16 and UTF-32.
+        with open(supplied_data.original_file.path, encoding="utf-8") as f:
+            try:
+                package_data = json.load(f)
+            except UnicodeError as err:
+                raise InputError(
+                    status=HTTPStatus.UNPROCESSABLE_ENTITY,
+                    heading=_("Sorry, we can't process that data"),
+                    message=format_html(
+                        _(
+                            "The file that you uploaded doesn't appear to be well formed JSON. OCDS JSON follows the "
+                            "I-JSON format, which requires UTF-8 encoding. Ensure that your file uses UTF-8 encoding, "
+                            "then try uploading again.\n\n"
+                            '<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> <strong>'
+                            "Error message:</strong> {}"
+                        ),
+                        err,
+                    ),
+                ) from None
+            except ValueError as err:
+                raise InputError(
+                    status=HTTPStatus.UNPROCESSABLE_ENTITY,
+                    heading=_("Sorry, we can't process that data"),
+                    message=format_html(
+                        _(
+                            "We think you tried to upload a JSON file, but it is not well formed JSON.\n\n"
+                            '<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> <strong>'
+                            "Error message:</strong> {}"
+                        ),
+                        err,
+                    ),
+                ) from None
+
+        if not isinstance(package_data, dict):
+            raise InputError(
+                status=HTTPStatus.UNPROCESSABLE_ENTITY,
+                heading=_("Sorry, we can't process that data"),
+                message=_("OCDS JSON should have an object as the top level, the JSON you supplied does not."),
+            ) from None
 
         schema_ocds = util.get_schema(lib_cove_ocds_config, package_data)
     else:
         with warnings.catch_warnings():
             warnings.filterwarnings("ignore", category=FlattenToolWarning)
 
-            meta_data = get_spreadsheet_meta_data(
-                supplied_data.upload_dir(),
-                supplied_data.original_file.path,
-                SchemaOCDS(select_version="1.1", lib_cove_ocds_config=lib_cove_ocds_config).pkg_schema_url,
-                context["file_type"],
-            )
+            try:
+                meta_data = get_spreadsheet_meta_data(
+                    supplied_data.upload_dir(),
+                    supplied_data.original_file.path,
+                    SchemaOCDS(select_version="1.1", lib_cove_ocds_config=lib_cove_ocds_config).pkg_schema_url,
+                    context["file_type"],
+                )
+            except Exception as err:
+                logger.exception("", extra={"request": request})
+                raise InputError(
+                    status=HTTPStatus.UNPROCESSABLE_ENTITY,
+                    heading=_("Sorry, we can't process that data"),
+                    message=_(
+                        "We think you tried to supply a spreadsheet, but we failed to convert it."
+                        "\n\nError message: %(error)r"
+                    )
+                    % {"error": err},
+                ) from None
 
         meta_data.setdefault("version", "1.1")
-        # Make "missing_package" pass.
-        meta_data["releases"] = {}
 
         schema_ocds = util.get_schema(lib_cove_ocds_config, meta_data)
 
@@ -92,30 +268,53 @@ def explore_ocds(request, pk):
                     )
                 )
             except FlattenToolValueError as err:
-                raise CoveInputDataError(
-                    context={
-                        "sub_title": _("Sorry, we can't process that data"),
-                        "link": "index",
-                        "link_text": _("Try Again"),
-                        "error": format(err),
-                        "msg": format_html(
-                            _(
-                                "The table isn't structured correctly. For example, a JSON Pointer (<code>tender"
-                                "</code>) can't be both a value (<code>tender</code>), a path to an object (<code>"
-                                "tender/id</code>) and a path to an array (<code>tender/0/title</code>).\n\n"
-                                '<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> '
-                                "<strong>Error message:</strong> {}",
-                            ),
-                            err,
+                raise InputError(
+                    status=HTTPStatus.UNPROCESSABLE_ENTITY,
+                    heading=_("Sorry, we can't process that data"),
+                    message=format_html(
+                        _(
+                            "The table isn't structured correctly. For example, a JSON Pointer (<code>tender"
+                            "</code>) can't be both a value (<code>tender</code>), a path to an object (<code>"
+                            "tender/id</code>) and a path to an array (<code>tender/0/title</code>).\n\n"
+                            '<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> '
+                            "<strong>Error message:</strong> {}",
                         ),
-                    }
+                        err,
+                    ),
                 ) from None
             except Exception as err:
                 logger.exception("", extra={"request": request})
-                raise CoveInputDataError(wrapped_err=err) from None
+                raise InputError(
+                    status=HTTPStatus.UNPROCESSABLE_ENTITY,
+                    heading=_("Sorry, we can't process that data"),
+                    message=_(
+                        "We think you tried to supply a spreadsheet, but we failed to convert it."
+                        "\n\nError message: %(error)r"
+                    )
+                    % {"error": err},
+                ) from None
 
         with open(context["converted_path"], "rb") as f:
             package_data = json.load(f)
+
+    if "releases" not in package_data and "records" not in package_data:
+        raise InputError(
+            status=HTTPStatus.UNPROCESSABLE_ENTITY,
+            heading=_("Missing OCDS package"),
+            message=mark_safe(
+                _(
+                    "We could not detect a package structure at the top-level of your data. OCDS releases and "
+                    'records should be published within a <a href="https://standard.open-contracting.org/latest/en'
+                    '/schema/release_package/">release package </a> or <a href="https://standard.open-contracting.'
+                    'org/latest/en/schema/record_package/"> record package</a> to provide important meta-data. '
+                    'For more information, please refer to the <a href="https://standard.open-contracting.org/'
+                    'latest/en/primer/releases_and_records/"> Releases and Records section </a> in the OCDS '
+                    "documentation.\n\n"
+                    '<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> <strong>'
+                    "Error message:</strong> <em>Missing OCDS package</em>"
+                )
+            ),
+        ) from None
 
     # Perform the validation.
 
@@ -123,23 +322,19 @@ def explore_ocds(request, pk):
 
     # Set by SchemaOCDS.get_schema_obj(deref=True), which, at the latest, is called indirectly by common_checks_ocds().
     if schema_ocds.json_deref_error:
-        raise CoveInputDataError(
-            context={
-                "sub_title": _("JSON reference error"),
-                "link": "index",
-                "link_text": _("Try Again"),
-                "msg": _(
-                    format_html(
-                        "We have detected a JSON reference error in the schema. This <em> may be "
-                        "</em> due to some extension trying to resolve non-existing references. "
-                        '\n\n<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true">'
-                        "</span> <strong>Error message:</strong> <em>{}</em>",
-                        schema_ocds.json_deref_error,
-                    )
-                ),
-                "error": _("%(error)s") % {"error": schema_ocds.json_deref_error},
-            }
-        )
+        raise InputError(
+            status=HTTPStatus.UNPROCESSABLE_ENTITY,
+            heading=_("JSON reference error"),
+            message=_(
+                format_html(
+                    "We have detected a JSON reference error in the schema. This <em> may be "
+                    "</em> due to some extension trying to resolve non-existing references. "
+                    '\n\n<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true">'
+                    "</span> <strong>Error message:</strong> <em>{}</em>",
+                    schema_ocds.json_deref_error,
+                )
+            ),
+        ) from None
 
     # Update the row in the database.
 
@@ -180,4 +375,4 @@ def explore_ocds(request, pk):
 
     context["has_records"] = "records" in package_data
 
-    return render(request, "cove_ocds/explore_base.html", context)
+    return render(request, "explore.html", context)

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block content %}
+<div class="panel panel-danger">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> {% trans 'Internal Server Error' %}
+    </h4>
+  </div>
+  <div class="panel-body">
+    <p>{% blocktrans %}Something went wrong with your request. This could be due to a bug in the application and/or the data you supplied.{% endblocktrans %}</p>
+    <p>{% blocktrans %}This error has been automatically reported to our development team. If you <a href="mailto:{{ support_email }}?subject=Data%20Review%20Tool%20error%20{{ request.sentry.id }}">get in touch</a>, please reference this error as <strong>{{ request.sentry.id }}</strong>.{% endblocktrans %}</p>
+  </div>
+</div>
+{% endblock %}
