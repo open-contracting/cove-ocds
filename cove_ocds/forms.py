@@ -12,10 +12,11 @@ class UploadForm(forms.ModelForm):
 
 
 class UrlForm(forms.ModelForm):
+    source_url = forms.URLField(required=True, label=_("Supply a URL"))
+
     class Meta:
         model = models.SuppliedData
         fields = ["source_url"]
-        labels = {"source_url": _("Supply a URL")}
 
 
 class TextForm(forms.Form):
