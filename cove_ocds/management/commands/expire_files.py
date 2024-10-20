@@ -1,21 +1,22 @@
+import datetime
 import shutil
-from datetime import timedelta
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 
-from cove_ocds.models import SuppliedData
+from cove_ocds import models
 
 
 class Command(BaseCommand):
-    help = "Delete files that are older than 7 days"
+    help = "Delete files created DELETE_FILES_AFTER_DAYS ago"
 
     def handle(self, *args, **options):
-        old_data = SuppliedData.objects.filter(
-            created__lt=timezone.now() - timedelta(days=getattr(settings, "DELETE_FILES_AFTER_DAYS", 7))
-        )
-        for supplied_data in old_data:
+        for supplied_data in models.SuppliedData.objects.filter(
+            expired=False, created__lt=timezone.now() - datetime.timedelta(days=settings.DELETE_FILES_AFTER_DAYS)
+        ):
+            supplied_data.expired = datetime.datetime.now(tz=datetime.timezone.UTC)
+            supplied_data.save()
             try:
                 shutil.rmtree(supplied_data.upload_dir())
             except FileNotFoundError:

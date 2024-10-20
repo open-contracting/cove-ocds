@@ -35,6 +35,7 @@ class SuppliedData(models.Model):
     source_url = models.URLField(blank=True, max_length=2000)
     original_file = models.FileField(upload_to=upload_to, max_length=256)
     created = models.DateTimeField(auto_now_add=True, null=True)
+    expired = models.BooleanField(default=False)
 
     class Meta:
         db_table = "input_supplieddata"
