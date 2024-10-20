@@ -5,3 +5,4 @@ gunicorn[setproctitle]
 libcove
 libcoveocds[perf,web]
 sentry-sdk
+werkzeug

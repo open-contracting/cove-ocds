@@ -126,8 +126,10 @@ lxml==4.9.1
     #   flattentool
 markdown-it-py==2.2.0
     # via -r requirements.txt
-markupsafe==2.1.2
-    # via werkzeug
+markupsafe==3.0.2
+    # via
+    #   -r requirements.txt
+    #   werkzeug
 mdurl==0.1.2
     # via
     #   -r requirements.txt
@@ -273,8 +275,10 @@ webencodings==0.5.1
     # via
     #   -r requirements.txt
     #   bleach
-werkzeug==3.0.3
-    # via pytest-localserver
+werkzeug==3.0.4
+    # via
+    #   -r requirements.txt
+    #   pytest-localserver
 wsproto==1.2.0
     # via trio-websocket
 xmltodict==0.12.0
