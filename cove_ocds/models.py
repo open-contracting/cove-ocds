@@ -14,10 +14,10 @@ from werkzeug.http import parse_options_header
 
 CONTENT_TYPE_MAP = {
     "application/json": "json",
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "xlsx",
-    "text/csv": "csv",
     "application/vnd.oasis.opendocument.spreadsheet": "ods",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "xlsx",
     "application/xml": "xml",
+    "text/csv": "csv",
     "text/xml": "xml",
 }
 
@@ -51,7 +51,7 @@ class SuppliedData(models.Model):
 
     def download(self):
         response = requests.get(
-            self.source_url,
+            self.source_url,  # Security: Potential SSRF via user-provided URL
             headers={"User-Agent": settings.USER_AGENT},
             timeout=settings.REQUESTS_TIMEOUT,
         )
