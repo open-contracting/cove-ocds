@@ -77,7 +77,7 @@ markupsafe==3.0.2
     # via werkzeug
 mdurl==0.1.2
     # via markdown-it-py
-ocdsextensionregistry==0.4.0
+ocdsextensionregistry==0.5.0
     # via libcoveocds
 odfpy==1.4.1
     # via flattentool
