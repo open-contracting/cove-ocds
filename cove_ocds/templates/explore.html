@@ -146,7 +146,13 @@
       </h4>
     </div>
     <div class="panel-body">
-      <p>{% blocktrans %}Your data contains the following schema extensions{% endblocktrans %}{% if not extensions.is_extended_schema %}{% blocktrans %}, but it wasn't possible to fetch them{% endblocktrans %}{% endif %}:</p>
+      <p>
+        {% if extensions.is_extended_schema %}
+          {% blocktrans %}Your data contains the following schema extensions:{% endblocktrans %}
+        {% else %}
+          {% blocktrans %}Your data contains the following schema extensions, but it wasn't possible to fetch them:{% endblocktrans %}
+        {% endif %}
+      </p>
       <ul>
         {% for ext_descriptor_url, ext_details in ext.items %}
           {% if ext_details %}

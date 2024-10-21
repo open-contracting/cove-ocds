@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-21 05:37+0000\n"
+"POT-Creation-Date: 2024-10-21 14:17+0000\n"
 "PO-Revision-Date: 2020-09-08 08:53+0000\n"
 "Last-Translator: James McKinney, 2024\n"
 "Language-Team: Spanish (https://app.transifex.com/open-contracting-"
@@ -286,19 +286,18 @@ msgid ""
 msgstr ""
 "Nuestro equipo de desarrollo ha sido informado de este error de forma "
 "automática. Si usted <a href=\"mailto:%(support_email)s?"
-"subject=Data%%20Review%%20Tool%%20error%%20%(sentry)s\">póngase "
-"en contacto</a>,por favor haga referencia a este error como "
-"<strong>%(sentry)s</strong>."
+"subject=Data%%20Review%%20Tool%%20error%%20%(sentry)s\">póngase en contacto</"
+"a>,por favor haga referencia a este error como <strong>%(sentry)s</strong>."
 
 #: cove_ocds/templates/additional_codelist_values.html:7
-#: cove_ocds/templates/explore.html:401 cove_ocds/templates/explore.html:447
-#: cove_ocds/templates/explore.html:560
+#: cove_ocds/templates/explore.html:407 cove_ocds/templates/explore.html:453
+#: cove_ocds/templates/explore.html:566
 msgid "Field"
 msgstr "Campo"
 
 #: cove_ocds/templates/additional_codelist_values.html:8
-#: cove_ocds/templates/explore.html:402 cove_ocds/templates/explore.html:448
-#: cove_ocds/templates/explore.html:562
+#: cove_ocds/templates/explore.html:408 cove_ocds/templates/explore.html:454
+#: cove_ocds/templates/explore.html:568
 msgid "Path to Field"
 msgstr "Ruta al Campo"
 
@@ -311,8 +310,8 @@ msgid "Additional Values Used"
 msgstr "Valores Adicionales Usados"
 
 #: cove_ocds/templates/base.html:31
-msgid " Data <span> Review </span> Tool"
-msgstr "Herramienta de  <span> revisión </span> de datos"
+msgid "Data <span>Review</span> Tool"
+msgstr "Herramienta de <span>revisión</span> de datos"
 
 #: cove_ocds/templates/base.html:53
 msgid "Go"
@@ -541,38 +540,42 @@ msgstr ""
 msgid "Schema Extensions"
 msgstr "Extensiones del Esquema"
 
-#: cove_ocds/templates/explore.html:149
-msgid "Your data contains the following schema extensions"
-msgstr "Los datos contienen las siguientes extensiones de esquema"
+#: cove_ocds/templates/explore.html:151
+msgid "Your data contains the following schema extensions:"
+msgstr "Los datos contienen las siguientes extensiones de esquema:"
 
-#: cove_ocds/templates/explore.html:149
-msgid ", but it wasn't possible to fetch them"
-msgstr ", pero no fue posible recuperarlos "
+#: cove_ocds/templates/explore.html:153
+msgid ""
+"Your data contains the following schema extensions, but it wasn't possible "
+"to fetch them:"
+msgstr ""
+"Los datos contienen las siguientes extensiones de esquema, pero no fue "
+"posible recuperarlos:"
 
-#: cove_ocds/templates/explore.html:155
+#: cove_ocds/templates/explore.html:161
 msgid "release schema"
 msgstr "esquema de entrega"
 
-#: cove_ocds/templates/explore.html:172
+#: cove_ocds/templates/explore.html:178
 msgid "The following extensions failed:"
 msgstr "Las siguientes extensiones fallaron:"
 
-#: cove_ocds/templates/explore.html:182
+#: cove_ocds/templates/explore.html:188
 msgid ""
 "Only those extensions successfully fetched were applied to extend the schema."
 msgstr ""
 "Solo las extensiones obtenidas con éxito se aplicaron para ampliar el "
 "esquema."
 
-#: cove_ocds/templates/explore.html:184
+#: cove_ocds/templates/explore.html:190
 msgid "All the extensions above were applied to extend the schema."
 msgstr "Todas las extensiones anteriores se aplicaron para ampliar el esquema."
 
-#: cove_ocds/templates/explore.html:186
+#: cove_ocds/templates/explore.html:192
 msgid "Get a copy of the schema with extension patches applied"
 msgstr "Obtenga una copia del esquema con los parches de extensión aplicados"
 
-#: cove_ocds/templates/explore.html:188
+#: cove_ocds/templates/explore.html:194
 msgid ""
 "None of the extensions above could be applied. Your data has been checked "
 "against a schema with no extensions."
@@ -580,11 +583,11 @@ msgstr ""
 "No se pudo aplicar ninguna de las extensiones anteriores. Sus datos han sido "
 "comparados con un esquema sin extensiones."
 
-#: cove_ocds/templates/explore.html:201
+#: cove_ocds/templates/explore.html:207
 msgid "Conversion Errors"
 msgstr "Errores de Conversión"
 
-#: cove_ocds/templates/explore.html:206
+#: cove_ocds/templates/explore.html:212
 msgid ""
 "In order to check your data we need to convert it. During that conversion we "
 "found the following issues:"
@@ -592,49 +595,49 @@ msgstr ""
 "Para verificar sus datos, necesitamos convertirlos. Durante esta conversión, "
 "encontramos los siguientes problemas:"
 
-#: cove_ocds/templates/explore.html:230
+#: cove_ocds/templates/explore.html:236
 msgid "Structural Errors - Required Fields"
 msgstr "Errores Estructurales - Campos Requeridos"
 
-#: cove_ocds/templates/explore.html:234
+#: cove_ocds/templates/explore.html:240
 msgid ""
 "Some or all of your data is missing fields which are required by the OCDS "
 "schema."
 msgstr ""
 "En alguno o todos tus datos faltan campos requeridos por el esquema OCDS."
 
-#: cove_ocds/templates/explore.html:254
+#: cove_ocds/templates/explore.html:260
 msgid "Structural Errors - Format"
 msgstr "Errores Estructurales - Formato"
 
-#: cove_ocds/templates/explore.html:258
+#: cove_ocds/templates/explore.html:264
 msgid ""
 "Some or all of your data includes fields which are incorrectly formatted."
 msgstr ""
 "Alguno o todos tus datos incluyen campos que están formateados "
 "incorrectamente."
 
-#: cove_ocds/templates/explore.html:278
+#: cove_ocds/templates/explore.html:284
 msgid "Structural Errors - Other"
 msgstr "Errores Estructurales - Otro"
 
-#: cove_ocds/templates/explore.html:282
+#: cove_ocds/templates/explore.html:288
 msgid "Some or all of your data has validation errors."
 msgstr "Alguno o todos tus datos tienen errores de validación."
 
-#: cove_ocds/templates/explore.html:295 cove_ocds/templates/explore.html:627
-#: cove_ocds/templates/explore.html:630
+#: cove_ocds/templates/explore.html:301 cove_ocds/templates/explore.html:633
+#: cove_ocds/templates/explore.html:636
 msgid "Structure Warnings"
 msgstr "Advertencias de Estructura"
 
-#: cove_ocds/templates/explore.html:300 cove_ocds/templates/explore.html:338
+#: cove_ocds/templates/explore.html:306 cove_ocds/templates/explore.html:344
 msgid ""
 "Fixing the following issues will improve the interoperability of your data."
 msgstr ""
 "La resolución de los siguientes problemas mejorará la interoperabilidad de "
 "sus datos."
 
-#: cove_ocds/templates/explore.html:306
+#: cove_ocds/templates/explore.html:312
 #, python-format
 msgid ""
 "We found <strong>%(n_missing)s</strong> object within an array in your data "
@@ -652,7 +655,7 @@ msgstr[2] ""
 "Encontramos <strong>%(n_missing)s</strong> objetos dentro de la lista de sus "
 "datos sin una propiedad <code>id</code>."
 
-#: cove_ocds/templates/explore.html:307
+#: cove_ocds/templates/explore.html:313
 msgid ""
 "This may affect the creation of OCDS records, and conversion of data into "
 "other formats. We recommend that all objects within an array should have an "
@@ -662,21 +665,21 @@ msgstr ""
 "datos a otros formatos. Recomendamos que todos los objetos en un array "
 "tengan una <code>id</code>."
 
-#: cove_ocds/templates/explore.html:308 cove_ocds/templates/explore.html:345
-#: cove_ocds/templates/explore.html:633
+#: cove_ocds/templates/explore.html:314 cove_ocds/templates/explore.html:351
+#: cove_ocds/templates/explore.html:639
 msgid "View all errors &#9660;"
 msgstr "Vea todos los errores &#9660;"
 
-#: cove_ocds/templates/explore.html:312
+#: cove_ocds/templates/explore.html:318
 msgid "Path to missing ID"
 msgstr "Ruta a la ID ausente"
 
-#: cove_ocds/templates/explore.html:333 cove_ocds/templates/explore.html:615
-#: cove_ocds/templates/explore.html:618
+#: cove_ocds/templates/explore.html:339 cove_ocds/templates/explore.html:621
+#: cove_ocds/templates/explore.html:624
 msgid "Conformance (Rules)"
 msgstr "Conformidad (Reglas)"
 
-#: cove_ocds/templates/explore.html:344
+#: cove_ocds/templates/explore.html:350
 #, python-format
 msgid ""
 "<strong>%(n_prefixes)s</strong> of your <code>ocid</code> fields has a "
@@ -694,24 +697,24 @@ msgstr[2] ""
 "<strong>%(n_prefixes)s</strong> de sus campos <code>ocid</code> tienen un "
 "problema:"
 
-#: cove_ocds/templates/explore.html:344
+#: cove_ocds/templates/explore.html:350
 msgid "there is no prefix or the prefix format is not recognised."
 msgstr "no hay prefijo o el formato de prefijo no es reconocido"
 
-#: cove_ocds/templates/explore.html:349
+#: cove_ocds/templates/explore.html:355
 msgid "ocid"
 msgstr "ocid"
 
-#: cove_ocds/templates/explore.html:349
+#: cove_ocds/templates/explore.html:355
 msgid "Path"
 msgstr "Ruta"
 
-#: cove_ocds/templates/explore.html:357
+#: cove_ocds/templates/explore.html:363
 #, python-format
 msgid " What is the <code>ocid</code> field? %(description)s "
 msgstr "Cuál es el campo de (ocid)? %(description)s"
 
-#: cove_ocds/templates/explore.html:357
+#: cove_ocds/templates/explore.html:363
 #, python-format
 msgid ""
 "For more information see <a href=\"%(url)s\">Open Contracting Identifier "
@@ -720,11 +723,11 @@ msgstr ""
 "Para mas información vea <a href=\"%(url)s\">Guía para indentificadores de "
 "Contratos Abiertos</a>"
 
-#: cove_ocds/templates/explore.html:371
+#: cove_ocds/templates/explore.html:377
 msgid "Codelist Errors"
 msgstr "Errores de la Lista de Códigos"
 
-#: cove_ocds/templates/explore.html:376
+#: cove_ocds/templates/explore.html:382
 msgid ""
 "The fields below use closed codelists. When using these fields, you <strong> "
 "must </strong> use one of the pre-defined codelist values. If you use a "
@@ -740,7 +743,7 @@ msgstr ""
 "+ o - esto indica que la lista de códigos ha sido modificada con estas "
 "adiciones (+) o sustracciones (-) por una o más extensiones."
 
-#: cove_ocds/templates/explore.html:380
+#: cove_ocds/templates/explore.html:386
 msgid ""
 "You may need to create a mapping between your local codes and the OCDS "
 "closed codelists to address these errors. In most cases, there will be a "
@@ -754,11 +757,11 @@ msgstr ""
 "códigos locales. Si ya ha completado un mapeo, favor revise la ortografía y "
 "las mayúsculas utilizadas en estos campos cerrados de la lista de códigos."
 
-#: cove_ocds/templates/explore.html:391
+#: cove_ocds/templates/explore.html:397
 msgid "Additional Fields"
 msgstr "Campos adicionales"
 
-#: cove_ocds/templates/explore.html:395
+#: cove_ocds/templates/explore.html:401
 msgid ""
 "This data includes the following fields which are not part of the OCDS "
 "schema. You should check whether the data in these fields could be provided "
@@ -772,33 +775,33 @@ msgstr ""
 "standard.open-contracting.org/latest/en/extensions/\">extensión</a> "
 "existente del esquema."
 
-#: cove_ocds/templates/explore.html:403 cove_ocds/templates/explore.html:449
-#: cove_ocds/templates/explore.html:563
+#: cove_ocds/templates/explore.html:409 cove_ocds/templates/explore.html:455
+#: cove_ocds/templates/explore.html:569
 msgid "Usage Count"
 msgstr "Número total de usos"
 
-#: cove_ocds/templates/explore.html:404 cove_ocds/templates/explore.html:450
+#: cove_ocds/templates/explore.html:410 cove_ocds/templates/explore.html:456
 msgid "Examples (first 3)"
 msgstr "Ejemplos (las primeras 3 ocurrencias)"
 
-#: cove_ocds/templates/explore.html:405
+#: cove_ocds/templates/explore.html:411
 msgid "Child Fields"
 msgstr "Campos hijos"
 
-#: cove_ocds/templates/explore.html:423
+#: cove_ocds/templates/explore.html:429
 msgid "(See child fields)"
 msgstr "(Vea todos los campos secundarios)"
 
-#: cove_ocds/templates/explore.html:440
+#: cove_ocds/templates/explore.html:446
 #, python-format
 msgid "Child fields of %(parent_full_path)s"
 msgstr "Campos hijos de %(parent_full_path)s"
 
-#: cove_ocds/templates/explore.html:486
+#: cove_ocds/templates/explore.html:492
 msgid "Additional Codelist Values"
 msgstr "Valores Adicionales de Listas de Códigos"
 
-#: cove_ocds/templates/explore.html:490
+#: cove_ocds/templates/explore.html:496
 msgid ""
 "Your data contains a number of fields that use an open codelist. You should "
 "use values from the codelist whenever possible, but if the codelist does not "
@@ -817,7 +820,7 @@ msgstr ""
 "de códigos ha sido modificada con estas adiciones (+) o sustracciones (-) "
 "por una o más extensiones."
 
-#: cove_ocds/templates/explore.html:496
+#: cove_ocds/templates/explore.html:502
 msgid ""
 "Make sure you list the definition of any additional codelist values you "
 "include within your <a href=\"https://standard.open-contracting.org/latest/"
@@ -834,20 +837,20 @@ msgstr ""
 "href=\"https://github.com/open-contracting/standard/issues/new\">gestor de "
 "incidencias de OCDS </a>."
 
-#: cove_ocds/templates/explore.html:506
+#: cove_ocds/templates/explore.html:512
 msgid "Additional Checks"
 msgstr "Comprobaciones adicionales"
 
-#: cove_ocds/templates/explore.html:514
+#: cove_ocds/templates/explore.html:520
 msgid "Check Description"
 msgstr "Compruebe la Descripción"
 
-#: cove_ocds/templates/explore.html:515
+#: cove_ocds/templates/explore.html:521
 #: cove_ocds/templates/validation_table.html:10
 msgid "Location of first 3 errors"
 msgstr "Ubicación de los 3 primeros errores"
 
-#: cove_ocds/templates/explore.html:522
+#: cove_ocds/templates/explore.html:528
 msgid ""
 "The data includes fields that are empty or contain only whitespaces. Fields "
 "that are not being used, or that have no value, should be excluded in their "
@@ -857,16 +860,16 @@ msgstr ""
 "blanco. Los campos que no se usan, o que no tienen ningún valor, deben "
 "excluirse en su totalidad (clave y valor) de los datos"
 
-#: cove_ocds/templates/explore.html:529
+#: cove_ocds/templates/explore.html:535
 msgid "see all"
 msgstr "ver todos"
 
-#: cove_ocds/templates/explore.html:552 cove_ocds/templates/explore.html:651
-#: cove_ocds/templates/explore.html:654
+#: cove_ocds/templates/explore.html:558 cove_ocds/templates/explore.html:657
+#: cove_ocds/templates/explore.html:660
 msgid "Deprecated Fields"
 msgstr "Campos Obsoletos"
 
-#: cove_ocds/templates/explore.html:552
+#: cove_ocds/templates/explore.html:558
 msgid ""
 "Fields flagged as 'deprecated' will be either replaced or removed in future "
 "versions of the schema."
@@ -874,28 +877,28 @@ msgstr ""
 "Campos marcados como 'obsoletos' serán reemplazados o eliminados en futuras "
 "versiones del esquema."
 
-#: cove_ocds/templates/explore.html:561
+#: cove_ocds/templates/explore.html:567
 msgid "Details"
 msgstr "Detalles"
 
-#: cove_ocds/templates/explore.html:569
+#: cove_ocds/templates/explore.html:575
 msgid "Learn more about deprecated fields"
 msgstr "Obtener más información acerca de los campos obsoletos "
 
-#: cove_ocds/templates/explore.html:576
+#: cove_ocds/templates/explore.html:582
 #, python-format
 msgid "Deprecated in %(version)s:"
 msgstr "Obsoleto en %(version)s:"
 
-#: cove_ocds/templates/explore.html:595
+#: cove_ocds/templates/explore.html:601
 msgid "Save or Share these results"
 msgstr "Guardar o Compartir estos resultados"
 
-#: cove_ocds/templates/explore.html:596
+#: cove_ocds/templates/explore.html:602
 msgid "Use the following url to share these results:"
 msgstr "Use la siguiente url para compartir estos resultados: "
 
-#: cove_ocds/templates/explore.html:600
+#: cove_ocds/templates/explore.html:606
 #, python-format
 msgid ""
 "These results will be available for %(delete_files_after_days)s days from "
@@ -906,7 +909,7 @@ msgstr ""
 "días desde el día en que los datos fueron subidos. Puede revisar estos "
 "resultados hasta entonces."
 
-#: cove_ocds/templates/explore.html:601
+#: cove_ocds/templates/explore.html:607
 #, python-format
 msgid ""
 "After %(delete_files_after_days)s days all uploaded data is deleted from our "
@@ -919,24 +922,24 @@ msgstr ""
 "Cualquiera que use el enlace a esta página después de ese periodo verá un "
 "mensaje informando de que el archivo ha sido borrado."
 
-#: cove_ocds/templates/explore.html:609 cove_ocds/templates/explore.html:612
+#: cove_ocds/templates/explore.html:615 cove_ocds/templates/explore.html:618
 msgid "Structural Errors"
 msgstr "Errores Estructurales"
 
-#: cove_ocds/templates/explore.html:621
+#: cove_ocds/templates/explore.html:627
 msgid "view all errors &#9660;"
 msgstr "ver todos los errores &#9660;"
 
-#: cove_ocds/templates/explore.html:624 cove_ocds/templates/explore.html:636
-#: cove_ocds/templates/explore.html:642
+#: cove_ocds/templates/explore.html:630 cove_ocds/templates/explore.html:642
+#: cove_ocds/templates/explore.html:648
 msgid "View all errors &#9650;"
 msgstr "Vea todos los errores &#9650;"
 
-#: cove_ocds/templates/explore.html:639
+#: cove_ocds/templates/explore.html:645
 msgid "Quality Warnings"
 msgstr "Advertencias de Calidad"
 
-#: cove_ocds/templates/explore.html:645 cove_ocds/templates/explore.html:648
+#: cove_ocds/templates/explore.html:651 cove_ocds/templates/explore.html:654
 msgid "Additional Fields (fields in data not in schema)"
 msgstr "Campos adicionales (campos en los datos que no están en el esquema)"
 
