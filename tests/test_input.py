@@ -1,13 +1,8 @@
 import os
 
 import pytest
-from cove.input.models import SuppliedData
 
-
-def fake_cove_middleware(request):
-    request.current_app = "cove_ocds"
-    request.current_app_base_template = "cove_ocds/base.html"
-    return request
+from cove_ocds.models import SuppliedData
 
 
 @pytest.mark.django_db

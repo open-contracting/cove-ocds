@@ -10,12 +10,6 @@ from selenium.webdriver.common.by import By
 BROWSER = os.getenv("BROWSER", "ChromeHeadless")
 
 
-@pytest.fixture(autouse="CUSTOM_SERVER_URL" in os.environ)
-def slow():
-    yield
-    time.sleep(1)
-
-
 @pytest.fixture(scope="module")
 def browser():
     if BROWSER == "ChromeHeadless":
@@ -73,24 +67,3 @@ def skip_if_remote():
     # can't make assumptions about what environment variables will be set
     if "CUSTOM_SERVER_URL" in os.environ:
         pytest.skip()
-
-
-@pytest.fixture
-def settings_releases_table_10(settings):
-    # This needs to be in a fixture, to make sure its loaded before
-    # url_input_browser
-    settings.RELEASES_OR_RECORDS_TABLE_LENGTH = 10
-
-
-@pytest.fixture
-def settings_records_table_10(settings):
-    # This needs to be in a fixture, to make sure its loaded before
-    # url_input_browser
-    settings.RELEASES_OR_RECORDS_TABLE_LENGTH = 10
-
-
-@pytest.fixture
-def settings_error_locations_sample(settings):
-    # This needs to be in a fixture, to make sure its loaded before
-    # url_input_browser
-    settings.VALIDATION_ERROR_LOCATIONS_SAMPLE = True

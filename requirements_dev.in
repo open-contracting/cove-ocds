@@ -6,5 +6,4 @@ libsass
 pytest
 pytest-django
 pytest-localserver
-requests
 selenium

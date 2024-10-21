@@ -1,0 +1,32 @@
+{% load i18n %}
+{% load cove_ocds %}
+
+<table class="table">
+   <thead>
+     <tr> 
+       <th>{% trans 'Field' %}</th> 
+       <th>{% trans 'Path to Field' %}</th> 
+       <th>{% trans 'Codelist' %}</th> 
+       <th>{% trans 'Additional Values Used' %}</th>
+     </tr>
+   </thead>
+   <tbody>
+   {% for path, detail in additional_codelist_values.items %}
+      <tr>
+        <td>{{detail.field}}</td> <td>{{detail.path}}</td> 
+        <td>
+          <a href="{{detail.codelist_url}}" >{{detail.codelist}}</a>
+          {% if detail.codelist_amend_urls %}
+            ( 
+            {% for symbol, url in detail.codelist_amend_urls %}
+              <a href="{{url}}">{{symbol}}</a>
+            {% endfor %}
+            )
+          {% endif %}
+
+        </td> 
+        <td>{{detail.values|join:", "}}</td>
+      </tr>
+   {% endfor %}
+   </tbody>
+</table>

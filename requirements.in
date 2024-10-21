@@ -4,7 +4,6 @@ flattentool
 gunicorn[setproctitle]
 libcove
 libcoveocds[perf,web]
-libcoveweb
-python-dateutil
-rfc3339-validator
+requests
 sentry-sdk
+werkzeug

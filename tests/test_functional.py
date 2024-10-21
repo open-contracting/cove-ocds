@@ -1,46 +1,14 @@
-import contextlib
 import os
 import time
 
 import pytest
 import requests
 from django.conf import settings
-from django.test import override_settings
-from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import Select
 
 OCDS_DEFAULT_SCHEMA_VERSION = list(settings.COVE_CONFIG["schema_version_choices"])[-1]
 OCDS_SCHEMA_VERSIONS = settings.COVE_CONFIG["schema_version_choices"]
 OCDS_SCHEMA_VERSIONS_DISPLAY = [display_url[0] for version, display_url in OCDS_SCHEMA_VERSIONS.items()]
-
-
-@pytest.mark.parametrize(
-    ("link_text", "expected_text", "css_selector", "url"),
-    [
-        (
-            "Open Contracting",
-            "better serve people and protect our planet",
-            "h2",
-            "https://www.open-contracting.org/",
-        ),
-        (
-            "Open Contracting Data Standard",
-            "Open Contracting Data Standard",
-            "#open-contracting-data-standard",
-            "https://standard.open-contracting.org/",
-        ),
-    ],
-)
-def test_footer_ocds(server_url, browser, link_text, expected_text, css_selector, url):
-    browser.get(server_url)
-    footer = browser.find_element(By.ID, "footer")
-    link = footer.find_element(By.LINK_TEXT, link_text)
-    href = link.get_attribute("href")
-    assert url in href
-    link.click()
-    time.sleep(0.5)
-    assert expected_text in browser.find_element(By.CSS_SELECTOR, css_selector).text
 
 
 def test_index_page_ocds(server_url, browser):
@@ -89,23 +57,6 @@ def test_index_page_ocds_links(server_url, browser, css_id, link_text, url):
     assert url in href
 
 
-def test_common_index_elements(server_url, browser):
-    browser.get(server_url)
-    browser.find_element(By.CSS_SELECTOR, "#more-information .panel-title").click()
-    time.sleep(0.5)
-    assert "What happens to the data I provide to this site?" in browser.find_element(By.TAG_NAME, "body").text
-    assert "Why provide converted versions?" in browser.find_element(By.TAG_NAME, "body").text
-    assert "Terms & Conditions" in browser.find_element(By.TAG_NAME, "body").text
-    assert "Open Data Services" in browser.find_element(By.TAG_NAME, "body").text
-    assert "360 Giving" not in browser.find_element(By.TAG_NAME, "body").text
-
-
-def test_terms_page(server_url, browser):
-    browser.get(f"{server_url}/terms/")
-
-    assert "Open Contracting Partnership" in browser.find_element(By.TAG_NAME, "body").text
-
-
 def test_accordion(server_url, browser):
     browser.get(server_url)
 
@@ -136,24 +87,15 @@ def test_accordion(server_url, browser):
     assert buttons() == [False, False, True]
 
 
-def test_500_error(server_url, browser):
-    browser.get(f"{server_url}/test/500")
-    # Check that our nice error message is there
-    assert "Something went wrong" in browser.find_element(By.TAG_NAME, "body").text
-    # Check for the exclamation icon
-    # This helps to check that the theme including the css has been loaded
-    # properly
-    icon_span = browser.find_element(By.CLASS_NAME, "panel-danger").find_element(By.TAG_NAME, "span")
-    assert "Glyphicons Halflings" in icon_span.value_of_css_property("font-family")
-    assert icon_span.value_of_css_property("color") == "rgba(255, 255, 255, 1)"
-
-
 @pytest.mark.parametrize(
     ("source_filename", "expected_text", "not_expected_text", "conversion_successful"),
     [
         (
             "tenders_releases_2_releases.json",
-            ["Convert", "Schema", "OCDS release package schema version 1.0. You can", *OCDS_SCHEMA_VERSIONS_DISPLAY],
+            [
+                "OCDS release package schema version 1.1.",
+                *OCDS_SCHEMA_VERSIONS_DISPLAY,
+            ],
             ["Schema Extensions"],
             True,
         ),
@@ -166,7 +108,7 @@ def test_500_error(server_url, browser):
                 "copy of the schema with extension",
                 "Structural Errors",
                 "name is missing but required within buyer",
-                "The schema version specified in the file is 1.1",
+                'The schema version specified in the file is "1.1"',
                 "Organization scale",
             ],
             ["/releases/parties/details", "fetching failed"],
@@ -221,7 +163,7 @@ def test_500_error(server_url, browser):
                 "records/compiledRelease/parties/details",
                 "mooo",
                 "/records/compiledRelease/tender/targets",
-                "The schema version specified in the file is 1.1",
+                'The schema version specified in the file is "1.1"',
                 "/records/releases/tender/targets",
             ],
             ["checked against a schema with no extensions"],
@@ -235,7 +177,6 @@ def test_500_error(server_url, browser):
                 "documents at the milestone level is now deprecated",
                 "releases/0/contracts/1/milestones/0",
                 "releases/1/tender",
-                "Contracts with no awards: 3",
             ],
             ["copy of the schema with extension"],
             True,
@@ -268,7 +209,7 @@ def test_500_error(server_url, browser):
         ),
         (
             "ocds_release_nulls.json",
-            ["Convert", "Save or Share these results"],
+            ["Save or Share these results"],
             [],
             True,
         ),
@@ -322,7 +263,6 @@ def test_500_error(server_url, browser):
         (
             "tenders_releases_2_releases_invalid.json",
             [
-                "Convert",
                 "Structural Errors",
                 "id is missing but required",
                 "Invalid 'uri' found",
@@ -332,7 +272,7 @@ def test_500_error(server_url, browser):
         ),
         ("tenders_releases_2_releases_codelists.json", ["oh no", "GSINS"], [], True),
         # Test UTF-8 support
-        ("utf8.json", ["Convert"], ["Ensure that your file uses UTF-8 encoding"], True),
+        ("utf8.json", [], ["Ensure that your file uses UTF-8 encoding"], True),
         # Test that non UTF-8 files get an error, with a helpful message
         ("latin1.json", ["Ensure that your file uses UTF-8 encoding"], [], False),
         ("utf-16.json", ["Ensure that your file uses UTF-8 encoding"], [], False),
@@ -345,7 +285,7 @@ def test_500_error(server_url, browser):
         ),
         (
             "tenders_releases_2_releases.xlsx",
-            ["Convert", "Schema", *OCDS_SCHEMA_VERSIONS_DISPLAY],
+            ["1.1"],
             ["Missing OCDS package"],
             True,
         ),
@@ -354,7 +294,6 @@ def test_500_error(server_url, browser):
         (
             "full_record.json",
             [
-                "Number of records",
                 "Structural Errors",
                 "compiledRelease",
                 "versionedRelease",
@@ -366,10 +305,9 @@ def test_500_error(server_url, browser):
         (
             "tenders_releases_1_release_with_unrecognized_version.json",
             [
-                "Your data specifies a version 123.123 which is not recognised",
-                f"checked against OCDS release package schema version {OCDS_DEFAULT_SCHEMA_VERSION}. You can",
+                'Your data specifies a version "123.123" which is not recognised',
+                f"structural checks against OCDS release package schema version {OCDS_DEFAULT_SCHEMA_VERSION}.",
                 "checked against the current default version.",
-                "Convert to Spreadsheet",
             ],
             ["Additional Fields (fields in data not in schema)", "Error message"],
             False,
@@ -377,9 +315,8 @@ def test_500_error(server_url, browser):
         (
             "tenders_releases_1_release_with_wrong_version_type.json",
             [
-                "Your data specifies a version 1000 (it must be a string) which is not recognised",
-                f"checked against OCDS release package schema version {OCDS_DEFAULT_SCHEMA_VERSION}. You can",
-                "Convert to Spreadsheet",
+                "Your data specifies a version 1000 which is not recognised",
+                f"structural checks against OCDS release package schema version {OCDS_DEFAULT_SCHEMA_VERSION}.",
             ],
             ["Additional Fields (fields in data not in schema)", "Error message"],
             False,
@@ -387,11 +324,10 @@ def test_500_error(server_url, browser):
         (
             "tenders_releases_1_release_with_patch_in_version.json",
             [
-                '"version" field in your data follows the major.minor.patch pattern',
-                "100.100.0 format does not comply with the schema",
-                "Error message",
+                'Your data specifies a version "100.100.0" which is not recognised',
+                f"structural checks against OCDS release package schema version {OCDS_DEFAULT_SCHEMA_VERSION}.",
             ],
-            ["Convert to Spreadsheet"],
+            ["Error message"],
             False,
         ),
         (
@@ -405,15 +341,15 @@ def test_500_error(server_url, browser):
             [
                 "JSON reference error",
                 "Unresolvable JSON pointer:",
-                "/definitions/OrganizationReference",
+                "/definitions/Broken",
             ],
-            ["Convert to Spreadsheet"],
+            [],
             False,
         ),
         (
             "tenders_releases_1_release_unpackaged.json",
             ["Missing OCDS package", "Error message: Missing OCDS package"],
-            ["Convert to Spreadsheet"],
+            [],
             False,
         ),
         (
@@ -490,16 +426,6 @@ def check_url_input_result_page(
     not_expected_text,
     conversion_successful,
 ):
-    # Avoid page refresh
-    dont_convert = [
-        "tenders_releases_1_release_with_unrecognized_version.json",
-        "tenders_releases_1_release_with_wrong_version_type.json",
-    ]
-
-    if source_filename.endswith(".json") and source_filename not in dont_convert:
-        with contextlib.suppress(NoSuchElementException):
-            browser.find_element(By.NAME, "flatten").click()
-
     body_text = browser.find_element(By.TAG_NAME, "body").text
     if isinstance(expected_text, str):
         expected_text = [expected_text]
@@ -511,35 +437,10 @@ def check_url_input_result_page(
 
     assert "Data Review Tool" in browser.find_element(By.TAG_NAME, "body").text
 
-    if conversion_successful:
-        if source_filename.endswith(".json"):
-            assert "JSON (Original)" in body_text
-            original_file = browser.find_element(By.LINK_TEXT, "JSON (Original)").get_attribute("href")
-            if "record" not in source_filename:
-                converted_file = browser.find_element(
-                    By.PARTIAL_LINK_TEXT, "Excel Spreadsheet (.xlsx) (Converted from Original using schema version"
-                ).get_attribute("href")
-                assert "flattened.xlsx" in converted_file
-        elif source_filename.endswith(".xlsx"):
-            assert "(.xlsx) (Original)" in body_text
-            original_file = browser.find_element(By.LINK_TEXT, "Excel Spreadsheet (.xlsx) (Original)").get_attribute(
-                "href"
-            )
-            converted_file = browser.find_element(
-                By.PARTIAL_LINK_TEXT, "JSON (Converted from Original using schema version"
-            ).get_attribute("href")
-            assert "unflattened.json" in converted_file
-        elif source_filename.endswith(".csv"):
-            assert "(.csv) (Original)" in body_text
-            original_file = browser.find_element(By.LINK_TEXT, "CSV Spreadsheet (.csv) (Original)").get_attribute(
-                "href"
-            )
-            converted_file = browser.find_element(
-                By.PARTIAL_LINK_TEXT, "JSON (Converted from Original using schema version"
-            ).get_attribute("href")
-            assert "unflattened.json" in browser.find_element(
-                By.PARTIAL_LINK_TEXT, "JSON (Converted from Original using schema version"
-            ).get_attribute("href")
+    if conversion_successful and source_filename.endswith((".xlsx", ".csv")):
+        original_file = browser.find_element(By.PARTIAL_LINK_TEXT, "cached").get_attribute("href")
+        converted_file = browser.find_element(By.PARTIAL_LINK_TEXT, "download").get_attribute("href")
+        assert "unflattened.json" in converted_file
 
         assert source_filename in original_file
         assert "0 bytes" not in body_text
@@ -645,18 +546,14 @@ def test_extension_validation_error_messages(url_input_browser):
         assert html not in browser.page_source
 
 
-@pytest.mark.parametrize("flatten_or_unflatten", ["flatten", "unflatten"])
-def test_flattentool_warnings(server_url, url_input_browser, httpserver, monkeypatch, flatten_or_unflatten):
+def test_flattentool_warnings(server_url, url_input_browser, httpserver, monkeypatch):
     # If we're testing a remove server then we can't run this test as we can't
     # set up the mocks
     if "CUSTOM_SERVER_URL" in os.environ:
         pytest.skip()
     # Actual input file doesn't matter, as we override
     # flattentool behaviour with a mock below
-    if flatten_or_unflatten == "flatten":
-        source_filename = "tenders_releases_2_releases.json"
-    else:
-        source_filename = "tenders_releases_2_releases.xlsx"
+    source_filename = "tenders_releases_2_releases.xlsx"
 
     import flattentool
 
@@ -672,8 +569,7 @@ def test_flattentool_warnings(server_url, url_input_browser, httpserver, monkeyp
         with open(f"{output_name}.xlsx", "w") as fp:
             fp.write("{}")
 
-    mocks = {"flatten": mockflatten, "unflatten": mockunflatten}
-    monkeypatch.setattr(flattentool, flatten_or_unflatten, mocks[flatten_or_unflatten])
+    monkeypatch.setattr(flattentool, "unflatten", mockunflatten)
 
     if "CUSTOM_SERVER_URL" in os.environ:
         source_url = (
@@ -726,7 +622,7 @@ def test_url_invalid_dataset_request(server_url, browser, data_url):
         ),
         (
             "tenders_releases_1_release_with_invalid_extensions.json",
-            "structural checks against OCDS release package schema version 1.0",
+            "structural checks against OCDS release package schema version 1.1",
             "version is missing but required",
             "methodRationale",
             "✅",  # skip this assertion
@@ -769,76 +665,6 @@ def test_url_input_with_version(
 
 
 @pytest.mark.parametrize(
-    (
-        "source_filename",
-        "select_version",
-        "expected",
-        "not_expected",
-        "expected_additional_field",
-        "not_expected_additional_field",
-    ),
-    [
-        (
-            "tenders_releases_1_release_with_extensions_1_1.json",
-            "1.0",
-            "structural checks against OCDS release package schema version 1.0",
-            "version is missing but required",
-            "version",
-            "publisher",
-        ),
-        (
-            "tenders_releases_1_release_with_invalid_extensions.json",
-            "1.1",
-            "",  # skip this assertion
-            "structural checks against OCDS release package schema version 1.0",
-            "methodRationale",
-            "version",
-        ),
-        (
-            "tenders_releases_2_releases_with_metatab_version_1_1_extensions.xlsx",
-            "1.0",
-            "structural checks against OCDS release package schema version 1.0",
-            "version is missing but required",
-            "version",
-            "publisher",
-        ),
-    ],
-)
-def test_url_input_with_version_change(
-    server_url,
-    url_input_browser,
-    httpserver,
-    select_version,
-    source_filename,
-    expected,
-    not_expected,
-    expected_additional_field,
-    not_expected_additional_field,
-):
-    browser = url_input_browser(source_filename)
-    select = Select(browser.find_element(By.NAME, "version"))
-    select.select_by_value(select_version)
-    browser.find_element(By.CSS_SELECTOR, ".btn-primary[value='Go']").click()
-    time.sleep(0.5)
-
-    body_text = browser.find_element(By.TAG_NAME, "body").text
-    additional_field_box = browser.find_element(By.ID, "additionalFieldTable").text
-
-    assert expected in body_text
-    assert not_expected not in body_text
-    assert expected_additional_field in additional_field_box
-    assert not_expected_additional_field not in additional_field_box
-
-    # Refresh page to check if tests still work after caching the data
-    browser.get(browser.current_url)
-
-    assert expected in body_text
-    assert not_expected not in body_text
-    assert expected_additional_field in additional_field_box
-    assert not_expected_additional_field not in additional_field_box
-
-
-@pytest.mark.parametrize(
     ("source_filename", "expected", "not_expected"),
     [
         (
@@ -851,7 +677,6 @@ def test_url_input_with_version_change(
             ],
             [
                 "The following extensions failed",
-                "extensions were not introduced in the schema until version 1.1.",
             ],
         ),
         (
@@ -861,7 +686,6 @@ def test_url_input_with_version_change(
                 "The metrics extension supports publication of forecasts",
                 "Get a copy of the schema with extension patches applied",
                 "The following extensions failed",
-                "extensions were not introduced in the schema until version 1.1.",
             ],
             ["checked against a schema with no extensions"],
         ),
@@ -869,7 +693,6 @@ def test_url_input_with_version_change(
             "tenders_releases_1_release_with_all_invalid_extensions.json",
             [
                 "None of the extensions above could be applied",
-                "extensions were not introduced in the schema until version 1.1.",
             ],
             ["Organization scale", "Get a copy of the schema with extension patches applied"],
         ),
@@ -883,7 +706,6 @@ def test_url_input_with_version_change(
             ],
             [
                 "The following extensions failed",
-                "extensions were not introduced in the schema until version 1.1.",
             ],
         ),
     ],
@@ -943,23 +765,6 @@ def test_url_input_extension_headlines(
 
 @pytest.mark.parametrize(
     ("source_filename", "expected", "not_expected"),
-    [("tenders_releases_extra_data.json", ["uniquedata"], [])],
-)
-def test_ocds_show(server_url, url_input_browser, httpserver, source_filename, expected, not_expected):
-    browser = url_input_browser(source_filename)
-
-    browser.find_element(By.CSS_SELECTOR, "a[href='#extra']").click()
-
-    body_text = browser.find_element(By.TAG_NAME, "body").text
-
-    for text in expected:
-        assert text in body_text
-    for text in not_expected:
-        assert text not in body_text
-
-
-@pytest.mark.parametrize(
-    ("source_filename", "expected", "not_expected"),
     [
         (
             "basic_release_empty_fields.json",
@@ -1011,122 +816,41 @@ def test_additional_checks_error_modal(server_url, url_input_browser, httpserver
     browser.find_element(By.CSS_SELECTOR, "div.modal.additional-checks-1 button.close").click()
 
 
-def test_releases_table_25_rows(skip_if_remote, url_input_browser):
+def test_error_list_100_lines(skip_if_remote, url_input_browser):
     """
-    Check that when there are more than 25 releases, only 25 are shown in the
-    table, and there is a message.
-    """
-
-    browser = url_input_browser("30_releases.json")
-    assert "This file contains 30 releases" in browser.find_element(By.TAG_NAME, "body").text
-    panel = browser.find_element(By.CSS_SELECTOR, "#releases-table-panel")
-    assert "first 25 releases" in panel.text
-    table_rows = browser.find_elements(By.CSS_SELECTOR, "#releases-table-panel table tbody tr")
-    assert len(table_rows) == 25
-
-
-def test_releases_table_7_rows(skip_if_remote, url_input_browser):
-    """
-    Check that when there are less than 25 releases, they are all shown in the
-    table, and there is no message.
+    Check that when there are more than 100 error locations, only 100 are
+    shown in the table, and there is a message.
     """
 
-    browser = url_input_browser("tenders_releases_7_releases_check_ocids.json")
-    assert "This file contains 7 releases" in browser.find_element(By.TAG_NAME, "body").text
-    panel = browser.find_element(By.CSS_SELECTOR, "#releases-table-panel")
-    assert "first 25 releases" not in panel.text
-    table_rows = browser.find_elements(By.CSS_SELECTOR, "#releases-table-panel table tbody tr")
-    assert len(table_rows) == 7
+    browser = url_input_browser("1001_empty_releases.json")
+    assert "1001" in browser.find_element(By.TAG_NAME, "body").text
+    browser.find_element(By.LINK_TEXT, "101").click()
+    modal_body = browser.find_element(By.CSS_SELECTOR, ".modal-body")
+    assert "first 100 locations for this error" in modal_body.text
+    assert "releases/99" in modal_body.text
+    assert "releases/100" not in modal_body.text
+    table_rows = modal_body.find_elements(By.CSS_SELECTOR, "table tbody tr")
+    assert len(table_rows) == 100
 
 
-def test_releases_table_10_rows_env_var(skip_if_remote, settings_releases_table_10, url_input_browser):
+def test_error_list_99_lines(skip_if_remote, url_input_browser):
     """
-    Check that when the appropriate setting is set, and there are more than 10
-    releases, only 10 are shown in the table, and there is a message.
-    """
-
-    browser = url_input_browser("30_releases.json")
-    assert "This file contains 30 releases" in browser.find_element(By.TAG_NAME, "body").text
-    panel = browser.find_element(By.CSS_SELECTOR, "#releases-table-panel")
-    assert "first 10 releases" in panel.text
-    table_rows = browser.find_elements(By.CSS_SELECTOR, "#releases-table-panel table tbody tr")
-    assert len(table_rows) == 10
-
-
-def test_releases_table_7_rows_env_var(skip_if_remote, settings_releases_table_10, url_input_browser):
-    """
-    Check that when the appropriate setting is set, and there are less than 10
-    releases, they are all shown in the table, and there is no message.
+    Check that when there are less than 100 error locations, they are all shown
+    in the table, and there is no message.
     """
 
-    browser = url_input_browser("tenders_releases_7_releases_check_ocids.json")
-    assert "This file contains 7 releases" in browser.find_element(By.TAG_NAME, "body").text
-    panel = browser.find_element(By.CSS_SELECTOR, "#releases-table-panel")
-    assert "first 25 releases" not in panel.text
-    assert "first 10 releases" not in panel.text
-    table_rows = browser.find_elements(By.CSS_SELECTOR, "#releases-table-panel table tbody tr")
-    assert len(table_rows) == 7
+    browser = url_input_browser("999_empty_releases.json")
+    assert "999" in browser.find_element(By.TAG_NAME, "body").text
+    browser.find_element(By.LINK_TEXT, "99").click()
+    modal_body = browser.find_element(By.CSS_SELECTOR, ".modal-body")
+    assert "first 99 locations for this error" not in modal_body.text
+    assert "releases/98" in modal_body.text
+    assert "releases/99" not in modal_body.text
+    table_rows = modal_body.find_elements(By.CSS_SELECTOR, "table tbody tr")
+    assert len(table_rows) == 99
 
 
-def test_records_table_25_rows(skip_if_remote, url_input_browser):
-    """
-    Check that when there are more than 25 records, only 25 are shown in the
-    table, and there is a message.
-    """
-
-    browser = url_input_browser("30_records.json")
-    assert "This file contains 30 records" in browser.find_element(By.TAG_NAME, "body").text
-    panel = browser.find_element(By.CSS_SELECTOR, "#records-table-panel")
-    assert "first 25 records" in panel.text
-    table_rows = browser.find_elements(By.CSS_SELECTOR, "#records-table-panel table tbody tr")
-    assert len(table_rows) == 25
-
-
-def test_records_table_7_rows(skip_if_remote, url_input_browser):
-    """
-    Check that when there are less than 25 records, they are all shown in the
-    table, and there is no message.
-    """
-
-    browser = url_input_browser("7_records.json")
-    assert "This file contains 7 records" in browser.find_element(By.TAG_NAME, "body").text
-    panel = browser.find_element(By.CSS_SELECTOR, "#records-table-panel")
-    assert "first 25 records" not in panel.text
-    table_rows = browser.find_elements(By.CSS_SELECTOR, "#records-table-panel table tbody tr")
-    assert len(table_rows) == 7
-
-
-def test_records_table_10_rows_env_var(skip_if_remote, settings_records_table_10, url_input_browser):
-    """
-    Check that when the appropriate setting is set, and there are more than 10
-    records, only 10 are shown in the table, and there is a message.
-    """
-
-    browser = url_input_browser("30_records.json")
-    assert "This file contains 30 records" in browser.find_element(By.TAG_NAME, "body").text
-    panel = browser.find_element(By.CSS_SELECTOR, "#records-table-panel")
-    assert "first 10 records" in panel.text
-    table_rows = browser.find_elements(By.CSS_SELECTOR, "#records-table-panel table tbody tr")
-    assert len(table_rows) == 10
-
-
-def test_records_table_7_rows_env_var(skip_if_remote, settings_records_table_10, url_input_browser):
-    """
-    Check that when the appropriate setting is set, and there are less than 10
-    records, they are all shown in the table, and there is no message.
-    """
-
-    browser = url_input_browser("7_records.json")
-    assert "This file contains 7 records" in browser.find_element(By.TAG_NAME, "body").text
-    panel = browser.find_element(By.CSS_SELECTOR, "#records-table-panel")
-    assert "first 25 records" not in panel.text
-    assert "first 10 records" not in panel.text
-    table_rows = browser.find_elements(By.CSS_SELECTOR, "#records-table-panel table tbody tr")
-    assert len(table_rows) == 7
-
-
-@override_settings(VALIDATION_ERROR_LOCATIONS_LENGTH=1000)
-def test_error_list_1000_lines(skip_if_remote, url_input_browser):
+def test_error_list_100_lines_sample(skip_if_remote, url_input_browser):
     """
     Check that when there are more than 1000 error locations, only 1001 are
     shown in the table, and there is a message.
@@ -1134,17 +858,14 @@ def test_error_list_1000_lines(skip_if_remote, url_input_browser):
 
     browser = url_input_browser("1001_empty_releases.json")
     assert "1001" in browser.find_element(By.TAG_NAME, "body").text
-    browser.find_element(By.LINK_TEXT, "1001").click()
+    browser.find_element(By.LINK_TEXT, "101").click()
     modal_body = browser.find_element(By.CSS_SELECTOR, ".modal-body")
-    assert "first 1000 locations for this error" in modal_body.text
-    assert "releases/999" in modal_body.text
-    assert "releases/1000" not in modal_body.text
+    assert "first 100 locations for this error" in modal_body.text
     table_rows = modal_body.find_elements(By.CSS_SELECTOR, "table tbody tr")
-    assert len(table_rows) == 1000
+    assert len(table_rows) == 100
 
 
-@override_settings(VALIDATION_ERROR_LOCATIONS_LENGTH=1000)
-def test_error_list_999_lines(skip_if_remote, url_input_browser):
+def test_error_list_99_lines_sample(skip_if_remote, url_input_browser):
     """
     Check that when there are less than 1000 error locations, they are all shown
     in the table, and there is no message.
@@ -1152,80 +873,13 @@ def test_error_list_999_lines(skip_if_remote, url_input_browser):
 
     browser = url_input_browser("999_empty_releases.json")
     assert "999" in browser.find_element(By.TAG_NAME, "body").text
-    browser.find_element(By.LINK_TEXT, "999").click()
+    browser.find_element(By.LINK_TEXT, "99").click()
     modal_body = browser.find_element(By.CSS_SELECTOR, ".modal-body")
-    assert "first 999 locations for this error" not in modal_body.text
-    assert "releases/998" in modal_body.text
-    assert "releases/999" not in modal_body.text
+    assert "first 99 locations for this error" not in modal_body.text
+    assert "releases/98" in modal_body.text
+    assert "releases/99" not in modal_body.text
     table_rows = modal_body.find_elements(By.CSS_SELECTOR, "table tbody tr")
-    assert len(table_rows) == 999
-
-
-@override_settings(VALIDATION_ERROR_LOCATIONS_LENGTH=1000)
-def test_error_list_1000_lines_sample(skip_if_remote, settings_error_locations_sample, url_input_browser):
-    """
-    Check that when there are more than 1000 error locations, only 1001 are
-    shown in the table, and there is a message.
-    """
-
-    browser = url_input_browser("1001_empty_releases.json")
-    assert "1001" in browser.find_element(By.TAG_NAME, "body").text
-    browser.find_element(By.LINK_TEXT, "1001").click()
-    modal_body = browser.find_element(By.CSS_SELECTOR, ".modal-body")
-    assert "random 1000 locations for this error" in modal_body.text
-    table_rows = modal_body.find_elements(By.CSS_SELECTOR, "table tbody tr")
-    assert len(table_rows) == 1000
-
-
-@override_settings(VALIDATION_ERROR_LOCATIONS_LENGTH=1000)
-def test_error_list_999_lines_sample(skip_if_remote, settings_error_locations_sample, url_input_browser):
-    """
-    Check that when there are less than 1000 error locations, they are all shown
-    in the table, and there is no message.
-    """
-
-    browser = url_input_browser("999_empty_releases.json")
-    assert "999" in browser.find_element(By.TAG_NAME, "body").text
-    browser.find_element(By.LINK_TEXT, "999").click()
-    modal_body = browser.find_element(By.CSS_SELECTOR, ".modal-body")
-    assert "first 999 locations for this error" not in modal_body.text
-    assert "releases/998" in modal_body.text
-    assert "releases/999" not in modal_body.text
-    table_rows = modal_body.find_elements(By.CSS_SELECTOR, "table tbody tr")
-    assert len(table_rows) == 999
-
-
-def test_records_table_releases_count(skip_if_remote, url_input_browser):
-    """
-    Check that the correct releases count is shown in the records table.
-    """
-
-    browser = url_input_browser("30_records.json")
-    assert "release" in browser.find_elements(By.CSS_SELECTOR, "#records-table-panel table thead th")[1].text
-    table_rows = browser.find_elements(By.CSS_SELECTOR, "#records-table-panel table tbody tr")
-    assert table_rows[0].find_elements(By.CSS_SELECTOR, "td")[1].text == "5"
-
-
-@pytest.mark.parametrize(
-    ("source_filename", "expected"),
-    [
-        (
-            "release_aggregate.json",
-            [
-                "Unique OCIDs: 1",
-                "Unique Item IDs: 2",
-                "Currencies: EUR, GBP, USD, YEN",
-            ],
-        ),
-    ],
-)
-def test_key_field_information(server_url, url_input_browser, httpserver, source_filename, expected):
-    """Check that KFIs are displaying"""
-
-    browser = url_input_browser(source_filename)
-    kfi_text = browser.find_element(By.ID, "kfi").text
-    for text in expected:
-        assert text in kfi_text
+    assert len(table_rows) == 99
 
 
 def test_jsonschema_translation(
