@@ -9,7 +9,7 @@
   </div>
   <div class="panel-body">
     <p>{% blocktrans %}Something went wrong with your request. This could be due to a bug in the application and/or the data you supplied.{% endblocktrans %}</p>
-    <p>{% blocktrans sentry=request.sentry.id %}This error has been automatically reported to our development team. If you <a href="mailto:{{ support_email }}?subject=Data%20Review%20Tool%20error%20{{ sentry }}">get in touch</a>, please reference this error as <strong>{{ sentry }}</strong>.{% endblocktrans %}</p>
+    <p>{% blocktrans with sentry=request.sentry.id %}This error has been automatically reported to our development team. If you <a href="mailto:{{ support_email }}?subject=Data%20Review%20Tool%20error%20{{ sentry }}">get in touch</a>, please reference this error as <strong>{{ sentry }}</strong>.{% endblocktrans %}</p>
   </div>
 </div>
 {% endblock %}
