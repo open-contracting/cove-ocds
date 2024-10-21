@@ -1360,9 +1360,3 @@ msgstr ""
 #: cove_ocds/views.py:317
 msgid "JSON reference error"
 msgstr "Error de referencia en JSON"
-
-#~ msgid "get in touch via email"
-#~ msgstr "póngase en contacto a través de correo electrónico "
-
-#~ msgid "referencing this error as "
-#~ msgstr "haciendo referencia a este error como "
