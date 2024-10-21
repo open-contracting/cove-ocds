@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-21 05:30+0000\n"
+"POT-Creation-Date: 2024-10-21 05:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -247,9 +247,8 @@ msgstr ""
 msgid ""
 "This error has been automatically reported to our development team. If you "
 "<a href=\"mailto:%(support_email)s?"
-"subject=Data%%20Review%%20Tool%%20error%%20%(request.sentry.id)s\">get in "
-"touch</a>, please reference this error as <strong>%(request.sentry.id)s</"
-"strong>."
+"subject=Data%%20Review%%20Tool%%20error%%20%(sentry)s\">get in touch</a>, "
+"please reference this error as <strong>%(sentry)s</strong>."
 msgstr ""
 
 #: cove_ocds/templates/additional_codelist_values.html:7
@@ -280,18 +279,14 @@ msgstr ""
 msgid "Go"
 msgstr ""
 
-#: cove_ocds/templates/error.html:13
+#: cove_ocds/templates/error.html:14
+#, python-format
 msgid ""
 "If you think this is a bug, you can <a href=\"https://github.com/open-"
-"contracting/cove-ocds/issues\">file an issue publicly on GitHub</a> or "
-msgstr ""
-
-#: cove_ocds/templates/error.html:13
-msgid "get in touch via email"
-msgstr ""
-
-#: cove_ocds/templates/error.html:13
-msgid "referencing this error as "
+"contracting/cove-ocds/issues\">file an issue publicly on GitHub</a> or <a "
+"href=\"mailto:%(support_email)s?"
+"subject=Data%%20Review%%20Tool%%20error%%20%(sentry)s\">get in touch via "
+"email</a>, referencing this error as <strong>%(sentry)s</strong>."
 msgstr ""
 
 #: cove_ocds/templates/explore.html:6
@@ -612,11 +607,10 @@ msgid " What is the <code>ocid</code> field? %(description)s "
 msgstr ""
 
 #: cove_ocds/templates/explore.html:357
-msgid "For more information see"
-msgstr ""
-
-#: cove_ocds/templates/explore.html:357
-msgid "Open Contracting Identifier guidance"
+#, python-format
+msgid ""
+"For more information see <a href=\"%(url)s\">Open Contracting Identifier "
+"guidance"
 msgstr ""
 
 #: cove_ocds/templates/explore.html:371

@@ -354,7 +354,7 @@
                   </tbody>
                 </table>
               </div>
-              <p class="font-weight-light small">{% blocktrans with description=conformance_errors.ocid_description %} What is the <code>ocid</code> field? {{description}} {% endblocktrans %}<br>{% trans "For more information see" %} <a href="{{conformance_errors.ocid_info_url}}">{% trans "Open Contracting Identifier guidance" %}</a></p>
+              <p class="font-weight-light small">{% blocktrans with description=conformance_errors.ocid_description %} What is the <code>ocid</code> field? {{description}} {% endblocktrans %}<br>{% blocktrans with url=conformance_errors.ocid_info_url %}For more information see <a href="{{url}}">Open Contracting Identifier guidance{% endblocktrans %}</a></p>
 
             {% endif %}
           {% endwith %}
