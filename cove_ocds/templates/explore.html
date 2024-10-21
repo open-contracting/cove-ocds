@@ -202,7 +202,7 @@
       </h4>
     </div>
     <div class="panel-body">
-      {% if file_type == 'xlsx' or file_type == 'csv' %}
+      {% if file_type != 'json' %}
         <p class="explanation">{% blocktrans %}In order to check your data we need to convert it. During that conversion we found the following issues:{% endblocktrans %}</p>
       {% endif %}
       <ul>
@@ -219,7 +219,7 @@
   {% if validation_errors %}
     {% for error_json, values in validation_errors %}
       {% with error=error_json|json_decode %}
-        {% cove_modal_errors className="validation-errors-"|concat:error_prefix|concat:forloop.counter modalTitle=error.message errorList=values file_type=file_type full_table=True %}
+        {% include "modal_errors.html" with className="validation-errors-"|concat:error_prefix|concat:forloop.counter modalTitle=error.message errorList=values file_type=file_type full_table=True %}
       {% endwith %}
     {% endfor %}
 
@@ -243,7 +243,7 @@
   {% if validation_errors %}
     {% for error_json, values in validation_errors %}
       {% with error=error_json|json_decode %}
-        {% cove_modal_errors className="validation-errors-"|concat:error_prefix|concat:forloop.counter modalTitle=error.message errorList=values file_type=file_type full_table=True %}
+        {% include "modal_errors.html" with className="validation-errors-"|concat:error_prefix|concat:forloop.counter modalTitle=error.message errorList=values file_type=file_type full_table=True %}
       {% endwith %}
     {% endfor %}
 
@@ -267,7 +267,7 @@
   {% if validation_errors %}
     {% for error_json, values in validation_errors %}
       {% with error=error_json|json_decode %}
-        {% cove_modal_errors className="validation-errors-"|concat:error_prefix|concat:forloop.counter modalTitle=error.message errorList=values file_type=file_type full_table=True %}
+        {% include "modal_errors.html" with className="validation-errors-"|concat:error_prefix|concat:forloop.counter modalTitle=error.message errorList=values file_type=file_type full_table=True %}
       {% endwith %}
     {% endfor %}
 
@@ -537,7 +537,7 @@
       </table>
 
       {% for type, values in additional_checks.items %}
-        {% cove_modal_errors className="additional-checks-"|concat:forloop.counter modalTitle="" errorList=values|dictsort:"json_location"|list_from_attribute:"json_location" file_type=file_type full_table=False %}
+        {% include "modal_errors.html" with className="additional-checks-"|concat:forloop.counter modalTitle="" errorList=values|dictsort:"json_location"|list_from_attribute:"json_location" file_type=file_type full_table=False %}
       {% endfor %}
 
     </div>

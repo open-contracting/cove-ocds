@@ -30,35 +30,32 @@ from cove_ocds.exceptions import InputError
 logger = logging.getLogger(__name__)
 
 
-default_form_classes = {
-    "upload_form": forms.UploadForm,
-    "url_form": forms.UrlForm,
-    "text_form": forms.TextForm,
-}
-
-
 @csrf_protect
-def data_input(request, form_classes=default_form_classes, text_file_name="test.json"):
-    forms = {form_name: form_class() for form_name, form_class in form_classes.items()}
-    request_data = None
-    if "source_url" in request.GET and settings.COVE_CONFIG.get("allow_direct_web_fetch", False):
-        request_data = request.GET
+def data_input(request):
+    forms_context = {
+        "url_form": forms.UrlForm(),
+        "text_form": forms.TextForm(),
+        "upload_form": forms.UploadForm(),
+    }
+
     if request.POST:
-        request_data = request.POST
-    if request_data:
-        if "source_url" in request_data:
+        if "source_url" in request.POST:
             form_name = "url_form"
-        elif "paste" in request_data:
+        elif "paste" in request.POST:
             form_name = "text_form"
         else:
             form_name = "upload_form"
-        form = form_classes[form_name](request_data, request.FILES)
-        forms[form_name] = form
+
+        form = type(forms_context[form_name])(request.POST, request.FILES)
+        forms_context[form_name] = form
+
         if form.is_valid():
             data = models.SuppliedData() if form_name == "text_form" else form.save(commit=False)
-
             data.save()
-            if form_name == "url_form":
+
+            if form_name == "text_form":
+                data.original_file.save("test.json", ContentFile(form["paste"].value()))
+            elif form_name == "url_form":
                 try:
                     data.download()
                 except requests.exceptions.InvalidURL as err:
@@ -93,11 +90,10 @@ def data_input(request, form_classes=default_form_classes, text_file_name="test.
                             "authentication, and does not block user agents."
                         ),
                     ) from None
-            elif form_name == "text_form":
-                data.original_file.save(text_file_name, ContentFile(form["paste"].value()))
+
             return redirect(reverse("explore", args=(data.pk,)))
 
-    return render(request, "input.html", {"forms": forms})
+    return render(request, "input.html", {"forms": forms_context})
 
 
 def explore_ocds(request, pk):
@@ -132,6 +128,7 @@ def explore_ocds(request, pk):
 
         context = {
             "original_file_url": supplied_data.original_file.url,
+            # Can raise FileNotFoundError.
             "original_file_size": supplied_data.original_file.size,
             "file_type": file_type,
             "current_url": request.build_absolute_uri(),

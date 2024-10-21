@@ -4,7 +4,6 @@ import time
 import pytest
 import requests
 from django.conf import settings
-from django.test import override_settings
 from selenium.webdriver.common.by import By
 
 OCDS_DEFAULT_SCHEMA_VERSION = list(settings.COVE_CONFIG["schema_version_choices"])[-1]
@@ -817,8 +816,41 @@ def test_additional_checks_error_modal(server_url, url_input_browser, httpserver
     browser.find_element(By.CSS_SELECTOR, "div.modal.additional-checks-1 button.close").click()
 
 
-@override_settings(VALIDATION_ERROR_LOCATIONS_LENGTH=1000)
-def test_error_list_1000_lines(skip_if_remote, url_input_browser):
+def test_error_list_100_lines(skip_if_remote, url_input_browser):
+    """
+    Check that when there are more than 100 error locations, only 100 are
+    shown in the table, and there is a message.
+    """
+
+    browser = url_input_browser("1001_empty_releases.json")
+    assert "1001" in browser.find_element(By.TAG_NAME, "body").text
+    browser.find_element(By.LINK_TEXT, "101").click()
+    modal_body = browser.find_element(By.CSS_SELECTOR, ".modal-body")
+    assert "first 100 locations for this error" in modal_body.text
+    assert "releases/99" in modal_body.text
+    assert "releases/100" not in modal_body.text
+    table_rows = modal_body.find_elements(By.CSS_SELECTOR, "table tbody tr")
+    assert len(table_rows) == 100
+
+
+def test_error_list_99_lines(skip_if_remote, url_input_browser):
+    """
+    Check that when there are less than 100 error locations, they are all shown
+    in the table, and there is no message.
+    """
+
+    browser = url_input_browser("999_empty_releases.json")
+    assert "999" in browser.find_element(By.TAG_NAME, "body").text
+    browser.find_element(By.LINK_TEXT, "99").click()
+    modal_body = browser.find_element(By.CSS_SELECTOR, ".modal-body")
+    assert "first 99 locations for this error" not in modal_body.text
+    assert "releases/98" in modal_body.text
+    assert "releases/99" not in modal_body.text
+    table_rows = modal_body.find_elements(By.CSS_SELECTOR, "table tbody tr")
+    assert len(table_rows) == 99
+
+
+def test_error_list_100_lines_sample(skip_if_remote, url_input_browser):
     """
     Check that when there are more than 1000 error locations, only 1001 are
     shown in the table, and there is a message.
@@ -826,17 +858,14 @@ def test_error_list_1000_lines(skip_if_remote, url_input_browser):
 
     browser = url_input_browser("1001_empty_releases.json")
     assert "1001" in browser.find_element(By.TAG_NAME, "body").text
-    browser.find_element(By.LINK_TEXT, "1001").click()
+    browser.find_element(By.LINK_TEXT, "101").click()
     modal_body = browser.find_element(By.CSS_SELECTOR, ".modal-body")
-    assert "first 1000 locations for this error" in modal_body.text
-    assert "releases/999" in modal_body.text
-    assert "releases/1000" not in modal_body.text
+    assert "first 100 locations for this error" in modal_body.text
     table_rows = modal_body.find_elements(By.CSS_SELECTOR, "table tbody tr")
-    assert len(table_rows) == 1000
+    assert len(table_rows) == 100
 
 
-@override_settings(VALIDATION_ERROR_LOCATIONS_LENGTH=1000)
-def test_error_list_999_lines(skip_if_remote, url_input_browser):
+def test_error_list_99_lines_sample(skip_if_remote, url_input_browser):
     """
     Check that when there are less than 1000 error locations, they are all shown
     in the table, and there is no message.
@@ -844,47 +873,13 @@ def test_error_list_999_lines(skip_if_remote, url_input_browser):
 
     browser = url_input_browser("999_empty_releases.json")
     assert "999" in browser.find_element(By.TAG_NAME, "body").text
-    browser.find_element(By.LINK_TEXT, "999").click()
+    browser.find_element(By.LINK_TEXT, "99").click()
     modal_body = browser.find_element(By.CSS_SELECTOR, ".modal-body")
-    assert "first 999 locations for this error" not in modal_body.text
-    assert "releases/998" in modal_body.text
-    assert "releases/999" not in modal_body.text
+    assert "first 99 locations for this error" not in modal_body.text
+    assert "releases/98" in modal_body.text
+    assert "releases/99" not in modal_body.text
     table_rows = modal_body.find_elements(By.CSS_SELECTOR, "table tbody tr")
-    assert len(table_rows) == 999
-
-
-@override_settings(VALIDATION_ERROR_LOCATIONS_LENGTH=1000)
-def test_error_list_1000_lines_sample(skip_if_remote, url_input_browser):
-    """
-    Check that when there are more than 1000 error locations, only 1001 are
-    shown in the table, and there is a message.
-    """
-
-    browser = url_input_browser("1001_empty_releases.json")
-    assert "1001" in browser.find_element(By.TAG_NAME, "body").text
-    browser.find_element(By.LINK_TEXT, "1001").click()
-    modal_body = browser.find_element(By.CSS_SELECTOR, ".modal-body")
-    assert "first 1000 locations for this error" in modal_body.text
-    table_rows = modal_body.find_elements(By.CSS_SELECTOR, "table tbody tr")
-    assert len(table_rows) == 1000
-
-
-@override_settings(VALIDATION_ERROR_LOCATIONS_LENGTH=1000)
-def test_error_list_999_lines_sample(skip_if_remote, url_input_browser):
-    """
-    Check that when there are less than 1000 error locations, they are all shown
-    in the table, and there is no message.
-    """
-
-    browser = url_input_browser("999_empty_releases.json")
-    assert "999" in browser.find_element(By.TAG_NAME, "body").text
-    browser.find_element(By.LINK_TEXT, "999").click()
-    modal_body = browser.find_element(By.CSS_SELECTOR, ".modal-body")
-    assert "first 999 locations for this error" not in modal_body.text
-    assert "releases/998" in modal_body.text
-    assert "releases/999" not in modal_body.text
-    table_rows = modal_body.find_elements(By.CSS_SELECTOR, "table tbody tr")
-    assert len(table_rows) == 999
+    assert len(table_rows) == 99
 
 
 def test_jsonschema_translation(

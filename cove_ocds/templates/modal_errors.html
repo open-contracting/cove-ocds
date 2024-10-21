@@ -1,5 +1,7 @@
 {% load i18n %}
 {% load cove_ocds %}
+{# To change the sample size, change all occurrences of 100 in this file only. #}
+
 <div class="modal {{className}}" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -9,12 +11,8 @@
       </div>
       <div class="modal-body">
         <p>
-          {% if validation_error_locations_length and errorList|length > validation_error_locations_length %}
-            {% if validation_error_locations_sample %} 
-              {% blocktrans %}Showing a random {{validation_error_locations_length}} locations for this error.{% endblocktrans %}
-            {% else %}
-              {% blocktrans %}Showing the first {{validation_error_locations_length}} locations for this error.{% endblocktrans %}
-            {% endif %}
+          {% if errorList|length > 100 %}
+            {% blocktrans %}Showing the first 100 locations for this error.{% endblocktrans %}
           {% endif %}
         </p>
         <table class="table">
@@ -23,7 +21,7 @@
               {% if full_table %}
                 <th>{% trans 'Value' %}</th>
                 <th>{% trans 'Location' %}</th>
-                {% if file_type == 'xlsx' or file_type == 'csv' or file_type == 'ods' %}
+                {% if file_type != 'json' %}
                   <th>{% trans 'Spreadsheet Location' %}</th> 
                 {% endif %}
               {% else %}
@@ -36,7 +34,7 @@
             </tr>
           </thead>
           <tbody>
-            {% for item in errorList|take_or_sample:validation_error_locations_length %}
+            {% for item in errorList|slice:":100" %}
               <tr>
               {% if full_table %}
                 <td> {{item.value}} </td>
@@ -48,7 +46,7 @@
                     {{ item.path }}
                   {% endif %}
                 </td>
-                {% if file_type == 'xlsx' or file_type == 'csv' or file_type == 'ods' %}
+                {% if file_type != 'json' %}
                   <td> <strong>{% trans "Sheet:" %}</strong> {{item.sheet}} <strong>{% trans "Row:" %}</strong> {{item.row_number}} {% if item.header %} <strong>{% trans "Header:" %}</strong> {{item.header}} {% endif %} </td>
                 {% endif %}
               {% else %}

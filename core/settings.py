@@ -249,7 +249,6 @@ FATHOM = {
 DELETE_FILES_AFTER_DAYS = int(os.getenv("DELETE_FILES_AFTER_DAYS", "90"))
 REQUESTS_TIMEOUT = int(os.getenv("REQUESTS_TIMEOUT", "10"))
 SUPPORT_EMAIL = "data@open-contracting.org"
-VALIDATION_ERROR_LOCATIONS_LENGTH = int(os.getenv("VALIDATION_ERROR_LOCATIONS_LENGTH", "100"))
 USER_AGENT = os.getenv(
     "USER_AGENT", "DataReviewTool/1.0 (+https://review.standard.open-contracting.org; data@open-contracting.org)"
 )

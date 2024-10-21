@@ -2,7 +2,7 @@
 
 import json
 
-from django.utils.html import escape, format_html
+from django.utils.html import escape, format_html, mark_safe
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import ngettext
 from libcove.lib.tools import decimal_default
@@ -38,6 +38,33 @@ def json_repr(s):
 
 
 def html_error_msg(error):
+    if error["error_id"] == "releases_both_embedded_and_linked":
+        return _(
+            "This array should contain either entirely embedded releases or "
+            "linked releases. Embedded releases contain an 'id' whereas linked "
+            "releases do not. Your releases contain a mixture."
+        )
+
+    if error["error_id"] == "oneOf_any":
+        return _("%s is not valid under any of the given schemas") % (json_repr(error["instance"]),)
+
+    if error["error_id"] == "oneOf_each":
+        return _("%(instance)s is valid under each of %(reprs)s") % {
+            "instance": json_repr(error["instance"]),
+            "reprs": error.get("reprs"),
+        }
+
+    if error["message_type"] == "date-time":
+        return mark_safe(
+            _(
+                # https://github.com/open-contracting/lib-cove-ocds/blob/main/libcoveocds/common_checks.py
+                "Incorrect date format. Dates should use the form YYYY-MM-DDT00:00:00Z. Learn more about "
+                '<a href="https://standard.open-contracting.org/latest/en/schema/reference/#date">dates in OCDS</a>.'
+            )
+        )
+
+    # https://github.com/OpenDataServices/lib-cove-web/blob/main/cove/html_error_msg.py
+
     # This should not happen for json schema validation, but may happen for
     # other forms of validation, e.g. XML for IATI
     if "validator" not in error:
