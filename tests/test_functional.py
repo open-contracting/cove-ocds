@@ -377,7 +377,7 @@ def test_500_error(server_url, browser):
         (
             "tenders_releases_1_release_with_wrong_version_type.json",
             [
-                "Your data specifies a version 1000 (it must be a string) which is not recognised",
+                "Your data specifies a version 1000 (not a string) which is not recognised",
                 f"checked against OCDS release package schema version {OCDS_DEFAULT_SCHEMA_VERSION}. You can",
                 "Convert to Spreadsheet",
             ],
@@ -388,7 +388,7 @@ def test_500_error(server_url, browser):
             "tenders_releases_1_release_with_patch_in_version.json",
             [
                 '"version" field in your data follows the major.minor.patch pattern',
-                "100.100.0 format does not comply with the schema",
+                '"100.100.0" format does not comply with the schema',
                 "Error message",
             ],
             ["Convert to Spreadsheet"],

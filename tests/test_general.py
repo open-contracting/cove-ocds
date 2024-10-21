@@ -260,6 +260,7 @@ def test_explore_page_null_version(client):
     data.current_app = "cove_ocds"
     resp = client.get(data.get_absolute_url())
     assert resp.status_code == 200
+    assert b"null (not a string)" in resp.content
 
 
 @pytest.mark.django_db
