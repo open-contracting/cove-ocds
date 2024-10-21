@@ -194,7 +194,6 @@ referencing==0.29.1
 requests==2.32.3
     # via
     #   -r requirements.txt
-    #   -r requirements_dev.in
     #   libcove
     #   libcoveocds
     #   ocdsextensionregistry

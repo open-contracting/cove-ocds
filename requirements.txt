@@ -105,6 +105,7 @@ referencing==0.29.1
     #   libcoveocds
 requests==2.32.3
     # via
+    #   -r requirements.in
     #   libcove
     #   libcoveocds
     #   ocdsextensionregistry
