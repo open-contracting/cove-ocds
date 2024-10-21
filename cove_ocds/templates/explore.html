@@ -302,9 +302,9 @@
           {% with structure_warnings=structure_warnings %}
             {% if structure_warnings.missing_ids %}
 
-              <p>{% blocktrans count n_missing=structure_warnings.missing_ids|length %} We found <strong>{{n_missing}}</strong> object within an array in your data without an <code>id</code> property.
-                 {% plural %}We found <strong>{{n_missing}}</strong> objects within arrays in your data without an <code>id</code> property.{% endblocktrans %}
-                 {% blocktrans %} This may affect the creation of OCDS records, and conversion of data into other formats. We recommend that all objects within an array should have an <code>id</code> set.{% endblocktrans %}
+              <p>
+                {% blocktrans count n_missing=structure_warnings.missing_ids|length %}We found <strong>{{n_missing}}</strong> object within an array in your data without an <code>id</code> property.{% plural %}We found <strong>{{n_missing}}</strong> objects within arrays in your data without an <code>id</code> property.{% endblocktrans %}
+                 {% blocktrans %}This may affect the creation of OCDS records, and conversion of data into other formats. We recommend that all objects within an array should have an <code>id</code> set.{% endblocktrans %}
                 <a class="view-all" role="region" aria-expanded="false" aria-controls="OCDSmissingIdTable" data-toggle="collapse" data-target="#OCDSmissingIdTable"><small>{% trans "View all errors &#9660;" %}</small></a>
               </p>
               <div id="OCDSmissingIdTable" class="collapse">
@@ -573,9 +573,7 @@
            {% for field, details in deprecated_fields.items %}
               <tr>
                  <td>{{field}}</td>
-                 {% blocktrans with version=details.explanation.0 description=details.explanation.1 %}
-                 <td>Deprecated in {{version}}: {{description}}</td>
-                 {% endblocktrans %}
+                 <td>{% blocktrans with version=details.explanation.0 %}Deprecated in {{version}}:{% endblocktrans %} {{details.explanation.1}}</td>
                  <td>{% for path in details.paths %}<p>{{path}}</p>{% endfor %}</td>
                  <td>{{details.paths|length}}</td>
               </tr>
