@@ -11,7 +11,7 @@
     {{ message | linebreaks }}
 
     <p>
-      {% blocktrans with sentry=request.sentry.id %}If you think this is a bug, you can <a href="https://github.com/open-contracting/cove-ocds/issues">file an issue publicly on GitHub</a> or <a href="mailto:{{support_email}}?subject=Data%20Review%20Tool%20error%20{{ sentry }}">get in touch via email</a>, referencing this error as <strong>{{ sentry }}</strong>.{% endblocktrans %}
+      {% blocktrans with sentry=request.sentry.id %}If you think this is a bug, you can <a href="https://github.com/open-contracting/cove-ocds/issues">file an issue publicly on GitHub</a> or <a href="mailto:{{support_email}}?subject=Data%20Review%20Tool%20error%20{{ sentry }}">contact us</a>, referencing this error as <strong>{{ sentry }}</strong>.{% endblocktrans %}
     </p>
   </div>
 </div>

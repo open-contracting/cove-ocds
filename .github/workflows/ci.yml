@@ -25,7 +25,7 @@ jobs:
         env:
           PYTHONWARNINGS: error
         shell: bash
-        # https://github.com/OpenDataServices/flatten-tool/pull/458
+        # https://github.com/OpenDataServices/flatten-tool/pull/458 > 0.20.0
         # https://github.com/OpenDataServices/flatten-tool/issues/412
         run: |
           ./manage.py migrate

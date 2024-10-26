@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-21 14:17+0000\n"
+"POT-Creation-Date: 2024-10-26 18:52+0000\n"
 "PO-Revision-Date: 2020-09-08 08:53+0000\n"
 "Last-Translator: James McKinney, 2024\n"
 "Language-Team: Spanish (https://app.transifex.com/open-contracting-"
@@ -28,8 +28,8 @@ msgstr ""
 "1 : 2;\n"
 
 #: cove_ocds/forms.py:11
-msgid "Upload a file (.json, .csv, .xlsx, .ods)"
-msgstr "Subir un archivo (.json, .csv, .xlsx, .ods)"
+msgid "Upload a file (.json, .xlsx, .ods, .csv)"
+msgstr "Subir un archivo (.json, .xlsx, .ods, .csv)"
 
 #: cove_ocds/forms.py:15
 msgid "Supply a URL"
@@ -39,15 +39,15 @@ msgstr "Proporcionar una dirección URL"
 msgid "Paste (JSON only)"
 msgstr "Pegar (sólo JSON)"
 
-#: cove_ocds/html_error_msg.py:14
+#: cove_ocds/html_error_msg.py:11
 msgid "Date is not in the correct format"
 msgstr "El formato de la fecha es incorrecto"
 
-#: cove_ocds/html_error_msg.py:15
+#: cove_ocds/html_error_msg.py:12
 msgid "Invalid 'uri' found"
 msgstr "Se ha encontrado una 'uri' inválida"
 
-#: cove_ocds/html_error_msg.py:17
+#: cove_ocds/html_error_msg.py:14
 msgid ""
 "{}<code>{}</code> is not a string. Check that the value {} has quotes at the "
 "start and end. Escape any quotes in the value with <code>\\</code>"
@@ -56,9 +56,9 @@ msgstr ""
 "principio y al final. Escapa de cualquier comillas con el valor <code>\\</"
 "code>"
 
-#: cove_ocds/html_error_msg.py:21
+#: cove_ocds/html_error_msg.py:18
 msgid ""
-"{}<code>{}</code> is not a integer. Check that the value {} doesn’t contain "
+"{}<code>{}</code> is not a integer. Check that the value {} doesn't contain "
 "decimal points or any characters other than 0-9. Integer values should not "
 "be in quotes. "
 msgstr ""
@@ -66,9 +66,9 @@ msgstr ""
 "puntos decimales ni ningún otro carácter que no sea 0-9. Los valores enteros "
 "no deben estar entre comillas."
 
-#: cove_ocds/html_error_msg.py:25
+#: cove_ocds/html_error_msg.py:22
 msgid ""
-"{}<code>{}</code> is not a number. Check that the value {} doesn’t contain "
+"{}<code>{}</code> is not a number. Check that the value {} doesn't contain "
 "any characters other than 0-9 and dot (<code>.</code>). Number values should "
 "not be in quotes. "
 msgstr ""
@@ -76,23 +76,23 @@ msgstr ""
 "ningún carácter más que 0-9 y el punto (.). Los valores numéricos no deben "
 "estar entre comillas"
 
-#: cove_ocds/html_error_msg.py:28
+#: cove_ocds/html_error_msg.py:25
 msgid "{}<code>{}</code> is not a JSON object"
 msgstr "{}<code>{}</code> no es un objeto JSON."
 
-#: cove_ocds/html_error_msg.py:29
+#: cove_ocds/html_error_msg.py:26
 msgid "{}<code>{}</code> is not a JSON array"
 msgstr "{}<code>{}</code> no es una matriz JSON"
 
-#: cove_ocds/html_error_msg.py:30
+#: cove_ocds/html_error_msg.py:27
 msgid "{}<code>{}</code> is not a JSON boolean"
 msgstr "{}<code>{}</code> no es un JSON booleano "
 
-#: cove_ocds/html_error_msg.py:31
+#: cove_ocds/html_error_msg.py:28
 msgid "{}<code>{}</code> is not null"
 msgstr "{}<code>{}</code> no es nulo"
 
-#: cove_ocds/html_error_msg.py:43
+#: cove_ocds/html_error_msg.py:37
 msgid ""
 "This array should contain either entirely embedded releases or linked "
 "releases. Embedded releases contain an 'id' whereas linked releases do not. "
@@ -102,17 +102,17 @@ msgstr ""
 "vinculadas. Las entregas integradas contienen un \"identificador\", mientras "
 "que las entregas vinculadas no. Estas entregas contienen una mezcla de ambos."
 
-#: cove_ocds/html_error_msg.py:49 cove_ocds/html_error_msg.py:193
+#: cove_ocds/html_error_msg.py:43 cove_ocds/html_error_msg.py:186
 #, python-format
 msgid "%s is not valid under any of the given schemas"
 msgstr "%s no es válido bajo ninguno de los esquemas dados"
 
-#: cove_ocds/html_error_msg.py:52
+#: cove_ocds/html_error_msg.py:46
 #, python-format
 msgid "%(instance)s is valid under each of %(reprs)s"
 msgstr "%(instance)s es válido bajo cada uno de %(reprs)s"
 
-#: cove_ocds/html_error_msg.py:61
+#: cove_ocds/html_error_msg.py:54
 msgid ""
 "Incorrect date format. Dates should use the form YYYY-MM-DDT00:00:00Z. Learn "
 "more about <a href=\"https://standard.open-contracting.org/latest/en/schema/"
@@ -122,48 +122,48 @@ msgstr ""
 "DDT00:00:00Z. Lea más sobre <a href=\"https://standard.open-contracting.org/"
 "latest/es/schema/reference/#date\"> fechas en OCDS</a>"
 
-#: cove_ocds/html_error_msg.py:83
+#: cove_ocds/html_error_msg.py:76
 msgid "Array Element "
 msgstr "Elemento de matriz"
 
-#: cove_ocds/html_error_msg.py:89 cove_ocds/html_error_msg.py:91
+#: cove_ocds/html_error_msg.py:82 cove_ocds/html_error_msg.py:84
 msgid "is not null, and"
 msgstr "no es 'null', y"
 
-#: cove_ocds/html_error_msg.py:98
+#: cove_ocds/html_error_msg.py:91
 #, python-format
 msgid "%(instance)s is not a %(validator_value)s"
 msgstr "%(instance)s no es un %(validator_value)s"
 
-#: cove_ocds/html_error_msg.py:108
+#: cove_ocds/html_error_msg.py:101
 msgid "<code>{}</code> is missing but required within <code>{}</code>"
 msgstr "<code>{}</code> falta pero se requiere dentro de <code>{}</code>"
 
-#: cove_ocds/html_error_msg.py:112
+#: cove_ocds/html_error_msg.py:105
 msgid "<code>{}</code> is missing but required"
 msgstr "<code>{}</code> falta pero se requiere"
 
-#: cove_ocds/html_error_msg.py:115
+#: cove_ocds/html_error_msg.py:108
 msgid "Invalid code found in <code>{}</code>"
 msgstr "Código inválido encontrado en <code>{}</code>"
 
-#: cove_ocds/html_error_msg.py:119
+#: cove_ocds/html_error_msg.py:112
 msgid "<code>{}</code> does not match the regex <code>{}</code>"
 msgstr "<code>{}</code> no coincide con la expresión regular <code>{}</code>"
 
-#: cove_ocds/html_error_msg.py:128
+#: cove_ocds/html_error_msg.py:121
 msgid ""
 "<code>{}</code> is too short. You must supply at least one value, or remove "
-"the item entirely (unless it’s required)."
+"the item entirely (unless it's required)."
 msgstr ""
 "<code>{}</code> es muy corto. Debe proporcionar al menos un valor o eliminar "
 "el artículo por completo (a menos que sea necesario)."
 
-#: cove_ocds/html_error_msg.py:134 cove_ocds/html_error_msg.py:148
+#: cove_ocds/html_error_msg.py:127 cove_ocds/html_error_msg.py:141
 msgid "<code>{}</code> is too short"
 msgstr "<code>{}</code> es muy corto"
 
-#: cove_ocds/html_error_msg.py:142
+#: cove_ocds/html_error_msg.py:135
 msgid ""
 "<code>{}</code> is too short. Strings must be at least one character. This "
 "error typically indicates a missing value."
@@ -171,82 +171,82 @@ msgstr ""
 "<code>{}</code> es muy corto. Las cadenas deben ser de al menos un caracter. "
 "Este error generalmente indica que hay un valor faltante. "
 
-#: cove_ocds/html_error_msg.py:154 cove_ocds/html_error_msg.py:160
+#: cove_ocds/html_error_msg.py:147 cove_ocds/html_error_msg.py:153
 msgid "<code>{}</code> is too long"
 msgstr "<code>{}</code> es muy largo"
 
-#: cove_ocds/html_error_msg.py:165
+#: cove_ocds/html_error_msg.py:158
 msgid "{} does not have enough properties"
 msgstr "{} no tiene suficientes propiedades"
 
-#: cove_ocds/html_error_msg.py:168
+#: cove_ocds/html_error_msg.py:161
 msgid "{} has too many properties"
 msgstr "{} tiene demasiadas propiedades"
 
-#: cove_ocds/html_error_msg.py:172
+#: cove_ocds/html_error_msg.py:165
 #, python-format
 msgid ""
 "%(instance)s is less than or equal to the minimum of %(validator_value)s"
 msgstr "%(instance)s es menor o igual que el mínimo de %(validator_value)s"
 
-#: cove_ocds/html_error_msg.py:176
+#: cove_ocds/html_error_msg.py:169
 #, python-format
 msgid "%(instance)s is less than the minimum of %(validator_value)s"
 msgstr "%(instance)s es menor que el mínimo de %(validator_value)s"
 
-#: cove_ocds/html_error_msg.py:183
+#: cove_ocds/html_error_msg.py:176
 #, python-format
 msgid ""
 "%(instance)s is more than or equal to the maximum of %(validator_value)s"
 msgstr "%(instance)s es mayor o igual que el máximo de %(validator_value)s"
 
-#: cove_ocds/html_error_msg.py:187
+#: cove_ocds/html_error_msg.py:180
 #, python-format
 msgid "%(instance)s is more than the maximum of %(validator_value)s"
 msgstr "%(instance)s es mayor que el máximo de %(validator_value)s"
 
-#: cove_ocds/html_error_msg.py:196
+#: cove_ocds/html_error_msg.py:189
 #, python-format
 msgid "%(instance)s is not a multiple of %(validator_value)s"
 msgstr "%(instance)s no es un múltiplo de %(validator_value)s"
 
-#: cove_ocds/html_error_msg.py:202
+#: cove_ocds/html_error_msg.py:195
 #, python-format
 msgid "%(validator_value)s is not allowed for %(instance)s"
 msgstr "%(validator_value)s no está permitido para %(instance)s"
 
-#: cove_ocds/html_error_msg.py:210
+#: cove_ocds/html_error_msg.py:203
 #, python-format
 msgid "Additional items are not allowed (%s was unexpected)"
 msgid_plural "Additional items are not allowed (%s were unexpected)"
 msgstr[0] "Items adicionales no están permitidos (%s fue inesperado)"
 msgstr[1] "Items adicionales no están permitidos (%s fueron inesperados)"
 
-#: cove_ocds/html_error_msg.py:216
+#: cove_ocds/html_error_msg.py:209
 #, python-format
 msgid "%(each)s is a dependency of %(property)s"
 msgstr "%(each)s es una dependencia de %(property)s"
 
-#: cove_ocds/html_error_msg.py:223
+#: cove_ocds/html_error_msg.py:216
 msgid "Array has non-unique elements"
 msgstr "La matriz tiene elementos no únicos"
 
-#: cove_ocds/html_error_msg.py:229
+#: cove_ocds/html_error_msg.py:222
 msgid "Non-unique combination of {} values"
 msgstr "Combinación no única de {} valores"
 
-#: cove_ocds/html_error_msg.py:230
+#: cove_ocds/html_error_msg.py:223
 msgid "Non-unique {} values"
 msgstr "Valores {} no únicos"
 
-#: cove_ocds/html_error_msg.py:235
+#: cove_ocds/html_error_msg.py:228
 #, python-format
 msgid "Additional properties are not allowed (%s was unexpected)"
 msgid_plural "Additional properties are not allowed (%s were unexpected)"
 msgstr[0] "Propiedades adicionales no están permitidas (%s fue inesperado)"
 msgstr[1] "Propiedades adicionales no están permitidas (%s fueron inesperados)"
 
-#: cove_ocds/html_error_msg.py:243
+#: cove_ocds/html_error_msg.py:236
 #, python-format
 msgid "%(extras)s does not match any of the regexes: %(patterns)s"
 msgid_plural "%(extras)s do not match any of the regexes: %(patterns)s"
@@ -281,7 +281,7 @@ msgstr ""
 msgid ""
 "This error has been automatically reported to our development team. If you "
 "<a href=\"mailto:%(support_email)s?"
-"subject=Data%%20Review%%20Tool%%20error%%20%(sentry)s\">get in touch</a>, "
+"subject=Data%%20Review%%20Tool%%20error%%20%(sentry)s\">contact us</a>, "
 "please reference this error as <strong>%(sentry)s</strong>."
 msgstr ""
 "Nuestro equipo de desarrollo ha sido informado de este error de forma "
@@ -323,9 +323,14 @@ msgid ""
 "If you think this is a bug, you can <a href=\"https://github.com/open-"
 "contracting/cove-ocds/issues\">file an issue publicly on GitHub</a> or <a "
 "href=\"mailto:%(support_email)s?"
-"subject=Data%%20Review%%20Tool%%20error%%20%(sentry)s\">get in touch via "
-"email</a>, referencing this error as <strong>%(sentry)s</strong>."
+"subject=Data%%20Review%%20Tool%%20error%%20%(sentry)s\">contact us</a>, "
+"referencing this error as <strong>%(sentry)s</strong>."
 msgstr ""
+"Si cree que esto es un error, puede <a href=\"https://github.com/open-"
+"contracting/cove-ocds/issues\">presentar un issue públicamente en GitHub</a> "
+"o <a href=\"mailto:%(support_email)s?"
+"subject=Data%%20Review%%20Tool%%20error%%20%(sentry)s\">póngase en contacto</"
+"a>, haciendo referencia a este error como <strong>%(sentry)s</strong>."
 
 #: cove_ocds/templates/explore.html:6
 msgid "Load New File"
@@ -747,7 +752,7 @@ msgstr ""
 msgid ""
 "You may need to create a mapping between your local codes and the OCDS "
 "closed codelists to address these errors. In most cases, there will be a "
-"‘detail’ field where you can also include your local codes. If you have "
+"'detail' field where you can also include your local codes. If you have "
 "already completed a mapping, please review the spelling and capitalisation "
 "used in these closed codelist fields."
 msgstr ""
@@ -1119,12 +1124,12 @@ msgid "Spreadsheet Location"
 msgstr "Localización de la hoja de cálculo"
 
 #: cove_ocds/templates/modal_errors.html:43
-#: cove_ocds/templates/validation_table.html:71
+#: cove_ocds/templates/validation_table.html:66
 msgid "Path:"
 msgstr "Ruta:"
 
 #: cove_ocds/templates/modal_errors.html:44
-#: cove_ocds/templates/validation_table.html:72
+#: cove_ocds/templates/validation_table.html:67
 msgid "Line:"
 msgstr "Línea:"
 

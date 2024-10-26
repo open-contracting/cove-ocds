@@ -1,5 +1,3 @@
-# https://github.com/OpenDataServices/lib-cove-web/blob/main/cove/input/models.py
-
 import os
 import secrets
 import string
@@ -66,6 +64,7 @@ class SuppliedData(models.Model):
                 filename = options["filename"]
             else:
                 filename = urlsplit(response.url).path.rstrip("/").rsplit("/", 1)[-1]
+
             possible_extension = filename.rsplit(".", 1)[-1]
             if possible_extension in CONTENT_TYPE_MAP.values():
                 file_extension = possible_extension

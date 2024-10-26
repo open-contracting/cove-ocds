@@ -15,11 +15,11 @@ validation_error_template_lookup_safe = {
         "Escape any quotes in the value with <code>\\</code>"
     ),
     "integer": _(
-        "{}<code>{}</code> is not a integer. Check that the value {} doesn’t contain decimal points "
+        "{}<code>{}</code> is not a integer. Check that the value {} doesn't contain decimal points "
         "or any characters other than 0-9. Integer values should not be in quotes. "
     ),
     "number": _(
-        "{}<code>{}</code> is not a number. Check that the value {} doesn’t contain any characters "
+        "{}<code>{}</code> is not a number. Check that the value {} doesn't contain any characters "
         "other than 0-9 and dot (<code>.</code>). Number values should not be in quotes. "
     ),
     "object": _("{}<code>{}</code> is not a JSON object"),
@@ -119,7 +119,7 @@ def html_error_msg(error):
             return format_html(
                 _(
                     "<code>{}</code> is too short. You must supply at least one value, "
-                    "or remove the item entirely (unless it’s required)."
+                    "or remove the item entirely (unless it's required)."
                 ),
                 json.dumps(error.get("instance")),
             )

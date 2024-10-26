@@ -8,7 +8,7 @@ class UploadForm(forms.ModelForm):
     class Meta:
         model = models.SuppliedData
         fields = ["original_file"]
-        labels = {"original_file": _("Upload a file (.json, .csv, .xlsx, .ods)")}
+        labels = {"original_file": _("Upload a file (.json, .xlsx, .ods, .csv)")}
 
 
 class UrlForm(forms.ModelForm):
