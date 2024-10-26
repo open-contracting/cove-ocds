@@ -1,6 +1,6 @@
 {% load i18n %}
 {% load cove_ocds %}
-{# To change the sample size, change all occurrences of 100 in this file only. #}
+{% with sample_size=100 sample_slice=":100" %}
 
 <div class="modal {{className}}" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-lg">
@@ -11,8 +11,8 @@
       </div>
       <div class="modal-body">
         <p>
-          {% if errorList|length > 100 %}
-            {% blocktrans %}Showing the first 100 locations for this error.{% endblocktrans %}
+          {% if errorList|length > sample_size %}
+            {% blocktrans %}Showing the first {{sample_size}} locations for this error.{% endblocktrans %}
           {% endif %}
         </p>
         <table class="table">
@@ -34,7 +34,7 @@
             </tr>
           </thead>
           <tbody>
-            {% for item in errorList|slice:":100" %}
+            {% for item in errorList|slice:sample_slice %}
               <tr>
               {% if full_table %}
                 <td> {{item.value}} </td>
@@ -64,3 +64,5 @@
     </div>
   </div>
 </div>
+
+{% endwith %}

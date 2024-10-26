@@ -1100,8 +1100,9 @@ msgstr ""
 "fictional-example/1.1/ocds-213czf-000-00001-02-tender.json</code>"
 
 #: cove_ocds/templates/modal_errors.html:15
-msgid "Showing the first 100 locations for this error."
-msgstr "Mostrando la primera 100 ubicación para este error."
+#, python-format
+msgid "Showing the first %(sample_size)s locations for this error."
+msgstr "Mostrando la primera %(sample_size)s ubicación para este error."
 
 #: cove_ocds/templates/modal_errors.html:22
 msgid "Value"
