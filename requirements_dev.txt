@@ -21,9 +21,7 @@ backports-datetime-fromisoformat==1.0.0
     #   -r requirements.txt
     #   flattentool
 bleach==6.0.0
-    # via
-    #   -r requirements.txt
-    #   libcoveocds
+    # via -r requirements.txt
 btrees==4.8.0
     # via
     #   -r requirements.txt
@@ -64,7 +62,6 @@ django==4.2.16
     # via
     #   -r requirements.txt
     #   django-bootstrap3
-    #   libcoveocds
     #   libcoveweb
 django-bootstrap3==24.2
     # via
@@ -82,7 +79,7 @@ flattentool==0.26.0
     #   -r requirements_dev.in
     #   libcove
     #   libcoveweb
-gunicorn[setproctitle]==23.0.0
+gunicorn==23.0.0
     # via -r requirements.txt
 h11==0.14.0
     # via wsproto
@@ -124,7 +121,7 @@ libcove==0.32.1
     #   -r requirements.txt
     #   libcoveocds
     #   libcoveweb
-libcoveocds[perf,web]==0.16.0
+libcoveocds==0.16.0
     # via -r requirements.txt
 libcoveweb==0.31.0
     # via -r requirements.txt
@@ -135,9 +132,7 @@ lxml==4.9.1
     #   -r requirements.txt
     #   flattentool
 markdown-it-py==2.2.0
-    # via
-    #   -r requirements.txt
-    #   libcoveocds
+    # via -r requirements.txt
 markupsafe==2.1.2
     # via
     #   -r requirements.txt
@@ -159,9 +154,7 @@ openpyxl==3.0.7
     #   -r requirements.txt
     #   flattentool
 orjson==3.9.15
-    # via
-    #   -r requirements.txt
-    #   libcoveocds
+    # via -r requirements.txt
 outcome==1.2.0
     # via trio
 packaging==24.1
@@ -242,9 +235,14 @@ selenium==4.11.2
 sentry-sdk==2.8.0
     # via -r requirements.txt
 setproctitle==1.3.3
+    # via -r requirements.txt
+setuptools==75.2.0
     # via
     #   -r requirements.txt
-    #   gunicorn
+    #   zc-lockfile
+    #   zc-zlibstorage
+    #   zodbpickle
+    #   zope-interface
 six==1.16.0
     # via
     #   -r requirements.txt
@@ -277,7 +275,7 @@ url-normalize==1.4.3
     # via
     #   -r requirements.txt
     #   requests-cache
-urllib3[socks]==2.2.2
+urllib3==2.2.2
     # via
     #   -r requirements.txt
     #   requests
