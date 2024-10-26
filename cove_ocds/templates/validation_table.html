@@ -21,9 +21,6 @@
     <td>
       <p>
         <strong>{{ error | html_error_msg }}</strong>
-        {% if error.message_type in common_error_types %}
-          <a href="{% url 'common_errors' %}#{{error.message_type}}" target="_blank">{% trans "(more info)" %}</a>
-        {% endif %}
         {% if error.assumption == 'embedded_releases' %}
             {% trans '(Assuming these are embedded releases, because they have an <code>id</code>).' %}
         {% elif error.assumption == 'linked_releases' %}
@@ -37,8 +34,6 @@
       </div>
       {% endif %}
     </td>
-  {% elif error.message_type in common_error_types %}
-  <td><a href="{% url 'common_errors' %}#{{error.message_type}}"> {{error.message}} </a></td>
   {% else %}
     <td>{{error.message}}</td> 
   {% endif %}
