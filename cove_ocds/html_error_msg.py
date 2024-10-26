@@ -1,11 +1,8 @@
-# https://github.com/OpenDataServices/lib-cove-web/blob/main/cove/html_error_msg.py
-
 import json
 
 from django.utils.html import escape, format_html, mark_safe
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import ngettext
-from libcove.lib.tools import decimal_default
 
 # These are "safe" html that we trust
 # Don't insert any values into these strings without ensuring escaping
@@ -32,12 +29,9 @@ validation_error_template_lookup_safe = {
 }
 
 
-def json_repr(s):
-    """Prefer JSON to repr(), used by jsonschema."""
-    return json.dumps(s, sort_keys=True, default=decimal_default)
-
-
 def html_error_msg(error):
+    # OCDS
+
     if error["error_id"] == "releases_both_embedded_and_linked":
         return _(
             "This array should contain either entirely embedded releases or "
@@ -46,24 +40,23 @@ def html_error_msg(error):
         )
 
     if error["error_id"] == "oneOf_any":
-        return _("%s is not valid under any of the given schemas") % (json_repr(error["instance"]),)
+        return _("%s is not valid under any of the given schemas") % (json.dumps(error["instance"]),)
 
     if error["error_id"] == "oneOf_each":
         return _("%(instance)s is valid under each of %(reprs)s") % {
-            "instance": json_repr(error["instance"]),
+            "instance": json.dumps(error["instance"]),
             "reprs": error.get("reprs"),
         }
 
     if error["message_type"] == "date-time":
         return mark_safe(
             _(
-                # https://github.com/open-contracting/lib-cove-ocds/blob/main/libcoveocds/common_checks.py
                 "Incorrect date format. Dates should use the form YYYY-MM-DDT00:00:00Z. Learn more about "
                 '<a href="https://standard.open-contracting.org/latest/en/schema/reference/#date">dates in OCDS</a>.'
             )
         )
 
-    # https://github.com/OpenDataServices/lib-cove-web/blob/main/cove/html_error_msg.py
+    # Generic
 
     # This should not happen for json schema validation, but may happen for
     # other forms of validation, e.g. XML for IATI
@@ -83,7 +76,7 @@ def html_error_msg(error):
     pre_header = _("Array Element ") if isinstance(header, str) and "[number]" in header else ""
 
     null_clause = ""
-    if e_validator in ("format", "type"):
+    if e_validator in {"format", "type"}:
         if isinstance(e_validator_value, list):
             if "null" not in e_validator_value:
                 null_clause = _("is not null, and")
@@ -96,8 +89,8 @@ def html_error_msg(error):
             return format_html(message_safe_template, pre_header, error["header"], null_clause)
         if e_validator == "format":
             return _("%(instance)s is not a %(validator_value)s") % {
-                "instance": json_repr(error.get("instance")),
-                "validator_value": json_repr(e_validator_value),
+                "instance": json.dumps(error.get("instance")),
+                "validator_value": json.dumps(e_validator_value),
             }
 
     if e_validator == "required":
@@ -128,11 +121,11 @@ def html_error_msg(error):
                     "<code>{}</code> is too short. You must supply at least one value, "
                     "or remove the item entirely (unless it’s required)."
                 ),
-                json_repr(error.get("instance")),
+                json.dumps(error.get("instance")),
             )
         return format_html(
             _("<code>{}</code> is too short"),
-            json_repr(error.get("instance")),
+            json.dumps(error.get("instance")),
         )
 
     if e_validator == "minLength":
@@ -142,66 +135,66 @@ def html_error_msg(error):
                     "<code>{}</code> is too short. Strings must be at least one character. "
                     "This error typically indicates a missing value."
                 ),
-                json_repr(error.get("instance")),
+                json.dumps(error.get("instance")),
             )
         return format_html(
             _("<code>{}</code> is too short"),
-            json_repr(error.get("instance")),
+            json.dumps(error.get("instance")),
         )
 
     if e_validator == "maxItems":
         return format_html(
             _("<code>{}</code> is too long"),
-            json_repr(error.get("instance")),
+            json.dumps(error.get("instance")),
         )
 
     if e_validator == "maxLength":
         return format_html(
             _("<code>{}</code> is too long"),
-            json_repr(error.get("instance")),
+            json.dumps(error.get("instance")),
         )
 
     if e_validator == "minProperties":
-        return _("{} does not have enough properties").format(json_repr(error.get("instance")))
+        return _("{} does not have enough properties").format(json.dumps(error.get("instance")))
 
     if e_validator == "maxProperties":
-        return _("{} has too many properties").format(json_repr(error.get("instance")))
+        return _("{} has too many properties").format(json.dumps(error.get("instance")))
 
     if e_validator == "minimum":
         if error.get("exclusiveMinimum", False):
             return _("%(instance)s is less than or equal to the minimum of %(validator_value)s") % {
-                "instance": json_repr(error.get("instance")),
-                "validator_value": json_repr(e_validator_value),
+                "instance": json.dumps(error.get("instance")),
+                "validator_value": json.dumps(e_validator_value),
             }
         return _("%(instance)s is less than the minimum of %(validator_value)s") % {
-            "instance": json_repr(error.get("instance")),
-            "validator_value": json_repr(e_validator_value),
+            "instance": json.dumps(error.get("instance")),
+            "validator_value": json.dumps(e_validator_value),
         }
 
     if e_validator == "maximum":
         if error.get("exclusiveMaximum", False):
             return _("%(instance)s is more than or equal to the maximum of %(validator_value)s") % {
-                "instance": json_repr(error.get("instance")),
-                "validator_value": json_repr(e_validator_value),
+                "instance": json.dumps(error.get("instance")),
+                "validator_value": json.dumps(e_validator_value),
             }
         return _("%(instance)s is more than the maximum of %(validator_value)s") % {
-            "instance": json_repr(error.get("instance")),
-            "validator_value": json_repr(e_validator_value),
+            "instance": json.dumps(error.get("instance")),
+            "validator_value": json.dumps(e_validator_value),
         }
 
     if e_validator == "anyOf":
-        return _("%s is not valid under any of the given schemas") % (json_repr(error["instance"]),)
+        return _("%s is not valid under any of the given schemas") % (json.dumps(error["instance"]),)
 
     if e_validator == "multipleOf":
         return _("%(instance)s is not a multiple of %(validator_value)s") % {
-            "instance": json_repr(error.get("instance")),
-            "validator_value": json_repr(e_validator_value),
+            "instance": json.dumps(error.get("instance")),
+            "validator_value": json.dumps(e_validator_value),
         }
 
     if e_validator == "not":
         return _("%(validator_value)s is not allowed for %(instance)s") % {
-            "instance": json_repr(error.get("instance")),
-            "validator_value": json_repr(e_validator_value),
+            "instance": json.dumps(error.get("instance")),
+            "validator_value": json.dumps(e_validator_value),
         }
 
     if e_validator == "additionalItems":
@@ -214,8 +207,8 @@ def html_error_msg(error):
 
     if e_validator == "dependencies":
         return _("%(each)s is a dependency of %(property)s") % {
-            "each": json_repr(error.get("each")),
-            "property": json_repr(error.get("property")),
+            "each": json.dumps(error.get("each")),
+            "property": json.dumps(error.get("property")),
         }
 
     if error.get("error_id"):
