@@ -25,7 +25,7 @@
           {% endif %}
 
         </td> 
-        <td>{{detail.values|join:", "}}</td>
+        <td>{{detail.values|sort|join:", "}}</td>
       </tr>
    {% endfor %}
    </tbody>

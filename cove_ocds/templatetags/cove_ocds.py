@@ -31,3 +31,8 @@ def subtract(value, arg):
 @register.filter
 def list_from_attribute(list_of_dicts, key_name):
     return [value[key_name] for value in list_of_dicts]
+
+
+@register.filter
+def sort(value):
+    return sorted(value)
