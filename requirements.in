@@ -3,7 +3,7 @@ django-bootstrap3
 flattentool
 gunicorn[setproctitle]
 libcove
-libcoveocds[perf,web]
+libcoveocds[perf,web]<0.17
 # https://github.com/OpenDataServices/lib-cove-web/pull/153
 git+https://github.com/jpmckinney/lib-cove-web.git@patch-2#egg=libcoveweb
 python-dateutil

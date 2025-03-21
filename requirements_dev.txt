@@ -121,7 +121,7 @@ libcove==0.32.1
     #   -r requirements.txt
     #   libcoveocds
     #   libcoveweb
-libcoveocds==0.16.4
+libcoveocds==0.16.5
     # via -r requirements.txt
 libcoveweb @ git+https://github.com/jpmckinney/lib-cove-web.git@b2f7a6e1fa8d8cbaec574a38792dc3c6bb881eb4#egg=libcoveweb
     # via -r requirements.txt
