@@ -30,7 +30,7 @@ contextlib2==0.6.0.post1
     # via schema
 defusedxml==0.7.1
     # via odfpy
-django==4.2.20
+django==4.2.21
     # via
     #   -r requirements.in
     #   django-bootstrap3
@@ -47,7 +47,7 @@ flattentool==0.26.0
     #   -r requirements.in
     #   libcove
     #   libcoveweb
-gunicorn==23.0.0
+gunicorn[setproctitle]==23.0.0
     # via -r requirements.in
 idna==3.7
     # via requests
@@ -72,9 +72,9 @@ libcove==0.32.1
     #   -r requirements.in
     #   libcoveocds
     #   libcoveweb
-libcoveocds==0.16.5
+libcoveocds[perf,web]==0.16.5
     # via -r requirements.in
-libcoveweb @ git+https://github.com/jpmckinney/lib-cove-web.git@b2f7a6e1fa8d8cbaec574a38792dc3c6bb881eb4#egg=libcoveweb
+libcoveweb @ git+https://github.com/jpmckinney/lib-cove-web.git@patch-2
     # via -r requirements.in
 lxml==4.9.1
     # via flattentool
@@ -137,12 +137,6 @@ sentry-sdk==2.8.0
     # via -r requirements.in
 setproctitle==1.3.3
     # via gunicorn
-setuptools==77.0.3
-    # via
-    #   zc-lockfile
-    #   zc-zlibstorage
-    #   zodbpickle
-    #   zope-interface
 six==1.16.0
     # via
     #   bleach
