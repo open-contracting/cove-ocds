@@ -2,6 +2,7 @@ import contextlib
 import os
 import time
 
+import flattentool
 import pytest
 import requests
 from django.conf import settings
@@ -657,8 +658,6 @@ def test_flattentool_warnings(server_url, url_input_browser, httpserver, monkeyp
         source_filename = "tenders_releases_2_releases.json"
     else:
         source_filename = "tenders_releases_2_releases.xlsx"
-
-    import flattentool
 
     def mockunflatten(input_name, output_name, *args, **kwargs):
         with open(kwargs["cell_source_map"], "w") as fp:
