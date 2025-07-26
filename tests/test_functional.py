@@ -58,11 +58,12 @@ def test_footer_ocds(server_url, browser, link_text, expected_text, css_selector
 
 def test_index_page_ocds(server_url, browser):
     browser.get(server_url)
+    body_text = browser.find_element(By.TAG_NAME, "body").text
 
-    assert "Data Review Tool" in browser.find_element(By.TAG_NAME, "body").text
-    assert "Using the data review tool" in browser.find_element(By.TAG_NAME, "body").text
-    assert "'release'" in browser.find_element(By.TAG_NAME, "body").text
-    assert "'record'" in browser.find_element(By.TAG_NAME, "body").text
+    assert "Data Review Tool" in body_text
+    assert "Using the data review tool" in body_text
+    assert "'release'" in body_text
+    assert "'record'" in body_text
 
 
 @pytest.mark.parametrize(
@@ -105,12 +106,13 @@ def test_common_index_elements(server_url, browser):
     browser.get(server_url)
     browser.find_element(By.CSS_SELECTOR, "#more-information .panel-title").click()
     time.sleep(0.5)
+    body_text = browser.find_element(By.TAG_NAME, "body").text
 
-    assert "What happens to the data I provide to this site?" in browser.find_element(By.TAG_NAME, "body").text
-    assert "Why provide converted versions?" in browser.find_element(By.TAG_NAME, "body").text
-    assert "Terms & Conditions" in browser.find_element(By.TAG_NAME, "body").text
-    assert "Open Data Services" in browser.find_element(By.TAG_NAME, "body").text
-    assert "360 Giving" not in browser.find_element(By.TAG_NAME, "body").text
+    assert "What happens to the data I provide to this site?" in body_text
+    assert "Why provide converted versions?" in body_text
+    assert "Terms & Conditions" in body_text
+    assert "Open Data Services" in body_text
+    assert "360 Giving" not in body_text
 
 
 def test_terms_page(server_url, browser):
@@ -523,7 +525,7 @@ def check_url_input_result_page(
     for text in not_expected_text:
         assert text not in body_text
 
-    assert "Data Review Tool" in browser.find_element(By.TAG_NAME, "body").text
+    assert "Data Review Tool" in body_text
 
     if conversion_successful:
         if source_filename.endswith(".json"):
@@ -717,9 +719,10 @@ def test_url_invalid_dataset_request(server_url, browser, data_url):
     browser.get(f"{server_url}/data/38e267ce-d395-46ba-acbf-2540cdd0c810")
 
     success_button = browser.find_element(By.CLASS_NAME, "success-button")
+    body_text = browser.find_element(By.TAG_NAME, "body").text
 
-    assert "We don't seem to be able to find the data you requested." in browser.find_element(By.TAG_NAME, "body").text
-    assert "360 Giving" not in browser.find_element(By.TAG_NAME, "body").text
+    assert "We don't seem to be able to find the data you requested." in body_text
+    assert "360 Giving" not in body_text
     # 363 - Tests there is padding round the 'go to home' button
     assert success_button.value_of_css_property("padding-bottom") == "20px"
 
