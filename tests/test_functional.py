@@ -766,6 +766,8 @@ def test_url_input_with_version(
 
     # Refresh page to check if tests still work after caching the data
     browser.get(browser.current_url)
+    body_text = browser.find_element(By.TAG_NAME, "body").text
+    additional_field_box = browser.find_element(By.ID, "additionalFieldTable").text
 
     assert expected in body_text
     assert not_expected not in body_text
@@ -836,6 +838,8 @@ def test_url_input_with_version_change(
 
     # Refresh page to check if tests still work after caching the data
     browser.get(browser.current_url)
+    body_text = browser.find_element(By.TAG_NAME, "body").text
+    additional_field_box = browser.find_element(By.ID, "additionalFieldTable").text
 
     assert expected in body_text
     assert not_expected not in body_text
@@ -904,6 +908,8 @@ def test_url_input_with_extensions(server_url, url_input_browser, httpserver, so
 
     # Refresh page to check if tests still work after caching the data
     browser.get(browser.current_url)
+    browser = url_input_browser(source_filename)
+    schema_extension_box = browser.find_element(By.ID, "schema-extensions").text
 
     for text in expected:
         assert text in schema_extension_box
