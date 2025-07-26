@@ -1023,7 +1023,7 @@ def test_releases_table_25_rows(skip_if_remote, url_input_browser):
     """
 
     browser = url_input_browser("30_releases.json")
-    assert "This file contains 30 releases" in browser.find_element(By.TAG_NAME, "body").text
+    assert "This file contains 30 releases" in browser.find_element(By.CSS_SELECTOR, ".key-facts ul li").text
     panel = browser.find_element(By.CSS_SELECTOR, "#releases-table-panel")
     assert "first 25 releases" in panel.text
     table_rows = browser.find_elements(By.CSS_SELECTOR, "#releases-table-panel table tbody tr")
@@ -1037,7 +1037,7 @@ def test_releases_table_7_rows(skip_if_remote, url_input_browser):
     """
 
     browser = url_input_browser("tenders_releases_7_releases_check_ocids.json")
-    assert "This file contains 7 releases" in browser.find_element(By.TAG_NAME, "body").text
+    assert "This file contains 7 releases" in browser.find_element(By.CSS_SELECTOR, ".key-facts ul li").text
     panel = browser.find_element(By.CSS_SELECTOR, "#releases-table-panel")
     assert "first 25 releases" not in panel.text
     table_rows = browser.find_elements(By.CSS_SELECTOR, "#releases-table-panel table tbody tr")
@@ -1051,7 +1051,7 @@ def test_releases_table_10_rows_env_var(skip_if_remote, settings_releases_table_
     """
 
     browser = url_input_browser("30_releases.json")
-    assert "This file contains 30 releases" in browser.find_element(By.TAG_NAME, "body").text
+    assert "This file contains 30 releases" in browser.find_element(By.CSS_SELECTOR, ".key-facts ul li").text
     panel = browser.find_element(By.CSS_SELECTOR, "#releases-table-panel")
     assert "first 10 releases" in panel.text
     table_rows = browser.find_elements(By.CSS_SELECTOR, "#releases-table-panel table tbody tr")
@@ -1065,7 +1065,7 @@ def test_releases_table_7_rows_env_var(skip_if_remote, settings_releases_table_1
     """
 
     browser = url_input_browser("tenders_releases_7_releases_check_ocids.json")
-    assert "This file contains 7 releases" in browser.find_element(By.TAG_NAME, "body").text
+    assert "This file contains 7 releases" in browser.find_element(By.CSS_SELECTOR, ".key-facts ul li").text
     panel = browser.find_element(By.CSS_SELECTOR, "#releases-table-panel")
     assert "first 25 releases" not in panel.text
     assert "first 10 releases" not in panel.text
@@ -1080,7 +1080,7 @@ def test_records_table_25_rows(skip_if_remote, url_input_browser):
     """
 
     browser = url_input_browser("30_records.json")
-    assert "This file contains 30 records" in browser.find_element(By.TAG_NAME, "body").text
+    assert "This file contains 30 records" in browser.find_element(By.CSS_SELECTOR, ".key-facts ul li").text
     panel = browser.find_element(By.CSS_SELECTOR, "#records-table-panel")
     assert "first 25 records" in panel.text
     table_rows = browser.find_elements(By.CSS_SELECTOR, "#records-table-panel table tbody tr")
@@ -1094,7 +1094,7 @@ def test_records_table_7_rows(skip_if_remote, url_input_browser):
     """
 
     browser = url_input_browser("7_records.json")
-    assert "This file contains 7 records" in browser.find_element(By.TAG_NAME, "body").text
+    assert "This file contains 7 records" in browser.find_element(By.CSS_SELECTOR, ".key-facts ul li").text
     panel = browser.find_element(By.CSS_SELECTOR, "#records-table-panel")
     assert "first 25 records" not in panel.text
     table_rows = browser.find_elements(By.CSS_SELECTOR, "#records-table-panel table tbody tr")
@@ -1108,7 +1108,7 @@ def test_records_table_10_rows_env_var(skip_if_remote, settings_records_table_10
     """
 
     browser = url_input_browser("30_records.json")
-    assert "This file contains 30 records" in browser.find_element(By.TAG_NAME, "body").text
+    assert "This file contains 30 records" in browser.find_element(By.CSS_SELECTOR, ".key-facts ul li").text
     panel = browser.find_element(By.CSS_SELECTOR, "#records-table-panel")
     assert "first 10 records" in panel.text
     table_rows = browser.find_elements(By.CSS_SELECTOR, "#records-table-panel table tbody tr")
@@ -1122,7 +1122,7 @@ def test_records_table_7_rows_env_var(skip_if_remote, settings_records_table_10,
     """
 
     browser = url_input_browser("7_records.json")
-    assert "This file contains 7 records" in browser.find_element(By.TAG_NAME, "body").text
+    assert "This file contains 7 records" in browser.find_element(By.CSS_SELECTOR, ".key-facts ul li").text
     panel = browser.find_element(By.CSS_SELECTOR, "#records-table-panel")
     assert "first 25 records" not in panel.text
     assert "first 10 records" not in panel.text
@@ -1138,7 +1138,7 @@ def test_error_list_1000_lines(skip_if_remote, url_input_browser):
     """
 
     browser = url_input_browser("1001_empty_releases.json")
-    assert "1001" in browser.find_element(By.TAG_NAME, "body").text
+    assert "1001" in browser.find_element(By.CSS_SELECTOR, ".key-facts ul li").text
     browser.find_element(By.LINK_TEXT, "1001").click()
     modal_body = browser.find_element(By.CSS_SELECTOR, ".modal-body")
     assert "first 1000 locations for this error" in modal_body.text
@@ -1156,7 +1156,7 @@ def test_error_list_999_lines(skip_if_remote, url_input_browser):
     """
 
     browser = url_input_browser("999_empty_releases.json")
-    assert "999" in browser.find_element(By.TAG_NAME, "body").text
+    assert "999" in browser.find_element(By.CSS_SELECTOR, ".key-facts ul li").text
     browser.find_element(By.LINK_TEXT, "999").click()
     modal_body = browser.find_element(By.CSS_SELECTOR, ".modal-body")
     assert "first 999 locations for this error" not in modal_body.text
@@ -1174,7 +1174,7 @@ def test_error_list_1000_lines_sample(skip_if_remote, settings_error_locations_s
     """
 
     browser = url_input_browser("1001_empty_releases.json")
-    assert "1001" in browser.find_element(By.TAG_NAME, "body").text
+    assert "1001" in browser.find_element(By.CSS_SELECTOR, ".key-facts ul li").text
     browser.find_element(By.LINK_TEXT, "1001").click()
     modal_body = browser.find_element(By.CSS_SELECTOR, ".modal-body")
     assert "random 1000 locations for this error" in modal_body.text
@@ -1190,7 +1190,7 @@ def test_error_list_999_lines_sample(skip_if_remote, settings_error_locations_sa
     """
 
     browser = url_input_browser("999_empty_releases.json")
-    assert "999" in browser.find_element(By.TAG_NAME, "body").text
+    assert "999" in browser.find_element(By.CSS_SELECTOR, ".key-facts ul li").text
     browser.find_element(By.LINK_TEXT, "999").click()
     modal_body = browser.find_element(By.CSS_SELECTOR, ".modal-body")
     assert "first 999 locations for this error" not in modal_body.text
