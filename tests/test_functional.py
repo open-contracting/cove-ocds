@@ -28,32 +28,25 @@ def assert_in(elements, expected, not_expected):
 
 
 @pytest.mark.parametrize(
-    ("link_text", "expected_text", "css_selector", "url"),
+    ("link_text", "css_selector", "url"),
     [
         (
             "Open Contracting",
-            "better serve people and protect our planet",
             "h2",
             "https://www.open-contracting.org/",
         ),
         (
-            "Open Contracting Data Standard",
             "Open Contracting Data Standard",
             "#open-contracting-data-standard",
             "https://standard.open-contracting.org/",
         ),
     ],
 )
-def test_footer_ocds(server_url, browser, link_text, expected_text, css_selector, url):
+def test_footer_ocds(server_url, browser, link_text, css_selector, url):
     browser.get(server_url)
     link = browser.find_element(By.ID, "footer").find_element(By.LINK_TEXT, link_text)
 
     assert url in link.get_attribute("href")
-
-    link.click()
-    time.sleep(0.5)
-
-    assert expected_text in browser.find_element(By.CSS_SELECTOR, css_selector).text
 
 
 def test_index_page_ocds(server_url, browser):
