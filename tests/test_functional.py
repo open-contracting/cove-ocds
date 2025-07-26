@@ -16,6 +16,17 @@ OCDS_SCHEMA_VERSIONS = settings.COVE_CONFIG["schema_version_choices"]
 OCDS_SCHEMA_VERSIONS_DISPLAY = [display_url[0] for version, display_url in OCDS_SCHEMA_VERSIONS.items()]
 
 
+def assert_in(elements, expected, not_expected):
+    actuals = [element.text for element in elements]
+
+    for text in expected:
+        assert any(text in actual for actual in actuals), f"{text!r} not in {actuals!r}"
+
+    for text in not_expected:
+        for actual in actuals:
+            assert text not in actual
+
+
 @pytest.mark.parametrize(
     ("link_text", "expected_text", "css_selector", "url"),
     [
@@ -944,12 +955,9 @@ def test_url_input_extension_headlines(
     server_url, url_input_browser, httpserver, source_filename, expected, not_expected
 ):
     browser = url_input_browser(source_filename)
-    headlines_box_text = browser.find_element(By.CLASS_NAME, "panel-body").text
+    elements = browser.find_elements(By.CSS_SELECTOR, ".message")
 
-    for text in expected:
-        assert text in headlines_box_text
-    for text in not_expected:
-        assert text not in headlines_box_text
+    assert_in(elements, expected, not_expected)
 
 
 @pytest.mark.parametrize(
@@ -1291,24 +1299,17 @@ def test_jsonschema_translation(
     source_filename = "extended_many_jsonschema_keys.json"
     browser = url_input_browser(source_filename)
 
-    # Ensure language is English
-    browser.find_elements(By.XPATH, "//*[contains(text(), 'español')]")[0].click()
-    browser.find_elements(By.XPATH, "//*[contains(text(), 'English')]")[0].click()
+    browser.find_element(By.XPATH, "//*[contains(text(), 'English')]").click()
 
-    body_text = browser.find_element(By.TAG_NAME, "body").text
+    elements = browser.find_elements(By.CSS_SELECTOR, ".panel-danger td:first-child")
 
-    for message in english_validation_messages:
-        assert message in body_text
+    assert_in(elements, english_validation_messages, spanish_validation_messages)
 
-    browser.find_elements(By.XPATH, "//*[contains(text(), 'English')]")[0].click()
-    browser.find_elements(By.XPATH, "//*[contains(text(), 'español')]")[0].click()
-    body_text = browser.find_element(By.TAG_NAME, "body").text
+    browser.find_element(By.XPATH, "//*[contains(text(), 'español')]").click()
 
-    for message in english_validation_messages:
-        assert message not in body_text
+    elements = browser.find_elements(By.CSS_SELECTOR, ".panel-danger td:first-child")
 
-    for message in spanish_validation_messages:
-        assert message in body_text
+    assert_in(elements, spanish_validation_messages, english_validation_messages)
 
 
 def test_jsonschema_translation_2(
@@ -1349,21 +1350,14 @@ def test_jsonschema_translation_2(
     source_filename = "badfile_all_validation_errors.json"
     browser = url_input_browser(source_filename)
 
-    # Ensure language is English
-    browser.find_elements(By.XPATH, "//*[contains(text(), 'español')]")[0].click()
-    browser.find_elements(By.XPATH, "//*[contains(text(), 'English')]")[0].click()
+    browser.find_element(By.XPATH, "//*[contains(text(), 'English')]").click()
 
-    body_text = browser.find_element(By.TAG_NAME, "body").text
+    elements = browser.find_elements(By.CSS_SELECTOR, ".panel-danger td:first-child")
 
-    for message in english_validation_messages:
-        assert message in body_text
+    assert_in(elements, english_validation_messages, spanish_validation_messages)
 
-    browser.find_elements(By.XPATH, "//*[contains(text(), 'English')]")[0].click()
-    browser.find_elements(By.XPATH, "//*[contains(text(), 'español')]")[0].click()
-    body_text = browser.find_element(By.TAG_NAME, "body").text
+    browser.find_element(By.XPATH, "//*[contains(text(), 'español')]").click()
 
-    for message in english_validation_messages:
-        assert message not in body_text
+    elements = browser.find_elements(By.CSS_SELECTOR, ".panel-danger td:first-child")
 
-    for message in spanish_validation_messages:
-        assert message in body_text
+    assert_in(elements, spanish_validation_messages, english_validation_messages)
