@@ -10,12 +10,6 @@ from selenium.webdriver.common.by import By
 BROWSER = os.getenv("BROWSER", "ChromeHeadless")
 
 
-@pytest.fixture(autouse="CUSTOM_SERVER_URL" in os.environ)
-def slow():
-    yield
-    time.sleep(1)
-
-
 @pytest.fixture(scope="module")
 def browser():
     if BROWSER == "ChromeHeadless":
@@ -42,6 +36,7 @@ def server_url(live_server):
 
 
 @pytest.fixture()
+@pytest.mark.django_db
 def url_input_browser(request, server_url, browser, httpserver):
     def _url_input_browser(source_filename, *, output_source_url=False):
         if source_filename.startswith("http"):
