@@ -35,17 +35,19 @@ OCDS_SCHEMA_VERSIONS_DISPLAY = [display_url[0] for version, display_url in OCDS_
 )
 def test_footer_ocds(server_url, browser, link_text, expected_text, css_selector, url):
     browser.get(server_url)
-    footer = browser.find_element(By.ID, "footer")
-    link = footer.find_element(By.LINK_TEXT, link_text)
-    href = link.get_attribute("href")
-    assert url in href
+    link = browser.find_element(By.ID, "footer").find_element(By.LINK_TEXT, link_text)
+
+    assert url in link.get_attribute("href")
+
     link.click()
     time.sleep(0.5)
+
     assert expected_text in browser.find_element(By.CSS_SELECTOR, css_selector).text
 
 
 def test_index_page_ocds(server_url, browser):
     browser.get(server_url)
+
     assert "Data Review Tool" in browser.find_element(By.TAG_NAME, "body").text
     assert "Using the data review tool" in browser.find_element(By.TAG_NAME, "body").text
     assert "'release'" in browser.find_element(By.TAG_NAME, "body").text
@@ -84,16 +86,15 @@ def test_index_page_ocds(server_url, browser):
 )
 def test_index_page_ocds_links(server_url, browser, css_id, link_text, url):
     browser.get(server_url)
-    section = browser.find_element(By.ID, css_id)
-    link = section.find_element(By.LINK_TEXT, link_text)
-    href = link.get_attribute("href")
-    assert url in href
+
+    assert url in browser.find_element(By.ID, css_id).find_element(By.LINK_TEXT, link_text).get_attribute("href")
 
 
 def test_common_index_elements(server_url, browser):
     browser.get(server_url)
     browser.find_element(By.CSS_SELECTOR, "#more-information .panel-title").click()
     time.sleep(0.5)
+
     assert "What happens to the data I provide to this site?" in browser.find_element(By.TAG_NAME, "body").text
     assert "Why provide converted versions?" in browser.find_element(By.TAG_NAME, "body").text
     assert "Terms & Conditions" in browser.find_element(By.TAG_NAME, "body").text
@@ -115,7 +116,7 @@ def test_accordion(server_url, browser):
 
     time.sleep(0.5)
     assert buttons() == [True, False, False]
-    assert "Supply a URL" in browser.find_elements(By.TAG_NAME, "label")[0].text
+    assert "Supply a URL" in browser.find_element(By.TAG_NAME, "label").text
     browser.find_element(By.PARTIAL_LINK_TEXT, "Upload").click()
     browser.implicitly_wait(1)
     time.sleep(0.5)
@@ -139,12 +140,12 @@ def test_accordion(server_url, browser):
 
 def test_500_error(server_url, browser):
     browser.get(f"{server_url}/test/500")
-    # Check that our nice error message is there
-    assert "Something went wrong" in browser.find_element(By.TAG_NAME, "body").text
-    # Check for the exclamation icon
-    # This helps to check that the theme including the css has been loaded
-    # properly
+
     icon_span = browser.find_element(By.CLASS_NAME, "panel-danger").find_element(By.TAG_NAME, "span")
+
+    # Check that our nice error message is there.
+    assert "Something went wrong" in browser.find_element(By.TAG_NAME, "body").text
+    # Check for the exclamation icon. This helps to check that the theme including the css has been loaded properly.
     assert "Glyphicons Halflings" in icon_span.value_of_css_property("font-family")
     assert icon_span.value_of_css_property("color") == "rgba(255, 255, 255, 1)"
 
@@ -471,6 +472,7 @@ def test_url_input(
     if source_filename == "tenders_releases_2_releases_invalid.json":
         # refresh page to now check if tests still work after caching some data
         browser.get(browser.current_url)
+
         check_url_input_result_page(
             server_url,
             browser,
@@ -603,7 +605,7 @@ DARK_GREEN = "155, 175, 0, 1"
 )
 def test_headlines_class(url_input_browser, source_filename, heading_color):
     browser = url_input_browser(source_filename)
-    headlines_panel = browser.find_elements(By.CLASS_NAME, "panel")[0]
+    headlines_panel = browser.find_element(By.CLASS_NAME, "panel")
     actual = headlines_panel.find_element(By.CLASS_NAME, "panel-heading").value_of_css_property("background-color")
 
     # Check that this is actually the headlines panel
@@ -697,13 +699,17 @@ def test_flattentool_warnings(server_url, url_input_browser, httpserver, monkeyp
 def test_url_invalid_dataset_request(server_url, browser, data_url):
     # Test a badly formed hexadecimal UUID string
     browser.get(f"{server_url}{data_url}")
+
     assert "We don't seem to be able to find the data you requested." in browser.find_element(By.TAG_NAME, "body").text
+
     # Test for well formed UUID that doesn't identify any dataset that exists
     browser.get(f"{server_url}/data/38e267ce-d395-46ba-acbf-2540cdd0c810")
+
+    success_button = browser.find_element(By.CLASS_NAME, "success-button")
+
     assert "We don't seem to be able to find the data you requested." in browser.find_element(By.TAG_NAME, "body").text
     assert "360 Giving" not in browser.find_element(By.TAG_NAME, "body").text
     # 363 - Tests there is padding round the 'go to home' button
-    success_button = browser.find_element(By.CLASS_NAME, "success-button")
     assert success_button.value_of_css_property("padding-bottom") == "20px"
 
 
