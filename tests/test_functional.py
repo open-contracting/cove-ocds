@@ -28,7 +28,7 @@ def test_accordion(server_url, page):
 
 
 @pytest.mark.django_db
-def test_500_error(server_url, page):
+def test_styles_500_error(server_url, page):
     page.goto(f"{server_url}/test/500")
     icon = page.locator(".panel-danger span").first
 
@@ -119,7 +119,7 @@ DARK_GREEN = "rgb(155, 175, 0)"
         ("tenders_records_1_record_with_invalid_extensions.json", DARK_RED),
     ],
 )
-def test_headlines_class(submit_url, filename, heading_color):
+def test_styles_headlines(submit_url, filename, heading_color):
     page = submit_url(filename)
     headlines = page.locator(".panel").first
 
@@ -163,7 +163,7 @@ def test_flattentool_warnings(skip_if_remote, submit_url, httpserver, monkeypatc
 
 
 @pytest.mark.parametrize("filename", ["basic_release_empty_fields.json"])
-def test_additional_checks_error_modal(submit_url, httpserver, filename):
+def test_modal_additional_checks_error(submit_url, httpserver, filename):
     page = submit_url(filename)
     page.click('a[data-target=".additional-checks-1"]')
     modal_text = page.locator(".additional-checks-1").text_content()
@@ -176,7 +176,7 @@ def test_additional_checks_error_modal(submit_url, httpserver, filename):
 
 
 @override_settings(VALIDATION_ERROR_LOCATIONS_LENGTH=1000)
-def test_error_list_1000_lines(skip_if_remote, submit_url):
+def test_modal_error_list_1001(skip_if_remote, submit_url):
     """
     When there are more than 1000 error locations, the first 1000 are shown in the table, and there is a message.
     """
@@ -195,7 +195,7 @@ def test_error_list_1000_lines(skip_if_remote, submit_url):
 
 
 @override_settings(VALIDATION_ERROR_LOCATIONS_LENGTH=1000)
-def test_error_list_999_lines(skip_if_remote, submit_url):
+def test_modal_error_list_999(skip_if_remote, submit_url):
     """
     When there are less than 1000 error locations, they are all shown in the table, and there is no message.
     """
@@ -214,7 +214,7 @@ def test_error_list_999_lines(skip_if_remote, submit_url):
 
 
 @override_settings(VALIDATION_ERROR_LOCATIONS_LENGTH=1000, VALIDATION_ERROR_LOCATIONS_SAMPLE=True)
-def test_error_list_1000_lines_sample(skip_if_remote, submit_url):
+def test_modal_error_list_1001_sample(skip_if_remote, submit_url):
     """
     When there are more than 1000 error locations, a random 1000 are shown in the table, and there is a message.
     """
@@ -231,7 +231,7 @@ def test_error_list_1000_lines_sample(skip_if_remote, submit_url):
 
 
 @override_settings(VALIDATION_ERROR_LOCATIONS_LENGTH=1000, VALIDATION_ERROR_LOCATIONS_SAMPLE=True)
-def test_error_list_999_lines_sample(skip_if_remote, submit_url):
+def test_modal_error_list_999_sample(skip_if_remote, submit_url):
     """
     When there are less than 1000 error locations, they are all shown in the table, and there is no message.
     """
