@@ -1,9 +1,11 @@
 import os
 from pathlib import Path
+from urllib.parse import urlsplit
 
 import lxml.etree
 import lxml.html
 import pytest
+import requests
 from django.test import override_settings
 from playwright.sync_api import sync_playwright
 
@@ -11,9 +13,10 @@ from tests import OCDS_DEFAULT_SCHEMA_VERSION, OCDS_SCHEMA_VERSIONS_DISPLAY, WHI
 
 
 class MockResponse:
-    def __init__(self, content):
+    def __init__(self, content, path_info):
         self.content = content
         self.status_code = 200
+        self.request = {"PATH_INFO": path_info}
 
 
 def submit_file(client, filename):
@@ -26,10 +29,12 @@ def submit_file(client, filename):
             page.click("text=Upload")
             page.locator('input[name="original_file"]').set_input_files(str(path))
             page.click('form[enctype] button[type="submit"]')
+
             page.wait_for_load_state("networkidle")
             content = page.content().encode()
+            path_info = urlsplit(page.url).path
 
-        return MockResponse(content)
+        return MockResponse(content, path_info)
 
     with path.open("rb") as f:
         response = client.post("/", {"original_file": f, "csrfmiddlewaretoken": ""})
@@ -305,8 +310,6 @@ def submit_file(client, filename):
     ],
 )
 @pytest.mark.django_db
-# Needed for /media/ URLs.
-@override_settings(STORAGES={"staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"}})
 def test_url_input(server_url, client, filename, expected, not_expected, conversion_successful):
     response = submit_file(client, filename)
 
@@ -343,10 +346,13 @@ def test_url_input(server_url, client, filename, expected, not_expected, convers
 
             file = links[0]
             path = file.attrib["href"]
-            static_file = client.get(f"{server_url}{path}")
 
-            assert static_file.status_code == 200
-            assert int(static_file.headers["content-length"]) > 0
+            if "CUSTOM_SERVER_URL" in os.environ:
+                static_file = requests.get(f"{server_url}{path}")
+
+                assert static_file.status_code == 200
+                assert int(static_file.headers["content-length"]) > 0
+
             assert not file.getnext().text_content().startswith("0")
             assert filename in path
             assert file.text_content().strip() == "JSON (Original)"
@@ -354,10 +360,13 @@ def test_url_input(server_url, client, filename, expected, not_expected, convers
             if "record" not in filename:
                 file = links[1]
                 path = file.attrib["href"]
-                static_file = client.get(f"{server_url}{path}")
 
-                assert static_file.status_code == 200
-                assert int(static_file.headers["content-length"]) > 0
+                if "CUSTOM_SERVER_URL" in os.environ:
+                    static_file = requests.get(f"{server_url}{path}")
+
+                    assert static_file.status_code == 200
+                    assert int(static_file.headers["content-length"]) > 0
+
                 assert not file.getnext().text_content().startswith("0")
                 assert "flattened.xlsx" in path
                 assert file.text_content().startswith(

@@ -24,7 +24,7 @@ def server_url(live_server):
 def page():
     with (
         override_settings(
-            # Needed for JavaScript tests, CSS tests, and /media/ URLs.
+            # Needed for JavaScript and CSS tests.
             STORAGES={"staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"}}
         ),
         sync_playwright() as p,
