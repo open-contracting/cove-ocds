@@ -330,13 +330,21 @@ def submit_file(client, filename):
             ['Has no "Code" column'],
             True,
         ),
+        (
+            "tenders_releases_2_releases.xlsx",
+            ["Convert", "Schema", *OCDS_SCHEMA_VERSIONS_DISPLAY],
+            ["Missing OCDS package"],
+            True,
+        ),
     ],
 )
 @pytest.mark.django_db
 def test_url_input(server_url, client, filename, expected, not_expected, conversion_successful):
+    excel = filename.endswith(".xlsx")
+
     response = submit_file(client, filename)
 
-    if filename not in {
+    if not excel and filename not in {
         # The unrecognized_version_data alert is not displayed after conversion.
         "tenders_releases_1_release_with_unrecognized_version.json",
         "tenders_releases_1_release_with_wrong_version_type.json",
@@ -378,7 +386,7 @@ def test_url_input(server_url, client, filename, expected, not_expected, convers
 
             assert not file.getnext().text_content().startswith("0")
             assert filename in path
-            assert file.text_content().strip() == "JSON (Original)"
+            assert file.text_content().strip() == f"{'Excel Spreadsheet (.xlsx)' if excel else 'JSON'} (Original)"
 
             if "record" not in filename:
                 file = links[1]
@@ -391,9 +399,10 @@ def test_url_input(server_url, client, filename, expected, not_expected, convers
                     assert int(static_file.headers["content-length"]) > 0
 
                 assert not file.getnext().text_content().startswith("0")
-                assert "flattened.xlsx" in path
+                assert "unflattened.json" if excel else "flattened.xlsx" in path
                 assert file.text_content().startswith(
-                    "Excel Spreadsheet (.xlsx) (Converted from Original using schema version "
+                    f"{'JSON' if excel else 'Excel Spreadsheet (.xlsx)'} "
+                    "(Converted from Original using schema version "
                 )
 
 

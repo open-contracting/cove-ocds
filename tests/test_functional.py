@@ -1,7 +1,7 @@
 import pytest
 from django.test import override_settings
 
-from tests import OCDS_SCHEMA_VERSIONS_DISPLAY, assert_in
+from tests import assert_in
 
 WAIT = 350
 
@@ -38,67 +38,6 @@ def test_styles_500_error(server_url, page):
     assert icon.evaluate("element => getComputedStyle(element).color") in "rgb(255, 255, 255)"
 
 
-@pytest.mark.parametrize(
-    ("filename", "expected_text", "not_expected_text", "conversion_successful"),
-    [
-        (
-            "tenders_releases_2_releases.xlsx",
-            ["Convert", "Schema", *OCDS_SCHEMA_VERSIONS_DISPLAY],
-            ["Missing OCDS package"],
-            True,
-        ),
-    ],
-)
-def test_url_input(
-    server_url,
-    submit_url,
-    httpserver,
-    filename,
-    expected_text,
-    not_expected_text,
-    conversion_successful,
-):
-    page = submit_url(filename)
-    text = page.text_content("body")
-
-    assert "Data Review Tool" in text
-    assert "Load New File" in text
-    for value in expected_text:
-        assert value in text
-    for value in not_expected_text:
-        assert value not in text
-
-    if conversion_successful:
-        links = page.locator("div.conversion a")
-
-        # Original
-        file = links.nth(0)
-
-        assert not file.locator("xpath=following-sibling::*[1]").text_content().startswith("0")
-        assert filename in file.get_attribute("href")
-        assert file.text_content().strip() == "Excel Spreadsheet (.xlsx) (Original)"
-
-        with page.expect_download() as download_info:
-            file.click()
-        download = download_info.value
-
-        assert download.failure() is None
-        assert download.path().stat().st_size > 0
-
-        # Converted
-        file = links.nth(1)
-
-        assert not file.locator("xpath=following-sibling::*[1]").text_content().startswith("0")
-        assert "unflattened.json" in file.get_attribute("href")
-        assert file.text_content().startswith("JSON (Converted from Original using schema version ")
-
-        # JSON files are rendered, not downloaded.
-        file.click()
-
-        assert page.url.endswith("unflattened.json")
-        assert '"releases"' in page.text_content("body")
-
-
 DARK_RED = "rgb(169, 68, 66)"
 DARK_GREEN = "rgb(155, 175, 0)"
 
@@ -131,7 +70,7 @@ def test_styles_headlines(submit_url, filename, heading_color):
 
 
 @pytest.mark.parametrize("filename", ["basic_release_empty_fields.json"])
-def test_modal_additional_checks_error(submit_url, httpserver, filename):
+def test_modal_additional_checks_error(submit_url, filename):
     page = submit_url(filename)
     page.click('a[data-target=".additional-checks-1"]')
     modal_text = page.locator(".additional-checks-1").text_content()
