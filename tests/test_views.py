@@ -145,7 +145,7 @@ def submit_file(client, filename):
                 "/records/releases/tender/targets",
             ],
             ["checked against a schema with no extensions"],
-            True,
+            False,  # context["conversion"] is set to False for record packages
         ),
         (
             "tenders_releases_deprecated_fields_against_1_1_live.json",
@@ -230,7 +230,7 @@ def submit_file(client, filename):
             ["Reference Docs"],
             True,
         ),
-        # Conversion should still work for files that don't validate against the schema
+        # Conversion should still work for files that don't validate against the schema.
         (
             "tenders_releases_2_releases_invalid.json",
             ["Convert", "Structural Errors", "id is missing but required", "Invalid 'uri' found"],
@@ -238,22 +238,18 @@ def submit_file(client, filename):
             True,
         ),
         ("tenders_releases_2_releases_codelists.json", ["oh no", "GSINS"], [], True),
-        # Test UTF-8 support
         ("utf8.json", ["Convert"], ["Ensure that your file uses UTF-8 encoding"], True),
-        # Test that non UTF-8 files get an error, with a helpful message
-        ("latin1.json", ["Ensure that your file uses UTF-8 encoding"], [], False),
-        ("utf-16.json", ["Ensure that your file uses UTF-8 encoding"], [], False),
-        # But we expect to see an error message if a file is not well formed JSON at all
-        ("tenders_releases_2_releases_not_json.json", ["not well formed JSON"], [], False),
-        # Test non-dict JSON (main sheet "releases" is missing)
-        ("non_dict_json.json", [], ["could not be converted"], False),
+        ("latin1.json", ["Ensure that your file uses UTF-8 encoding"], [], False),  # invalid encoding
+        ("utf-16.json", ["Ensure that your file uses UTF-8 encoding"], [], False),  # invalid encoding
+        ("tenders_releases_2_releases_not_json.json", ["not well formed JSON"], [], False),  # invalid JSON
+        ("non_dict_json.json", [], ["could not be converted"], True),
         (
             "full_record.json",
             ["Number of records", "Structural Errors", "compiledRelease", "versionedRelease"],
             [],
-            True,
+            False,  # context["conversion"] is set to False for record packages
         ),
-        # Test "version" value in data
+        # Test "version" value in data.
         (
             "tenders_releases_1_release_with_unrecognized_version.json",
             [
@@ -263,7 +259,7 @@ def submit_file(client, filename):
                 "Convert to Spreadsheet",
             ],
             ["Additional Fields (fields in data not in schema)", "Error message"],
-            False,
+            None,  # Skip conversion (the unrecognized_version_data alert is not displayed after conversion).
         ),
         (
             "tenders_releases_1_release_with_wrong_version_type.json",
@@ -273,7 +269,7 @@ def submit_file(client, filename):
                 "Convert to Spreadsheet",
             ],
             ["Additional Fields (fields in data not in schema)", "Error message"],
-            False,
+            None,  # Skip conversion (the unrecognized_version_data alert is not displayed after conversion).
         ),
         (
             "tenders_releases_1_release_with_patch_in_version.json",
@@ -283,25 +279,25 @@ def submit_file(client, filename):
                 "Error message",
             ],
             ["Convert to Spreadsheet"],
-            False,
+            False,  # Invalid version
         ),
         (
             "bad_toplevel_list.json",
             ["OCDS JSON should have an object as the top level, the JSON you supplied does not."],
             [],
-            False,
+            False,  # Invalid type
         ),
         (
             "tenders_releases_1_release_with_extension_broken_json_ref.json",
             ["JSON reference error", "Unresolvable JSON pointer:", "/definitions/OrganizationReference"],
             ["Convert to Spreadsheet"],
-            False,
+            False,  # Invalid reference
         ),
         (
             "tenders_releases_1_release_unpackaged.json",
             ["Missing OCDS package", "Error message: Missing OCDS package"],
             ["Convert to Spreadsheet"],
-            False,
+            False,  # Invalid package
         ),
         (
             "tenders_releases_1_release_with_closed_codelist.json",
@@ -341,11 +337,7 @@ def test_url_input(server_url, client, filename, expected, not_expected, convers
 
     response = submit_file(client, filename)
 
-    if not excel and filename not in {
-        # The unrecognized_version_data alert is not displayed after conversion.
-        "tenders_releases_1_release_with_unrecognized_version.json",
-        "tenders_releases_1_release_with_wrong_version_type.json",
-    }:
+    if conversion_successful and not excel:
         response = make_request(client, "POST", server_url, response.request["PATH_INFO"], {"flatten": "true"})
 
     responses = [response]
@@ -364,6 +356,10 @@ def test_url_input(server_url, client, filename, expected, not_expected, convers
 
         assert "Data Review Tool" in text
         assert "Load New File" in text or "Try Again" in text
+        if conversion_successful is None:
+            assert "Convert to Spreadsheet" in text
+        else:
+            assert "Convert to Spreadsheet" not in text  # the button isn't present after clicking
         for value in expected:
             assert value in text
         for value in not_expected:
@@ -385,22 +381,20 @@ def test_url_input(server_url, client, filename, expected, not_expected, convers
             assert filename in path
             assert file.text_content().strip() == f"{'Excel Spreadsheet (.xlsx)' if excel else 'JSON'} (Original)"
 
-            if "record" not in filename:
-                file = links[1]
-                path = file.attrib["href"]
+            file = links[1]
+            path = file.attrib["href"]
 
-                if REMOTE:
-                    static_file = requests.get(f"{server_url}{path}")
+            if REMOTE:
+                static_file = requests.get(f"{server_url}{path}")
 
-                    assert static_file.status_code == 200
-                    assert int(static_file.headers["content-length"]) > 0
+                assert static_file.status_code == 200
+                assert int(static_file.headers["content-length"]) > 0
 
-                assert not file.getnext().text_content().startswith("0")
-                assert "unflattened.json" if excel else "flattened.xlsx" in path
-                assert file.text_content().startswith(
-                    f"{'JSON' if excel else 'Excel Spreadsheet (.xlsx)'} "
-                    "(Converted from Original using schema version "
-                )
+            assert not file.getnext().text_content().startswith("0")
+            assert "unflattened.json" if excel else "flattened.xlsx" in path
+            assert file.text_content().startswith(
+                f"{'JSON' if excel else 'Excel Spreadsheet (.xlsx)'} " "(Converted from Original using schema version "
+            )
 
 
 @pytest.mark.django_db

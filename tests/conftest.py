@@ -26,7 +26,7 @@ def page():
 
 @pytest.fixture
 @pytest.mark.django_db
-def submit_url(request, httpserver, server_url, page):
+def submit_url(httpserver, server_url, page):
     def inner(filename):
         if REMOTE:
             source_url = f"https://raw.githubusercontent.com/open-contracting/cove-ocds/main/tests/fixtures/{filename}"
