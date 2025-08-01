@@ -576,10 +576,10 @@ def test_url_input_with_extensions(server_url, client, filename, expected, not_e
         assert text not in schema_extension_box
 
 
-# Skip if remote, as we can't set up the mocks.
 @pytest.mark.parametrize("flatten_or_unflatten", ["flatten", "unflatten"])
 @pytest.mark.django_db
-def test_flattentool_warnings(skip_if_remote, monkeypatch, server_url, client, flatten_or_unflatten):
+@pytest.mark.skipif(REMOTE, reason="Uses mocks")
+def test_flattentool_warnings(monkeypatch, server_url, client, flatten_or_unflatten):
     def mockflatten(input_name, output_name, *args, **kwargs):
         with open(f"{output_name}.xlsx", "w") as f:
             f.write("{}")
@@ -680,7 +680,8 @@ def test_additional_checks_section_not_being_displayed(client):
     ],
 )
 @pytest.mark.django_db
-def test_table_rows(skip_if_remote, client, filename, total, items, subtotal):
+@pytest.mark.skipif(REMOTE, reason="Depends on RELEASES_OR_RECORDS_TABLE_LENGTH = 25 (default)")
+def test_table_rows(client, filename, total, items, subtotal):
     response = submit_file(client, filename)
 
     document = lxml.html.fromstring(response.content)
@@ -702,7 +703,8 @@ def test_table_rows(skip_if_remote, client, filename, total, items, subtotal):
 )
 @pytest.mark.django_db
 @override_settings(RELEASES_OR_RECORDS_TABLE_LENGTH=10)
-def test_table_rows_settings(skip_if_remote, client, filename, total, items, subtotal):
+@pytest.mark.skipif(REMOTE, reason="Depends on RELEASES_OR_RECORDS_TABLE_LENGTH = 10")
+def test_table_rows_settings(client, filename, total, items, subtotal):
     response = submit_file(client, filename)
 
     document = lxml.html.fromstring(response.content)
@@ -714,7 +716,7 @@ def test_table_rows_settings(skip_if_remote, client, filename, total, items, sub
 
 
 @pytest.mark.django_db
-def test_records_table_releases_count(skip_if_remote, client):
+def test_records_table_releases_count(client):
     response = submit_file(client, "30_records.json")
 
     document = lxml.html.fromstring(response.content)

@@ -8,13 +8,6 @@ from tests import REMOTE, setup_agent
 
 
 @pytest.fixture(scope="session")
-def skip_if_remote():
-    """Use this fixture to skip tests that require specific settings configured via environment variables."""
-    if REMOTE:
-        pytest.skip()
-
-
-@pytest.fixture(scope="session")
 def server_url(live_server):
     return os.getenv("CUSTOM_SERVER_URL", live_server.url)
 

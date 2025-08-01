@@ -1,7 +1,7 @@
 import pytest
 from django.test import override_settings
 
-from tests import assert_in
+from tests import REMOTE, assert_in
 
 WAIT = 350
 
@@ -83,7 +83,8 @@ def test_modal_additional_checks_error(submit_url, filename):
 
 
 @override_settings(VALIDATION_ERROR_LOCATIONS_LENGTH=1000)
-def test_modal_error_list_1001(skip_if_remote, submit_url):
+@pytest.mark.skipif(REMOTE, reason="Depends on VALIDATION_ERROR_LOCATIONS_LENGTH = 1000")
+def test_modal_error_list_1001(submit_url):
     """
     When there are more than 1000 error locations, the first 1000 are shown in the table, and there is a message.
     """
@@ -102,7 +103,8 @@ def test_modal_error_list_1001(skip_if_remote, submit_url):
 
 
 @override_settings(VALIDATION_ERROR_LOCATIONS_LENGTH=1000)
-def test_modal_error_list_999(skip_if_remote, submit_url):
+@pytest.mark.skipif(REMOTE, reason="Depends on VALIDATION_ERROR_LOCATIONS_LENGTH = 1000")
+def test_modal_error_list_999(submit_url):
     """
     When there are less than 1000 error locations, they are all shown in the table, and there is no message.
     """
@@ -121,7 +123,11 @@ def test_modal_error_list_999(skip_if_remote, submit_url):
 
 
 @override_settings(VALIDATION_ERROR_LOCATIONS_LENGTH=1000, VALIDATION_ERROR_LOCATIONS_SAMPLE=True)
-def test_modal_error_list_1001_sample(skip_if_remote, submit_url):
+@pytest.mark.skipif(
+    REMOTE,
+    reason="Depends on VALIDATION_ERROR_LOCATIONS_LENGTH = 1000 and VALIDATION_ERROR_LOCATIONS_SAMPLE = True",
+)
+def test_modal_error_list_1001_sample(submit_url):
     """
     When there are more than 1000 error locations, a random 1000 are shown in the table, and there is a message.
     """
@@ -138,7 +144,11 @@ def test_modal_error_list_1001_sample(skip_if_remote, submit_url):
 
 
 @override_settings(VALIDATION_ERROR_LOCATIONS_LENGTH=1000, VALIDATION_ERROR_LOCATIONS_SAMPLE=True)
-def test_modal_error_list_999_sample(skip_if_remote, submit_url):
+@pytest.mark.skipif(
+    REMOTE,
+    reason="Depends on VALIDATION_ERROR_LOCATIONS_LENGTH = 1000 and VALIDATION_ERROR_LOCATIONS_SAMPLE = True",
+)
+def test_modal_error_list_999_sample(submit_url):
     """
     When there are less than 1000 error locations, they are all shown in the table, and there is no message.
     """
