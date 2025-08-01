@@ -8,11 +8,10 @@ import lxml.html
 import pytest
 import requests
 from django.test import override_settings
-from playwright.sync_api import sync_playwright
 
-from tests import OCDS_DEFAULT_SCHEMA_VERSION, OCDS_SCHEMA_VERSIONS_DISPLAY, WHITESPACE, assert_in
+from tests import DEFAULT_SCHEMA_VERSION, REMOTE, SCHEMA_VERSION_CHOICES, WHITESPACE, assert_in, setup_agent
 
-REMOTE = "CUSTOM_SERVER_URL" in os.environ
+SCHEMA_VERSIONS_DISPLAY = [display for (display, _, _) in SCHEMA_VERSION_CHOICES.values()]
 
 
 class MockResponse:
@@ -27,8 +26,7 @@ def make_request(client, method, server_url, path, data=None):
         if method == "GET":
             return requests.get(f"{server_url}{path}")
 
-        with sync_playwright() as p, p.chromium.launch() as browser, browser.new_context() as context:
-            page = context.new_page()
+        with setup_agent() as page:
             page.goto(f"{server_url}{path}")
             if method == "POST":  # Callers only use "POST" to submit this form
                 page.click('button[name="flatten"]')
@@ -46,8 +44,7 @@ def submit_file(client, filename):
     path = Path("tests") / "fixtures" / filename
 
     if REMOTE:  # client.post() would 404
-        with sync_playwright() as p, p.chromium.launch() as browser, browser.new_context() as context:
-            page = context.new_page()
+        with setup_agent() as page:
             page.goto(os.environ["CUSTOM_SERVER_URL"])
             page.click("text=Upload")
             page.locator('input[name="original_file"]').set_input_files(str(path))
@@ -76,7 +73,7 @@ def submit_file(client, filename):
     [
         (
             "tenders_releases_2_releases.json",
-            ["Convert", "Schema", "OCDS release package schema version 1.0. You can", *OCDS_SCHEMA_VERSIONS_DISPLAY],
+            ["Convert", "Schema", "OCDS release package schema version 1.0. You can", *SCHEMA_VERSIONS_DISPLAY],
             ["Schema Extensions"],
             True,
         ),
@@ -261,7 +258,7 @@ def submit_file(client, filename):
             "tenders_releases_1_release_with_unrecognized_version.json",
             [
                 "Your data specifies a version 123.123 which is not recognised",
-                f"checked against OCDS release package schema version {OCDS_DEFAULT_SCHEMA_VERSION}. You can",
+                f"checked against OCDS release package schema version {DEFAULT_SCHEMA_VERSION}. You can",
                 "checked against the current default version.",
                 "Convert to Spreadsheet",
             ],
@@ -272,7 +269,7 @@ def submit_file(client, filename):
             "tenders_releases_1_release_with_wrong_version_type.json",
             [
                 "Your data specifies a version 1000 (it must be a string) which is not recognised",
-                f"checked against OCDS release package schema version {OCDS_DEFAULT_SCHEMA_VERSION}. You can",
+                f"checked against OCDS release package schema version {DEFAULT_SCHEMA_VERSION}. You can",
                 "Convert to Spreadsheet",
             ],
             ["Additional Fields (fields in data not in schema)", "Error message"],
@@ -332,7 +329,7 @@ def submit_file(client, filename):
         ),
         (
             "tenders_releases_2_releases.xlsx",
-            ["Convert", "Schema", *OCDS_SCHEMA_VERSIONS_DISPLAY],
+            ["Convert", "Schema", *SCHEMA_VERSIONS_DISPLAY],
             ["Missing OCDS package"],
             True,
         ),

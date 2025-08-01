@@ -1,11 +1,21 @@
+import os
 import re
+from contextlib import contextmanager
 
 from django.conf import settings
+from playwright.sync_api import sync_playwright
 
+REMOTE = "CUSTOM_SERVER_URL" in os.environ
 WHITESPACE = re.compile(r"\s+")
-schema_version_choices = settings.COVE_CONFIG["schema_version_choices"]
-OCDS_DEFAULT_SCHEMA_VERSION = list(schema_version_choices)[-1]
-OCDS_SCHEMA_VERSIONS_DISPLAY = [display for (display, _, _) in schema_version_choices.values()]
+SCHEMA_VERSION_CHOICES = settings.COVE_CONFIG["schema_version_choices"]
+DEFAULT_SCHEMA_VERSION = list(SCHEMA_VERSION_CHOICES)[-1]
+
+
+@contextmanager
+def setup_agent():
+    with sync_playwright() as p, p.chromium.launch() as browser, browser.new_context() as context:
+        context.set_default_timeout(10000)
+        yield context.new_page()
 
 
 def assert_in(elements, expected, not_expected):

@@ -3,9 +3,8 @@ from pathlib import Path
 
 import pytest
 from django.test import override_settings
-from playwright.sync_api import sync_playwright
 
-REMOTE = "CUSTOM_SERVER_URL" in os.environ
+from tests import REMOTE, setup_agent
 
 
 @pytest.fixture(scope="session")
@@ -27,18 +26,14 @@ def page():
             # Needed for JavaScript and CSS tests.
             STORAGES={"staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"}}
         ),
-        sync_playwright() as p,
-        p.chromium.launch() as browser,
-        browser.new_context() as context,
+        setup_agent() as page,
     ):
-        context.set_default_timeout(10000)
-        page = context.new_page()
         yield page
 
 
 @pytest.fixture
 @pytest.mark.django_db
-def submit_url(request, server_url, page, httpserver):
+def submit_url(request, httpserver, server_url, page):
     def inner(filename):
         if REMOTE:
             source_url = f"https://raw.githubusercontent.com/open-contracting/cove-ocds/main/tests/fixtures/{filename}"
