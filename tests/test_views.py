@@ -11,6 +11,8 @@ from playwright.sync_api import sync_playwright
 
 from tests import OCDS_DEFAULT_SCHEMA_VERSION, OCDS_SCHEMA_VERSIONS_DISPLAY, WHITESPACE, assert_in
 
+REMOTE = "CUSTOM_SERVER_URL" in os.environ
+
 
 class MockResponse:
     def __init__(self, content, path_info):
@@ -19,10 +21,30 @@ class MockResponse:
         self.request = {"PATH_INFO": path_info}
 
 
+def make_request(client, method, server_url, path, data=None):
+    if REMOTE:  # client.post() would 404
+        if method == "GET":
+            return requests.get(f"{server_url}{path}")
+
+        with sync_playwright() as p, p.chromium.launch() as browser, browser.new_context() as context:
+            page = context.new_page()
+            page.goto(f"{server_url}{path}")
+            if method == "POST":  # Callers only use "POST" to submit this form
+                page.click('button[name="flatten"]')
+
+            page.wait_for_load_state("networkidle")
+            content = page.content().encode()
+            path_info = urlsplit(page.url).path
+
+        return MockResponse(content, path_info)
+
+    return getattr(client, method.lower())(path, data)
+
+
 def submit_file(client, filename):
     path = Path("tests") / "fixtures" / filename
 
-    if "CUSTOM_SERVER_URL" in os.environ:
+    if REMOTE:  # client.post() would 404
         with sync_playwright() as p, p.chromium.launch() as browser, browser.new_context() as context:
             page = context.new_page()
             page.goto(os.environ["CUSTOM_SERVER_URL"])
@@ -318,13 +340,13 @@ def test_url_input(server_url, client, filename, expected, not_expected, convers
         "tenders_releases_1_release_with_unrecognized_version.json",
         "tenders_releases_1_release_with_wrong_version_type.json",
     }:
-        response = client.post(f"{server_url}{response.request['PATH_INFO']}", {"flatten": "true"})
+        response = make_request(client, "POST", server_url, response.request["PATH_INFO"], {"flatten": "true"})
 
     responses = [response]
 
     # Do this additional test for only one case, to speed up tests.
     if filename == "tenders_releases_2_releases_invalid.json":
-        responses.append(client.get(f"{server_url}{response.request['PATH_INFO']}"))
+        responses.append(make_request(client, "GET", server_url, response.request["PATH_INFO"]))
 
     for response in responses:
         assert response.status_code == 200
@@ -347,7 +369,7 @@ def test_url_input(server_url, client, filename, expected, not_expected, convers
             file = links[0]
             path = file.attrib["href"]
 
-            if "CUSTOM_SERVER_URL" in os.environ:
+            if REMOTE:
                 static_file = requests.get(f"{server_url}{path}")
 
                 assert static_file.status_code == 200
@@ -361,7 +383,7 @@ def test_url_input(server_url, client, filename, expected, not_expected, convers
                 file = links[1]
                 path = file.attrib["href"]
 
-                if "CUSTOM_SERVER_URL" in os.environ:
+                if REMOTE:
                     static_file = requests.get(f"{server_url}{path}")
 
                     assert static_file.status_code == 200
@@ -417,7 +439,7 @@ def test_extension_validation_error_messages(client):
 @pytest.mark.parametrize("uuid", ["0", "324ea8eb-f080-43ce-a8c1-9f47b28162f3"])
 @pytest.mark.django_db
 def test_url_invalid_dataset_request(server_url, client, uuid):
-    response = client.get(f"{server_url}/data/{uuid}")
+    response = make_request(client, "GET", server_url, f"/data/{uuid}")
 
     assert response.status_code == 404
     assert b"We don&#x27;t seem to be able to find the data you requested" in response.content
@@ -464,7 +486,7 @@ def test_url_input_with_version(
     assert not_expected_additional_field not in additional_field_box
 
     # Refresh page to check if tests still work after caching the data
-    response = client.get(f"{server_url}{response.request['PATH_INFO']}")
+    response = make_request(client, "GET", server_url, response.request["PATH_INFO"])
     document = lxml.html.fromstring(response.content)
     text = document.text_content()
     additional_field_box = document.cssselect("#additionalFieldTable")[0].text_content()
@@ -537,7 +559,7 @@ def test_url_input_with_extensions(server_url, client, filename, expected, not_e
         assert text not in schema_extension_box
 
     # Refresh page to check if tests still work after caching the data
-    response = client.get(f"{server_url}{response.request['PATH_INFO']}")
+    response = make_request(client, "GET", server_url, response.request["PATH_INFO"])
     document = lxml.html.fromstring(response.content)
     schema_extension_box = document.cssselect("#schema-extensions")[0].text_content()
 

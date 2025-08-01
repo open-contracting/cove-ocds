@@ -5,19 +5,19 @@ import pytest
 from django.test import override_settings
 from playwright.sync_api import sync_playwright
 
+REMOTE = "CUSTOM_SERVER_URL" in os.environ
+
 
 @pytest.fixture(scope="session")
 def skip_if_remote():
     """Use this fixture to skip tests that require specific settings configured via environment variables."""
-    if "CUSTOM_SERVER_URL" in os.environ:
+    if REMOTE:
         pytest.skip()
 
 
 @pytest.fixture(scope="session")
 def server_url(live_server):
-    if "CUSTOM_SERVER_URL" in os.environ:
-        return os.environ["CUSTOM_SERVER_URL"]
-    return live_server.url
+    return os.getenv("CUSTOM_SERVER_URL", live_server.url)
 
 
 @pytest.fixture
@@ -40,7 +40,7 @@ def page():
 @pytest.mark.django_db
 def submit_url(request, server_url, page, httpserver):
     def inner(filename):
-        if "CUSTOM_SERVER_URL" in os.environ:
+        if REMOTE:
             source_url = f"https://raw.githubusercontent.com/open-contracting/cove-ocds/main/tests/fixtures/{filename}"
         else:
             with (Path("tests") / "fixtures" / filename).open("rb") as f:
