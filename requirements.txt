@@ -112,7 +112,7 @@ referencing==0.29.1
     #   jsonschema-specifications
     #   libcove
     #   libcoveocds
-requests==2.32.3
+requests==2.32.4
     # via
     #   libcove
     #   libcoveocds
