@@ -393,7 +393,7 @@ def test_url_input(server_url, client, filename, expected, not_expected, convers
             assert not file.getnext().text_content().startswith("0")
             assert "unflattened.json" if excel else "flattened.xlsx" in path
             assert file.text_content().startswith(
-                f"{'JSON' if excel else 'Excel Spreadsheet (.xlsx)'} " "(Converted from Original using schema version "
+                f"{'JSON' if excel else 'Excel Spreadsheet (.xlsx)'} (Converted from Original using schema version "
             )
 
 
