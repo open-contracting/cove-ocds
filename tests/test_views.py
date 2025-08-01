@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 from urllib.parse import urlsplit
 
+import flattentool
 import lxml.etree
 import lxml.html
 import pytest
@@ -567,6 +568,39 @@ def test_url_input_with_extensions(server_url, client, filename, expected, not_e
         assert text in schema_extension_box
     for text in not_expected:
         assert text not in schema_extension_box
+
+
+# Skip if remote, as we can't set up the mocks.
+@pytest.mark.parametrize("flatten_or_unflatten", ["flatten", "unflatten"])
+@pytest.mark.django_db
+def test_flattentool_warnings(skip_if_remote, monkeypatch, server_url, client, flatten_or_unflatten):
+    def mockflatten(input_name, output_name, *args, **kwargs):
+        with open(f"{output_name}.xlsx", "w") as f:
+            f.write("{}")
+
+    def mockunflatten(input_name, output_name, *args, **kwargs):
+        with open(kwargs["cell_source_map"], "w") as f:
+            f.write("{}")
+        with open(kwargs["heading_source_map"], "w") as f:
+            f.write("{}")
+        with open(output_name, "w") as f:
+            f.write("{}")
+
+    monkeypatch.setattr(
+        flattentool, flatten_or_unflatten, mockflatten if flatten_or_unflatten == "flatten" else mockunflatten
+    )
+
+    # Actual input file doesn't matter, as we override flattentool behavior with a mock below.
+    filename = f"tenders_releases_2_releases.{'json' if flatten_or_unflatten == 'flatten' else 'xlsx'}"
+
+    response = submit_file(client, filename)
+    if flatten_or_unflatten == "flatten":
+        response = make_request(client, "POST", server_url, response.request["PATH_INFO"], {"flatten": "true"})
+    document = lxml.html.fromstring(response.content)
+    text = document.text_content()
+
+    assert "conversion Errors" not in text
+    assert "Conversion Warnings" not in text
 
 
 @pytest.mark.parametrize(

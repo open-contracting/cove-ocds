@@ -1,4 +1,3 @@
-import flattentool
 import pytest
 from django.test import override_settings
 
@@ -129,37 +128,6 @@ def test_styles_headlines(submit_url, filename, heading_color):
         headlines.locator(".panel-heading").first.evaluate("element => getComputedStyle(element).backgroundColor")
         == heading_color
     )
-
-
-# Skip if remote, as we can't set up the mocks.
-@pytest.mark.parametrize("flatten_or_unflatten", ["flatten", "unflatten"])
-def test_flattentool_warnings(skip_if_remote, submit_url, httpserver, monkeypatch, flatten_or_unflatten):
-    def mockflatten(input_name, output_name, *args, **kwargs):
-        with open(f"{output_name}.xlsx", "w") as f:
-            f.write("{}")
-
-    def mockunflatten(input_name, output_name, *args, **kwargs):
-        with open(kwargs["cell_source_map"], "w") as f:
-            f.write("{}")
-        with open(kwargs["heading_source_map"], "w") as f:
-            f.write("{}")
-        with open(output_name, "w") as f:
-            f.write("{}")
-
-    monkeypatch.setattr(
-        flattentool, flatten_or_unflatten, mockflatten if flatten_or_unflatten == "flatten" else mockunflatten
-    )
-
-    # Actual input file doesn't matter, as we override flattentool behavior with a mock below.
-    filename = f"tenders_releases_2_releases.{'json' if flatten_or_unflatten == 'flatten' else 'xlsx'}"
-
-    page = submit_url(filename)
-    if flatten_or_unflatten == "flatten":
-        page.click('button[name="flatten"]')
-    text = page.text_content("body")
-
-    assert "conversion Errors" not in text
-    assert "Conversion Warnings" not in text
 
 
 @pytest.mark.parametrize("filename", ["basic_release_empty_fields.json"])
