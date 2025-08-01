@@ -399,10 +399,11 @@ def test_url_input(server_url, client, filename, expected, not_expected, convers
 
 @pytest.mark.django_db
 def test_validation_error_messages(client):
-    content = submit_file(client, "badfile_all_validation_errors.json").content
+    # Normalize the HTML source from Playwright and Django.
+    content = submit_file(client, "badfile_all_validation_errors.json").content.replace(b"&quot;", b'"')
 
     for value in (
-        b"<code>&quot;&quot;</code> is too short",
+        b'<code>""</code> is too short',
         b"<code>version</code> does not match the regex <code>^(\\d+\\.)(\\d+)$</code>",
         b"<code>id</code> is missing but required within <code>tender</code>",
         b"<code>initiationType</code> is missing but required",
