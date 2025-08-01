@@ -241,7 +241,7 @@ def test_modal_error_list_999_sample(skip_if_remote, submit_url):
         ),
     ],
 )
-def test_jsonschema_translation(submit_url, filename, english, spanish):
+def test_language_switcher(submit_url, filename, english, spanish):
     page = submit_url(filename)
     elements = page.locator(".panel-danger td:first-child > p").all()
 
