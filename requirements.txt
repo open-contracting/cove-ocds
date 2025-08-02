@@ -103,7 +103,7 @@ referencing==0.29.1
     #   jsonschema-specifications
     #   libcove
     #   libcoveocds
-requests==2.32.3
+requests==2.32.4
     # via
     #   -r requirements.in
     #   libcove
@@ -143,7 +143,7 @@ transaction==3.0.1
     # via zodb
 url-normalize==1.4.3
     # via requests-cache
-urllib3==2.2.2
+urllib3==2.5.0
     # via
     #   requests
     #   requests-cache
