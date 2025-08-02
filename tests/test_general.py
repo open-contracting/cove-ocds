@@ -4,7 +4,6 @@ import shutil
 
 import libcove.lib.common as cove_common
 import pytest
-from django.conf import settings
 from django.core.files.base import ContentFile
 from django.core.files.uploadedfile import UploadedFile
 from django.urls import reverse
@@ -13,10 +12,8 @@ from libcoveocds.exceptions import OCDSVersionError
 from libcoveocds.schema import SchemaOCDS
 
 from cove_ocds.models import SuppliedData
+from tests import DEFAULT_SCHEMA_VERSION
 
-schema_version = list(settings.COVE_CONFIG["schema_version_choices"])[-1]
-OCDS_DEFAULT_SCHEMA_VERSION = schema_version
-DEFAULT_OCDS_VERSION = schema_version
 METRICS_EXT = (
     "https://raw.githubusercontent.com/open-contracting-extensions/ocds_metrics_extension/master/extension.json"
 )
@@ -278,7 +275,7 @@ def test_wrong_schema_version_in_data(client):
     data.original_file.save("test.json", ContentFile('{"version": "1.bad", "releases": [{"ocid": "xx"}]}'))
     resp = client.get(reverse("explore", args=(data.pk,)))
     assert resp.status_code == 200
-    assert resp.context["version_used"] == OCDS_DEFAULT_SCHEMA_VERSION
+    assert resp.context["version_used"] == DEFAULT_SCHEMA_VERSION
 
 
 def test_get_additional_codelist_values():

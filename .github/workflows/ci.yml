@@ -1,5 +1,7 @@
 name: CI
 on: [push, pull_request]
+permissions:
+  contents: read
 jobs:
   build:
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
@@ -15,6 +17,7 @@ jobs:
       # Check requirements.txt contains production requirements.
       - run: ./manage.py --help
       - run: pip install -r requirements_dev.txt
+      - run: playwright install chromium
       - name: Install gettext
         run: |
           sudo apt update

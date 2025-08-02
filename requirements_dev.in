@@ -1,9 +1,10 @@
 -r requirements.txt
 coverage
+cssselect
 flattentool>=0.14.0
 hypothesis
 libsass
+playwright
 pytest
 pytest-django
 pytest-localserver
-selenium

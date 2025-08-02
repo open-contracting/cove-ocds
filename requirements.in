@@ -1,4 +1,4 @@
-django
+django<5
 django-bootstrap3
 flattentool
 gunicorn[setproctitle]
