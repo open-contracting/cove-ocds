@@ -6,3 +6,5 @@ on:
 jobs:
   i18n:
     uses: open-contracting/.github/.github/workflows/i18n-django.yml@main
+    permissions:
+      contents: read
