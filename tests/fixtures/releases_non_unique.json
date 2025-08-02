@@ -1,0 +1,45 @@
+{
+    "version": "1.1",
+    "publishedDate": "2019-09-18T17:56:21.078Z",
+    "publisher": {
+        "name": "A Publisher Name"
+    },
+    "uri": "http://example.org",
+    "releases": [
+        {
+            "id": "EXAMPLE-1-1",
+            "ocid": "EXAMPLE-1",
+            "date": "2019-09-18T17:56:21.078Z",
+            "initiationType": "tender",
+            "tag": ["planning"]
+        },
+        {
+            "id": "EXAMPLE-1-1",
+            "ocid": "EXAMPLE-1",
+            "date": "2019-09-18T17:56:21.078Z",
+            "initiationType": "tender",
+            "tag": ["planning"]
+        },
+        {
+            "id": "EXAMPLE-1-2",
+            "ocid": "EXAMPLE-1",
+            "date": "2019-09-18T17:56:21.078Z",
+            "initiationType": "tender",
+            "tag": ["planning"]
+        },
+        {
+            "id": "EXAMPLE-1-2",
+            "ocid": "EXAMPLE-1",
+            "date": "2019-09-18T17:56:21.078Z",
+            "initiationType": "tender",
+            "tag": ["planning"]
+        },
+        {
+            "id": "EXAMPLE-1-2",
+            "ocid": "EXAMPLE-1",
+            "date": "1999-09-18T17:56:21.078Z",
+            "initiationType": "tender",
+            "tag": ["planning"]
+        }
+    ]
+}

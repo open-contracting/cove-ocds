@@ -1,0 +1,669 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load cove_ocds %}
+
+{% block header_button %}
+  <a href="{% url 'index' %}" class="btn btn-large btn-success">{% trans 'Load New File' %}</a>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+
+  <div class="col-md-12">
+    <div class="panel panel-primary {% if validation_errors or additional_closed_codelist_values or extensions and extensions.invalid_extension %}panel-danger{% endif %}">
+      <div class="panel-heading">
+        <h4 class="panel-title">{% trans 'Headlines' %}</h4>
+      </div>
+      <div class="panel-body">
+        {% if conversion_warning_messages %}
+          <div class="conversion message"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span>{% blocktrans %}Please read the <a href="#conversion-warning">conversion warnings</a> below.{% endblocktrans %}</div>
+        {% endif %}
+
+        <div class="validation message">
+          <span class="glyphicon glyphicon-{% if validation_errors or additional_closed_codelist_values %}remove{% else %}ok{% endif %}" aria-hidden="true"></span>
+          {% if validation_errors or additional_closed_codelist_values %}
+            {% if has_records %}
+              {% blocktrans %}<b>Failed</b> structural checks against <a href="{{ schema_url }}">OCDS record package schema version {{ version_used_display }}</a>.{% endblocktrans %}
+            {% else %}
+              {% blocktrans %}<b>Failed</b> structural checks against <a href="{{ schema_url }}">OCDS release package schema version {{ version_used_display }}</a>.{% endblocktrans %}
+            {% endif %}
+          {% else %}
+            {% if has_records %}
+              {% blocktrans %}Passed structural checks against <a href="{{ schema_url }}">OCDS record package schema version {{ version_used_display }}</a>.{% endblocktrans %}
+            {% else %}
+              {% blocktrans %}Passed structural checks against <a href="{{ schema_url }}">OCDS release package schema version {{ version_used_display }}</a>.{% endblocktrans %}
+            {% endif %}
+          {% endif %}
+          {% if validation_errors %}
+          <br/>
+          {% blocktrans %}See <a href="#validation-errors">Structural Errors</a> below.{% endblocktrans %}
+          {% endif %}
+        </div>
+
+        {% if unrecognized_version_data %}
+          <div class="bg-danger text-danger in-panel-warning">
+            <small><span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> &nbsp;{% blocktrans %}Your data specifies a version <strong>{{unrecognized_version_data}}</strong> which is not recognised. For that reason, it's been checked against the current default version.{% endblocktrans %}</small>
+          </div>
+        {% endif %}
+
+        {% if extensions and extensions.invalid_extension %}
+        <div class="message">
+          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>{% blocktrans count count=extensions.invalid_extension.keys|length %}<strong>Failed</strong> to apply {{count}} extension to the schema.{% plural %}<strong>Failed</strong> to apply {{count}} extensions to the schema.{% endblocktrans %}<br/>
+          {% blocktrans %}See <a href="#schema-extensions">Extensions</a> below.{% endblocktrans %}
+        </div>
+        {% endif %}
+
+        {% if conversion %}
+        <div class="message">
+          <span class="glyphicon glyphicon-download" aria-hidden="true"></span>{% blocktrans with size=converted_file_size|filesizeformat %}To validated your file, we converted it to JSON format <a href="{{converted_url}}">({{size}} download)</a>.{% endblocktrans %}
+        </div>
+        {% endif %}
+
+          <div class="key-facts message">
+           <strong>{% trans "At a glance" %}</strong>
+           <ul>
+             {% if count %}
+             <li><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+             {% if has_records %}
+             {% blocktrans count count=count %}This file contains <strong>{{count}} record</strong>{% plural %}This file contains <strong>{{count}} records</strong>{% endblocktrans %}
+             {% else %}
+             {% blocktrans count count=count %}This file contains <strong>{{count}} release</strong>{% plural %}This file contains <strong>{{count}} releases</strong>{% endblocktrans %}
+             {% endif %}
+             {% blocktrans count count=unique_ocids_count %} describing <strong>{{count}} contracting process</strong>{% plural %} describing <strong>{{count}} contracting processes.</strong>{% endblocktrans %}
+             </li>
+             {% endif %}
+
+             {% if 'version' in json_data %}
+                <li><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                  {% blocktrans with value=json_data.version|json %}The schema version specified in the file is <code>{{value}}</code>.{% endblocktrans %}
+                </li>
+             {% endif %}
+
+             {% if json_data.publisher.name %}
+                <li><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                  {% blocktrans with value=json_data.publisher.name %}The publisher named in the file is <strong>{{value}}</strong>.{% endblocktrans %}
+                </li>
+             {% endif %}
+
+             {% if json_data.license %}
+                <li><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                  {% blocktrans with value=json_data.license %}The license is <a href="{{value}}">{{value}}</a>.{% endblocktrans %}
+                </li>
+             {% endif %}
+
+             {% if json_data.publicationPolicy %}
+                <li><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                  {% blocktrans with value=json_data.publicationPolicy %}Publication policy is <a href="{{value}}">{{value}}</a>.{% endblocktrans %}
+                </li>
+             {% endif %}
+
+             {% if extensions and extensions.is_extended_schema %}
+                <li><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                  {% with n_invalid=extensions.invalid_extension.keys|length %}
+                    {% blocktrans count count=extensions.extensions.keys|length|subtract:n_invalid %}This file applies {{count}} valid <a href="#schema-extensions">extension</a> to the schema.{% plural %}This file applies {{count}} valid <a href="#schema-extensions">extensions</a> to the schema.{% endblocktrans %}
+                  {% endwith %}
+                </li>
+             {% endif %}
+
+            {% if data_only %}
+            <li><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                {% blocktrans count count=data_only|length %}This file uses {{count}} <a href="#additional-fields">additional field</a> not used in the standard.{% plural %}This file uses {{count}} <a href="#additional-fields">additional fields</a> not used in the standard.{% endblocktrans %}
+             </li>
+             {% endif %}
+
+             {% if csv_encoding and csv_encoding != "utf-8-sig" %}
+             <li><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                {% blocktrans %}This file is not 'utf-8' encoded (it is <strong>{{csv_encoding}}</strong> encoded).{% endblocktrans %}
+             </li>
+             {% endif %}
+
+             {% if deprecated_fields %}
+             <li><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                {% blocktrans count count=deprecated_fields|length %}This file uses {{count}} <a href="#deprecated-fields">deprecated field</a>.{% plural %} This file uses {{count}} <a href="#deprecated-fields">deprecated fields</a>.{% endblocktrans %}
+              </li>
+             {% endif %}
+
+             <li><span class="glyphicon glyphicon-download" aria-hidden="true"></span>
+               {% if source_url %}
+                  {% blocktrans with size=original_file_size|filesizeformat %}Data downloaded <a href="{{original_file_url}}">({{size}} cached)</a> from <code>{{ source_url }}</code> on {{ created_datetime }}.{% endblocktrans %}
+               {% else %}
+                 {% blocktrans with size=original_file_size|filesizeformat %}Data uploaded <a href="{{original_file_url}}">({{size}} cached)</a> on {{ created_datetime }}.{% endblocktrans %}
+               {% endif %}<br>
+            </li>
+           </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if extensions %}
+  {% with ext=extensions.extensions ext_errors=extensions.invalid_extension %}
+  <div class="panel panel-primary" id="schema-extensions">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        {% trans 'Schema Extensions' %}
+      </h4>
+    </div>
+    <div class="panel-body">
+      <p>
+        {% if extensions.is_extended_schema %}
+          {% blocktrans %}Your data contains the following schema extensions:{% endblocktrans %}
+        {% else %}
+          {% blocktrans %}Your data contains the following schema extensions, but it wasn't possible to fetch them:{% endblocktrans %}
+        {% endif %}
+      </p>
+      <ul>
+        {% for ext_descriptor_url, ext_details in ext.items %}
+          {% if ext_details %}
+          <li><a href="{% if ext_details.documentationUrl %}{{ ext_details.documentationUrl }}{% else %}{{ ext_details.url }}{% endif %}">{{ ext_details.name }}</a>
+            {% if ext_details.schema_url %}
+              &nbsp;(<a href="{{ ext_details.schema_url }}">{% trans "release schema" %}</a>)
+            {% endif %}
+            &nbsp;&nbsp;<span class="font-tick tick"></span><p><small>{{ ext_details.description }}</small><p>
+            {% if ext_details.failed_codelists %}
+              <ul class="list-unstyled">
+                {% for codelist, codelist_error in ext_details.failed_codelists.items %}
+                    <li>
+                    <span class="font-tick cross"></span> <strong>{{ codelist }}:</strong> {{ codelist_error }}
+                    </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+      {% if ext_errors %}
+      {% if extensions.is_extended_schema %}<p class="indent"> {% blocktrans %}The following extensions failed:{% endblocktrans %}{% endif %}
+      <ul>
+        {% for ext_descriptor_url, error in ext_errors.items %}
+          <li><a href="{{ext_descriptor_url}}" class="text-warning">{{ext_descriptor_url}}</a>  &nbsp;&nbsp;<span class="font-tick cross"></span><p><small>{{error}}</small><p></li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+
+      {% if extensions.is_extended_schema %}
+        {% if ext_errors %}
+          <p>{% blocktrans %}Only those extensions successfully fetched were applied to extend the schema.{% endblocktrans %}</p>
+        {% else %}
+          <p>{% blocktrans %}All the extensions above were applied to extend the schema.{% endblocktrans %}</p>
+        {% endif %}
+        <span class="glyphicon glyphicon-download" aria-hidden="true"></span> <a href="{{extensions.extended_schema_url}}"> &nbsp;{% blocktrans %}Get a copy of the schema with extension patches applied{% endblocktrans %}</a>
+      {% else %}
+        <p>{% blocktrans %}None of the extensions above could be applied. Your data has been checked against a schema with no extensions.{% endblocktrans %}</p>
+      {% endif %}
+
+    </div>
+  </div>
+  {% endwith %}
+{% endif %}
+
+{% if conversion_warning_messages %}
+  <a name="conversion-warning" class="anchor"></a>
+  <div class="panel panel-warning">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        {% trans 'Conversion Errors' %}
+      </h4>
+    </div>
+    <div class="panel-body">
+      {% if file_type != 'json' %}
+        <p class="explanation">{% blocktrans %}In order to check your data we need to convert it. During that conversion we found the following issues:{% endblocktrans %}</p>
+      {% endif %}
+      <ul>
+        {% for warning_message in conversion_warning_messages %}
+          <li>{{warning_message}}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+{% endif %}
+
+
+{% with validation_errors=validation_errors_grouped.required error_prefix='required-' %}
+  {% if validation_errors %}
+    {% for error_json, values in validation_errors %}
+      {% with error=error_json|json_decode %}
+        {% include "modal_errors.html" with className="validation-errors-"|concat:error_prefix|concat:forloop.counter modalTitle=error.message errorList=values file_type=file_type full_table=True %}
+      {% endwith %}
+    {% endfor %}
+
+    <a name="validation-errors" class="anchor"></a>
+    <div class="panel panel-danger">
+      <div id="validation-panel" class="panel-heading pointer" role="region" aria-expanded="true" aria-controls="validationTable" data-toggle="collapse" data-target="#validationTable">
+        <h4 class="panel-title">
+          <span class="glyphicon glyphicon-collapse-up"></span>{% trans 'Structural Errors - Required Fields' %}
+        </h4>
+      </div>
+      <div id="validationTable" class="collapse in panel-body">
+        {% blocktrans %}Some or all of your data is missing fields which are required by the OCDS schema.{% endblocktrans %}
+        {% include "validation_table.html" %}
+      </div>
+    </div>
+
+  {% endif %}
+{% endwith %}
+
+{% with validation_errors=validation_errors_grouped.format error_prefix='format-' %}
+  {% if validation_errors %}
+    {% for error_json, values in validation_errors %}
+      {% with error=error_json|json_decode %}
+        {% include "modal_errors.html" with className="validation-errors-"|concat:error_prefix|concat:forloop.counter modalTitle=error.message errorList=values file_type=file_type full_table=True %}
+      {% endwith %}
+    {% endfor %}
+
+    <a name="validation-errors" class="anchor"></a>
+    <div class="panel panel-danger">
+      <div id="validation-panel" class="panel-heading pointer" role="region" aria-expanded="true" aria-controls="validationTable" data-toggle="collapse" data-target="#validationTable">
+        <h4 class="panel-title">
+          <span class="glyphicon glyphicon-collapse-up"></span>{% trans 'Structural Errors - Format' %}
+        </h4>
+      </div>
+      <div id="validationTable" class="collapse in panel-body">
+        {% blocktrans %}Some or all of your data includes fields which are incorrectly formatted.{% endblocktrans %}
+        {% include "validation_table.html" %}
+      </div>
+    </div>
+
+  {% endif %}
+{% endwith %}
+
+{% with validation_errors=validation_errors_grouped.other error_prefix='other-' %}
+  {% if validation_errors %}
+    {% for error_json, values in validation_errors %}
+      {% with error=error_json|json_decode %}
+        {% include "modal_errors.html" with className="validation-errors-"|concat:error_prefix|concat:forloop.counter modalTitle=error.message errorList=values file_type=file_type full_table=True %}
+      {% endwith %}
+    {% endfor %}
+
+    <a name="validation-errors" class="anchor"></a>
+    <div class="panel panel-danger">
+      <div id="validation-panel" class="panel-heading pointer" role="region" aria-expanded="true" aria-controls="validationTable" data-toggle="collapse" data-target="#validationTable">
+        <h4 class="panel-title">
+          <span class="glyphicon glyphicon-collapse-up"></span>{% trans 'Structural Errors - Other' %}
+        </h4>
+      </div>
+      <div id="validationTable" class="collapse in panel-body">
+        {% blocktrans %}Some or all of your data has validation errors.{% endblocktrans %}
+        {% include "validation_table.html" %}
+      </div>
+    </div>
+
+  {% endif %}
+{% endwith %}
+
+{% if structure_warnings %}
+    <a name="structure-warnings" class="anchor"></a>
+    <div class="panel panel-danger">
+      <div id="structure-warnings-panel" class="panel-heading pointer" role="region" aria-expanded="true" aria-controls="structureWarningsTable" data-toggle="collapse" data-target="#structureWarningsTable">
+        <h4 class="panel-title">
+          <span class="our-title"><span class="glyphicon glyphicon-collapse-up"></span>{% trans 'Structure Warnings' %}</span>
+        </h4>
+      </div>
+      <div id="structureWarningsTable" class="collapse in">
+        <div class="panel-body">
+          <p class="explanation">{% blocktrans %}Fixing the following issues will improve the interoperability of your data.{% endblocktrans %}</p>
+          <br>
+          {% with structure_warnings=structure_warnings %}
+            {% if structure_warnings.missing_ids %}
+
+              <p>
+                {% blocktrans count n_missing=structure_warnings.missing_ids|length %}We found <strong>{{n_missing}}</strong> object within an array in your data without an <code>id</code> property.{% plural %}We found <strong>{{n_missing}}</strong> objects within arrays in your data without an <code>id</code> property.{% endblocktrans %}
+                 {% blocktrans %}This may affect the creation of OCDS records, and conversion of data into other formats. We recommend that all objects within an array should have an <code>id</code> set.{% endblocktrans %}
+                <a class="view-all" role="region" aria-expanded="false" aria-controls="OCDSmissingIdTable" data-toggle="collapse" data-target="#OCDSmissingIdTable"><small>{% trans "View all errors &#9660;" %}</small></a>
+              </p>
+              <div id="OCDSmissingIdTable" class="collapse">
+                <table class="table table-striped">
+                  <thead><tr><th>{% trans "Path to missing ID" %}</th></thead>
+                  <tbody>
+              {% for path in structure_warnings.missing_ids %}
+                    <tr><td>{{path}}</td></tr>
+              {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+
+            {% endif %}
+          {% endwith %}
+        </div>
+      </div>
+    </div>
+{% endif %}
+
+{% if conformance_errors %}
+    <a name="conformance-rules" class="anchor"></a>
+    <div class="panel panel-danger">
+      <div id="conformance-rules-panel" class="panel-heading pointer" role="region" aria-expanded="true" aria-controls="conformanceRulesTable" data-toggle="collapse" data-target="#conformanceRulesTable">
+        <h4 class="panel-title">
+          <span class="our-title"><span class="glyphicon glyphicon-collapse-up"></span>{% trans 'Conformance (Rules)' %}</span>
+        </h4>
+      </div>
+      <div id="conformanceRulesTable" class="collapse in">
+        <div class="panel-body">
+          <p class="explanation">{% blocktrans %}Fixing the following issues will improve the interoperability of your data.{% endblocktrans %}</p>
+          <br>
+          {% with conformance_errors=conformance_errors %}
+            {% if conformance_errors.ocds_prefixes_bad_format %}
+
+              <p>
+                {% blocktrans count n_prefixes=conformance_errors.ocds_prefixes_bad_format|length %}<strong>{{n_prefixes}}</strong> of your <code>ocid</code> fields has a problem: {% plural %}<strong>{{n_prefixes}}</strong> of your <code>ocid</code> fields have a problem: {% endblocktrans %}{% trans "there is no prefix or the prefix format is not recognised." %}
+                <a class="view-all" role="region" aria-expanded="false" aria-controls="OCDSprefixesTable" data-toggle="collapse" data-target="#OCDSprefixesTable"><small>{% trans "View all errors &#9660;" %}</small></a>
+              </p>
+              <div id="OCDSprefixesTable" class="collapse">
+                <table class="table table-striped">
+                  <thead><tr><th>{% trans "ocid" %}</th><th>{% trans "Path" %}</th></tr></thead>
+                  <tbody>
+              {% for ocid, path in conformance_errors.ocds_prefixes_bad_format %}
+                    <tr><td>{{ocid}}</td><td>{{path}}</td></tr>
+              {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              <p class="font-weight-light small">{% blocktrans with description=conformance_errors.ocid_description %} What is the <code>ocid</code> field? {{description}} {% endblocktrans %}<br>{% blocktrans with url=conformance_errors.ocid_info_url %}For more information see <a href="{{url}}">Open Contracting Identifier guidance{% endblocktrans %}</a></p>
+
+            {% endif %}
+          {% endwith %}
+        </div>
+      </div>
+    </div>
+{% endif %}
+
+{% if additional_closed_codelist_values %}
+    <a name="additional-closed-codelist-values" class="anchor"></a>
+    <div class="panel panel-danger">
+      <div id="additional-closed-codelist-values-panel" class="panel-heading pointer" role="region" aria-expanded="true" aria-controls="additionalClosedCodelist" data-toggle="collapse" data-target="#additionalClosedCodelist">
+        <h4 class="panel-title">
+          <span class="our-title"><span class="glyphicon glyphicon-collapse-up"></span>{% trans 'Codelist Errors' %}</span>
+        </h4>
+      </div>
+      <div id="additionalClosedCodelist" class="collapse in">
+        <div class="panel-body">
+          {% blocktrans %}The fields below use closed codelists. When using these fields, you <strong> must </strong> use one of the pre-defined codelist values. If you use a value that is not on the relevant codelist, your data will not pass structural checks. Where you see + or - this indicates that the codelist has been modified with these additions (+) or subtractions (-) by one or more extensions.{% endblocktrans %}
+          {% with additional_codelist_values=additional_closed_codelist_values %}
+          <div>{% include "additional_codelist_values.html" %}</div>
+          {% endwith %}
+          {% blocktrans %}You may need to create a mapping between your local codes and the OCDS closed codelists to address these errors. In most cases, there will be a 'detail' field where you can also include your local codes. If you have already completed a mapping, please review the spelling and capitalisation used in these closed codelist fields.{% endblocktrans %}
+        </div>
+      </div>
+    </div>
+{% endif %}
+
+{% if data_only %}
+    <a name="additional-fields" class="anchor"></a>
+    <div class="panel panel-warning">
+      <div id="additional-fields-panel" class="panel-heading pointer" role="region" aria-expanded="true" aria-controls="additionalFieldTable" data-toggle="collapse" data-target="#additionalFieldTable">
+        <h4 class="panel-title">
+          <span class="our-title"><span class="glyphicon glyphicon-collapse-up"></span>{% trans 'Additional Fields' %}</span>
+        </h4>
+      </div>
+      <div class="panel-body">
+        <p>{% blocktrans %}This data includes the following fields which are not part of the OCDS schema. You should check whether the data in these fields could be provided by using a field in the OCDS schema or by using an existing <a href="https://standard.open-contracting.org/latest/en/extensions/">extension</a> to the schema.{% endblocktrans %}</p>
+        <div id="additionalFieldTable" class="collapse in">
+
+          <table class="table">
+             <thead>
+               <tr>
+                 <th> {% trans 'Field' %}</th>
+                 <th> {% trans 'Path to Field' %}</th>
+                 <th> {% trans 'Usage Count' %}</th>
+                 <th> {% trans 'Examples (first 3)' %}</th>
+                 <th> {% trans 'Child Fields' %}</th>
+               </tr>
+             </thead>
+             <tbody>
+             {% for full_path, info in additional_fields.items %}
+               {% if info.root_additional_field %}
+                <tr>
+                   <td>{{info.field_name}}</td>
+                   <td>{{info.path}}</td>
+                   <td>{{info.count}}</td>
+                   <td>
+                     {% for example in info.examples %}
+                     {{example}} <br />
+                     {% endfor %}
+                   </td>
+                   <td>
+                     {% if info.additional_field_descendance %}
+                       {{info.additional_field_descendance|length}}
+                       <a data-toggle="modal" data-target="#additional-field-{{full_path|slugify}}">{% trans "(See child fields)" %}</a>
+                     {% endif %}
+                   </td>
+                </tr>
+               {% endif %}
+             {% endfor %}
+             </tbody>
+          </table>
+
+
+          {% for parent_full_path, parent_info in additional_fields.items %}
+            {% if parent_info.root_additional_field and parent_info.additional_field_descendance %}
+              <div class="modal fade" id="additional-field-{{parent_full_path|slugify}}" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                      <h4>{% blocktrans %}Child fields of {{parent_full_path}}{% endblocktrans %} </h4>
+
+                    </div>
+                    <div class="modal-body">
+                      <table class="table">
+                         <thead>
+                           <tr>
+                             <th> {% trans 'Field' %}</th>
+                             <th> {% trans 'Path to Field' %}</th>
+                             <th> {% trans 'Usage Count' %}</th>
+                             <th> {% trans 'Examples (first 3)' %}</th>
+                           </tr>
+                         </thead>
+                         <tbody>
+                         {% for full_path, info in parent_info.additional_field_descendance.items %}
+                           <tr>
+                              <td>{{info.field_name}}</td>
+                              <td>{{info.path}}</td>
+                              <td>{{info.count}}</td>
+                              <td>
+                                {% for example in info.examples %}
+                                  {{example}} <br />
+                                {% endfor %}
+                              </td>
+                           </tr>
+                         {% endfor %}
+                         </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+          {% endfor %}
+
+        </div>
+      </div>
+    </div>
+{% endif %}
+
+
+{% if additional_open_codelist_values %}
+    <a name="additional-open-codelist-values" class="anchor"></a>
+    <div class="panel panel-warning">
+      <div id="additional-open-codelist-values-panel" class="panel-heading pointer" role="region" aria-expanded="true" aria-controls="additionalOpenCodelist" data-toggle="collapse" data-target="#additionalOpenCodelist">
+        <h4 class="panel-title">
+          <span class="our-title"><span class="glyphicon glyphicon-collapse-up"></span>{% trans 'Additional Codelist Values' %}</span>
+        </h4>
+      </div>
+      <div class="panel-body">
+        {% blocktrans %}Your data contains a number of fields that use an open codelist. You should use values from the codelist whenever possible, but if the codelist does not provide the values you need, you are permitted to add additional values. The values below do not appear in the codelist; you should check that you intended these as additional values. Where you see + or - this indicates that the codelist has been modified with these additions (+) or subtractions (-) by one or more extensions.{% endblocktrans %}
+        <div id="additionalOpenCodelist" class="collapse in">
+          {% with additional_codelist_values=additional_open_codelist_values %}
+          {% include "additional_codelist_values.html" %}
+          {% endwith%}
+        </div>
+        {% blocktrans %}Make sure you list the definition of any additional codelist values you include within your <a href="https://standard.open-contracting.org/latest/en/guidance/publish/#finalize-your-publication-policy">publication policy</a>, and if you believe they should be added as recommended values in the open codelist, please suggest this via the <a href="https://github.com/open-contracting/standard/issues/new"> OCDS issue tracker.</a>{% endblocktrans %}
+      </div>
+    </div>
+{% endif %}
+
+{% if additional_checks %}
+  <a name="additional_checks" class="anchor"></a>
+  <div class="panel panel-warning">
+    <div id="additional-checks-panel" class="panel-heading pointer" role="region" aria-expanded="true" aria-controls="additionalChecksTable" data-toggle="collapse" data-target="#additionalChecksTable">
+      <h4 class="panel-title">
+        <span class="glyphicon glyphicon-collapse-up"></span>{% trans 'Additional Checks' %}
+      </h4>
+    </div>
+    <div id="additionalChecksTable" class="collapse in">
+
+      <table class="table">
+          <thead>
+            <tr>
+              <th>{% trans 'Check Description' %}</th>
+              <th>{% trans 'Location of first 3 errors' %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for type, values in additional_checks.items %}
+              {% if type == 'empty_field' %}
+                <tr>
+                  <td>{% trans 'The data includes fields that are empty or contain only whitespaces. Fields that are not being used, or that have no value, should be excluded in their entirety (key and value) from the data' %}</td>
+                  <td>
+                    <ul class="list-unstyled">
+                      {% for value in values|dictsort:"json_location"|slice:":3" %}
+                        <li>{{ value.json_location }}</li>
+                      {% endfor %}
+                      {% if values|length > 3 %}
+                        <li><a data-toggle="modal" data-target=".{{"additional-checks-"|concat:forloop.counter}}"><sup>{% trans "see all" %}</sup></a></li>
+                      {% endif %}
+                    </ul>
+                  </td>
+                </tr>
+              {% endif %}
+            {% endfor %}
+          </tbody>
+      </table>
+
+      {% for type, values in additional_checks.items %}
+        {% include "modal_errors.html" with className="additional-checks-"|concat:forloop.counter modalTitle="" errorList=values|dictsort:"json_location"|list_from_attribute:"json_location" file_type=file_type full_table=False %}
+      {% endfor %}
+
+    </div>
+  </div>
+{% endif %}
+
+{% if deprecated_fields %}
+    <a name="deprecated-fields" class="anchor"></a>
+    <div class="panel panel-warning">
+      <div id="deprecated-fields-panel" class="panel-heading pointer" role="region" aria-expanded="true" aria-controls="deprecatedFieldTable" data-toggle="collapse" data-target="#deprecatedFieldTable">
+        <h4 class="panel-title">
+          <span class="our-title"><span class="glyphicon glyphicon-collapse-up"></span>{% trans "Deprecated Fields" %}</span>&nbsp;<sup><span data-toggle="tooltip" title="{% trans "Fields flagged as 'deprecated' will be either replaced or removed in future versions of the schema." %}"><strong>?</strong></span></sup>
+        </h4>
+      </div>
+      <div id="deprecatedFieldTable" class="collapse in">
+
+        <table class="table">
+           <thead>
+              <tr>
+                <th class="col-md-3">{% trans "Field" %}</th>
+                 <th>{% trans "Details" %}</th>
+                 <th>{% trans "Path to Field" %}</th>
+                 <th class="col-md-2">{% trans "Usage Count" %}</th>
+              </tr>
+           </thead>
+           <tfoot class="small-tfoot">
+              {% get_current_language as LANGUAGE_CODE %}
+              <tr><td colspan="4">
+                 <small><a href="https://standard.open-contracting.org/1.1/{{LANGUAGE_CODE}}/governance/deprecation/">{% trans "Learn more about deprecated fields" %}</a></small>
+              </td></tr>
+           </tfoot>
+           <tbody>
+           {% for field, details in deprecated_fields.items %}
+              <tr>
+                 <td>{{field}}</td>
+                 <td>{% blocktrans with version=details.explanation.0 %}Deprecated in {{version}}:{% endblocktrans %} {{details.explanation.1}}</td>
+                 <td>{% for path in details.paths %}<p>{{path}}</p>{% endfor %}</td>
+                 <td>{{details.paths|length}}</td>
+              </tr>
+           {% endfor %}
+           </tbody>
+        </table>
+
+      </div>
+    </div>
+
+{% endif %}
+
+
+{% block explore_additional_content %}
+{% endblock %}
+
+
+<div class="above-footer">
+  <h2>{% trans "Save or Share these results" %}</h2>
+  <p>{% blocktrans %}Use the following url to share these results:{% endblocktrans %}</p>
+  <div class="copy-div">
+      <span class="copy-span"> {{ current_url }} <span id="copy-url-button" title="Click to copy." data-clipboard-text={{ current_url }} class="btn copy-button glyphicon glyphicon-copy" aria-hidden="true"></span> </span>
+  </div>
+  <p>{% blocktrans %}These results will be available for {{ delete_files_after_days }} days from the day the data was first uploaded. You can revisit these results until then.{% endblocktrans %}</p>
+  <p>{% blocktrans %}After {{ delete_files_after_days }} days all uploaded data is deleted from our servers, and the results will no longer be available. Anyone using the link to this page after that will be shown a message that tells them the file has been removed.{% endblocktrans %}</p>
+</div>
+{% endblock content %}
+
+{% block extrafooterscript %}
+  {{ block.super }}
+  <script type="text/javascript">
+      $("#validationTable").on("hide.bs.collapse", function(){
+        $("#validation-panel.panel-heading").html('<h4 class="panel-title"><span class="glyphicon glyphicon-collapse-down"></span>{% trans "Structural Errors" %}</h4>');
+      });
+      $("#validationTable").on("show.bs.collapse", function(){
+        $("#validation-panel.panel-heading").html('<h4 class="panel-title"><span class="glyphicon glyphicon-collapse-up"></span>{% trans "Structural Errors" %}</h4>');
+      });
+      $("#conformanceRulesTable").on("hide.bs.collapse", function(){
+        $("#conformance-rules-panel .our-title").html('<span class="glyphicon glyphicon-collapse-down"></span>{% trans "Conformance (Rules)" %}');
+      });
+      $("#conformanceRulesTable").on("show.bs.collapse", function(){
+        $("#conformance-rules-panel .our-title").html('<span class="glyphicon glyphicon-collapse-up"></span>{% trans "Conformance (Rules)" %}');
+      });
+      $("#OCDSprefixesTable").on("hide.bs.collapse", function(){
+        $(".view-all").html('<small>{% trans "view all errors &#9660;" %}</small>');
+      });
+      $("#OCDSprefixesTable").on("show.bs.collapse", function(){
+        $(".view-all").html('<small>{% trans "View all errors &#9650;" %}</small>');
+      });
+      $("#structureWarningsTable").on("hide.bs.collapse", function(){
+        $("#structure-warnings-panel .our-title").html('<span class="glyphicon glyphicon-collapse-down"></span>{% trans "Structure Warnings" %}');
+      });
+      $("#structureWarningsTable").on("show.bs.collapse", function(){
+        $("#structure_warnings-panel .our-title").html('<span class="glyphicon glyphicon-collapse-up"></span>{% trans "Structure Warnings" %}');
+      });
+      $("#OCDSmissingIdTable").on("hide.bs.collapse", function(){
+        $(".view-all").html('<small>{% trans "View all errors &#9660;" %}</small>');
+      });
+      $("#OCDSmissingIdTable").on("show.bs.collapse", function(){
+        $(".view-all").html('<small>{% trans "View all errors &#9650;" %}</small>');
+      });
+      $("#OCDSPrefixWarningsTable").on("hide.bs.collapse", function(){
+        $("#bad-ocds-prefix-panel .our-title").html('<span class="glyphicon glyphicon-collapse-down"></span>{% trans "Quality Warnings" %}');
+      });
+      $("#OCDSprefixesTable").on("show.bs.collapse", function(){
+        $(".view-all").html('<small>{% trans "View all errors &#9650;" %}</small>');
+      });
+      $("#additionalFieldTable").on("hide.bs.collapse", function(){
+        $("#additional-fields-panel .our-title").html('<span class="glyphicon glyphicon-collapse-down"></span>{% trans "Additional Fields (fields in data not in schema)" %}');
+      });
+      $("#additionalFieldTable").on("show.bs.collapse", function(){
+        $("#additional-fields-panel .our-title").html('<span class="glyphicon glyphicon-collapse-up"></span>{% trans "Additional Fields (fields in data not in schema)" %}');
+      });
+      $("#deprecatedFieldTable").on("hide.bs.collapse", function(){
+        $("#deprecated-fields-panel .our-title").html('<span class="glyphicon glyphicon-collapse-down"></span>{% trans "Deprecated Fields" %}');
+      });
+      $("#deprecatedFieldTable").on("show.bs.collapse", function(){
+        $("#deprecated-fields-panel .our-title").html('<span class="glyphicon glyphicon-collapse-up"></span>{% trans "Deprecated Fields" %}');
+      });
+      $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+      })
+      $('form').submit(function() {
+          $('#small-loading').css({"display": "inline"});
+      });
+  </script>
+{% endblock extrafooterscript %}

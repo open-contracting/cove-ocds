@@ -1,7 +1,6 @@
 import pytest
-from django.test import override_settings
 
-from tests import REMOTE, assert_in
+from tests import assert_in
 
 WAIT = 350
 
@@ -24,18 +23,6 @@ def test_accordion(server_url, page):
 
         for i, button in enumerate(page.locator("button").all()):
             assert button.is_visible() == (index == i)
-
-
-@pytest.mark.django_db
-def test_styles_500_error(server_url, page):
-    page.goto(f"{server_url}/test/500")
-    icon = page.locator(".panel-danger span").first
-
-    # Check that our nice error message is there.
-    assert "Something went wrong" in page.text_content("body")
-    # Check for the exclamation icon. This helps to check that the theme including the css has been loaded properly.
-    assert "Glyphicons Halflings" in icon.evaluate("element => getComputedStyle(element).fontFamily")
-    assert icon.evaluate("element => getComputedStyle(element).color") in "rgb(255, 255, 255)"
 
 
 DARK_RED = "rgb(169, 68, 66)"
@@ -82,88 +69,40 @@ def test_modal_additional_checks_error(submit_url, filename):
     page.click("div.modal.additional-checks-1 button.close")
 
 
-@override_settings(VALIDATION_ERROR_LOCATIONS_LENGTH=1000)
-@pytest.mark.skipif(REMOTE, reason="Depends on VALIDATION_ERROR_LOCATIONS_LENGTH = 1000")
-def test_modal_error_list_1001(submit_url):
+def test_modal_error_list_101(submit_url):
     """
-    When there are more than 1000 error locations, the first 1000 are shown in the table, and there is a message.
+    When there are more than 100 error locations, the first 100 are shown in the table, and there is a message.
     """
-    page = submit_url("1001_empty_releases.json")
+    page = submit_url("101_empty_releases.json")
 
-    assert "1001" in page.text_content(".key-facts ul li")
+    assert "101" in page.text_content(".key-facts ul li")
 
-    page.click("text=1001")
+    page.click("text=101")
     modal_body = page.locator(".modal-body").first
     modal_text = modal_body.text_content()
 
-    assert modal_body.locator("table tbody tr").count() == 1000
-    assert "first 1000 locations for this error" in modal_text
-    assert "releases/999" in modal_text
-    assert "releases/1000" not in modal_text
+    assert modal_body.locator("table tbody tr").count() == 100
+    assert "first 100 locations for this error" in modal_text
+    assert "releases/99" in modal_text
+    assert "releases/100" not in modal_text
 
 
-@override_settings(VALIDATION_ERROR_LOCATIONS_LENGTH=1000)
-@pytest.mark.skipif(REMOTE, reason="Depends on VALIDATION_ERROR_LOCATIONS_LENGTH = 1000")
-def test_modal_error_list_999(submit_url):
+def test_modal_error_list_99(submit_url):
     """
-    When there are less than 1000 error locations, they are all shown in the table, and there is no message.
+    When there are less than 100 error locations, they are all shown in the table, and there is no message.
     """
-    page = submit_url("999_empty_releases.json")
+    page = submit_url("99_empty_releases.json")
 
-    assert "999" in page.text_content(".key-facts ul li")
+    assert "99" in page.text_content(".key-facts ul li")
 
-    page.click("text=999")
+    page.click("text=99")
     modal_body = page.locator(".modal-body").first
     modal_text = modal_body.text_content()
 
-    assert modal_body.locator("table tbody tr").count() == 999
-    assert "first 999 locations for this error" not in modal_text
-    assert "releases/998" in modal_text
-    assert "releases/999" not in modal_text
-
-
-@override_settings(VALIDATION_ERROR_LOCATIONS_LENGTH=1000, VALIDATION_ERROR_LOCATIONS_SAMPLE=True)
-@pytest.mark.skipif(
-    REMOTE,
-    reason="Depends on VALIDATION_ERROR_LOCATIONS_LENGTH = 1000 and VALIDATION_ERROR_LOCATIONS_SAMPLE = True",
-)
-def test_modal_error_list_1001_sample(submit_url):
-    """
-    When there are more than 1000 error locations, a random 1000 are shown in the table, and there is a message.
-    """
-    page = submit_url("1001_empty_releases.json")
-
-    assert "1001" in page.text_content(".key-facts ul li")
-
-    page.click("text=1001")
-    modal_body = page.locator(".modal-body").first
-    modal_text = modal_body.text_content()
-
-    assert modal_body.locator("table tbody tr").count() == 1000
-    assert "random 1000 locations for this error" in modal_text
-
-
-@override_settings(VALIDATION_ERROR_LOCATIONS_LENGTH=1000, VALIDATION_ERROR_LOCATIONS_SAMPLE=True)
-@pytest.mark.skipif(
-    REMOTE,
-    reason="Depends on VALIDATION_ERROR_LOCATIONS_LENGTH = 1000 and VALIDATION_ERROR_LOCATIONS_SAMPLE = True",
-)
-def test_modal_error_list_999_sample(submit_url):
-    """
-    When there are less than 1000 error locations, they are all shown in the table, and there is no message.
-    """
-    page = submit_url("999_empty_releases.json")
-
-    assert "999" in page.text_content(".key-facts ul li")
-
-    page.click("text=999")
-    modal_body = page.locator(".modal-body").first
-    modal_text = modal_body.text_content()
-
-    assert modal_body.locator("table tbody tr").count() == 999
-    assert "first 999 locations for this error" not in modal_text
-    assert "releases/998" in modal_text
-    assert "releases/999" not in modal_text
+    assert modal_body.locator("table tbody tr").count() == 99
+    assert "first 99 locations for this error" not in modal_text
+    assert "releases/98" in modal_text
+    assert "releases/99" not in modal_text
 
 
 @pytest.mark.parametrize(
@@ -222,16 +161,16 @@ def test_modal_error_list_999_sample(submit_url):
                 "id is missing but required within tender",
                 "initiationType is missing but required",
                 "version does not match the regex ^(\\d+\\.)(\\d+)$",
-                "amount is not a number. Check that the value doesn’t contain any characters other than 0-9 and dot (.). Number values should not be in quotes.",  # noqa: E501
+                "amount is not a number. Check that the value doesn't contain any characters other than 0-9 and dot (.). Number values should not be in quotes.",  # noqa: E501
                 "buyer is not a JSON object",
-                "numberOfTenderers is not a integer. Check that the value doesn’t contain decimal points or any characters other than 0-9. Integer values should not be in quotes.",  # noqa: E501
+                "numberOfTenderers is not a integer. Check that the value doesn't contain decimal points or any characters other than 0-9. Integer values should not be in quotes.",  # noqa: E501
                 "ocid is not a string. Check that the value is not null, and has quotes at the start and end. Escape any quotes in the value with \\",  # noqa: E501
                 "parties is not a JSON array",
                 "title is not a string. Check that the value has quotes at the start and end. Escape any quotes in the value with \\",  # noqa: E501
                 "Incorrect date format. Dates should use the form YYYY-MM-DDT00:00:00Z. Learn more about dates in OCDS.",  # noqa: E501
                 "Invalid 'uri' found",
                 '"" is too short. Strings must be at least one character. This error typically indicates a missing value.',  # noqa: E501
-                "[] is too short. You must supply at least one value, or remove the item entirely (unless it’s required).",  # noqa: E501
+                "[] is too short. You must supply at least one value, or remove the item entirely (unless it's required).",  # noqa: E501
             ],
             [
                 "id falta pero se requiere dentro de tender",

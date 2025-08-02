@@ -4,24 +4,7 @@ on:
   push:
     branches: [main]
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-          cache: pip
-          cache-dependency-path: '**/requirements*.txt'
-      - name: Install translate-toolkit
-        run: |
-          sudo apt update
-          sudo apt install gettext translate-toolkit
-      - run: pip install -r requirements.txt
-      - run: python manage.py makemessages -a
-      - name: Count incomplete translations
-        shell: bash
-        run: |
-          output=$(find . -name LC_MESSAGES -not -path "*/en/*" -exec pocount --incomplete --short "{}" +)
-          echo $output
-          [ "$output" = "" ]
+  i18n:
+    uses: open-contracting/.github/.github/workflows/i18n-django.yml@main
+    permissions:
+      contents: read

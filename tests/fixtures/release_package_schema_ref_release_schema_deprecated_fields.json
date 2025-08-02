@@ -23,7 +23,7 @@
             "items": { "$ref": "file:tests/fixtures/release_schema_deprecated_fields.json" },
             "uniqueItems": true
         },
-        "publisher": { 
+        "publisher": {
             "description": "Information to uniquely identify the publisher of this package.",
             "type": "object",
             "properties": {

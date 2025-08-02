@@ -1,19 +1,17 @@
-import io
 import json
 import os
 import shutil
-from unittest.mock import patch
 
 import libcove.lib.common as cove_common
 import pytest
-from cove.input.models import SuppliedData
 from django.core.files.base import ContentFile
 from django.core.files.uploadedfile import UploadedFile
-from libcove.lib.converters import convert_json, convert_spreadsheet
+from django.urls import reverse
 from libcoveocds.api import ocds_json_output
 from libcoveocds.exceptions import OCDSVersionError
 from libcoveocds.schema import SchemaOCDS
 
+from cove_ocds.models import SuppliedData
 from tests import DEFAULT_SCHEMA_VERSION
 
 METRICS_EXT = (
@@ -122,91 +120,78 @@ def test_get_schema_deprecated_paths():
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "json_data",
+    ("json_data", "status_code"),
     [
-        # A selection of JSON strings we expect to give a 200 status code, even
-        # though some of them aren't valid OCDS
-        "true",
-        "null",
-        "1",
-        "{}",
-        "[]",
-        "[[]]",
-        '{"releases":{}}',
-        '{"releases" : 1.0}',
-        '{"releases" : 2}',
-        '{"releases" : true}',
-        '{"releases" : "test"}',
-        '{"releases" : null}',
-        '{"releases" : {"a":"b"}}',
-        '{"releases" : [["test"]]}',
-        '{"records":{}}',
-        '{"records" : 1.0}',
-        '{"records" : 2}',
-        '{"records" : true}',
-        '{"records" : "test"}',
-        '{"records" : null}',
-        '{"records" : {"a":"b"}}',
-        '{"records" : [["test"]]}',
-        '{"version": "1.1", "releases" : 1.0}',
-        '{"version": "1.1", "releases" : 2}',
-        '{"version": "1.1", "releases" : true}',
-        '{"version": "1.1", "releases" : "test"}',
-        '{"version": "1.1", "releases" : null}',
-        '{"version": "1.1", "releases" : {"version": "1.1", "a":"b"}}',
-        '{"version": "1.1", "records" : 1.0}',
-        '{"version": "1.1", "records" : 2}',
-        '{"version": "1.1", "records" : true}',
-        '{"version": "1.1", "records" : "test"}',
-        '{"version": "1.1", "records" : {"version": "1.1", "a":"b"}}',
-        '{"version": "1.1", "releases":{"buyer":{"additionalIdentifiers":[]}}}',
-        '{"version": "1.1", "releases":{"parties":{"roles":[["a","b"]]}}}',  # test an array in a codelist position
-        """{
-            "extensions": [
-                "https://raw.githubusercontent.com/open-contracting-extensions/ocds_bid_extension/v1.1.1/extension.jso"
-            ],
-            "releases": []
-        }""",
-        '{"extensions":[{}], "releases":[]}'
-        """{
-            "extensions": [
-                "https://raw.githubusercontent.com/open-contracting-extensions/ocds_bid_extension/v1.1.1/extension.jso"
-            ],
-            "releases": [],
-            "version": "1.1"
-        }""",
-        '{"extensions":[{}], "releases":[], "version": "1.1"}',
+        ("true", 422),
+        ("null", 422),
+        ("1", 422),
+        ("{}", 422),
+        ("[]", 422),
+        ("[[]]", 422),
+        ('{"releases":{}}', 200),
+        ('{"releases" : 1.0}', 200),
+        ('{"releases" : 2}', 200),
+        ('{"releases" : true}', 200),
+        ('{"releases" : "test"}', 200),
+        ('{"releases" : null}', 200),
+        ('{"releases" : {"a":"b"}}', 200),
+        ('{"releases" : [["test"]]}', 200),
+        ('{"records":{}}', 200),
+        ('{"records" : 1.0}', 200),
+        ('{"records" : 2}', 200),
+        ('{"records" : true}', 200),
+        ('{"records" : "test"}', 200),
+        ('{"records" : null}', 200),
+        ('{"records" : {"a":"b"}}', 200),
+        ('{"records" : [["test"]]}', 200),
+        ('{"version": "1.1", "releases" : 1.0}', 200),
+        ('{"version": "1.1", "releases" : 2}', 200),
+        ('{"version": "1.1", "releases" : true}', 200),
+        ('{"version": "1.1", "releases" : "test"}', 200),
+        ('{"version": "1.1", "releases" : null}', 200),
+        ('{"version": "1.1", "releases" : {"version": "1.1", "a":"b"}}', 200),
+        ('{"version": "1.1", "records" : 1.0}', 200),
+        ('{"version": "1.1", "records" : 2}', 200),
+        ('{"version": "1.1", "records" : true}', 200),
+        ('{"version": "1.1", "records" : "test"}', 200),
+        ('{"version": "1.1", "records" : {"version": "1.1", "a":"b"}}', 200),
+        ('{"version": "1.1", "releases":{"buyer":{"additionalIdentifiers":[]}}}', 200),
+        ('{"version": "1.1", "releases":{"parties":{"roles":[["a","b"]]}}}', 200),  # an array in a codelist position
+        ('{"extensions":[{}], "releases":[], "version": "1.1"}', 200),
+        ('{"extensions":[{}], "releases":[]}', 200),
+        (
+            """{
+                    "extensions": [
+                        "https://raw.githubusercontent.com/open-contracting-extensions/ocds_bid_extension/v1.1.1/extension.json"
+                    ],
+                    "releases": []
+                }""",
+            422,  # #/definitions/RequirementResponse JSON reference error
+        ),
+        (
+            """{
+                    "extensions": [
+                        "https://raw.githubusercontent.com/open-contracting-extensions/ocds_bid_extension/v1.1.1/extension.json"
+                    ],
+                    "releases": [],
+                    "version": "1.1"
+                }""",
+            422,  # #/definitions/RequirementResponse JSON reference error
+        ),
     ],
 )
-def test_explore_page(client, json_data):
+def test_explore_page(client, json_data, status_code):
     data = SuppliedData.objects.create()
     data.original_file.save("test.json", ContentFile(json_data))
-    data.current_app = "cove_ocds"
-    resp = client.get(data.get_absolute_url())
-    assert resp.status_code == 200
-
-
-@pytest.mark.django_db
-def test_explore_page_convert(client):
-    data = SuppliedData.objects.create()
-    data.original_file.save("test.json", ContentFile('{"releases":[]}'))
-    data.current_app = "cove_ocds"
-    resp = client.get(data.get_absolute_url())
-    assert resp.status_code == 200
-    assert resp.context["conversion"] == "flattenable"
-
-    resp = client.post(data.get_absolute_url(), {"flatten": "true"})
-    assert resp.status_code == 200
-    assert resp.context["conversion"] == "flatten"
-    assert "converted_file_size" in resp.context
-    assert "converted_file_size_titles" not in resp.context
+    resp = client.get(reverse("explore", args=(data.pk,)))
+    assert resp.status_code == status_code
 
 
 @pytest.mark.django_db
 def test_explore_page_csv(client):
     data = SuppliedData.objects.create()
     data.original_file.save("test.csv", ContentFile("a,b"))
-    resp = client.get(data.get_absolute_url())
+    resp = client.get(reverse("explore", args=(data.pk,)))
     assert resp.status_code == 200
     assert resp.context["conversion"] == "unflatten"
     assert resp.context["converted_file_size"] == 22
@@ -217,8 +202,8 @@ def test_explore_not_json(client):
     data = SuppliedData.objects.create()
     with open(os.path.join("tests", "fixtures", "tenders_releases_2_releases_not_json.json")) as fp:
         data.original_file.save("test.json", UploadedFile(fp))
-    resp = client.get(data.get_absolute_url())
-    assert resp.status_code == 200
+    resp = client.get(reverse("explore", args=(data.pk,)))
+    assert resp.status_code == 422
     assert b"not well formed JSON" in resp.content
 
 
@@ -227,27 +212,16 @@ def test_explore_unconvertable_spreadsheet(client):
     data = SuppliedData.objects.create()
     with open(os.path.join("tests", "fixtures", "bad.xlsx"), "rb") as fp:
         data.original_file.save("basic.xlsx", UploadedFile(fp))
-    resp = client.get(data.get_absolute_url())
-    assert resp.status_code == 200
+    resp = client.get(reverse("explore", args=(data.pk,)))
+    assert resp.status_code == 422
     assert b"We think you tried to supply a spreadsheet, but we failed to convert it." in resp.content
-
-
-@pytest.mark.django_db
-def test_explore_non_dict_json(client):
-    data = SuppliedData.objects.create()
-    with open(os.path.join("tests", "fixtures", "non_dict_json.json")) as fp:
-        data.original_file.save("non_dict_json.json", UploadedFile(fp))
-    resp = client.post(data.get_absolute_url(), {"flatten": "true"})
-    assert resp.status_code == 200
-    assert b"could not be converted" not in resp.content
 
 
 @pytest.mark.django_db
 def test_explore_page_null_tag(client):
     data = SuppliedData.objects.create()
     data.original_file.save("test.json", ContentFile('{"releases":[{"tag":null}]}'))
-    data.current_app = "cove_ocds"
-    resp = client.get(data.get_absolute_url())
+    resp = client.get(reverse("explore", args=(data.pk,)))
     assert resp.status_code == 200
 
 
@@ -255,18 +229,17 @@ def test_explore_page_null_tag(client):
 def test_explore_page_null_version(client):
     data = SuppliedData.objects.create()
     data.original_file.save("test.json", ContentFile('{"version":null,"releases":[{}]}'))
-    data.current_app = "cove_ocds"
-    resp = client.get(data.get_absolute_url())
+    resp = client.get(reverse("explore", args=(data.pk,)))
     assert resp.status_code == 200
+    assert b"<strong>null</strong> which is not recognised" in resp.content
 
 
 @pytest.mark.django_db
 def test_explore_page_expired_file(client):
     data = SuppliedData.objects.create()
     data.original_file.save("test.json", ContentFile('{"releases":[{}]}'))
-    data.current_app = "cove_ocds"
     shutil.rmtree(data.upload_dir())
-    resp = client.get(data.get_absolute_url())
+    resp = client.get(reverse("explore", args=(data.pk,)))
     assert resp.status_code == 404
     assert b"automatically deleted after" in resp.content
 
@@ -283,141 +256,26 @@ def test_explore_page_expired_file(client):
 def test_explore_schema_version(client, json_data):
     data = SuppliedData.objects.create()
     data.original_file.save("test.json", ContentFile(json_data))
-    data.current_app = "cove_ocds"
 
-    resp = client.get(data.get_absolute_url())
+    resp = client.get(reverse("explore", args=(data.pk,)))
     assert resp.status_code == 200
     if "version" not in json_data:
         assert "/1.1/" in resp.context["schema_url"]
         assert resp.context["version_used"] == "1.1"
         assert resp.context["version_used_display"] == "1.1"
-        resp = client.post(data.get_absolute_url(), {"version": "1.0"})
-        assert resp.status_code == 200
-        assert "/1.0/" in resp.context["schema_url"]
-        assert resp.context["version_used"] == "1.0"
     else:
         assert "/1.1/" in resp.context["schema_url"]
         assert resp.context["version_used"] == "1.1"
         assert resp.context["version_used_display"] == "1.1"
-        resp = client.post(data.get_absolute_url(), {"version": "1.0"})
-        assert resp.status_code == 200
-        assert "/1.0/" in resp.context["schema_url"]
-        assert resp.context["version_used"] == "1.0"
-        assert resp.context["version_used_display"] == "1.0"
 
 
 @pytest.mark.django_db
 def test_wrong_schema_version_in_data(client):
     data = SuppliedData.objects.create()
     data.original_file.save("test.json", ContentFile('{"version": "1.bad", "releases": [{"ocid": "xx"}]}'))
-    data.current_app = "cove_ocds"
-    resp = client.get(data.get_absolute_url())
+    resp = client.get(reverse("explore", args=(data.pk,)))
     assert resp.status_code == 200
     assert resp.context["version_used"] == DEFAULT_SCHEMA_VERSION
-
-
-@pytest.mark.django_db
-@pytest.mark.parametrize(
-    ("file_type", "converter", "replace_after_post"),
-    [("xlsx", convert_spreadsheet, True), ("json", convert_json, False)],
-)
-def test_explore_schema_version_change(client, file_type, converter, replace_after_post):
-    data = SuppliedData.objects.create()
-    with open(
-        os.path.join("tests", "fixtures", f"tenders_releases_2_releases.{file_type}"),
-        "rb",
-    ) as fp:
-        data.original_file.save(f"test.{file_type}", UploadedFile(fp))
-    data.current_app = "cove_ocds"
-
-    with patch(
-        f"cove_ocds.views.{converter.__name__}",
-        side_effect=converter,
-        autospec=True,
-    ) as mock_object:
-        resp = client.get(data.get_absolute_url())
-        args, kwargs = mock_object.call_args
-        assert resp.status_code == 200
-        assert resp.context["version_used"] == "1.0"
-        assert mock_object.called
-        assert "/1.0/" in kwargs["schema_url"]
-        assert kwargs["replace"] is False
-        mock_object.reset_mock()
-
-        resp = client.post(data.get_absolute_url(), {"version": "1.1"})
-        args, kwargs = mock_object.call_args
-        assert resp.status_code == 200
-        assert resp.context["version_used"] == "1.1"
-        assert mock_object.called
-        assert "/1.1/" in kwargs["schema_url"]
-        assert kwargs["replace"] is replace_after_post
-
-
-@pytest.mark.django_db
-@patch("cove_ocds.views.convert_json", side_effect=convert_json, autospec=True)
-def test_explore_schema_version_change_with_json_to_xlsx(mock_object, client):
-    data = SuppliedData.objects.create()
-    with open(os.path.join("tests", "fixtures", "tenders_releases_2_releases.json")) as fp:
-        data.original_file.save("test.json", UploadedFile(fp))
-    data.current_app = "cove_ocds"
-
-    resp = client.get(data.get_absolute_url())
-    args, kwargs = mock_object.call_args
-    assert resp.status_code == 200
-    assert "/1.0/" in kwargs["schema_url"]
-    assert kwargs["replace"] is False
-    mock_object.reset_mock()
-
-    resp = client.post(data.get_absolute_url(), {"version": "1.1"})
-    args, kwargs = mock_object.call_args
-    assert resp.status_code == 200
-    assert kwargs["replace"] is False
-    mock_object.reset_mock()
-
-    # Convert to spreadsheet
-    resp = client.post(data.get_absolute_url(), {"flatten": "true"})
-    assert kwargs["replace"] is False
-    mock_object.reset_mock()
-
-    # Do replace with version change now that it's been converted once
-    resp = client.post(data.get_absolute_url(), {"version": "1.0"})
-    args, kwargs = mock_object.call_args
-    assert resp.status_code == 200
-    assert kwargs["replace"] is True
-    mock_object.reset_mock()
-
-    # Do not replace if the version does not changed
-    resp = client.post(data.get_absolute_url(), {"version": "1.0"})
-    args, kwargs = mock_object.call_args
-    assert resp.status_code == 200
-    assert kwargs["replace"] is False
-    mock_object.reset_mock()
-
-    resp = client.post(data.get_absolute_url(), {"version": "1.1"})
-    args, kwargs = mock_object.call_args
-    assert resp.status_code == 200
-    assert kwargs["replace"] is True
-    mock_object.reset_mock()
-
-
-@pytest.mark.django_db
-def test_data_supplied_schema_version(client):
-    data = SuppliedData.objects.create()
-    with open(os.path.join("tests", "fixtures", "tenders_releases_2_releases.xlsx"), "rb") as fp:
-        data.original_file.save("test.xlsx", UploadedFile(fp))
-    data.current_app = "cove_ocds"
-
-    assert data.schema_version == ""
-
-    resp = client.get(data.get_absolute_url())
-    assert resp.status_code == 200
-    assert resp.context["version_used"] == "1.0"
-    assert SuppliedData.objects.get(id=data.id).schema_version == "1.0"
-
-    resp = client.post(data.get_absolute_url(), {"version": "1.1"})
-    assert resp.status_code == 200
-    assert resp.context["version_used"] == "1.1"
-    assert SuppliedData.objects.get(id=data.id).schema_version == "1.1"
 
 
 def test_get_additional_codelist_values():
@@ -483,85 +341,6 @@ def test_schema_ocds_extended_schema_file():
     assert not schema.extended
     assert not schema.extended_schema_file
     assert not schema.extended_schema_url
-
-
-@pytest.mark.django_db
-def test_schema_after_version_change(client):
-    data = SuppliedData.objects.create()
-    with open(
-        os.path.join(
-            "tests",
-            "fixtures",
-            "tenders_releases_1_release_with_invalid_extensions.json",
-        )
-    ) as fp:
-        data.original_file.save("test.json", UploadedFile(fp))
-
-    resp = client.post(data.get_absolute_url(), {"version": "1.1"})
-    assert resp.status_code == 200
-
-    with open(os.path.join(data.upload_dir(), "extended_schema.json")) as extended_release_fp:
-        assert "mainProcurementCategory" in json.load(extended_release_fp)["definitions"]["Tender"]["properties"]
-
-    # test link is still there.
-    resp = client.get(data.get_absolute_url())
-    assert resp.status_code == 200
-    assert "extended_schema.json" in resp.content.decode()
-
-    with open(os.path.join(data.upload_dir(), "extended_schema.json")) as extended_release_fp:
-        assert "mainProcurementCategory" in json.load(extended_release_fp)["definitions"]["Tender"]["properties"]
-
-    resp = client.post(data.get_absolute_url(), {"version": "1.0"})
-    assert resp.status_code == 200
-
-    with open(os.path.join(data.upload_dir(), "extended_schema.json")) as extended_release_fp:
-        assert "mainProcurementCategory" not in json.load(extended_release_fp)["definitions"]["Tender"]["properties"]
-
-
-@pytest.mark.django_db
-def test_schema_after_version_change_record(client):
-    data = SuppliedData.objects.create()
-    with open(
-        os.path.join(
-            "tests",
-            "fixtures",
-            "tenders_records_1_record_with_invalid_extensions.json",
-        )
-    ) as fp:
-        new_json = json.load(fp)
-        # Test without version field
-        new_json.pop("version")
-        new_json_file = io.StringIO(json.dumps(new_json))
-        data.original_file.save("test.json", UploadedFile(new_json_file))
-
-    resp = client.post(data.get_absolute_url(), {"version": "1.1"})
-    assert resp.status_code == 200
-
-    with open(os.path.join(data.upload_dir(), "extended_schema.json")) as extended_release_fp:
-        assert "mainProcurementCategory" in json.load(extended_release_fp)["definitions"]["Tender"]["properties"]
-
-    with open(os.path.join(data.upload_dir(), "validation_errors-3.json")) as validation_errors_fp:
-        assert "'version' is missing but required" in validation_errors_fp.read()
-
-    # test link is still there.
-    resp = client.get(data.get_absolute_url())
-    assert resp.status_code == 200
-    assert "extended_schema.json" in resp.content.decode()
-
-    with open(os.path.join(data.upload_dir(), "extended_schema.json")) as extended_release_fp:
-        assert "mainProcurementCategory" in json.load(extended_release_fp)["definitions"]["Tender"]["properties"]
-
-    with open(os.path.join(data.upload_dir(), "validation_errors-3.json")) as validation_errors_fp:
-        assert "'version' is missing but required" in validation_errors_fp.read()
-
-    resp = client.post(data.get_absolute_url(), {"version": "1.0"})
-    assert resp.status_code == 200
-
-    with open(os.path.join(data.upload_dir(), "extended_schema.json")) as extended_release_fp:
-        assert "mainProcurementCategory" not in json.load(extended_release_fp)["definitions"]["Tender"]["properties"]
-
-    with open(os.path.join(data.upload_dir(), "validation_errors-3.json")) as validation_errors_fp:
-        assert "'version' is missing but required" not in validation_errors_fp.read()
 
 
 @pytest.mark.parametrize(
@@ -653,8 +432,7 @@ def test_codelist_url_ocds_codelists(client):
         user_data = fp.read()
     data = SuppliedData.objects.create()
     data.original_file.save("test.json", ContentFile(user_data))
-    data.current_app = "cove_ocds"
-    resp = client.get(data.get_absolute_url())
+    resp = client.get(reverse("explore", args=(data.pk,)))
 
     assert resp.status_code == 200
     assert len(resp.context["additional_closed_codelist_values"]) == 1
@@ -680,8 +458,7 @@ def test_codelist_url_extension_codelists(client):
         user_data = fp.read()
     data = SuppliedData.objects.create()
     data.original_file.save("test.json", ContentFile(user_data))
-    data.current_app = "cove_ocds"
-    resp = client.get(data.get_absolute_url())
+    resp = client.get(reverse("explore", args=(data.pk,)))
 
     assert resp.status_code == 200
     assert len(resp.context["additional_closed_codelist_values"]) == 1

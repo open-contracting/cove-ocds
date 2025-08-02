@@ -18,7 +18,6 @@ jobs:
       - run: ./manage.py --help
       - run: pip install -r requirements_dev.txt
       - run: playwright install chromium
-      # Compile messages, so that lib-cove-web translations are available.
       - name: Install gettext
         run: |
           sudo apt update
@@ -29,11 +28,11 @@ jobs:
         env:
           PYTHONWARNINGS: error
         shell: bash
-        # https://github.com/OpenDataServices/flatten-tool/pull/458
+        # https://github.com/OpenDataServices/flatten-tool/pull/458 > 0.20.0
         # https://github.com/OpenDataServices/flatten-tool/issues/412
         run: |
           ./manage.py migrate
           ./manage.py makemigrations --check --dry-run
           ./manage.py check --fail-level WARNING
           coverage run --source=core,cove_ocds -m pytest -W error -W ignore::DeprecationWarning:ijson.compat -W ignore::ResourceWarning
-      - uses: coverallsapp/github-action@v2
+      - uses: coverallsapp/github-action@648a8eb78e6d50909eff900e4ec85cab4524a45b # v2.3.6
