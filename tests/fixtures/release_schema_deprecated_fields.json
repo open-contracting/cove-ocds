@@ -45,7 +45,7 @@
                 "description" : "Not a useful field as always has to be tender"
             }
         },
-        "planning": { 
+        "planning": {
             "title": "Planning",
             "deprecated": {
                 "deprecatedVersion" : "1.1",
@@ -64,7 +64,7 @@
             "description": "The buyer is the entity whose budget will be used to purchase the goods. This may be different from the procuring agency who may be specified in the tender data.",
             "$ref": "#/definitions/Organization"
         },
-        "awards": { 
+        "awards": {
             "title": "Awards",
             "description": "Information from the award phase of the contracting process. There may be more than one award per contracting process e.g. because the contract is split amongst different providers, or because it is a standing offer.",
             "type": "array",
@@ -73,7 +73,7 @@
             "items": { "$ref": "#/definitions/Award" },
             "uniqueItems": true
         },
-        "contracts": { 
+        "contracts": {
             "title": "Contracts",
             "description": "Information from the contract creation phase of the procurement process.",
             "type": "array",
@@ -379,7 +379,7 @@
                     "items": { "$ref": "#/definitions/Document" },
                     "uniqueItems": true
                 },
-                "amendment": { 
+                "amendment": {
                     "$ref": "#/definitions/Amendment"
                 }
             },
@@ -464,13 +464,13 @@
                     "items": { "$ref": "#/definitions/Document" },
                     "uniqueItems": true
                 },
-                "amendment": { 
+                "amendment": {
                     "$ref": "#/definitions/Amendment"
                 },
-                "implementation": { 
+                "implementation": {
                     "title": "Implementation",
                     "description": "Information related to the implementation of the contract in accordance with the obligations laid out therein.",
-                    "$ref": "#/definitions/Implementation" 
+                    "$ref": "#/definitions/Implementation"
                 }
             },
             "patternProperties": {
@@ -664,7 +664,7 @@
                     "mergeStrategy": "ocdsVersion",
                     "format": "uri"
                 },
-                "id":{ 
+                "id":{
                     "title":"ID",
                     "description": "An identifier for the budget line item which provides funds for this contracting process. This identifier should be possible to cross-reference against the provided data source.",
                     "mergeStrategy": "ocdsVersion",
@@ -676,7 +676,7 @@
                     "mergeStrategy": "ocdsVersion",
                     "type": ["string", "null"]
                 },
-                "amount": { 
+                "amount": {
                     "title":"Amount",
                     "description": "The value of the budget line item.",
                     "$ref": "#/definitions/Value"
@@ -719,7 +719,7 @@
             "description": "A spending transaction related to the contracting process. Draws upon the data models of the [Fiscal Data Package](http://fiscal.dataprotocols.org/) and the [International Aid Transpareny Initiative](http://iatistandard.org/activity-standard/iati-activities/iati-activity/transaction/) and should be used to cross-reference to more detailed information held using a Budget Data Package, IATI file, or to provide enough information to allow a user to manually or automatically cross-reference with some other published source of transactional spending data.",
             "required": ["id"],
             "properties": {
-                "id":{ 
+                "id":{
                     "title":"ID",
                     "description": "A unique identifier for this transaction. This identifier should be possible to cross-reference against the provided data source. For the budget data package this is the id, for IATI, the transaction reference.",
                     "type": ["string", "integer"],
@@ -739,7 +739,7 @@
                     "type": ["string", "null"],
                     "format": "date-time"
                 },
-                "amount": { 
+                "amount": {
                     "title":"Amount",
                     "description": "The value of the transaction.",
                     "$ref": "#/definitions/Value"
@@ -768,12 +768,12 @@
             "description": "An organization.",
             "type": "object",
             "properties": {
-                "identifier": { 
+                "identifier": {
                     "title":"Primary identifier",
                     "description": "The primary identifier for this organization. Identifiers that uniquely pick out a legal entity should be preferred. Consult the [organization identifier guidance](http://standard.open-contracting.org/latest/en/schema/identifiers/) for the preferred scheme and identifier to use.",
-                    "$ref": "#/definitions/Identifier" 
+                    "$ref": "#/definitions/Identifier"
                 },
-                "additionalIdentifiers": { 
+                "additionalIdentifiers": {
                     "title":"Additional identifiers",
                     "description": "A list of additional / supplemental identifiers for the organization, using the [organization identifier guidance](http://standard.open-contracting.org/latest/en/schema/identifiers/). This could be used to provide an internally used identifier for this organization in addition to the primary legal entity identifier.",
                     "type": "array",
@@ -1094,7 +1094,7 @@
             "title":"Period",
             "type": "object",
             "properties": {
-                "startDate": { 
+                "startDate": {
                     "title":"Start date",
                     "description": "The start date for the period.",
                     "type": ["string", "null"],

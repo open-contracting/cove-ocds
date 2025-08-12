@@ -1,0 +1,68 @@
+{% load i18n %}
+{% load cove_ocds %}
+{% with sample_size=100 sample_slice=":100" %}
+
+<div class="modal {{className}}" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+         <h5 class="modal-title">{{ modalTitle }}</h5>
+      </div>
+      <div class="modal-body">
+        <p>
+          {% if errorList|length > sample_size %}
+            {% blocktrans %}Showing the first {{sample_size}} locations for this error.{% endblocktrans %}
+          {% endif %}
+        </p>
+        <table class="table">
+          <thead>
+            <tr>
+              {% if full_table %}
+                <th>{% trans 'Value' %}</th>
+                <th>{% trans 'Location' %}</th>
+                {% if file_type != 'json' %}
+                  <th>{% trans 'Spreadsheet Location' %}</th> 
+                {% endif %}
+              {% else %}
+                {% if file_type == 'json' %}
+                  <th>{% trans 'Location' %}</th>
+                {% else %}
+                  <th>{% trans 'Spreadsheet Location' %}</th>
+                {% endif %}
+              {% endif %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in errorList|slice:sample_slice %}
+              <tr>
+              {% if full_table %}
+                <td> {{item.value}} </td>
+                <td>
+                  {% if item.line %}
+                    <b>{% trans 'Path:' %}</b> {{item.path}}
+                    <b>{% trans 'Line:' %}</b> {{item.line}}
+                  {% else %}
+                    {{ item.path }}
+                  {% endif %}
+                </td>
+                {% if file_type != 'json' %}
+                  <td> <strong>{% trans "Sheet:" %}</strong> {{item.sheet}} <strong>{% trans "Row:" %}</strong> {{item.row_number}} {% if item.header %} <strong>{% trans "Header:" %}</strong> {{item.header}} {% endif %} </td>
+                {% endif %}
+              {% else %}
+                {% if file_type == 'json' %}
+                  <td>{{item}}</td>
+                {% else %}
+                  <td> <strong>{% trans "Sheet:" %}</strong> {{item.sheet}} <strong>{% trans "Row:" %}</strong> {{item.row_number}} {% if item.header %} <strong>{% trans "Header:" %}</strong> {{item.header}} {% endif %} </td>
+                {% endif %}
+              {% endif %}
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endwith %}

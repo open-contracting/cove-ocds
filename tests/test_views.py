@@ -1,13 +1,11 @@
-import os
+import re
 from pathlib import Path
 from urllib.parse import urlsplit
 
-import flattentool
 import lxml.etree
 import lxml.html
 import pytest
 import requests
-from django.test import override_settings
 
 from tests import DEFAULT_SCHEMA_VERSION, REMOTE, SCHEMA_VERSION_CHOICES, WHITESPACE, assert_in, setup_agent
 
@@ -40,12 +38,12 @@ def make_request(client, method, server_url, path, data=None):
     return getattr(client, method.lower())(path, data)
 
 
-def submit_file(client, filename):
+def submit_file(client, server_url, filename, expected_status_code=200):
     path = Path("tests") / "fixtures" / filename
 
     if REMOTE:  # client.post() would 404
         with setup_agent() as page:
-            page.goto(os.environ["CUSTOM_SERVER_URL"])
+            page.goto(server_url)
             page.click("text=Upload")
             page.locator('input[name="original_file"]').set_input_files(str(path))
             page.click('form[enctype] button[type="submit"]')
@@ -63,17 +61,17 @@ def submit_file(client, filename):
 
     response = client.get(response.url)
 
-    assert response.status_code == 200
+    assert response.status_code == expected_status_code
 
     return response
 
 
 @pytest.mark.parametrize(
-    ("filename", "expected", "not_expected", "conversion_successful"),
+    ("filename", "expected", "not_expected", "processable"),
     [
         (
             "tenders_releases_2_releases.json",
-            ["Convert", "Schema", "OCDS release package schema version 1.0. You can", *SCHEMA_VERSIONS_DISPLAY],
+            ["OCDS release package schema version 1.1.", *SCHEMA_VERSIONS_DISPLAY],
             ["Schema Extensions"],
             True,
         ),
@@ -86,7 +84,7 @@ def submit_file(client, filename):
                 "copy of the schema with extension",
                 "Structural Errors",
                 "name is missing but required within buyer",
-                "The schema version specified in the file is 1.1",
+                'The schema version specified in the file is "1.1"',
                 "Organization scale",
             ],
             ["/releases/parties/details", "fetching failed"],
@@ -141,11 +139,11 @@ def submit_file(client, filename):
                 "records/compiledRelease/parties/details",
                 "mooo",
                 "/records/compiledRelease/tender/targets",
-                "The schema version specified in the file is 1.1",
+                'The schema version specified in the file is "1.1"',
                 "/records/releases/tender/targets",
             ],
             ["checked against a schema with no extensions"],
-            False,  # context["conversion"] is set to False for record packages
+            True,
         ),
         (
             "tenders_releases_deprecated_fields_against_1_1_live.json",
@@ -155,7 +153,6 @@ def submit_file(client, filename):
                 "documents at the milestone level is now deprecated",
                 "releases/0/contracts/1/milestones/0",
                 "releases/1/tender",
-                "Contracts with no awards: 3",
             ],
             ["copy of the schema with extension"],
             True,
@@ -183,7 +180,7 @@ def submit_file(client, filename):
             [],
             True,
         ),
-        ("ocds_release_nulls.json", ["Convert", "Save or Share these results"], [], True),
+        ("ocds_release_nulls.json", ["Save or Share these results"], [], True),
         (
             "badfile_all_validation_errors.json",
             [
@@ -201,9 +198,9 @@ def submit_file(client, filename):
                 "Codelist Errors",
                 "releases/tender/value",
                 "badCurrencyCode",
-                "numberOfTenderers is not a integer. Check that the value doesn’t contain decimal points or any characters other than 0-9. Integer values should not be in quotes.",  # noqa: E501
+                "numberOfTenderers is not a integer. Check that the value doesn't contain decimal points or any characters other than 0-9. Integer values should not be in quotes.",  # noqa: E501
                 "The number of parties who submit a bid.",
-                "amount is not a number. Check that the value doesn’t contain any characters other than 0-9 and dot (.). Number values should not be in quotes",  # noqa: E501
+                "amount is not a number. Check that the value doesn't contain any characters other than 0-9 and dot (.). Number values should not be in quotes",  # noqa: E501
                 "Amount as a number.",
                 "ocid is not a string. Check that the value is not null, and has quotes at the start and end. Escape any quotes in the value with \\",  # noqa: E501
                 "A globally unique identifier for this Open Contracting Process. Composed of an ocid prefix and an identifier for the contracting process. For more information see the Open Contracting Identifier guidance",  # noqa: E501
@@ -213,7 +210,7 @@ def submit_file(client, filename):
                 "Information on the parties (organizations, economic operators and other participants) who are involved in the contracting process and their roles, e.g. buyer, procuring entity, supplier etc. Organization references elsewhere in the schema are used to refer back to this entries in this list.",  # noqa: E501
                 "buyer is not a JSON object",
                 "The id and name of the party being referenced. Used to cross-reference to the parties section",
-                "[] is too short. You must supply at least one value, or remove the item entirely (unless it’s required).",  # noqa: E501
+                "[] is too short. You must supply at least one value, or remove the item entirely (unless it's required).",  # noqa: E501
                 "One or more values from the closed releaseTag codelist. Tags can be used to filter releases and to understand the kind of information that releases might contain",  # noqa: E501
             ],
             [],
@@ -233,53 +230,45 @@ def submit_file(client, filename):
         # Conversion should still work for files that don't validate against the schema.
         (
             "tenders_releases_2_releases_invalid.json",
-            ["Convert", "Structural Errors", "id is missing but required", "Invalid 'uri' found"],
+            ["Structural Errors", "id is missing but required", "Invalid 'uri' found"],
             [],
             True,
         ),
         ("tenders_releases_2_releases_codelists.json", ["oh no", "GSINS"], [], True),
-        ("utf8.json", ["Convert"], ["Ensure that your file uses UTF-8 encoding"], True),
+        ("utf8.json", [], ["Ensure that your file uses UTF-8 encoding"], True),
         ("latin1.json", ["Ensure that your file uses UTF-8 encoding"], [], False),  # invalid encoding
         ("utf-16.json", ["Ensure that your file uses UTF-8 encoding"], [], False),  # invalid encoding
         ("tenders_releases_2_releases_not_json.json", ["not well formed JSON"], [], False),  # invalid JSON
         ("non_dict_json.json", [], ["could not be converted"], True),
-        (
-            "full_record.json",
-            ["Number of records", "Structural Errors", "compiledRelease", "versionedRelease"],
-            [],
-            False,  # context["conversion"] is set to False for record packages
-        ),
+        ("full_record.json", ["Structural Errors", "compiledRelease", "versionedRelease"], [], True),
         # Test "version" value in data.
         (
             "tenders_releases_1_release_with_unrecognized_version.json",
             [
-                "Your data specifies a version 123.123 which is not recognised",
-                f"checked against OCDS release package schema version {DEFAULT_SCHEMA_VERSION}. You can",
+                'Your data specifies a version "123.123" which is not recognised',
+                f"structural checks against OCDS release package schema version {DEFAULT_SCHEMA_VERSION}.",
                 "checked against the current default version.",
-                "Convert to Spreadsheet",
             ],
             ["Additional Fields (fields in data not in schema)", "Error message"],
-            None,  # Skip conversion (the unrecognized_version_data alert is not displayed after conversion).
+            True,
         ),
         (
             "tenders_releases_1_release_with_wrong_version_type.json",
             [
-                "Your data specifies a version 1000 (it must be a string) which is not recognised",
-                f"checked against OCDS release package schema version {DEFAULT_SCHEMA_VERSION}. You can",
-                "Convert to Spreadsheet",
+                "Your data specifies a version 1000 which is not recognised",
+                f"structural checks against OCDS release package schema version {DEFAULT_SCHEMA_VERSION}.",
             ],
             ["Additional Fields (fields in data not in schema)", "Error message"],
-            None,  # Skip conversion (the unrecognized_version_data alert is not displayed after conversion).
+            True,
         ),
         (
             "tenders_releases_1_release_with_patch_in_version.json",
             [
-                '"version" field in your data follows the major.minor.patch pattern',
-                "100.100.0 format does not comply with the schema",
-                "Error message",
+                'Your data specifies a version "100.100.0" which is not recognised',
+                f"structural checks against OCDS release package schema version {DEFAULT_SCHEMA_VERSION}.",
             ],
-            ["Convert to Spreadsheet"],
-            False,  # Invalid version
+            ["Error message"],
+            True,
         ),
         (
             "bad_toplevel_list.json",
@@ -289,14 +278,14 @@ def submit_file(client, filename):
         ),
         (
             "tenders_releases_1_release_with_extension_broken_json_ref.json",
-            ["JSON reference error", "Unresolvable JSON pointer:", "/definitions/OrganizationReference"],
-            ["Convert to Spreadsheet"],
+            ["JSON reference error", "Unresolvable JSON pointer:", "/definitions/Broken"],
+            [],
             False,  # Invalid reference
         ),
         (
             "tenders_releases_1_release_unpackaged.json",
             ["Missing OCDS package", "Error message: Missing OCDS package"],
-            ["Convert to Spreadsheet"],
+            [],
             False,  # Invalid package
         ),
         (
@@ -323,22 +312,15 @@ def submit_file(client, filename):
             ['Has no "Code" column'],
             True,
         ),
-        (
-            "tenders_releases_2_releases.xlsx",
-            ["Convert", "Schema", *SCHEMA_VERSIONS_DISPLAY],
-            ["Missing OCDS package"],
-            True,
-        ),
+        ("tenders_releases_2_releases.xlsx", ["1.1"], ["Missing OCDS package"], True),
     ],
 )
 @pytest.mark.django_db
-def test_url_input(server_url, client, filename, expected, not_expected, conversion_successful):
+def test_url_input(client, server_url, filename, expected, not_expected, processable):
     excel = filename.endswith(".xlsx")
+    expected_status_code = 200 if processable else 422
 
-    response = submit_file(client, filename)
-
-    if conversion_successful and not excel:
-        response = make_request(client, "POST", server_url, response.request["PATH_INFO"], {"flatten": "true"})
+    response = submit_file(client, server_url, filename, expected_status_code=expected_status_code)
 
     responses = [response]
 
@@ -347,27 +329,22 @@ def test_url_input(server_url, client, filename, expected, not_expected, convers
         responses.append(make_request(client, "GET", server_url, response.request["PATH_INFO"]))
 
     for response in responses:
-        assert response.status_code == 200
+        assert response.status_code == expected_status_code
 
         document = lxml.html.fromstring(response.content)
         for script in document.xpath("//script"):
             script.getparent().remove(script)
         text = WHITESPACE.sub(" ", document.text_content())
+        links = document.cssselect("span.glyphicon-download + a")
 
         assert "Data Review Tool" in text
         assert "Load New File" in text or "Try Again" in text
-        if conversion_successful is None:
-            assert "Convert to Spreadsheet" in text
-        else:
-            assert "Convert to Spreadsheet" not in text  # the button isn't present after clicking
         for value in expected:
             assert value in text
         for value in not_expected:
             assert value not in text
 
-        if conversion_successful:
-            links = document.xpath("//div[contains(@class, 'conversion')]//a")
-
+        if processable:
             file = links[0]
             path = file.attrib["href"]
 
@@ -377,30 +354,29 @@ def test_url_input(server_url, client, filename, expected, not_expected, convers
                 assert static_file.status_code == 200
                 assert int(static_file.headers["content-length"]) > 0
 
-            assert not file.getnext().text_content().startswith("0")
+            if excel:
+                assert "unflattened.json" in path
+                assert re.search(r"\(([1-9]\d*\.\d KB|[1-9]\d* bytes) download\)", file.text_content())  # noqa: RUF001
+
+                file = links[1]
+                path = file.attrib["href"]
+
+                if REMOTE:
+                    static_file = requests.get(f"{server_url}{path}")
+
+                    assert static_file.status_code == 200
+                    assert int(static_file.headers["content-length"]) > 0
+
             assert filename in path
-            assert file.text_content().strip() == f"{'Excel Spreadsheet (.xlsx)' if excel else 'JSON'} (Original)"
-
-            file = links[1]
-            path = file.attrib["href"]
-
-            if REMOTE:
-                static_file = requests.get(f"{server_url}{path}")
-
-                assert static_file.status_code == 200
-                assert int(static_file.headers["content-length"]) > 0
-
-            assert not file.getnext().text_content().startswith("0")
-            assert "unflattened.json" if excel else "flattened.xlsx" in path
-            assert file.text_content().startswith(
-                f"{'JSON' if excel else 'Excel Spreadsheet (.xlsx)'} (Converted from Original using schema version "
-            )
+            assert re.search(r"\(([1-9]\d*\.\d KB|[1-9]\d* bytes) cached\)", file.text_content())  # noqa: RUF001
+        else:
+            assert not links
 
 
 @pytest.mark.django_db
-def test_validation_error_messages(client):
+def test_validation_error_messages(client, server_url):
     # Normalize the HTML source from Playwright and Django.
-    content = submit_file(client, "badfile_all_validation_errors.json").content.replace(b"&quot;", b'"')
+    content = submit_file(client, server_url, "badfile_all_validation_errors.json").content.replace(b"&quot;", b'"')
 
     for value in (
         b'<code>""</code> is too short',
@@ -409,7 +385,7 @@ def test_validation_error_messages(client):
         b"<code>initiationType</code> is missing but required",
         b'Incorrect date format. Dates should use the form YYYY-MM-DDT00:00:00Z. Learn more about <a href="https://standard.open-contracting.org/latest/en/schema/reference/#date">dates in OCDS</a>.',  # noqa: E501
         b"<code>numberOfTenderers</code> is not a integer",
-        b"<code>amount</code> is not a number. Check that the value  doesn\xe2\x80\x99t contain any characters other than 0-9 and dot (<code>.</code>).",  # noqa: E501
+        b"<code>amount</code> is not a number. Check that the value  doesn't contain any characters other than 0-9 and dot (<code>.</code>).",  # noqa: E501
         b"<code>ocid</code> is not a string. Check that the value is not null, and has quotes at the start and end. Escape any quotes in the value with <code>\\</code>",  # noqa: E501
         b'For more information see the <a href="https://standard.open-contracting.org/1.1/en/schema/identifiers/">Open Contracting Identifier guidance</a>',  # noqa: E501
         b"<code>title</code> is not a string. Check that the value  has quotes at the start and end. Escape any quotes in the value with <code>\\</code>",  # noqa: E501
@@ -422,8 +398,8 @@ def test_validation_error_messages(client):
 
 
 @pytest.mark.django_db
-def test_extension_validation_error_messages(client):
-    content = submit_file(client, "badfile_extension_validation_errors.json").content
+def test_extension_validation_error_messages(client, server_url):
+    content = submit_file(client, server_url, "badfile_extension_validation_errors.json").content
 
     for value in (
         b"&lt;script&gt;alert('badscript');&lt;/script&gt;",
@@ -440,7 +416,7 @@ def test_extension_validation_error_messages(client):
 
 @pytest.mark.parametrize("uuid", ["0", "324ea8eb-f080-43ce-a8c1-9f47b28162f3"])
 @pytest.mark.django_db
-def test_url_invalid_dataset_request(server_url, client, uuid):
+def test_url_invalid_dataset_request(client, server_url, uuid):
     response = make_request(client, "GET", server_url, f"/data/{uuid}")
 
     assert response.status_code == 404
@@ -459,7 +435,7 @@ def test_url_invalid_dataset_request(server_url, client, uuid):
         ),
         (
             "tenders_releases_1_release_with_invalid_extensions.json",
-            "structural checks against OCDS release package schema version 1.0",
+            "structural checks against OCDS release package schema version 1.1",
             "version is missing but required",
             "methodRationale",
             "✅",  # skip this assertion
@@ -475,9 +451,9 @@ def test_url_invalid_dataset_request(server_url, client, uuid):
 )
 @pytest.mark.django_db
 def test_url_input_with_version(
-    server_url, client, filename, expected, not_expected, expected_additional_field, not_expected_additional_field
+    client, server_url, filename, expected, not_expected, expected_additional_field, not_expected_additional_field
 ):
-    response = submit_file(client, filename)
+    response = submit_file(client, server_url, filename)
     document = lxml.html.fromstring(response.content)
     text = document.text_content()
     additional_field_box = document.cssselect("#additionalFieldTable")[0].text_content()
@@ -512,7 +488,6 @@ def test_url_input_with_version(
             ],
             [
                 "The following extensions failed",
-                "extensions were not introduced in the schema until version 1.1.",
             ],
         ),
         (
@@ -522,7 +497,6 @@ def test_url_input_with_version(
                 "The metrics extension supports publication of forecasts",
                 "Get a copy of the schema with extension patches applied",
                 "The following extensions failed",
-                "extensions were not introduced in the schema until version 1.1.",
             ],
             ["checked against a schema with no extensions"],
         ),
@@ -530,7 +504,6 @@ def test_url_input_with_version(
             "tenders_releases_1_release_with_all_invalid_extensions.json",
             [
                 "None of the extensions above could be applied",
-                "extensions were not introduced in the schema until version 1.1.",
             ],
             ["Organization scale", "Get a copy of the schema with extension patches applied"],
         ),
@@ -544,14 +517,13 @@ def test_url_input_with_version(
             ],
             [
                 "The following extensions failed",
-                "extensions were not introduced in the schema until version 1.1.",
             ],
         ),
     ],
 )
 @pytest.mark.django_db
-def test_url_input_with_extensions(server_url, client, filename, expected, not_expected):
-    response = submit_file(client, filename)
+def test_url_input_with_extensions(client, server_url, filename, expected, not_expected):
+    response = submit_file(client, server_url, filename)
     document = lxml.html.fromstring(response.content)
     schema_extension_box = document.cssselect("#schema-extensions")[0].text_content()
 
@@ -571,37 +543,14 @@ def test_url_input_with_extensions(server_url, client, filename, expected, not_e
         assert text not in schema_extension_box
 
 
-@pytest.mark.parametrize("flatten_or_unflatten", ["flatten", "unflatten"])
 @pytest.mark.django_db
-@pytest.mark.skipif(REMOTE, reason="Uses mocks")
-def test_flattentool_warnings(monkeypatch, server_url, client, flatten_or_unflatten):
-    def mockflatten(input_name, output_name, *args, **kwargs):
-        with open(f"{output_name}.xlsx", "w") as f:
-            f.write("{}")
-
-    def mockunflatten(input_name, output_name, *args, **kwargs):
-        with open(kwargs["cell_source_map"], "w") as f:
-            f.write("{}")
-        with open(kwargs["heading_source_map"], "w") as f:
-            f.write("{}")
-        with open(output_name, "w") as f:
-            f.write("{}")
-
-    monkeypatch.setattr(
-        flattentool, flatten_or_unflatten, mockflatten if flatten_or_unflatten == "flatten" else mockunflatten
-    )
-
-    # Actual input file doesn't matter, as we override flattentool behavior with a mock below.
-    filename = f"tenders_releases_2_releases.{'json' if flatten_or_unflatten == 'flatten' else 'xlsx'}"
-
-    response = submit_file(client, filename)
-    if flatten_or_unflatten == "flatten":
-        response = make_request(client, "POST", server_url, response.request["PATH_INFO"], {"flatten": "true"})
+def test_flattentool_warnings(client, server_url):
+    response = submit_file(client, server_url, "tenders_releases_2_releases.xlsx")
     document = lxml.html.fromstring(response.content)
     text = document.text_content()
 
-    assert "conversion Errors" not in text
-    assert "Conversion Warnings" not in text
+    assert "Conversion Errors" not in text
+    assert "conversion warnings" not in text
 
 
 @pytest.mark.parametrize(
@@ -628,15 +577,15 @@ def test_flattentool_warnings(monkeypatch, server_url, client, flatten_or_unflat
     ],
 )
 @pytest.mark.django_db
-def test_url_input_extension_headlines(client, filename, expected, not_expected):
-    response = submit_file(client, filename)
+def test_url_input_extension_headlines(client, server_url, filename, expected, not_expected):
+    response = submit_file(client, server_url, filename)
 
     assert_in(lxml.html.fromstring(response.content).cssselect(".message"), expected, not_expected)
 
 
 @pytest.mark.django_db
-def test_additional_checks_section(client):
-    response = submit_file(client, "basic_release_empty_fields.json")
+def test_additional_checks_section(client, server_url):
+    response = submit_file(client, server_url, "basic_release_empty_fields.json")
     element = lxml.html.fromstring(response.content).cssselect("#additionalChecksTable")[0]
     element_text = element.text_content()
 
@@ -659,62 +608,7 @@ def test_additional_checks_section(client):
 
 
 @pytest.mark.django_db
-def test_additional_checks_section_not_being_displayed(client):
-    response = submit_file(client, "full_record.json")
+def test_additional_checks_section_not_being_displayed(client, server_url):
+    response = submit_file(client, server_url, "full_record.json")
 
     assert lxml.html.fromstring(response.content).cssselect("#additionalChecksTable") == []
-
-
-@pytest.mark.parametrize(
-    ("filename", "total", "items", "subtotal"),
-    [
-        ("30_releases.json", 30, "releases", 25),
-        ("tenders_releases_7_releases_check_ocids.json", 7, "releases", 7),
-        ("30_records.json", 30, "records", 25),
-        ("7_records.json", 7, "records", 7),
-    ],
-)
-@pytest.mark.django_db
-@pytest.mark.skipif(REMOTE, reason="Depends on RELEASES_OR_RECORDS_TABLE_LENGTH = 25 (default)")
-def test_table_rows(client, filename, total, items, subtotal):
-    response = submit_file(client, filename)
-
-    document = lxml.html.fromstring(response.content)
-    panel = document.cssselect(f"#{items}-table-panel")[0].text_content()
-
-    assert f"This file contains {total} {items}" in document.cssselect(".key-facts ul li")[0].text_content()
-    assert "first" not in panel if total <= subtotal else f"first 25 {items}" in panel
-    assert len(document.cssselect(f"#{items}-table-panel table tbody tr")) == subtotal
-
-
-@pytest.mark.parametrize(
-    ("filename", "total", "items", "subtotal"),
-    [
-        ("30_releases.json", 30, "releases", 10),
-        ("tenders_releases_7_releases_check_ocids.json", 7, "releases", 7),
-        ("30_records.json", 30, "records", 10),
-        ("7_records.json", 7, "records", 7),
-    ],
-)
-@pytest.mark.django_db
-@override_settings(RELEASES_OR_RECORDS_TABLE_LENGTH=10)
-@pytest.mark.skipif(REMOTE, reason="Depends on RELEASES_OR_RECORDS_TABLE_LENGTH = 10")
-def test_table_rows_settings(client, filename, total, items, subtotal):
-    response = submit_file(client, filename)
-
-    document = lxml.html.fromstring(response.content)
-    panel = document.cssselect(f"#{items}-table-panel")[0].text_content()
-
-    assert f"This file contains {total} {items}" in document.cssselect(".key-facts ul li")[0].text_content()
-    assert "first" not in panel if total <= subtotal else f"first 10 {items}" in panel
-    assert len(document.cssselect(f"#{items}-table-panel table tbody tr")) == subtotal
-
-
-@pytest.mark.django_db
-def test_records_table_releases_count(client):
-    response = submit_file(client, "30_records.json")
-
-    document = lxml.html.fromstring(response.content)
-
-    assert "release" in document.cssselect("#records-table-panel table thead th")[1].text_content()
-    assert document.cssselect("#records-table-panel table tbody tr")[0].cssselect("td")[1].text_content() == "5"

@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+{% load i18n %}
+
+{% block content %}
+<div id="loading" style="display: none"> <h3> {% trans "Loading" %}: </h3> <img class="spinner" src="//i1.wp.com/cdnjs.cloudflare.com/ajax/libs/galleriffic/2.0.1/css/loader.gif" alt="spinner" width="30" height="30"> </div>
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingOne" data-toggle="collapse" data-parent="#accordion" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+      <h4 class="panel-title">
+        <a class="accordion-toggle">
+          <span class="glyphicon glyphicon-link" aria-hidden="true"></span>{% trans "Link" %}
+        </a>
+      </h4>
+    </div>
+    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+        <form method="POST" action="." id="fetchURL">{% csrf_token %}
+            {% bootstrap_form forms.url_form %}
+            {% buttons %}
+                <button type="submit" class="btn btn-primary">
+                    {% trans 'Submit' %}
+                </button>
+            {% endbuttons %}
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingTwo" data-toggle="collapse" data-parent="#accordion" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+      <h4 class="panel-title">
+        <a class="accordion-toggle">
+          <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>{% trans "Upload" %}
+        </a>
+      </h4>
+    </div>
+    <div id="collapseTwo" class="panel-collapse show-open-if-noscript" role="tabpanel" aria-labelledby="headingTwo">
+      <div class="panel-body">
+        <form method="POST" action="." enctype="multipart/form-data">{% csrf_token %}
+            {% bootstrap_form forms.upload_form %}
+            {% buttons %}
+                <button type="submit" class="btn btn-primary">
+                    {% trans 'Submit' %}
+                </button>
+            {% endbuttons %}
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingThree" data-toggle="collapse" data-parent="#accordion" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+      <h4 class="panel-title">
+        <a class="accordion-toggle">
+          <span class="glyphicon glyphicon-paste" aria-hidden="true"></span>{% trans "Paste" %}
+        </a>
+      </h4>
+    </div>
+    <div id="collapseThree" class="panel-collapse show-open-if-noscript" role="tabpanel" aria-labelledby="headingThree">
+      <div class="panel-body">
+        <form method="POST" action=".">{% csrf_token %}
+            {% bootstrap_form forms.text_form %}
+            {% buttons %}
+                <button type="submit" class="btn btn-primary">
+                    {% trans 'Submit' %}
+                </button>
+            {% endbuttons %}
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block bottomcontent1 %}
+<div class="row" id="introduction">
+  <div class="col-sm-6">
+    <div class="panel panel-default">
+      <div class="panel-body">
+
+        <h1 class="heading-in-panel"> <small> {% blocktrans %}About OCDS {%endblocktrans%}</small> </h1>
+        <p> {% blocktrans %}The <a href="https://standard.open-contracting.org/">Open Contracting Data Standard (OCDS)</a> exists to formalize how contracting data and documents can be published in an accessible, structured and repeatable way.{%endblocktrans%} </p>
+        <p> {% blocktrans %}Governments around the world spend an estimated US$9.5 trillion through contracts every year. Yet, contracting information is often unavailable for public scrutiny. OCDS works to change that.{%endblocktrans%} </p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="panel panel-default">
+      <div class="panel-body">
+
+        <h1 class="heading-in-panel"> <small>{% blocktrans %}Check and Review{%endblocktrans%}</small> </h1>
+        <p> {% blocktrans %}This tool helps you to:{%endblocktrans%} </p>
+        <ul>
+          <li> {% blocktrans %}Check that your OCDS data complies with the <a href="https://standard.open-contracting.org/latest/en/schema/">schema</a>{%endblocktrans%}</li>
+          <li> {% blocktrans %}Inspect key contents of your data to review data quality{%endblocktrans%} </li>
+          <li> {% blocktrans %}Access your data in different formats (spreadsheet and JSON) to support further review.{%endblocktrans%} </li>
+        </ul>
+        <br/>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block bottomcontent2 %}
+{% url 'index' as index_url %}
+<div class="row" id="how-to-use">
+  <div class="col-xs-12">
+    <div class="panel panel-default">
+      <div class="panel-body">
+
+        <h1 class="heading-in-panel"> <small> {% blocktrans %}Using the data review tool{%endblocktrans%}</small> </h1>
+        <p> {% blocktrans %}You can upload, paste or provide a link to data published using the <a href="https://standard.open-contracting.org/">Open Contracting Data Standard</a>. This can be:{%endblocktrans%} </p>
+
+        <ul>
+          <li> {% blocktrans %}<b> JSON </b> - following the OCDS schema; {%endblocktrans%}</li>
+          <li> {% blocktrans %}<b> A CSV file or Excel Spreadsheet </b> - using the <a href="https://standard.open-contracting.org/latest/en/guidance/build/serialization/">flattened serialization of OCDS</a>; {%endblocktrans%}</li>
+        </ul>
+        <p> {% blocktrans %}Supported encodings are UTF-8 for JSON and UTF-8, Windows-1252 and ISO-8859-1 for CSV.{% endblocktrans%} </p>
+        <p> {% blocktrans %}The application works with both <a href="https://standard.open-contracting.org/latest/en/primer/releases_and_records/">'release' and 'record'</a> OCDS documents that conform to the <a href="https://standard.open-contracting.org/">Open Data Contracting Standard</a> {%endblocktrans%} </p>
+        <p> {% blocktrans %}If your data passes basic structural checks, the tool will then present a report on data quality, and information about the contents of your file. It will also offer alternative copies of the data for download. {%endblocktrans%} </p>
+        <p> {% blocktrans %}Data is stored for {{ delete_files_after_days }} days at a randomly generated URL. You can share this link with others to support discussion of data quality.  {%endblocktrans%} </p>
+        <p> {% blocktrans %}To preview how the data review tool works, try loading: <code>https://raw.githubusercontent.com/open-contracting/sample-data/main/fictional-example/1.1/ocds-213czf-000-00001-02-tender.json</code>{% endblocktrans%}</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extrafooterscript %}
+ <script>
+   //If javascript is off all panels show.
+   //We use this to collapse panels 2 and 3 if javascript is on.
+  $("#collapseTwo").attr('class', 'panel-collapse collapse');
+  $("#collapseThree").attr('class', 'panel-collapse collapse');
+
+  $('form').submit(function() {
+      $('#loading').css({"display": "block"});
+      $('#accordion').hide();
+  });
+  $(window).unload(function() {
+    $('#loading').css({"display": "none"});
+  })
+
+</script>
+{% endblock %}
