@@ -1,9 +1,0 @@
-[main]
-host = https://www.transifex.com
-
-[o:open-contracting-partnership-1:p:cove-1:r:cove-ocds]
-file_filter = cove_ocds/locale/<lang>/LC_MESSAGES/django.po
-source_file = cove_ocds/locale/en/LC_MESSAGES/django.po
-source_lang = en
-type        = PO
-
