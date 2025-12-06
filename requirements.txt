@@ -149,7 +149,7 @@ transaction==3.0.1
     # via zodb
 url-normalize==1.4.3
     # via requests-cache
-urllib3==2.5.0
+urllib3==2.6.0
     # via
     #   requests
     #   requests-cache
